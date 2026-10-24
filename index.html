@@ -117,16 +117,17 @@
     }
 
     .user-welcome-bar {
-      font-size: 10px;
-      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fde047;
       background: #1e293b;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 4px 12px;
-      border-radius: 10px;
+      padding: 5px 14px;
+      border-radius: 12px;
       margin-top: 3px;
-      border: 1px solid #334155;
+      border: 1px solid #eab308;
       cursor: pointer;
     }
 
@@ -183,11 +184,11 @@
       justify-content: space-between;
     }
 
-    /* SCROLLABLE CATEGORY GRID CONTAINER */
+    /* PERFECT SCROLLABLE CATEGORY GRID CONTAINER */
     .category-grid-container {
-      max-height: 180px;
+      max-height: 160px;
       overflow-y: auto;
-      padding-right: 2px;
+      padding-right: 4px;
       margin-bottom: 14px;
       scrollbar-width: thin;
       scrollbar-color: #eab308 #1e293b;
@@ -436,7 +437,7 @@
       <div class="app-title-box">
         <div class="main-app-name">കോളയാട് കണക്ട്</div>
         <div class="user-welcome-bar" onclick="openProfileModal()">
-          <span id="userDisplayName">👤 ഉപഭോക്തൃ പ്രൊഫൈൽ (ലോഗിൻ)</span>
+          <span id="userDisplayName">👤 നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</span>
         </div>
       </div>
 
@@ -533,7 +534,7 @@
           </div>
           <div class="cat-box" onclick="setCat('stationery', this)">
             <div class="cat-box-icon">📚</div>
-            <div class="cat-box-title">സ്റ്റേഷനറി</div>
+            <div class="cat-box-title">സ്റ്റേഷനറി കട</div>
           </div>
           <div class="cat-box" onclick="setCat('fruits', this)">
             <div class="cat-box-icon">🍎</div>
@@ -571,7 +572,7 @@
       </button>
       <button class="nav-btn" onclick="openProfileModal()">
         <span style="font-size: 16px;">👤</span>
-        <span>മൈ പ്രൊഫൈൽ</span>
+        <span>എന്റെ പേര് / വിവരങ്ങൾ</span>
       </button>
       <button class="nav-btn" onclick="toggleAdmin()">
         <span style="font-size: 16px;">⚙️</span>
@@ -581,16 +582,16 @@
 
   </div>
 
-  <!-- USER PROFILE / CUSTOMER LOGIN MODAL -->
+  <!-- USER PROFILE MODAL -->
   <div class="modal-bg" id="profileModal">
     <div class="modal-box">
-      <h3 style="margin-bottom: 6px; font-weight:800; font-size:16px;">ഉപഭോക്തൃ പ്രൊഫൈൽ</h3>
-      <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">കടകളിലേക്ക് ഓർഡർ ചെയ്യുമ്പോൾ നിങ്ങളുടെ വിവരങ്ങൾ ഓട്ടോമാറ്റിക്കായി അയക്കാൻ സഹായിക്കുന്നു.</p>
+      <h3 style="margin-bottom: 6px; font-weight:800; font-size:16px;">നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</h3>
+      <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">കടക്കാരിലേക്ക് നേരിട്ട് ഓർഡർ അയക്കുമ്പോൾ നിങ്ങളുടെ പേരും ഫോൺ നമ്പറും വിലാസവും കൃത്യമായി പോകുന്നതിനാണ് ഇത്.</p>
       <form onsubmit="saveUserProfile(event)">
         <input type="text" id="uName" placeholder="നിങ്ങളുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
-        <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ (ഉപഭോക്താവ്)" required class="dark-input" style="margin-bottom: 8px;">
+        <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 8px;">
         <textarea id="uAddress" placeholder="വീട്ടുപേര് / പ്രദേശം (വിലാസം)" rows="2" required class="dark-input" style="margin-bottom: 12px; resize:none;"></textarea>
-        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">പ്രൊഫൈൽ സേവ് ചെയ്യുക</button>
+        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
       </form>
     </div>
   </div>
@@ -676,9 +677,9 @@
 
     function checkUserStatus() {
       if(currentUser && currentUser.name) {
-        document.getElementById('userDisplayName').innerText = `👋 പ്രൊഫൈൽ: ${currentUser.name}`;
+        document.getElementById('userDisplayName').innerText = `👋 ഹലോ, ${currentUser.name}`;
       } else {
-        document.getElementById('userDisplayName').innerText = `👤 ഉപഭോക്തൃ പ്രൊഫൈൽ (ലോഗിൻ)`;
+        document.getElementById('userDisplayName').innerText = `👤 നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക`;
       }
     }
 
@@ -701,7 +702,7 @@
       localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
       checkUserStatus();
       toggleModal('profileModal');
-      alert("ഉപഭോക്തൃ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+      alert("വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
     }
 
     function render() {
