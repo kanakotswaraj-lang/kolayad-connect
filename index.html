@@ -55,13 +55,13 @@
     .hero-banner {
       position: relative;
       height: 95px;
-      background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%);
+      background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
     }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), #0f172a);
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), #0f172a);
     }
 
     .top-action-bar {
@@ -141,29 +141,31 @@
       gap: 6px;
     }
 
-    /* CLEAR HIGH-CONTRAST INPUTS */
+    /* HIGH VISIBILITY SEARCH INPUTS */
     .dark-input, .dark-select {
       width: 100%;
-      background: #1e293b;
-      border: 1px solid #475569;
+      background: #162032;
+      border: 1.5px solid #eab308;
       color: #ffffff;
-      padding: 9px 12px;
+      padding: 10px 14px;
       border-radius: 12px;
       font-size: 12px;
+      font-weight: 600;
       outline: none;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
     }
 
     .dark-input::placeholder {
-      color: #cbd5e1;
-      opacity: 0.85;
+      color: #fde047;
+      opacity: 0.9;
     }
 
     .dark-input:focus, .dark-select:focus {
-      border-color: #fde047;
-      box-shadow: 0 0 8px rgba(253, 224, 71, 0.2);
+      border-color: #fef08a;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
     }
 
-    /* SCROLLABLE LISTINGS & CATEGORIES AREA */
+    /* SCROLLABLE CONTENT BODY */
     .scrollable-body {
       flex: 1;
       overflow-y: auto;
@@ -182,33 +184,41 @@
       justify-content: space-between;
     }
 
-    /* GRID CATEGORY BOXES */
+    /* GRID CATEGORY BOXES WITH SCROLL FOR MORE ITEMS */
+    .category-grid-container {
+      max-height: 190px;
+      overflow-y: auto;
+      padding-right: 2px;
+      margin-bottom: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: #eab308 #1e293b;
+    }
+
     .category-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
     }
 
     .cat-box {
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 12px 8px;
+      border-radius: 14px;
+      padding: 10px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       cursor: pointer;
       text-align: center;
       transition: all 0.2s ease;
     }
 
     .cat-box-icon {
-      font-size: 22px;
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      font-size: 20px;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       background: rgba(234, 179, 8, 0.15);
       border: 1px solid rgba(234, 179, 8, 0.2);
       display: flex;
@@ -218,7 +228,7 @@
     }
 
     .cat-box-title {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: #e2e8f0;
     }
@@ -416,7 +426,7 @@
 
     <!-- STICKY TOP HEADER -->
     <div class="sticky-header">
-      <div class="hero-banner">
+      <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
@@ -425,7 +435,7 @@
       </div>
 
       <div class="profile-avatar-wrap">
-        <div class="profile-avatar"></div>
+        <div class="profile-avatar" id="profileAvatarBg"></div>
       </div>
 
       <div class="app-title-box">
@@ -454,48 +464,50 @@
     <!-- SCROLLABLE CONTENT BODY -->
     <div class="scrollable-body" id="scrollBody">
       
-      <!-- GRID CATEGORIES SECTION -->
+      <!-- GRID CATEGORIES SECTION WITH SCROLL FOR MORE ITEMS -->
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
-        <span style="font-size:10px; color:#94a3b8; font-weight:normal;" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
+        <span style="font-size:10px; color:#fde047; font-weight:normal;" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
       </div>
 
-      <div class="category-grid">
-        <div class="cat-box active" onclick="setCat('all', this)">
-          <div class="cat-box-icon">📂</div>
-          <div class="cat-box-title">എല്ലാം</div>
-        </div>
-        <div class="cat-box" onclick="setCat('worker', this)">
-          <div class="cat-box-icon">👷‍♂️</div>
-          <div class="cat-box-title">തൊഴിലാളികൾ</div>
-        </div>
-        <div class="cat-box" onclick="setCat('supermarket', this)">
-          <div class="cat-box-icon">🛒</div>
-          <div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div>
-        </div>
-        <div class="cat-box" onclick="setCat('hotel', this)">
-          <div class="cat-box-icon">🍲</div>
-          <div class="cat-box-title">ഹോട്ടൽ</div>
-        </div>
-        <div class="cat-box" onclick="setCat('bakery', this)">
-          <div class="cat-box-icon">🎂</div>
-          <div class="cat-box-title">ബേക്കറി</div>
-        </div>
-        <div class="cat-box" onclick="setCat('medical', this)">
-          <div class="cat-box-icon">💊</div>
-          <div class="cat-box-title">മെഡിക്കൽ</div>
-        </div>
-        <div class="cat-box" onclick="setCat('hardware', this)">
-          <div class="cat-box-icon">🔨</div>
-          <div class="cat-box-title">ഹാർഡ്‌വെയർ</div>
-        </div>
-        <div class="cat-box" onclick="setCat('rental', this)">
-          <div class="cat-box-icon">🚜</div>
-          <div class="cat-box-title">വാടക ഉപകരണങ്ങൾ</div>
-        </div>
-        <div class="cat-box" onclick="setCat('events', this)">
-          <div class="cat-box-icon">💡</div>
-          <div class="cat-box-title">ലൈറ്റ് & സൗണ്ട്</div>
+      <div class="category-grid-container">
+        <div class="category-grid">
+          <div class="cat-box active" onclick="setCat('all', this)">
+            <div class="cat-box-icon">📂</div>
+            <div class="cat-box-title">എല്ലാം</div>
+          </div>
+          <div class="cat-box" onclick="setCat('worker', this)">
+            <div class="cat-box-icon">👷‍♂️</div>
+            <div class="cat-box-title">തൊഴിലാളികൾ</div>
+          </div>
+          <div class="cat-box" onclick="setCat('supermarket', this)">
+            <div class="cat-box-icon">🛒</div>
+            <div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div>
+          </div>
+          <div class="cat-box" onclick="setCat('hotel', this)">
+            <div class="cat-box-icon">🍲</div>
+            <div class="cat-box-title">ഹോട്ടൽ</div>
+          </div>
+          <div class="cat-box" onclick="setCat('bakery', this)">
+            <div class="cat-box-icon">🎂</div>
+            <div class="cat-box-title">ബേക്കറി</div>
+          </div>
+          <div class="cat-box" onclick="setCat('medical', this)">
+            <div class="cat-box-icon">💊</div>
+            <div class="cat-box-title">മെഡിക്കൽ</div>
+          </div>
+          <div class="cat-box" onclick="setCat('hardware', this)">
+            <div class="cat-box-icon">🔨</div>
+            <div class="cat-box-title">ഹാർഡ്‌വെയർ</div>
+          </div>
+          <div class="cat-box" onclick="setCat('rental', this)">
+            <div class="cat-box-icon">🚜</div>
+            <div class="cat-box-title">വാടക ഉപകരണങ്ങൾ</div>
+          </div>
+          <div class="cat-box" onclick="setCat('events', this)">
+            <div class="cat-box-icon">💡</div>
+            <div class="cat-box-title">ലൈറ്റ് & സൗണ്ട്</div>
+          </div>
         </div>
       </div>
 
@@ -553,9 +565,16 @@
         <button onclick="toggleModal('adminModal')" class="dark-input" style="flex:1;">ക്യാൻസൽ</button>
         <button onclick="loginAdmin()" class="btn-pro-call" style="flex:1;">ലോഗിൻ</button>
       </div>
-      <div id="adminDataExport" style="display:none; margin-top:12px; text-align:left;">
-        <h4 style="font-size:11px; color:#fde047; margin-bottom:4px;">ശേഖരിച്ച ഫോൺ നമ്പറുകൾ (കടകളും ഉപഭോക്താക്കളും):</h4>
-        <textarea id="registeredNumbersText" class="dark-input" rows="4" readonly style="font-size:10px;"></textarea>
+
+      <!-- ADMIN PHOTO CUSTOMIZER -->
+      <div id="adminPhotoSection" style="display:none; margin-top:14px; text-align:left;">
+        <h4 style="font-size:11px; color:#eab308; margin-bottom:6px;">🖼️ ഫോട്ടോകൾ മാറ്റുക:</h4>
+        <input type="text" id="adminCoverUrl" placeholder="കവർ ഫോട്ടോ ഇമേജ് ലിങ്ക്" class="dark-input" style="margin-bottom:6px; font-size:10px;">
+        <input type="text" id="adminLogoUrl" placeholder="പ്രൊഫൈൽ ലോഗോ ഇമേജ് ലിങ്ക്" class="dark-input" style="margin-bottom:8px; font-size:10px;">
+        <button onclick="updateAppImages()" class="btn-pro-call" style="width:100%; padding:8px; font-size:10px; margin-bottom:10px;">ഫോട്ടോകൾ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        
+        <h4 style="font-size:11px; color:#eab308; margin-bottom:4px;">📞 ശേഖരിച്ച നമ്പറുകൾ:</h4>
+        <textarea id="registeredNumbersText" class="dark-input" rows="3" readonly style="font-size:10px;"></textarea>
       </div>
     </div>
   </div>
@@ -588,6 +607,10 @@
     let isAdmin = false;
     let selectedCat = 'all';
     let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
+    let appImages = JSON.parse(localStorage.getItem('kolayad_images')) || {
+      cover: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',
+      logo: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80'
+    };
 
     let shops = JSON.parse(localStorage.getItem('kolayad_shops')) || [
       { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ സേവനങ്ങൾ: വീടുകളിലെ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210" },
@@ -595,6 +618,11 @@
       { id: 3, name: "അൽ-മദീന ഹോട്ടൽ", cat: "hotel", catLabel: "ഹോട്ടൽ", loc: "മാർക്കറ്റ് റോഡ്", desc: "🍲 ലഭിക്കുന്നവ: നാടൻ ഭക്ഷണങ്ങൾ, ചിക്കൻ ബിരിയാണി, പൊറോട്ട, ഫ്രെഷ് ജ്യൂസുകൾ.", phone: "9876543212" },
       { id: 4, name: "സിറ്റി മെഡിക്കൽസ്", cat: "medical", catLabel: "മെഡിക്കൽ", loc: "ഹോസ്പിറ്റൽ ജംഗ്ഷൻ", desc: "💊 സേവനങ്ങൾ: 24 മണിക്കൂർ മരുന്നു സേവനവും ഫസ്റ്റ് എയ്ഡ് സാമഗ്രികളും.", phone: "9876543213" }
     ];
+
+    function applyImages() {
+      document.getElementById('heroBannerBg').style.backgroundImage = `url('${appImages.cover}')`;
+      document.getElementById('profileAvatarBg').style.backgroundImage = `url('${appImages.logo}')`;
+    }
 
     function checkUserStatus() {
       if(currentUser && currentUser.name) {
@@ -639,7 +667,7 @@
       });
 
       if(filtered.length === 0) {
-        list.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px; font-size:12px;">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല!</div>`;
+        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:20px; font-size:12px;">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല!</div>`;
         return;
       }
 
@@ -689,7 +717,7 @@
       if(isAdmin) {
         isAdmin = false;
         document.getElementById('adminBtn').innerText = "അഡ്മിൻ";
-        document.getElementById('adminDataExport').style.display = 'none';
+        document.getElementById('adminPhotoSection').style.display = 'none';
         render();
       } else {
         toggleModal('adminModal');
@@ -700,8 +728,11 @@
       if(document.getElementById('adminPass').value === '1234') {
         isAdmin = true;
         document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
-        document.getElementById('adminDataExport').style.display = 'block';
+        document.getElementById('adminPhotoSection').style.display = 'block';
         
+        document.getElementById('adminCoverUrl').value = appImages.cover;
+        document.getElementById('adminLogoUrl').value = appImages.logo;
+
         let allNums = "--- രജിസ്റ്റർ ചെയ്ത കടകൾ / തൊഴിലാളികൾ ---\n";
         shops.forEach(s => allNums += `${s.name} (${s.loc}): ${s.phone}\n`);
         if(currentUser) {
@@ -710,12 +741,19 @@
         }
         document.getElementById('registeredNumbersText').value = allNums;
 
-        toggleModal('adminModal');
         document.getElementById('adminPass').value = '';
         render();
       } else {
         alert("തെറ്റായ പാസ്‌വേഡ്!");
       }
+    }
+
+    function updateAppImages() {
+      appImages.cover = document.getElementById('adminCoverUrl').value;
+      appImages.logo = document.getElementById('adminLogoUrl').value;
+      localStorage.setItem('kolayad_images', JSON.stringify(appImages));
+      applyImages();
+      alert("ഫോട്ടോകൾ വിജയകരമായി മാറ്റിക്കഴിഞ്ഞു!");
     }
 
     function saveShop(e) {
@@ -743,6 +781,7 @@
       }
     }
 
+    applyImages();
     checkUserStatus();
     render();
   </script>
