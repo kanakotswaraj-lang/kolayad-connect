@@ -28,12 +28,12 @@
       max-width: 480px;
       height: 100vh;
       background: #0f172a;
-      border: 2px solid #10b981;
+      border: 2px solid #eab308;
       border-radius: 0;
       display: flex;
       flex-direction: column;
       position: relative;
-      box-shadow: 0 0 35px rgba(16, 185, 129, 0.2);
+      box-shadow: 0 0 35px rgba(234, 179, 8, 0.25);
     }
 
     @media (min-width: 481px) {
@@ -44,7 +44,7 @@
       }
     }
 
-    /* STICKY TOP HEADER (FIXED) */
+    /* STICKY TOP HEADER */
     .sticky-header {
       flex-shrink: 0;
       background: #0f172a;
@@ -54,14 +54,14 @@
 
     .hero-banner {
       position: relative;
-      height: 100px;
-      background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
+      height: 95px;
+      background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%);
     }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.3), #0f172a);
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), #0f172a);
     }
 
     .top-action-bar {
@@ -77,8 +77,8 @@
 
     .admin-badge-btn {
       background: rgba(15, 23, 42, 0.85);
-      border: 1px solid #10b981;
-      color: #34d399;
+      border: 1px solid #eab308;
+      color: #fde047;
       padding: 5px 12px;
       border-radius: 20px;
       font-size: 11px;
@@ -99,9 +99,9 @@
       width: 60px;
       height: 60px;
       border-radius: 18px;
-      border: 3px solid #f59e0b;
+      border: 3px solid #eab308;
       background: #1e293b url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80') center/cover;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
     }
 
     .app-title-box {
@@ -110,20 +110,20 @@
     }
 
     .main-app-name {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 800;
-      color: #38bdf8;
+      color: #fde047;
       letter-spacing: -0.5px;
     }
 
     .user-welcome-bar {
       font-size: 10px;
-      color: #94a3b8;
+      color: #cbd5e1;
       background: #1e293b;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 10px;
       margin-top: 3px;
       border: 1px solid #334155;
@@ -153,46 +153,82 @@
     }
 
     .dark-input:focus, .dark-select:focus {
-      border-color: #38bdf8;
+      border-color: #eab308;
     }
 
-    /* SCROLLABLE CATEGORIES */
-    .cat-scroll-container {
+    /* SCROLLABLE LISTINGS & CATEGORIES AREA */
+    .scrollable-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      padding-bottom: 85px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #fde047;
+      margin: 8px 0 10px 2px;
+      letter-spacing: 0.5px;
       display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 6px 12px 10px 12px;
-      scrollbar-width: none;
-      background: #0f172a;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .cat-scroll-container::-webkit-scrollbar { display: none; }
+    /* GRID CATEGORY BOXES (രണ്ടാമത്തെ ചിത്രത്തിലെ പോലെ ക്രമീകരിച്ച കാറ്റഗറി പെട്ടികൾ) */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
 
-    .cat-pill {
+    .cat-box {
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 6px 10px;
-      border-radius: 12px;
-      white-space: nowrap;
+      border-radius: 16px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
       cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .cat-box-icon {
+      font-size: 22px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(234, 179, 8, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fde047;
+    }
+
+    .cat-box-title {
       font-size: 11px;
       font-weight: 700;
       color: #cbd5e1;
     }
 
-    .cat-pill.active {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      border-color: #34d399;
-      color: white;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    .cat-box.active {
+      background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
+      border-color: #fef08a;
+      box-shadow: 0 4px 15px rgba(234, 179, 8, 0.35);
     }
 
-    /* SCROLLABLE CONTENT AREA (ONLY LISTINGS SCROLL) */
-    .scrollable-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-      padding-bottom: 80px;
+    .cat-box.active .cat-box-title {
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .cat-box.active .cat-box-icon {
+      background: #0f172a;
+      color: #fde047;
     }
 
     /* CARDS LAYOUT */
@@ -201,7 +237,7 @@
       border-radius: 18px;
       padding: 14px;
       margin-bottom: 12px;
-      border-left: 5px solid #10b981;
+      border-left: 5px solid #eab308;
       border-top: 1px solid #334155;
       border-right: 1px solid #334155;
       border-bottom: 1px solid #334155;
@@ -224,8 +260,8 @@
       font-weight: 800;
       padding: 3px 8px;
       border-radius: 6px;
-      background: rgba(255,255,255,0.08);
-      color: #38bdf8;
+      background: rgba(254, 224, 71, 0.12);
+      color: #fde047;
     }
 
     .item-name {
@@ -252,7 +288,7 @@
       border-radius: 12px;
       margin-bottom: 10px;
       line-height: 1.4;
-      border: 1px solid #38bdf8;
+      border: 1px solid #ca8a04;
     }
 
     .card-actions {
@@ -262,8 +298,8 @@
 
     .btn-pro-call {
       flex: 1;
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      color: white;
+      background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
+      color: #0f172a;
       text-decoration: none;
       padding: 9px;
       border-radius: 10px;
@@ -301,14 +337,14 @@
     }
 
     .btn-add-pro {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-      border: 2px solid #34d399;
-      padding: 8px 18px;
+      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+      color: #0f172a;
+      border: 2px solid #fef08a;
+      padding: 9px 20px;
       border-radius: 25px;
       font-weight: 800;
-      font-size: 11px;
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+      font-size: 12px;
+      box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4);
       cursor: pointer;
     }
 
@@ -339,7 +375,7 @@
       cursor: pointer;
     }
 
-    .nav-btn.active { color: #10b981; }
+    .nav-btn.active { color: #fde047; }
 
     /* MODAL OVERLAY */
     .modal-bg {
@@ -369,12 +405,12 @@
 
   <div class="app-container">
 
-    <!-- STICKY TOP HEADER (FIXED IN PLACE) -->
+    <!-- STICKY TOP HEADER -->
     <div class="sticky-header">
       <div class="hero-banner">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
-          <div style="font-size: 11px; font-weight: 800; color: #f8fafc; background: rgba(0,0,0,0.6); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
+          <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
           <button class="admin-badge-btn" onclick="toggleAdmin()" id="adminBtn">അഡ്മിൻ</button>
         </div>
       </div>
@@ -386,8 +422,7 @@
       <div class="app-title-box">
         <div class="main-app-name">കോളയാട് കണക്ട്</div>
         <div class="user-welcome-bar" onclick="openProfileModal()">
-          <span id="userDisplayName">👤 പ്രൊഫൈൽ സെറ്റ് ചെയ്യുക</span>
-          <span style="color:#38bdf8;">(ലോഗിൻ)</span>
+          <span id="userDisplayName">👤 ഉപഭോക്തൃ പ്രൊഫൈൽ (ലോഗിൻ)</span>
         </div>
       </div>
 
@@ -405,24 +440,62 @@
           </select>
         </div>
       </div>
-
-      <!-- CATEGORY HORIZONTAL SCROLL -->
-      <div class="cat-scroll-container">
-        <div class="cat-pill active" onclick="setCat('all', this)">📂 എല്ലാം</div>
-        <div class="cat-pill" onclick="setCat('worker', this)">👷‍♂️ തൊഴിലാളികൾ</div>
-        <div class="cat-pill" onclick="setCat('supermarket', this)">🛒 സൂപ്പർമാർക്കറ്റ്</div>
-        <div class="cat-pill" onclick="setCat('hotel', this)">🍲 ഹോട്ടൽ</div>
-        <div class="cat-pill" onclick="setCat('bakery', this)">🎂 ബേക്കറി</div>
-        <div class="cat-pill" onclick="setCat('medical', this)">💊 മെഡിക്കൽ</div>
-        <div class="cat-pill" onclick="setCat('hardware', this)">🔨 ഹാർഡ്‌വെയർ</div>
-        <div class="cat-pill" onclick="setCat('rental', this)">🚜 വാടക ഉപകരണങ്ങൾ</div>
-        <div class="cat-pill" onclick="setCat('events', this)">💡 ലൈറ്റ് & സൗണ്ട്</div>
-      </div>
     </div>
 
-    <!-- SCROLLABLE LISTINGS BODY -->
+    <!-- SCROLLABLE CONTENT BODY -->
     <div class="scrollable-body" id="scrollBody">
+      
+      <!-- GRID CATEGORIES SECTION -->
+      <div class="section-label">
+        <span>കാറ്റഗറികൾ (CATEGORIES)</span>
+        <span style="font-size:10px; color:#94a3b8; font-weight:normal;" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
+      </div>
+
+      <div class="category-grid">
+        <div class="cat-box active" onclick="setCat('all', this)">
+          <div class="cat-box-icon">📂</div>
+          <div class="cat-box-title">എല്ലാം</div>
+        </div>
+        <div class="cat-box" onclick="setCat('worker', this)">
+          <div class="cat-box-icon">👷‍♂️</div>
+          <div class="cat-box-title">തൊഴിലാളികൾ</div>
+        </div>
+        <div class="cat-box" onclick="setCat('supermarket', this)">
+          <div class="cat-box-icon">🛒</div>
+          <div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div>
+        </div>
+        <div class="cat-box" onclick="setCat('hotel', this)">
+          <div class="cat-box-icon">🍲</div>
+          <div class="cat-box-title">ഹോട്ടൽ</div>
+        </div>
+        <div class="cat-box" onclick="setCat('bakery', this)">
+          <div class="cat-box-icon">🎂</div>
+          <div class="cat-box-title">ബേക്കറി</div>
+        </div>
+        <div class="cat-box" onclick="setCat('medical', this)">
+          <div class="cat-box-icon">💊</div>
+          <div class="cat-box-title">മെഡിക്കൽ</div>
+        </div>
+        <div class="cat-box" onclick="setCat('hardware', this)">
+          <div class="cat-box-icon">🔨</div>
+          <div class="cat-box-title">ഹാർഡ്‌വെയർ</div>
+        </div>
+        <div class="cat-box" onclick="setCat('rental', this)">
+          <div class="cat-box-icon">🚜</div>
+          <div class="cat-box-title">വാടക ഉപകരണങ്ങൾ</div>
+        </div>
+        <div class="cat-box" onclick="setCat('events', this)">
+          <div class="cat-box-icon">💡</div>
+          <div class="cat-box-title">ലൈറ്റ് & സൗണ്ട്</div>
+        </div>
+      </div>
+
+      <!-- LISTINGS AREA -->
+      <div class="section-label">
+        <span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span>
+      </div>
       <div id="listings"></div>
+
     </div>
 
     <!-- FLOATING ADD BUTTON -->
@@ -448,16 +521,16 @@
 
   </div>
 
-  <!-- USER PROFILE / LOGIN MODAL -->
+  <!-- USER PROFILE / CUSTOMER LOGIN MODAL -->
   <div class="modal-bg" id="profileModal">
     <div class="modal-box">
-      <h3 style="margin-bottom: 6px; font-weight:800; font-size:16px;">നിങ്ങളുടെ പ്രൊഫൈൽ</h3>
-      <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">സാധനങ്ങൾ ഓർഡർ ചെയ്യാനും സേവനങ്ങൾക്കും നിങ്ങളുടെ വിവരങ്ങൾ ഒരിക്കൽ നൽകുക.</p>
+      <h3 style="margin-bottom: 6px; font-weight:800; font-size:16px;">ഉപഭോക്തൃ പ്രൊഫൈൽ</h3>
+      <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">കടകളിലേക്ക് ഓർഡർ ചെയ്യുമ്പോൾ നിങ്ങളുടെ വിവരങ്ങൾ ഓട്ടോമാറ്റിക്കായി അയക്കാൻ സഹായിക്കുന്നു.</p>
       <form onsubmit="saveUserProfile(event)">
         <input type="text" id="uName" placeholder="നിങ്ങളുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
-        <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 8px;">
+        <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ (ഉപഭോക്താവ്)" required class="dark-input" style="margin-bottom: 8px;">
         <textarea id="uAddress" placeholder="വീട്ടുപേര് / പ്രദേശം (വിലാസം)" rows="2" required class="dark-input" style="margin-bottom: 12px; resize:none;"></textarea>
-        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">സേവ് ചെയ്യുക</button>
+        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">പ്രൊഫൈൽ സേവ് ചെയ്യുക</button>
       </form>
     </div>
   </div>
@@ -465,15 +538,15 @@
   <!-- ADMIN MODAL -->
   <div class="modal-bg" id="adminModal">
     <div class="modal-box" style="text-align: center;">
-      <h3 style="margin-bottom: 8px; font-size:16px;">അഡ്മിൻ ലോഗിൻ</h3>
+      <h3 style="margin-bottom: 8px; font-size:16px;">അഡ്മിൻ പാനൽ</h3>
       <input type="password" id="adminPass" placeholder="Passcode (1234)" class="dark-input" style="text-align: center; margin-bottom: 12px;">
       <div style="display: flex; gap: 8px;">
         <button onclick="toggleModal('adminModal')" class="dark-input" style="flex:1;">ക്യാൻസൽ</button>
         <button onclick="loginAdmin()" class="btn-pro-call" style="flex:1;">ലോഗിൻ</button>
       </div>
       <div id="adminDataExport" style="display:none; margin-top:12px; text-align:left;">
-        <h4 style="font-size:11px; color:#38bdf8; margin-bottom:4px;">രജിസ്റ്റർ ചെയ്ത ഫോൺ നമ്പറുകൾ:</h4>
-        <textarea id="registeredNumbersText" class="dark-input" rows="3" readonly style="font-size:10px;"></textarea>
+        <h4 style="font-size:11px; color:#fde047; margin-bottom:4px;">ശേഖരിച്ച ഫോൺ നമ്പറുകൾ (കടകളും ഉപഭോക്താക്കളും):</h4>
+        <textarea id="registeredNumbersText" class="dark-input" rows="4" readonly style="font-size:10px;"></textarea>
       </div>
     </div>
   </div>
@@ -481,9 +554,9 @@
   <!-- ADD SHOP / SERVICE MODAL -->
   <div class="modal-bg" id="addModal">
     <div class="modal-box">
-      <h3 style="margin-bottom: 10px; font-size:16px;">വിവരങ്ങൾ ചേർക്കുക</h3>
+      <h3 style="margin-bottom: 10px; font-size:16px;">സ്ഥാപനം / സേവനം ചേർക്കുക</h3>
       <form onsubmit="saveShop(event)">
-        <input type="text" id="sName" placeholder="പേര് / സ്ഥാപനത്തിന്റെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
+        <input type="text" id="sName" placeholder="സ്ഥാപനത്തിന്റെ / തൊഴിലാളിയുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
         <select id="sCat" class="dark-select" style="margin-bottom: 8px;">
           <option value="worker">തൊഴിലാളി / സേവനം</option>
           <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
@@ -496,7 +569,7 @@
         </select>
         <input type="text" id="sLoc" placeholder="പ്രദേശം (ഉദാ: കവല ജംഗ്ഷൻ)" required class="dark-input" style="margin-bottom: 8px;">
         <textarea id="sDesc" placeholder="ഉൽപ്പന്നങ്ങൾ / സേവന വിവരങ്ങൾ" rows="2" class="dark-input" style="margin-bottom: 8px; resize: none;" required></textarea>
-        <input type="tel" id="sPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 12px;">
+        <input type="tel" id="sPhone" placeholder="ഫോൺ നമ്പർ (കടക്കാരൻ/തൊഴിലാളി)" required class="dark-input" style="margin-bottom: 12px;">
         <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">സമർപ്പിക്കുക</button>
       </form>
     </div>
@@ -507,8 +580,8 @@
     let selectedCat = 'all';
     let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
 
-    let shops = [
-      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ സേവനങ്ങൾ: വീടുകളിലെ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾക്ക് വിളിക്കുക.", phone: "9876543210" },
+    let shops = JSON.parse(localStorage.getItem('kolayad_shops')) || [
+      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ സേവനങ്ങൾ: വീടുകളിലെ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210" },
       { id: 2, name: "ഹരിശ്രീ സൂപ്പർമാർക്കറ്റ്", cat: "supermarket", catLabel: "സൂപ്പർമാർക്കറ്റ്", loc: "കവല ജംഗ്ഷൻ", desc: "🛒 ഉൽപ്പന്നങ്ങൾ: പച്ചക്കറികൾ, പലചരക്ക് സാധനങ്ങൾ, ഹോം ഡെലിവറി ലഭ്യമാണ്.", phone: "9876543211" },
       { id: 3, name: "അൽ-മദീന ഹോട്ടൽ", cat: "hotel", catLabel: "ഹോട്ടൽ", loc: "മാർക്കറ്റ് റോഡ്", desc: "🍲 ലഭിക്കുന്നവ: നാടൻ ഭക്ഷണങ്ങൾ, ചിക്കൻ ബിരിയാണി, പൊറോട്ട, ഫ്രെഷ് ജ്യൂസുകൾ.", phone: "9876543212" },
       { id: 4, name: "സിറ്റി മെഡിക്കൽസ്", cat: "medical", catLabel: "മെഡിക്കൽ", loc: "ഹോസ്പിറ്റൽ ജംഗ്ഷൻ", desc: "💊 സേവനങ്ങൾ: 24 മണിക്കൂർ മരുന്നു സേവനവും ഫസ്റ്റ് എയ്ഡ് സാമഗ്രികളും.", phone: "9876543213" }
@@ -516,9 +589,9 @@
 
     function checkUserStatus() {
       if(currentUser && currentUser.name) {
-        document.getElementById('userDisplayName').innerText = `👋 ${currentUser.name}`;
+        document.getElementById('userDisplayName').innerText = `👋 പ്രൊഫൈൽ: ${currentUser.name}`;
       } else {
-        document.getElementById('userDisplayName').innerText = `👤 പ്രൊഫൈൽ സെറ്റ് ചെയ്യുക`;
+        document.getElementById('userDisplayName').innerText = `👤 ഉപഭോക്തൃ പ്രൊഫൈൽ (ലോഗിൻ)`;
       }
     }
 
@@ -541,7 +614,7 @@
       localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
       checkUserStatus();
       toggleModal('profileModal');
-      alert("പ്രൊഫൈൽ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+      alert("ഉപഭോക്തൃ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
     }
 
     function render() {
@@ -589,8 +662,12 @@
 
     function setCat(cat, elem) {
       selectedCat = cat;
-      document.querySelectorAll('.cat-pill').forEach(e => e.classList.remove('active'));
+      document.querySelectorAll('.cat-box').forEach(e => e.classList.remove('active'));
       elem.classList.add('active');
+      
+      const txt = elem.querySelector('.cat-box-title').innerText;
+      document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
+      
       render();
     }
 
@@ -616,10 +693,10 @@
         document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
         document.getElementById('adminDataExport').style.display = 'block';
         
-        let allNums = "--- രജിസ്റ്റർ ചെയ്ത കടകൾ ---\n";
-        shops.forEach(s => allNums += `${s.name}: ${s.phone}\n`);
+        let allNums = "--- രജിസ്റ്റർ ചെയ്ത കടകൾ / തൊഴിലാളികൾ ---\n";
+        shops.forEach(s => allNums += `${s.name} (${s.loc}): ${s.phone}\n`);
         if(currentUser) {
-          allNums += "\n--- ഉപഭോക്താവ് ---\n";
+          allNums += "\n--- ഉപഭോക്താവിന്റെ വിവരം ---\n";
           allNums += `${currentUser.name} (${currentUser.address}): ${currentUser.phone}\n`;
         }
         document.getElementById('registeredNumbersText').value = allNums;
@@ -644,13 +721,15 @@
         phone: document.getElementById('sPhone').value
       };
       shops.unshift(n);
+      localStorage.setItem('kolayad_shops', JSON.stringify(shops));
       toggleModal('addModal');
       render();
     }
 
     function delShop(id) {
-      if(confirm("ഇത് ഒഴിവാക്കണോ?")) {
+      if(confirm("ഈ വിവരം ഒഴിവാക്കണോ?")) {
         shops = shops.filter(s => s.id !== id);
+        localStorage.setItem('kolayad_shops', JSON.stringify(shops));
         render();
       }
     }
