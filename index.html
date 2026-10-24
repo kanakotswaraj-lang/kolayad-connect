@@ -7,414 +7,86 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif;
-    }
-
-    body {
-      background-color: #0b0f17;
-      color: #f1f5f9;
-      display: flex;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #0b0f17; color: #f1f5f9; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
 
     .app-container {
-      width: 100%;
-      max-width: 480px;
-      height: 100vh;
-      background: #0f172a;
-      border: 2px solid #eab308;
-      border-radius: 0;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+      width: 100%; max-width: 480px; height: 100vh; background: #0f172a;
+      border: 2px solid #eab308; display: flex; flex-direction: column; position: relative;
       box-shadow: 0 0 35px rgba(234, 179, 8, 0.25);
     }
 
-    @media (min-width: 481px) {
-      .app-container {
-        border-radius: 28px;
-        height: 95vh;
-        margin-top: 2.5vh;
-      }
-    }
+    @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
 
-    /* STICKY TOP HEADER */
-    .sticky-header {
-      flex-shrink: 0;
-      background: #0f172a;
-      border-bottom: 2px solid #1e293b;
-      z-index: 40;
-    }
+    .sticky-header { flex-shrink: 0; background: #0f172a; border-bottom: 2px solid #1e293b; z-index: 40; }
+    .hero-banner { position: relative; height: 95px; background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), #0f172a); }
 
-    .hero-banner {
-      position: relative;
-      height: 95px;
-      background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
-    }
+    .top-action-bar { position: absolute; top: 8px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+    .admin-badge-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; }
 
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), #0f172a);
-    }
+    .profile-avatar-wrap { position: relative; margin-top: -35px; display: flex; justify-content: center; z-index: 5; }
+    .profile-avatar { width: 60px; height: 60px; border-radius: 18px; border: 3px solid #eab308; background: #1e293b url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80') center/cover; }
 
-    .top-action-bar {
-      position: absolute;
-      top: 8px;
-      left: 10px;
-      right: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-    }
+    .app-title-box { text-align: center; padding: 4px 10px 6px 10px; }
+    .main-app-name { font-size: 19px; font-weight: 800; color: #fde047; }
+    .user-welcome-bar { font-size: 11px; font-weight: 700; color: #fde047; background: #1e293b; padding: 5px 14px; border-radius: 12px; border: 1px solid #eab308; cursor: pointer; display: inline-flex; }
 
-    .admin-badge-btn {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid #eab308;
-      color: #fde047;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      backdrop-filter: blur(8px);
-      cursor: pointer;
-    }
+    .filter-sticky-padding { padding: 8px 12px; background: #0f172a; }
+    .dark-input, .dark-select { width: 100%; background: #162032; border: 1.5px solid #eab308; color: #ffffff; padding: 10px 14px; border-radius: 12px; font-size: 12px; outline: none; }
 
-    .profile-avatar-wrap {
-      position: relative;
-      margin-top: -35px;
-      display: flex;
-      justify-content: center;
-      z-index: 5;
-    }
+    .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 85px; }
+    .section-label { font-size: 12px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; }
 
-    .profile-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 18px;
-      border: 3px solid #eab308;
-      background: #1e293b url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80') center/cover;
-      box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
-    }
-
-    .app-title-box {
-      text-align: center;
-      padding: 4px 10px 6px 10px;
-    }
-
-    .main-app-name {
-      font-size: 19px;
-      font-weight: 800;
-      color: #fde047;
-      letter-spacing: -0.5px;
-    }
-
-    .user-welcome-bar {
-      font-size: 11px;
-      font-weight: 700;
-      color: #fde047;
-      background: #1e293b;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 14px;
-      border-radius: 12px;
-      margin-top: 3px;
-      border: 1px solid #eab308;
-      cursor: pointer;
-    }
-
-    .filter-sticky-padding {
-      padding: 8px 12px;
-      background: #0f172a;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .dark-input, .dark-select {
-      width: 100%;
-      background: #162032;
-      border: 1.5px solid #eab308;
-      color: #ffffff;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      outline: none;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
-    }
-
-    .dark-input::placeholder {
-      color: #fde047;
-      opacity: 0.9;
-    }
-
-    /* SCROLLABLE CONTENT BODY */
-    .scrollable-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-      padding-bottom: 85px;
-    }
-
-    .section-label {
-      font-size: 12px;
-      font-weight: 800;
-      color: #fde047;
-      margin: 10px 0 8px 2px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* FLIPKART STYLE BRIGHT BANNER CARD FOR NOTICES & OFFERS */
-    .banner-slider {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 6px;
-      margin-bottom: 12px;
-      scrollbar-width: none;
-    }
+    /* FLIPKART STYLE SLIDER WITH MULTI-COLORS */
+    .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
     .banner-slider::-webkit-scrollbar { display: none; }
 
     .bright-notice-card {
-      min-width: 88%;
-      scroll-snap-align: start;
-      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-      color: #0f172a;
-      border-radius: 16px;
-      padding: 14px 16px;
-      box-shadow: 0 6px 18px rgba(234, 179, 8, 0.35);
-      position: relative;
-      overflow: hidden;
+      min-width: 85%; scroll-snap-align: start;
+      border-radius: 16px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      cursor: pointer; transition: transform 0.2s ease; position: relative;
     }
+    .bright-notice-card:active { transform: scale(0.98); }
 
-    .notice-tag {
-      background: #0f172a;
-      color: #fde047;
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-bottom: 6px;
-    }
+    .notice-tag { background: rgba(0, 0, 0, 0.25); color: #ffffff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
+    .notice-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+    .notice-desc { font-size: 11px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-    .notice-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 4px;
-    }
-
-    .notice-desc {
-      font-size: 11px;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.4;
-    }
-
-    /* CATEGORY GRID */
-    .category-grid-container {
-      max-height: 160px;
-      overflow-y: auto;
-      padding-right: 4px;
-      margin-bottom: 14px;
-      scrollbar-width: thin;
-      scrollbar-color: #eab308 #1e293b;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .cat-box {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 14px;
-      padding: 10px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .cat-box-icon {
-      font-size: 20px;
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: rgba(234, 179, 8, 0.15);
-      border: 1px solid rgba(234, 179, 8, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fde047;
-    }
-
-    .cat-box-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: #e2e8f0;
-    }
-
-    .cat-box.active {
-      background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
-      border-color: #fef08a;
-    }
-
+    /* CATEGORIES & CARDS */
+    .category-grid-container { max-height: 160px; overflow-y: auto; margin-bottom: 14px; }
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .cat-box { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
+    .cat-box-icon { font-size: 20px; width: 38px; height: 38px; border-radius: 10px; background: rgba(234, 179, 8, 0.15); display: flex; align-items: center; justify-content: center; color: #fde047; }
+    .cat-box-title { font-size: 10px; font-weight: 700; color: #e2e8f0; margin-top: 4px; }
+    .cat-box.active { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); }
     .cat-box.active .cat-box-title { color: #0f172a; font-weight: 800; }
-    .cat-box.active .cat-box-icon { background: #0f172a; color: #fde047; }
 
-    /* CARDS */
-    .pro-card {
-      background: #1e293b;
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 12px;
-      border-left: 5px solid #eab308;
-      border: 1px solid #334155;
-      border-left-width: 5px;
-    }
-
-    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .pro-card { background: #1e293b; border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1px solid #334155; border-left: 5px solid #eab308; }
     .badge-tag { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(254, 224, 71, 0.12); color: #fde047; }
-    .item-name { font-size: 15px; font-weight: 800; color: #f8fafc; margin-bottom: 3px; }
+    .item-name { font-size: 15px; font-weight: 800; color: #f8fafc; margin-top: 4px; }
     .item-loc { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
-
-    .item-desc-highlight {
-      font-size: 11px;
-      color: #f1f5f9;
-      background: #0f172a;
-      padding: 10px 12px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      border: 1px solid #ca8a04;
-    }
-
+    .item-desc-highlight { font-size: 11px; color: #f1f5f9; background: #0f172a; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
+    
     .card-actions { display: flex; gap: 8px; }
+    .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; }
+    .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 
-    .btn-pro-call {
-      flex: 1;
-      background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
-      color: #0f172a;
-      text-decoration: none;
-      padding: 9px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 800;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; }
+    .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 20px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; }
 
-    .btn-pro-wa {
-      width: 36px;
-      height: 36px;
-      background: #22c55e;
-      color: white;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-
-    /* FLOATING BUTTON */
-    .floating-bar {
-      position: absolute;
-      bottom: 65px;
-      left: 0; right: 0;
-      display: flex;
-      justify-content: center;
-      z-index: 20;
-    }
-
-    .btn-add-pro {
-      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-      color: #0f172a;
-      border: 2px solid #fef08a;
-      padding: 9px 20px;
-      border-radius: 25px;
-      font-weight: 800;
-      font-size: 12px;
-      box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4);
-      cursor: pointer;
-    }
-
-    /* BOTTOM NAV BAR */
-    .bottom-nav {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: #0f172a;
-      border-top: 1px solid #1e293b;
-      padding: 6px 16px 12px 16px;
-      display: flex;
-      justify-content: space-around;
-      z-index: 30;
-    }
-
-    .nav-btn {
-      border: none;
-      background: transparent;
-      color: #64748b;
-      font-size: 10px;
-      font-weight: 700;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      cursor: pointer;
-    }
-
+    .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid #1e293b; padding: 6px 16px 12px 16px; display: flex; justify-content: space-around; z-index: 30; }
+    .nav-btn { border: none; background: transparent; color: #64748b; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
     .nav-btn.active { color: #fde047; }
 
-    /* MODALS */
-    .modal-bg {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-      padding: 16px;
-    }
-
-    .modal-box {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 360px;
-      padding: 18px;
-      color: white;
-    }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+    .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 360px; padding: 18px; color: white; }
   </style>
 </head>
 <body>
 
   <div class="app-container">
 
-    <!-- STICKY TOP HEADER -->
     <div class="sticky-header">
       <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
@@ -435,175 +107,69 @@
         </div>
       </div>
 
-      <!-- SEARCH & LOCATION FILTERS -->
       <div class="filter-sticky-padding">
-        <div class="filter-group">
-          <input type="text" id="searchInput" class="dark-input" onkeyup="render()" placeholder="🔍 ഉൽപ്പന്നങ്ങൾ, സേവനങ്ങൾ, കടകൾ തിരയുക...">
-          <select id="locationFilter" class="dark-select" onchange="render()">
-            <option value="all">📍 എല്ലാ പ്രദേശങ്ങളും (All Locations)</option>
-            <option value="കവല ജംഗ്ഷൻ">കവല ജംഗ്ഷൻ</option>
-            <option value="വായനശാലപ്പടി">വായനശാലപ്പടി</option>
-            <option value="മാർക്കറ്റ് റോഡ്">മാർക്കറ്റ് റോഡ്</option>
-            <option value="ഈസ്റ്റ് ഗ്രാമം">ഈസ്റ്റ് ഗ്രാമം</option>
-            <option value="ഹോസ്പിറ്റൽ ജംഗ്ഷൻ">ഹോസ്പിറ്റൽ ജംഗ്ഷൻ</option>
-          </select>
-        </div>
+        <input type="text" id="searchInput" class="dark-input" onkeyup="render()" placeholder="🔍 ഉൽപ്പന്നങ്ങൾ, സേവനങ്ങൾ, കടകൾ തിരയുക...">
       </div>
     </div>
 
-    <!-- SCROLLABLE CONTENT BODY -->
     <div class="scrollable-body" id="scrollBody">
       
-      <!-- FLIPKART STYLE BRIGHT NOTICES & OFFERS SECTION -->
+      <!-- OFFERS SLIDER SECTION -->
       <div class="section-label">
         <span>📢 പ്രധാന അറിയിപ്പുകൾ & ഓഫറുകൾ</span>
+        <span style="font-size:10px; color:#cbd5e1;">തൊട്ടാൽ വലുതായി വായിക്കാം 🔍</span>
       </div>
       
-      <div class="banner-slider">
-        <div class="bright-notice-card">
-          <span class="notice-tag">പ്രധാന അറിയിപ്പ്</span>
-          <div class="notice-title">🎉 കോളയാട് കണക്ട് ആരംഭിച്ചു!</div>
-          <div class="notice-desc">കോളയാട്ടിലെ എല്ലാ കടകളും തൊഴിലാളികളും സേവനങ്ങളും ഇനി നിങ്ങളുടെ വിരൽത്തുമ്പിൽ. വിവരങ്ങൾ സൗജന്യമായി ചേർക്കാം.</div>
-        </div>
-        
-        <div class="bright-notice-card" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: white;">
-          <span class="notice-tag" style="background: white; color: #0284c7;">വ്യാപാര ഓഫറുകൾ</span>
-          <div class="notice-title" style="color: white;">💥 വ്യാപാരികൾക്ക് വിശേഷ ഓഫർ</div>
-          <div class="notice-desc" style="color: #f0f9ff;">നിങ്ങളുടെ സ്ഥാപനങ്ങളുടെയും ഓഫറുകളുടെയും വിവരങ്ങൾ ആപ്പിൽ പ്രസിദ്ധീകരിക്കാൻ അഡ്മിനുമായി ബന്ധപ്പെടുക.</div>
-        </div>
-      </div>
+      <div class="banner-slider" id="noticesSlider"></div>
 
       <!-- CATEGORIES SECTION -->
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
-        <span style="font-size:10px; color:#fde047; font-weight:normal;" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
       </div>
 
       <div class="category-grid-container">
         <div class="category-grid">
-          <div class="cat-box active" onclick="setCat('all', this)">
-            <div class="cat-box-icon">📂</div>
-            <div class="cat-box-title">എല്ലാം</div>
-          </div>
-          <div class="cat-box" onclick="setCat('worker', this)">
-            <div class="cat-box-icon">👷‍♂️</div>
-            <div class="cat-box-title">തൊഴിലാളികൾ</div>
-          </div>
-          <div class="cat-box" onclick="setCat('supermarket', this)">
-            <div class="cat-box-icon">🛒</div>
-            <div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('hotel', this)">
-            <div class="cat-box-icon">🍲</div>
-            <div class="cat-box-title">ഹോട്ടൽ</div>
-          </div>
-          <div class="cat-box" onclick="setCat('bakery', this)">
-            <div class="cat-box-icon">🎂</div>
-            <div class="cat-box-title">ബേക്കറി</div>
-          </div>
-          <div class="cat-box" onclick="setCat('textiles', this)">
-            <div class="cat-box-icon">👗</div>
-            <div class="cat-box-title">ടെക്സ്റ്റൈൽസ്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('tailor', this)">
-            <div class="cat-box-icon">🧵</div>
-            <div class="cat-box-title">തയ്യൽക്കട</div>
-          </div>
-          <div class="cat-box" onclick="setCat('mobile', this)">
-            <div class="cat-box-icon">📱</div>
-            <div class="cat-box-title">മൊബൈൽ ഷോപ്പ്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('fish', this)">
-            <div class="cat-box-icon">🐟</div>
-            <div class="cat-box-title">മത്സ്യ മാർക്കറ്റ്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('meat', this)">
-            <div class="cat-box-icon">🥩</div>
-            <div class="cat-box-title">ഇറച്ചിക്കടകൾ</div>
-          </div>
-          <div class="cat-box" onclick="setCat('watch', this)">
-            <div class="cat-box-icon">⌚</div>
-            <div class="cat-box-title">വാച്ച് റിപ്പയർ</div>
-          </div>
-          <div class="cat-box" onclick="setCat('lottery', this)">
-            <div class="cat-box-icon">🎟️</div>
-            <div class="cat-box-title">ലോട്ടറി സ്റ്റാൾ</div>
-          </div>
-          <div class="cat-box" onclick="setCat('csc', this)">
-            <div class="cat-box-icon">💻</div>
-            <div class="cat-box-title">സിഎസ്സി സെന്റർ</div>
-          </div>
-          <div class="cat-box" onclick="setCat('mill', this)">
-            <div class="cat-box-icon">🌾</div>
-            <div class="cat-box-title">ധാന്യപ്പൊടി മില്ല്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('workshop', this)">
-            <div class="cat-box-icon">🔧</div>
-            <div class="cat-box-title">വർക്ക്‌ഷോപ്പ്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('ayurveda', this)">
-            <div class="cat-box-icon">🌿</div>
-            <div class="cat-box-title">ആയുർവേദ ഷോപ്പ്</div>
-          </div>
-          <div class="cat-box" onclick="setCat('stationery', this)">
-            <div class="cat-box-icon">📚</div>
-            <div class="cat-box-title">സ്റ്റേഷനറി കട</div>
-          </div>
-          <div class="cat-box" onclick="setCat('fruits', this)">
-            <div class="cat-box-icon">🍎</div>
-            <div class="cat-box-title">ഫ്രൂട്ട്സ് കട</div>
-          </div>
-          <div class="cat-box" onclick="setCat('auto', this)">
-            <div class="cat-box-icon">🛺</div>
-            <div class="cat-box-title">ഓട്ടോ / ടാക്സി</div>
-          </div>
-          <div class="cat-box" onclick="setCat('emergency', this)">
-            <div class="cat-box-icon">🚨</div>
-            <div class="cat-box-title">പ്രധാന നമ്പറുകൾ</div>
-          </div>
+          <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
+          <div class="cat-box" onclick="setCat('worker', this)"><div class="cat-box-icon">👷‍♂️</div><div class="cat-box-title">തൊഴിലാളികൾ</div></div>
+          <div class="cat-box" onclick="setCat('supermarket', this)"><div class="cat-box-icon">🛒</div><div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div></div>
+          <div class="cat-box" onclick="setCat('hotel', this)"><div class="cat-box-icon">🍲</div><div class="cat-box-title">ഹോട്ടൽ</div></div>
+          <div class="cat-box" onclick="setCat('bakery', this)"><div class="cat-box-icon">🎂</div><div class="cat-box-title">ബേക്കറി</div></div>
+          <div class="cat-box" onclick="setCat('textiles', this)"><div class="cat-box-icon">👗</div><div class="cat-box-title">ടെക്സ്റ്റൈൽസ്</div></div>
         </div>
       </div>
 
-      <!-- LISTINGS AREA -->
-      <div class="section-label">
-        <span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span>
-      </div>
+      <div class="section-label"><span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span></div>
       <div id="listings"></div>
 
     </div>
 
-    <!-- FLOATING ADD BUTTON -->
     <div class="floating-bar">
       <button class="btn-add-pro" onclick="toggleModal('addModal')">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</button>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-      <button class="nav-btn active" onclick="render()">
-        <span style="font-size: 16px;">🏪</span>
-        <span>ഡയറക്ടറി</span>
-      </button>
-      <button class="nav-btn" onclick="openProfileModal()">
-        <span style="font-size: 16px;">👤</span>
-        <span>എന്റെ വിവരങ്ങൾ</span>
-      </button>
-      <button class="nav-btn" onclick="toggleAdmin()">
-        <span style="font-size: 16px;">⚙️</span>
-        <span>അഡ്മിൻ</span>
-      </button>
+      <button class="nav-btn active" onclick="render()"><span style="font-size: 16px;">🏪</span><span>ഡയറക്ടറി</span></button>
+      <button class="nav-btn" onclick="openProfileModal()"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></button>
+      <button class="nav-btn" onclick="toggleAdmin()"><span style="font-size: 16px;">⚙️</span><span>അഡ്മിൻ</span></button>
     </nav>
 
+  </div>
+
+  <!-- POPUP MODAL TO READ OFFER FULL SIZE -->
+  <div class="modal-bg" id="viewNoticeModal">
+    <div class="modal-box" id="viewNoticeContent">
+      <!-- Dynamic Big Offer View -->
+    </div>
   </div>
 
   <!-- USER PROFILE MODAL -->
   <div class="modal-bg" id="profileModal">
     <div class="modal-box">
-      <h3 style="margin-bottom: 6px; font-weight:800; font-size:16px;">നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</h3>
-      <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">കടക്കാരിലേക്ക് നേരിട്ട് ഓർഡർ അയക്കുമ്പോൾ നിങ്ങളുടെ പേരും ഫോൺ നമ്പറും വിലാസവും കൃത്യമായി പോകുന്നതിനാണ് ഇത്.</p>
+      <h3 style="margin-bottom: 6px;">നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</h3>
       <form onsubmit="saveUserProfile(event)">
         <input type="text" id="uName" placeholder="നിങ്ങളുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
         <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 8px;">
-        <textarea id="uAddress" placeholder="വീട്ടുപേര് / പ്രദേശം (വിലാസം)" rows="2" required class="dark-input" style="margin-bottom: 12px; resize:none;"></textarea>
+        <textarea id="uAddress" placeholder="വീട്ടുപേര് / പ്രദേശം (വിലാസം)" rows="2" required class="dark-input" style="margin-bottom: 12px;"></textarea>
         <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
       </form>
     </div>
@@ -612,55 +178,40 @@
   <!-- ADMIN MODAL -->
   <div class="modal-bg" id="adminModal">
     <div class="modal-box" style="text-align: center;">
-      <h3 style="margin-bottom: 8px; font-size:16px;">അഡ്മിൻ പാനൽ</h3>
-      <input type="password" id="adminPass" placeholder="Passcode (1234)" class="dark-input" style="text-align: center; margin-bottom: 12px;">
+      <h3>അഡ്മിൻ പാനൽ ലോഗിൻ</h3>
+      <input type="password" id="adminPass" placeholder="Passcode (1234)" class="dark-input" style="text-align: center; margin: 12px 0;">
       <div style="display: flex; gap: 8px;">
         <button onclick="toggleModal('adminModal')" class="dark-input" style="flex:1;">ക്യാൻസൽ</button>
         <button onclick="loginAdmin()" class="btn-pro-call" style="flex:1;">ലോഗിൻ</button>
       </div>
 
-      <!-- ADMIN PHOTO CUSTOMIZER -->
       <div id="adminPhotoSection" style="display:none; margin-top:14px; text-align:left;">
-        <h4 style="font-size:11px; color:#eab308; margin-bottom:6px;">🖼️ ഫോട്ടോകൾ മാറ്റുക:</h4>
-        <input type="text" id="adminCoverUrl" placeholder="കവർ ഫോട്ടോ ഇമേജ് ലിങ്ക്" class="dark-input" style="margin-bottom:6px; font-size:10px;">
-        <input type="text" id="adminLogoUrl" placeholder="പ്രൊഫൈൽ ലോഗോ ഇമേജ് ലിങ്ക്" class="dark-input" style="margin-bottom:8px; font-size:10px;">
-        <button onclick="updateAppImages()" class="btn-pro-call" style="width:100%; padding:8px; font-size:10px; margin-bottom:10px;">ഫോട്ടോകൾ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">➕ പുതിയ ഓഫർ / അറിയിപ്പ് ചേർക്കുക:</h4>
+        <input type="text" id="offTag" placeholder="ടാഗ് (ഉദാ: വിശേഷ ഓഫർ)" class="dark-input" style="margin-bottom:6px;">
+        <input type="text" id="offTitle" placeholder="വിഷയം / ഹെഡിംഗ്" class="dark-input" style="margin-bottom:6px;">
+        <textarea id="offDesc" placeholder="ഓഫറിന്റെ മുഴുവൻ വിവരങ്ങൾ" class="dark-input" rows="2" style="margin-bottom:8px;"></textarea>
         
-        <h4 style="font-size:11px; color:#eab308; margin-bottom:4px;">📞 ശേഖരിച്ച നമ്പറുകൾ:</h4>
-        <textarea id="registeredNumbersText" class="dark-input" rows="3" readonly style="font-size:10px;"></textarea>
+        <select id="offColorTheme" class="dark-select" style="margin-bottom:8px;">
+          <option value="linear-gradient(135deg, #059669 0%, #10b981 100%)|#ffffff">എമറാൾഡ് ഗ്രീൻ (Emerald Green)</option>
+          <option value="linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)|#ffffff">റോയൽ ബ്ലൂ (Royal Blue)</option>
+          <option value="linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)|#ffffff">പർപ്പിൾ വൈബ് (Purple)</option>
+          <option value="linear-gradient(135deg, #d97706 0%, #f59e0b 100%)|#0f172a">ഗോൾഡൻ യെല്ലോ (Golden)</option>
+          <option value="linear-gradient(135deg, #dc2626 0%, #ef4444 100%)|#ffffff">റൂബി റെഡ് (Ruby Red)</option>
+        </select>
+
+        <button onclick="addNotice()" class="btn-pro-call" style="width:100%; padding:8px; margin-bottom:12px;">ഓഫർ പബ്ലിഷ് ചെയ്യുക</button>
       </div>
     </div>
   </div>
 
-  <!-- ADD SHOP / SERVICE MODAL -->
+  <!-- ADD SHOP MODAL -->
   <div class="modal-bg" id="addModal">
     <div class="modal-box">
-      <h3 style="margin-bottom: 10px; font-size:16px;">സ്ഥാപനം / സേവനം ചേർക്കുക</h3>
+      <h3>സ്ഥാപനം / സേവനം ചേർക്കുക</h3>
       <form onsubmit="saveShop(event)">
         <input type="text" id="sName" placeholder="സ്ഥാപനത്തിന്റെ / തൊഴിലാളിയുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
-        <select id="sCat" class="dark-select" style="margin-bottom: 8px;">
-          <option value="worker">തൊഴിലാളി / സേവനം</option>
-          <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
-          <option value="hotel">ഹോട്ടൽ</option>
-          <option value="bakery">ബേക്കറി</option>
-          <option value="textiles">ടെക്സ്റ്റൈൽസ്</option>
-          <option value="tailor">തയ്യൽക്കട</option>
-          <option value="mobile">മൊബൈൽ ഷോപ്പ്</option>
-          <option value="fish">മത്സ്യ മാർക്കറ്റ്</option>
-          <option value="meat">ഇറച്ചിക്കട</option>
-          <option value="watch">വാച്ച് റിപ്പയർ</option>
-          <option value="lottery">ലോട്ടറി സ്റ്റാൾ</option>
-          <option value="csc">സിഎസ്സി സെന്റർ</option>
-          <option value="mill">ധാന്യപ്പൊടി മില്ല്</option>
-          <option value="workshop">വർക്ക്‌ഷോപ്പ്</option>
-          <option value="ayurveda">ആയുർവേദ ഷോപ്പ്</option>
-          <option value="stationery">സ്റ്റേഷനറി കട</option>
-          <option value="fruits">ഫ്രൂട്ട്സ് കട</option>
-          <option value="auto">ഓട്ടോ / ടാക്സി</option>
-          <option value="emergency">പ്രധാന നമ്പറുകൾ</option>
-        </select>
-        <input type="text" id="sLoc" placeholder="പ്രദേശം (ഉദാ: കവല ജംഗ്ഷൻ)" required class="dark-input" style="margin-bottom: 8px;">
-        <textarea id="sDesc" placeholder="ഉൽപ്പന്നങ്ങൾ / സേവന വിവരങ്ങൾ" rows="2" class="dark-input" style="margin-bottom: 8px; resize: none;" required></textarea>
+        <input type="text" id="sLoc" placeholder="പ്രദേശം" required class="dark-input" style="margin-bottom: 8px;">
+        <textarea id="sDesc" placeholder="വിവരങ്ങൾ" rows="2" class="dark-input" style="margin-bottom: 8px;" required></textarea>
         <input type="tel" id="sPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 12px;">
         <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">സമർപ്പിക്കുക</button>
       </form>
@@ -671,21 +222,72 @@
     let isAdmin = false;
     let selectedCat = 'all';
     let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
-    let appImages = JSON.parse(localStorage.getItem('kolayad_images')) || {
-      cover: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',
-      logo: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80'
-    };
-
-    let shops = JSON.parse(localStorage.getItem('kolayad_shops')) || [
-      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ സേവനങ്ങൾ: വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210" },
-      { id: 2, name: "ഹരിശ്രീ സൂപ്പർമാർക്കറ്റ്", cat: "supermarket", catLabel: "സൂപ്പർമാർക്കറ്റ്", loc: "കവല ജംഗ്ഷൻ", desc: "🛒 ഉൽപ്പന്നങ്ങൾ: പച്ചക്കറികൾ, പലചരക്ക് സാധനങ്ങൾ, ഹോം ഡെലിവറി.", phone: "9876543211" },
-      { id: 3, name: "അൽ-മദീന ഹോട്ടൽ", cat: "hotel", catLabel: "ഹോട്ടൽ", loc: "മാർക്കറ്റ് റോഡ്", desc: "🍲 നാടൻ ഭക്ഷണങ്ങളും ബിരിയാണിയും ലഭ്യമാണ്.", phone: "9876543212" },
-      { id: 4, name: "സിറ്റി മെഡിക്കൽസ്", cat: "medical", catLabel: "മെഡിക്കൽ", loc: "ഹോസ്പിറ്റൽ ജംഗ്ഷൻ", desc: "💊 24 മണിക്കൂർ മരുന്നു സേവനം.", phone: "9876543213" }
+    
+    let notices = JSON.parse(localStorage.getItem('kolayad_notices')) || [
+      { id: 1, tag: "പ്രധാന അറിയിപ്പ്", title: "🎉 കോളയാട് കണക്ട് ആരംഭിച്ചു!", desc: "കോളയാട്ടിലെ എല്ലാ കടകളും തൊഴിലാളികളും സേവനങ്ങളും ഇനി നിങ്ങളുടെ വിരൽത്തുമ്പിൽ. വിവരങ്ങൾ സൗജന്യമായി ചേർക്കാം.", bg: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)", color: "#ffffff" },
+      { id: 2, tag: "വ്യാപാര ഓഫറുകൾ", title: "💥 വ്യാപാരികൾക്ക് വിശേഷ ഓഫർ", desc: "നിങ്ങളുടെ സ്ഥാപനങ്ങളുടെയും ഓഫറുകളുടെയും വിവരങ്ങൾ ആപ്പിൽ പ്രസിദ്ധീകരിക്കാൻ അഡ്മിനുമായി ബന്ധപ്പെടുക.", bg: "linear-gradient(135deg, #059669 0%, #10b981 100%)", color: "#ffffff" },
+      { id: 3, tag: "പുതിയ സേവനം", title: "🚀 ഹോം ഡെലിവറി ലഭ്യമാണ്", desc: "ആവശ്യമായ സാധനങ്ങൾ ഇനി വീട്ടിലെത്തും. കൂടുതൽ വിവരങ്ങൾക്ക് ബന്ധപ്പെടുക.", bg: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)", color: "#ffffff" }
     ];
 
-    function applyImages() {
-      document.getElementById('heroBannerBg').style.backgroundImage = `url('${appImages.cover}')`;
-      document.getElementById('profileAvatarBg').style.backgroundImage = `url('${appImages.logo}')`;
+    let shops = JSON.parse(localStorage.getItem('kolayad_shops')) || [
+      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210" }
+    ];
+
+    function renderNotices() {
+      const container = document.getElementById('noticesSlider');
+      container.innerHTML = notices.map(n => `
+        <div class="bright-notice-card" style="background: ${n.bg}; color: ${n.color};" onclick="viewNotice(${n.id})">
+          <span class="notice-tag">${n.tag}</span>
+          <div class="notice-title" style="color: ${n.color};">${n.title}</div>
+          <div class="notice-desc" style="color: ${n.color}; opacity: 0.95;">${n.desc}</div>
+          ${isAdmin ? `<button onclick="delNotice(event, ${n.id})" style="position:absolute; top:8px; right:8px; background:#ef4444; color:white; border:none; padding:2px 6px; border-radius:6px; font-size:10px;">🗑️</button>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function viewNotice(id) {
+      const n = notices.find(x => x.id === id);
+      if(!n) return;
+      const modalBox = document.getElementById('viewNoticeContent');
+      modalBox.style.background = n.bg;
+      modalBox.style.color = n.color;
+      modalBox.innerHTML = `
+        <span class="notice-tag" style="font-size:11px;">${n.tag}</span>
+        <h2 style="font-size:18px; margin:10px 0; color:${n.color};">${n.title}</h2>
+        <p style="font-size:13px; line-height:1.6; margin-bottom:16px; color:${n.color};">${n.desc}</p>
+        <button onclick="toggleModal('viewNoticeModal')" class="btn-pro-call" style="width:100%; background:#ffffff; color:#0f172a;">ക്ലോസ് ചെയ്യുക</button>
+      `;
+      toggleModal('viewNoticeModal');
+    }
+
+    function addNotice() {
+      const tag = document.getElementById('offTag').value;
+      const title = document.getElementById('offTitle').value;
+      const desc = document.getElementById('offDesc').value;
+      const themeVal = document.getElementById('offColorTheme').value.split('|');
+      
+      if(!title || !desc) return alert('വിവരങ്ങൾ പൂർണ്ണമായി നൽകുക!');
+
+      notices.unshift({ 
+        id: Date.now(), 
+        tag: tag || 'അറിയിപ്പ്', 
+        title, 
+        desc, 
+        bg: themeVal[0], 
+        color: themeVal[1] 
+      });
+      localStorage.setItem('kolayad_notices', JSON.stringify(notices));
+      renderNotices();
+      alert('പുതിയ ഓഫർ വിജയകരമായി പബ്ലിഷ് ചെയ്തു!');
+    }
+
+    function delNotice(e, id) {
+      e.stopPropagation();
+      if(confirm('ഈ ഓഫർ നീക്കം ചെയ്യണോ?')) {
+        notices = notices.filter(n => n.id !== id);
+        localStorage.setItem('kolayad_notices', JSON.stringify(notices));
+        renderNotices();
+      }
     }
 
     function openProfileModal() {
@@ -699,68 +301,29 @@
 
     function saveUserProfile(e) {
       e.preventDefault();
-      currentUser = {
-        name: document.getElementById('uName').value,
-        phone: document.getElementById('uPhone').value,
-        address: document.getElementById('uAddress').value
-      };
+      currentUser = { name: document.getElementById('uName').value, phone: document.getElementById('uPhone').value, address: document.getElementById('uAddress').value };
       localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
       toggleModal('profileModal');
-      alert("വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+      alert("വിവരങ്ങൾ സേവ് ചെയ്തു!");
     }
 
     function render() {
       const list = document.getElementById('listings');
       const q = document.getElementById('searchInput').value.toLowerCase();
-      const locFilter = document.getElementById('locationFilter').value;
+      const filtered = shops.filter(s => s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q));
 
-      const filtered = shops.filter(s => {
-        const matchCat = selectedCat === 'all' || s.cat === selectedCat;
-        const matchLoc = locFilter === 'all' || s.loc.includes(locFilter);
-        const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.loc.toLowerCase().includes(q);
-        return matchCat && matchLoc && matchQ;
-      });
-
-      if(filtered.length === 0) {
-        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:20px; font-size:12px;">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല!</div>`;
-        return;
-      }
-
-      list.innerHTML = filtered.map(s => {
-        let waText = `ഹലോ ${s.name}, കോളയാട് കണക്ട് ആപ്പിൽ നിങ്ങളുടെ വിവരങ്ങൾ കണ്ടിട്ടാണ് ബന്ധപ്പെടുന്നത്.`;
-        if(currentUser && currentUser.name) {
-          waText += `%0A%0A*ഓർഡർ ചെയ്യുന്ന ആളുടെ വിവരങ്ങൾ:*%0Aപേര്: ${currentUser.name}%0Aഫോൺ: ${currentUser.phone}%0Aവിലാസം: ${currentUser.address}`;
-        }
-
-        return `
+      list.innerHTML = filtered.map(s => `
         <div class="pro-card">
-          <div class="card-top">
-            <span class="badge-tag">${s.catLabel}</span>
-            <span style="font-size:10px; color:#34d399; font-weight:800;">● ലഭ്യമാണ്</span>
-          </div>
+          <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
           <div class="item-name">${s.name}</div>
           <div class="item-loc">📍 ${s.loc}</div>
-          
           <div class="item-desc-highlight">${s.desc}</div>
-          
           <div class="card-actions">
-            <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക ➡️</a>
-            <a href="https://wa.me/91${s.phone}?text=${waText}" target="_blank" class="btn-pro-wa" title="WhatsApp">💬</a>
-            ${isAdmin ? `<button onclick="delShop(${s.id})" style="background:#ef4444; color:white; border:none; padding:0 10px; border-radius:10px; font-weight:bold; cursor:pointer;">🗑️</button>` : ''}
+            <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
+            <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-pro-wa">💬</a>
           </div>
         </div>
-      `}).join('');
-    }
-
-    function setCat(cat, elem) {
-      selectedCat = cat;
-      document.querySelectorAll('.cat-box').forEach(e => e.classList.remove('active'));
-      elem.classList.add('active');
-      
-      const txt = elem.querySelector('.cat-box-title').innerText;
-      document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
-      
-      render();
+      `).join('');
     }
 
     function toggleModal(id) {
@@ -769,14 +332,8 @@
     }
 
     function toggleAdmin() {
-      if(isAdmin) {
-        isAdmin = false;
-        document.getElementById('adminBtn').innerText = "അഡ്മിൻ";
-        document.getElementById('adminPhotoSection').style.display = 'none';
-        render();
-      } else {
-        toggleModal('adminModal');
-      }
+      if(isAdmin) { isAdmin = false; document.getElementById('adminBtn').innerText = "അഡ്മിൻ"; renderNotices(); }
+      else { toggleModal('adminModal'); }
     }
 
     function loginAdmin() {
@@ -784,59 +341,11 @@
         isAdmin = true;
         document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
         document.getElementById('adminPhotoSection').style.display = 'block';
-        
-        document.getElementById('adminCoverUrl').value = appImages.cover;
-        document.getElementById('adminLogoUrl').value = appImages.logo;
-
-        let allNums = "--- രജിസ്റ്റർ ചെയ്ത കടകൾ / സേവനങ്ങൾ ---\n";
-        shops.forEach(s => allNums += `${s.name} (${s.loc}): ${s.phone}\n`);
-        if(currentUser) {
-          allNums += "\n--- ഉപഭോക്താവിന്റെ വിവരം ---\n";
-          allNums += `${currentUser.name} (${currentUser.address}): ${currentUser.phone}\n`;
-        }
-        document.getElementById('registeredNumbersText').value = allNums;
-
-        document.getElementById('adminPass').value = '';
-        render();
-      } else {
-        alert("തെറ്റായ പാസ്‌വേഡ്!");
-      }
+        renderNotices();
+      } else alert("പാസ്‌വേഡ് തെറ്റാണ്!");
     }
 
-    function updateAppImages() {
-      appImages.cover = document.getElementById('adminCoverUrl').value;
-      appImages.logo = document.getElementById('adminLogoUrl').value;
-      localStorage.setItem('kolayad_images', JSON.stringify(appImages));
-      applyImages();
-      alert("ഫോട്ടോകൾ വിജയകരമായി മാറ്റിക്കഴിഞ്ഞു!");
-    }
-
-    function saveShop(e) {
-      e.preventDefault();
-      const n = {
-        id: Date.now(),
-        name: document.getElementById('sName').value,
-        cat: document.getElementById('sCat').value,
-        catLabel: document.getElementById('sCat').options[document.getElementById('sCat').selectedIndex].text,
-        loc: document.getElementById('sLoc').value,
-        desc: document.getElementById('sDesc').value,
-        phone: document.getElementById('sPhone').value
-      };
-      shops.unshift(n);
-      localStorage.setItem('kolayad_shops', JSON.stringify(shops));
-      toggleModal('addModal');
-      render();
-    }
-
-    function delShop(id) {
-      if(confirm("ഈ വിവരം ഒഴിവാക്കണോ?")) {
-        shops = shops.filter(s => s.id !== id);
-        localStorage.setItem('kolayad_shops', JSON.stringify(shops));
-        render();
-      }
-    }
-
-    applyImages();
+    renderNotices();
     render();
   </script>
 </body>
