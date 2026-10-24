@@ -184,7 +184,17 @@
       justify-content: space-between;
     }
 
-    /* PERFECT SCROLLABLE CATEGORY GRID CONTAINER */
+    /* NOTICES BOX */
+    .notice-card {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #eab308;
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+    }
+
+    /* SCROLLABLE CATEGORY GRID CONTAINER */
     .category-grid-container {
       max-height: 160px;
       overflow-y: auto;
@@ -437,7 +447,7 @@
       <div class="app-title-box">
         <div class="main-app-name">കോളയാട് കണക്ട്</div>
         <div class="user-welcome-bar" onclick="openProfileModal()">
-          <span id="userDisplayName">👤 നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</span>
+          <span>👤 നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</span>
         </div>
       </div>
 
@@ -460,6 +470,15 @@
     <!-- SCROLLABLE CONTENT BODY -->
     <div class="scrollable-body" id="scrollBody">
       
+      <!-- NOTICES SECTION -->
+      <div class="section-label">
+        <span>📢 അറിയിപ്പുകൾ & ഓഫറുകൾ</span>
+      </div>
+      <div class="notice-card">
+        <div style="font-size: 12px; font-weight: 700; color: #fde047; margin-bottom: 4px;">കോളയാട് കണക്ട് അറിയിപ്പ്</div>
+        <div style="font-size: 11px; color: #cbd5e1; line-height: 1.4;">നിങ്ങളുടെ പ്രദേശത്തെ പുതിയ ഓഫറുകളും പ്രധാന അറിയിപ്പുകളും ഇവിടെ ഉടൻ ലഭ്യമാകും!</div>
+      </div>
+
       <!-- SCROLLABLE GRID CATEGORIES SECTION -->
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
@@ -572,7 +591,11 @@
       </button>
       <button class="nav-btn" onclick="openProfileModal()">
         <span style="font-size: 16px;">👤</span>
-        <span>എന്റെ പേര് / വിവരങ്ങൾ</span>
+        <span>എന്റെ വിവരങ്ങൾ</span>
+      </button>
+      <button class="nav-btn" onclick="alert('അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും!')">
+        <span style="font-size: 16px;">📢</span>
+        <span>അറിയിപ്പുകൾ</span>
       </button>
       <button class="nav-btn" onclick="toggleAdmin()">
         <span style="font-size: 16px;">⚙️</span>
@@ -675,14 +698,6 @@
       document.getElementById('profileAvatarBg').style.backgroundImage = `url('${appImages.logo}')`;
     }
 
-    function checkUserStatus() {
-      if(currentUser && currentUser.name) {
-        document.getElementById('userDisplayName').innerText = `👋 ഹലോ, ${currentUser.name}`;
-      } else {
-        document.getElementById('userDisplayName').innerText = `👤 നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക`;
-      }
-    }
-
     function openProfileModal() {
       if(currentUser) {
         document.getElementById('uName').value = currentUser.name || '';
@@ -700,7 +715,6 @@
         address: document.getElementById('uAddress').value
       };
       localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
-      checkUserStatus();
       toggleModal('profileModal');
       alert("വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
     }
@@ -833,7 +847,6 @@
     }
 
     applyImages();
-    checkUserStatus();
     render();
   </script>
 </body>
