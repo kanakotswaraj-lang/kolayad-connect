@@ -160,11 +160,6 @@
       opacity: 0.9;
     }
 
-    .dark-input:focus, .dark-select:focus {
-      border-color: #fef08a;
-      box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
-    }
-
     /* SCROLLABLE CONTENT BODY */
     .scrollable-body {
       flex: 1;
@@ -174,27 +169,65 @@
     }
 
     .section-label {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 800;
       color: #fde047;
-      margin: 8px 0 10px 2px;
-      letter-spacing: 0.5px;
+      margin: 10px 0 8px 2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* NOTICES BOX */
-    .notice-card {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      border: 1px solid #eab308;
+    /* FLIPKART STYLE BRIGHT BANNER CARD FOR NOTICES & OFFERS */
+    .banner-slider {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .banner-slider::-webkit-scrollbar { display: none; }
+
+    .bright-notice-card {
+      min-width: 88%;
+      scroll-snap-align: start;
+      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+      color: #0f172a;
       border-radius: 16px;
-      padding: 12px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+      padding: 14px 16px;
+      box-shadow: 0 6px 18px rgba(234, 179, 8, 0.35);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* SCROLLABLE CATEGORY GRID CONTAINER */
+    .notice-tag {
+      background: #0f172a;
+      color: #fde047;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .notice-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .notice-desc {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    /* CATEGORY GRID */
     .category-grid-container {
       max-height: 160px;
       overflow-y: auto;
@@ -221,7 +254,6 @@
       gap: 5px;
       cursor: pointer;
       text-align: center;
-      transition: all 0.2s ease;
     }
 
     .cat-box-icon {
@@ -246,80 +278,38 @@
     .cat-box.active {
       background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
       border-color: #fef08a;
-      box-shadow: 0 4px 15px rgba(234, 179, 8, 0.35);
     }
 
-    .cat-box.active .cat-box-title {
-      color: #0f172a;
-      font-weight: 800;
-    }
+    .cat-box.active .cat-box-title { color: #0f172a; font-weight: 800; }
+    .cat-box.active .cat-box-icon { background: #0f172a; color: #fde047; }
 
-    .cat-box.active .cat-box-icon {
-      background: #0f172a;
-      border-color: transparent;
-      color: #fde047;
-    }
-
-    /* CARDS LAYOUT */
+    /* CARDS */
     .pro-card {
       background: #1e293b;
       border-radius: 18px;
       padding: 14px;
       margin-bottom: 12px;
       border-left: 5px solid #eab308;
-      border-top: 1px solid #334155;
-      border-right: 1px solid #334155;
-      border-bottom: 1px solid #334155;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+      border: 1px solid #334155;
+      border-left-width: 5px;
     }
 
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .badge-tag {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: rgba(254, 224, 71, 0.12);
-      color: #fde047;
-    }
-
-    .item-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: #f8fafc;
-      margin-bottom: 3px;
-    }
-
-    .item-loc {
-      font-size: 11px;
-      color: #94a3b8;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .badge-tag { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(254, 224, 71, 0.12); color: #fde047; }
+    .item-name { font-size: 15px; font-weight: 800; color: #f8fafc; margin-bottom: 3px; }
+    .item-loc { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
 
     .item-desc-highlight {
       font-size: 11px;
       color: #f1f5f9;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: #0f172a;
       padding: 10px 12px;
       border-radius: 12px;
       margin-bottom: 10px;
-      line-height: 1.4;
       border: 1px solid #ca8a04;
     }
 
-    .card-actions {
-      display: flex;
-      gap: 8px;
-    }
+    .card-actions { display: flex; gap: 8px; }
 
     .btn-pro-call {
       flex: 1;
@@ -334,7 +324,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
     }
 
     .btn-pro-wa {
@@ -347,15 +336,13 @@
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      font-size: 16px;
     }
 
     /* FLOATING BUTTON */
     .floating-bar {
       position: absolute;
       bottom: 65px;
-      left: 0;
-      right: 0;
+      left: 0; right: 0;
       display: flex;
       justify-content: center;
       z-index: 20;
@@ -376,9 +363,7 @@
     /* BOTTOM NAV BAR */
     .bottom-nav {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       background: #0f172a;
       border-top: 1px solid #1e293b;
       padding: 6px 16px 12px 16px;
@@ -402,10 +387,9 @@
 
     .nav-btn.active { color: #fde047; }
 
-    /* MODAL OVERLAY */
+    /* MODALS */
     .modal-bg {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.85);
       backdrop-filter: blur(6px);
       display: none;
@@ -470,16 +454,26 @@
     <!-- SCROLLABLE CONTENT BODY -->
     <div class="scrollable-body" id="scrollBody">
       
-      <!-- NOTICES SECTION -->
+      <!-- FLIPKART STYLE BRIGHT NOTICES & OFFERS SECTION -->
       <div class="section-label">
-        <span>📢 അറിയിപ്പുകൾ & ഓഫറുകൾ</span>
+        <span>📢 പ്രധാന അറിയിപ്പുകൾ & ഓഫറുകൾ</span>
       </div>
-      <div class="notice-card">
-        <div style="font-size: 12px; font-weight: 700; color: #fde047; margin-bottom: 4px;">കോളയാട് കണക്ട് അറിയിപ്പ്</div>
-        <div style="font-size: 11px; color: #cbd5e1; line-height: 1.4;">നിങ്ങളുടെ പ്രദേശത്തെ പുതിയ ഓഫറുകളും പ്രധാന അറിയിപ്പുകളും ഇവിടെ ഉടൻ ലഭ്യമാകും!</div>
+      
+      <div class="banner-slider">
+        <div class="bright-notice-card">
+          <span class="notice-tag">പ്രധാന അറിയിപ്പ്</span>
+          <div class="notice-title">🎉 കോളയാട് കണക്ട് ആരംഭിച്ചു!</div>
+          <div class="notice-desc">കോളയാട്ടിലെ എല്ലാ കടകളും തൊഴിലാളികളും സേവനങ്ങളും ഇനി നിങ്ങളുടെ വിരൽത്തുമ്പിൽ. വിവരങ്ങൾ സൗജന്യമായി ചേർക്കാം.</div>
+        </div>
+        
+        <div class="bright-notice-card" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: white;">
+          <span class="notice-tag" style="background: white; color: #0284c7;">വ്യാപാര ഓഫറുകൾ</span>
+          <div class="notice-title" style="color: white;">💥 വ്യാപാരികൾക്ക് വിശേഷ ഓഫർ</div>
+          <div class="notice-desc" style="color: #f0f9ff;">നിങ്ങളുടെ സ്ഥാപനങ്ങളുടെയും ഓഫറുകളുടെയും വിവരങ്ങൾ ആപ്പിൽ പ്രസിദ്ധീകരിക്കാൻ അഡ്മിനുമായി ബന്ധപ്പെടുക.</div>
+        </div>
       </div>
 
-      <!-- SCROLLABLE GRID CATEGORIES SECTION -->
+      <!-- CATEGORIES SECTION -->
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
         <span style="font-size:10px; color:#fde047; font-weight:normal;" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
@@ -592,10 +586,6 @@
       <button class="nav-btn" onclick="openProfileModal()">
         <span style="font-size: 16px;">👤</span>
         <span>എന്റെ വിവരങ്ങൾ</span>
-      </button>
-      <button class="nav-btn" onclick="alert('അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും!')">
-        <span style="font-size: 16px;">📢</span>
-        <span>അറിയിപ്പുകൾ</span>
       </button>
       <button class="nav-btn" onclick="toggleAdmin()">
         <span style="font-size: 16px;">⚙️</span>
