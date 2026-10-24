@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>കോളയാട് കണക്ട് - ഗ്രാമീണ ഡയറക്ടറി</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      padding-bottom: 130px;
+    }
+
+    /* Ultra Modern Header */
+    .app-header {
+      background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
+      color: white;
+      padding: 18px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    .admin-top-btn {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: white;
+      padding: 9px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .main-content {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Modern Ticker */
+    .ticker-box {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 1px solid #fde68a;
+      border-radius: 18px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #78350f;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+    }
+
+    .ticker-tag {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    /* Search & Location Filter Box */
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .search-box, .location-select {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      font-size: 14px;
+      outline: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .search-box:focus, .location-select:focus {
+      border-color: #10b981;
+    }
+
+    /* Horizontal Scroll Categories */
+    .cat-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .cat-scroll-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+
+    .cat-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-item {
+      background: white;
+      border: 1px solid #edf2f7;
+      border-radius: 18px;
+      padding: 12px 14px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 90px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .cat-item:active {
+      transform: scale(0.95);
+    }
+
+    .cat-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .cat-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+
+    .cat-item.active {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.4);
+    }
+
+    .cat-item.active .cat-text {
+      color: white;
+    }
+
+    /* Modern Tabs */
+    .tab-bar {
+      background: #e2e8f0;
+      padding: 5px;
+      border-radius: 16px;
+      display: flex;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: #065f46;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    /* Shop Cards */
+    .shop-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 24px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .badge-cat {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 10px;
+    }
+
+    .badge-status {
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    .shop-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .shop-loc {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .shop-desc {
+      font-size: 12px;
+      color: #334155;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      line-height: 1.5;
+      border: 1px solid #f1f5f9;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-call {
+      flex: 1;
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-wa {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    /* Floating Add Button */
+    .float-add-container {
+      position: fixed;
+      bottom: 85px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 25;
+      padding: 0 16px;
+    }
+
+    .btn-float-add {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      border: 3px solid white;
+      padding: 14px 28px;
+      border-radius: 35px;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(5, 150, 105, 0.5);
+      cursor: pointer;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid #e2e8f0;
+      padding: 10px 16px 22px 16px;
+      display: flex;
+      justify-content: space-around;
+      z-index: 30;
+    }
+
+    .nav-item {
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .nav-item.active {
+      color: #059669;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 380px;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-box">
+      <div class="brand-icon">🌐</div>
+      <div>
+        <div class="brand-title">കോളയാട് കണക്ട്</div>
+        <div class="brand-sub">ഗ്രാമീണ ബിസിനസ് & സർവീസ് ഡയറക്ടറി</div>
+      </div>
+    </div>
+    <button onclick="toggleAdmin()" class="admin-top-btn" id="adminBtnText">അഡ്മിൻ</button>
+  </header>
+
+  <!-- MAIN BODY -->
+  <main class="main-content">
+
+    <!-- TICKER -->
+    <div class="ticker-box">
+      <span class="ticker-tag">അറിയിപ്പ്</span>
+      <marquee>കോളയാട് കണക്ടിലേക്ക് സ്വാഗതം! നിങ്ങളുടെ പ്രദേശത്തെ കടകളും സേവനങ്ങളും ഇനി ഒറ്റ ക്ലിക്കിൽ അറിയാം.</marquee>
+    </div>
+
+    <!-- SEARCH & LOCATION FILTER -->
+    <div class="search-container">
+      <input type="text" class="search-box" id="searchInput" onkeyup="render()" placeholder="🔍 കടകൾ, തൊഴിലാളികൾ, സേവനങ്ങൾ തിരയുക...">
+      
+      <select id="locationFilter" onchange="render()" class="location-select">
+        <option value="all">📍 എല്ലാ പ്രദേശങ്ങളും (All Locations)</option>
+        <option value="കവല ജംഗ്ഷൻ">കവല ജംഗ്ഷൻ</option>
+        <option value="വായനശാലപ്പടി">വായനശാലപ്പടി</option>
+        <option value="മാർക്കറ്റ് റോഡ്">മാർക്കറ്റ് റോഡ്</option>
+        <option value="ഈസ്റ്റ് ഗ്രാമം">ഈസ്റ്റ് ഗ്രാമം</option>
+        <option value="ഹോസ്പിറ്റൽ ജംഗ്ഷൻ">ഹോസ്പിറ്റൽ ജംഗ്ഷൻ</option>
+      </select>
+    </div>
+
+    <!-- HORIZONTAL SCROLL CATEGORIES -->
+    <div class="cat-title">കാറ്റഗറികൾ (CATEGORIES)</div>
+    <div class="cat-scroll-container">
+      <div onclick="setCat('all', this)" class="cat-item active">
+        <div class="cat-icon-wrap" style="background:#dcfce7; color:#15803d;">📂</div>
+        <div class="cat-text">എല്ലാം</div>
+      </div>
+      <div onclick="setCat('worker', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#e0f2fe; color:#0369a1;">👷‍♂️</div>
+        <div class="cat-text">തൊഴിലാളികൾ</div>
+      </div>
+      <div onclick="setCat('supermarket', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#dcfce7; color:#15803d;">🛒</div>
+        <div class="cat-text">സൂപ്പർമാർക്കറ്റ്</div>
+      </div>
+      <div onclick="setCat('hotel', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#fef3c7; color:#b45309;">🍲</div>
+        <div class="cat-text">ഹോട്ടൽ</div>
+      </div>
+      <div onclick="setCat('bakery', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#ffe4e6; color:#be123c;">🎂</div>
+        <div class="cat-text">ബേക്കറി</div>
+      </div>
+      <div onclick="setCat('medical', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#f3e8ff; color:#7e22ce;">💊</div>
+        <div class="cat-text">മെഡിക്കൽ</div>
+      </div>
+      <div onclick="setCat('hardware', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#ffedd5; color:#c2410c;">🔨</div>
+        <div class="cat-text">ഹാർഡ്‌വെയർ</div>
+      </div>
+      <div onclick="setCat('rental', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#ccfbf1; color:#0f766e;">🚜</div>
+        <div class="cat-text">വാടക ഉപകരണങ്ങൾ</div>
+      </div>
+      <div onclick="setCat('events', this)" class="cat-item">
+        <div class="cat-icon-wrap" style="background:#fae8ff; color:#a21caf;">💡</div>
+        <div class="cat-text">ലൈറ്റ് & സൗണ്ട്</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabDir" onclick="switchTab('dir')">ഡയറക്ടറി (<span id="count">5</span>)</button>
+      <button class="tab-btn" id="tabNotice" onclick="switchTab('notice')">നോട്ടീസ് ബോർഡ്</button>
+    </div>
+
+    <!-- LISTINGS -->
+    <div id="listings"></div>
+
+  </main>
+
+  <!-- FLOATING BUTTON -->
+  <div class="float-add-container">
+    <button class="btn-float-add" onclick="toggleModal('addModal')">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('dir')">
+      <span style="font-size: 18px;">🏪</span>
+      <span>ഡയറക്ടറി</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('notice')">
+      <span style="font-size: 18px;">📢</span>
+      <span>ഓഫറുകൾ</span>
+    </button>
+    <button class="nav-item" onclick="toggleAdmin()">
+      <span style="font-size: 18px;">⚙️</span>
+      <span>അഡ്മിൻ</span>
+    </button>
+  </nav>
+
+  <!-- ADMIN MODAL -->
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal-card" style="text-align: center;">
+      <h3 style="margin-bottom: 8px; font-weight: 800;">അഡ്മിൻ ലോഗിൻ</h3>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">പാസ്‌വേഡ് ടൈപ്പ് ചെയ്യുക (1234)</p>
+      <input type="password" id="adminPass" placeholder="Passcode" style="width: 100%; padding: 12px; border-radius: 14px; border: 1px solid #cbd5e1; text-align: center; margin-bottom: 16px; font-size: 16px; outline: none;">
+      <div style="display: flex; gap: 10px;">
+        <button onclick="toggleModal('adminModal')" style="flex:1; padding:12px; border-radius:14px; border:none; background:#e2e8f0; font-weight:700; cursor:pointer;">ക്യാൻസൽ</button>
+        <button onclick="loginAdmin()" style="flex:1; padding:12px; border-radius:14px; border:none; background:#059669; color:white; font-weight:800; cursor:pointer;">ലോഗിൻ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD SHOP MODAL -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-card">
+      <h3 style="margin-bottom: 16px; font-weight: 800;">വിവരങ്ങൾ ചേർക്കുക</h3>
+      <form onsubmit="saveShop(event)">
+        <input type="text" id="sName" placeholder="പേര് / സ്ഥാപനത്തിന്റെ പേര്" required style="width:100%; padding:12px; border-radius:14px; border:1px solid #cbd5e1; margin-bottom:10px; font-size:14px; outline:none;">
+        <select id="sCat" style="width:100%; padding:12px; border-radius:14px; border:1px solid #cbd5e1; margin-bottom:10px; font-size:14px; outline:none; background:white;">
+          <option value="worker">തൊഴിലാളി / സേവനം (Worker/Service)</option>
+          <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
+          <option value="hotel">ഹോട്ടൽ</option>
+          <option value="bakery">ബേക്കറി</option>
+          <option value="medical">മെഡിക്കൽ ഷോപ്പ്</option>
+          <option value="hardware">ഹാർഡ്‌വെയർ</option>
+          <option value="rental">വാടക ഉപകരണങ്ങൾ</option>
+          <option value="events">ലൈറ്റ് & സൗണ്ട്</option>
+        </select>
+        <input type="text" id="sLoc" placeholder="പ്രദേശം (ഉദാ: കവല ജംഗ്ഷൻ)" required style="width:100%; padding:12px; border-radius:14px; border:1px solid #cbd5e1; margin-bottom:10px; font-size:14px; outline:none;">
+        <textarea id="sDesc" placeholder="വിവരണം (ജോലി/സേവനങ്ങൾ)" rows="2" style="width:100%; padding:12px; border-radius:14px; border:1px solid #cbd5e1; margin-bottom:10px; font-size:14px; outline:none; resize:none;"></textarea>
+        <input type="tel" id="sPhone" placeholder="ഫോൺ നമ്പർ" required style="width:100%; padding:12px; border-radius:14px; border:1px solid #cbd5e1; margin-bottom:16px; font-size:14px; outline:none;">
+        <button type="submit" style="width:100%; padding:14px; border-radius:14px; border:none; background:#059669; color:white; font-weight:800; font-size:14px; cursor:pointer; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">സമർപ്പിക്കുക</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let isAdmin = false;
+    let selectedCat = 'all';
+
+    let shops = [
+      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "വീടുകളിലെ വയറിങ്, പ്ലംബിംഗ് പണികൾക്ക് വിളിക്കുക.", phone: "9876543210" },
+      { id: 2, name: "ഹരിശ്രീ സൂപ്പർമാർക്കറ്റ്", cat: "supermarket", catLabel: "സൂപ്പർമാർക്കറ്റ്", loc: "കവല ജംഗ്ഷൻ", desc: "പച്ചക്കറികൾ, പലചരക്ക് സാധനങ്ങൾ.", phone: "9876543211" },
+      { id: 3, name: "അൽ-മദീന ഹോട്ടൽ", cat: "hotel", catLabel: "ഹോട്ടൽ", loc: "മാർക്കറ്റ് റോഡ്", desc: "നാടൻ ഭക്ഷണങ്ങളും ബിരിയാണിയും ലഭ്യമാണ്.", phone: "9876543212" },
+      { id: 4, name: "സിറ്റി മെഡിക്കൽസ്", cat: "medical", catLabel: "മെഡിക്കൽ ഷോപ്പ്", loc: "ഹോസ്പിറ്റൽ ജംഗ്ഷൻ", desc: "24 മണിക്കൂർ മരുന്നു സേവനം.", phone: "9876543213" },
+      { id: 5, name: "ശ്രീരാം ലൈറ്റ് & സൗണ്ട്", cat: "events", catLabel: "ലൈറ്റ് & സൗണ്ട്", loc: "ഈസ്റ്റ് ഗ്രാമം", desc: "ആഘോഷ പരിപാടികൾക്ക് സൗണ്ട് സിസ്റ്റം.", phone: "9876543214" }
+    ];
+
+    function render() {
+      const list = document.getElementById('listings');
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const locFilter = document.getElementById('locationFilter').value;
+
+      const filtered = shops.filter(s => {
+        const matchCat = selectedCat === 'all' || s.cat === selectedCat;
+        const matchLoc = locFilter === 'all' || s.loc.includes(locFilter);
+        const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.loc.toLowerCase().includes(q);
+        return matchCat && matchLoc && matchQ;
+      });
+
+      document.getElementById('count').innerText = filtered.length;
+
+      if(filtered.length === 0) {
+        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:30px; font-weight:600;">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല!</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(s => `
+        <div class="shop-card">
+          <div class="card-head">
+            <span class="badge-cat">${s.catLabel}</span>
+            <span class="badge-status">ലഭ്യമാണ്</span>
+          </div>
+          <div class="shop-title">${s.name}</div>
+          <div class="shop-loc">📍 ${s.loc}</div>
+          <div class="shop-desc">${s.desc}</div>
+          <div class="btn-group">
+            <a href="tel:${s.phone}" class="btn-call">📞 കോൾ ചെയ്യുക</a>
+            <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-wa">💬</a>
+            ${isAdmin ? `<button onclick="delShop(${s.id})" style="background:#fee2e2; color:#ef4444; border:none; padding:0 14px; border-radius:14px; font-weight:bold; cursor:pointer;">🗑️</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setCat(cat, elem) {
+      selectedCat = cat;
+      document.querySelectorAll('.cat-item').forEach(e => e.classList.remove('active'));
+      elem.classList.add('active');
+      render();
+    }
+
+    function switchTab(t) {
+      if(t === 'dir') {
+        document.getElementById('tabDir').classList.add('active');
+        document.getElementById('tabNotice').classList.remove('active');
+        render();
+      } else {
+        document.getElementById('tabNotice').classList.add('active');
+        document.getElementById('tabDir').classList.remove('active');
+        document.getElementById('listings').innerHTML = `
+          <div class="shop-card" style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-color:#fde68a;">
+            <span style="background:#f59e0b; color:white; font-size:10px; font-weight:800; padding:4px 10px; border-radius:8px;">ഓഫർ</span>
+            <h4 style="margin-top:8px; color:#78350f; font-weight:800; font-size:16px;">കോളയാട് കണക്ട് അറിയിപ്പ്</h4>
+            <p style="font-size:12px; color:#92400e; margin-top:6px; font-weight:600; line-height:1.5;">നിങ്ങളുടെ പ്രദേശത്തെ പുതിയ ഓഫറുകളും അറിയിപ്പുകളും ഇവിടെ ഉടൻ ലഭ്യമാകും!</p>
+          </div>
+        `;
+      }
+    }
+
+    function toggleModal(id) {
+      const m = document.getElementById(id);
+      m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function toggleAdmin() {
+      if(isAdmin) {
+        isAdmin = false;
+        document.getElementById('adminBtnText').innerText = "അഡ്മിൻ";
+        render();
+      } else {
+        toggleModal('adminModal');
+      }
+    }
+
+    function loginAdmin() {
+      if(document.getElementById('adminPass').value === '1234') {
+        isAdmin = true;
+        document.getElementById('adminBtnText').innerText = "ലോഗ്ഔട്ട്";
+        toggleModal('adminModal');
+        document.getElementById('adminPass').value = '';
+        render();
+      } else {
+        alert("തെറ്റായ പാസ്‌വേഡ്!");
+      }
+    }
+
+    function saveShop(e) {
+      e.preventDefault();
+      const n = {
+        id: Date.now(),
+        name: document.getElementById('sName').value,
+        cat: document.getElementById('sCat').value,
+        catLabel: document.getElementById('sCat').options[document.getElementById('sCat').selectedIndex].text,
+        loc: document.getElementById('sLoc').value,
+        desc: document.getElementById('sDesc').value,
+        phone: document.getElementById('sPhone').value
+      };
+      shops.unshift(n);
+      toggleModal('addModal');
+      render();
+    }
+
+    function delShop(id) {
+      if(confirm("ഈ വിവരം ഒഴിവാക്കണോ?")) {
+        shops = shops.filter(s => s.id !== id);
+        render();
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
