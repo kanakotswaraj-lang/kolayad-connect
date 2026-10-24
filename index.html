@@ -17,7 +17,7 @@
     body {
       background-color: #0b0f17;
       color: #f1f5f9;
-      padding-bottom: 110px;
+      padding-bottom: 90px;
       display: flex;
       justify-content: center;
     }
@@ -34,24 +34,33 @@
       position: relative;
     }
 
-    /* Cover & Hero Section (Mahestri Pro Style) */
+    /* STICKY HEADER AREA */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: #0f172a;
+      border-bottom: 2px solid #1e293b;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
     .hero-banner {
       position: relative;
-      height: 180px;
+      height: 120px;
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
     }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), #0f172a);
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.3), #0f172a);
     }
 
     .top-action-bar {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      right: 14px;
+      top: 10px;
+      left: 12px;
+      right: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -59,12 +68,12 @@
     }
 
     .admin-badge-btn {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.85);
       border: 1px solid #10b981;
       color: #34d399;
-      padding: 8px 16px;
+      padding: 6px 14px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       backdrop-filter: blur(8px);
       cursor: pointer;
@@ -72,56 +81,55 @@
 
     .profile-avatar-wrap {
       position: relative;
-      margin-top: -55px;
+      margin-top: -40px;
       display: flex;
       justify-content: center;
       z-index: 5;
     }
 
     .profile-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 26px;
-      border: 4px solid #f59e0b;
+      width: 70px;
+      height: 70px;
+      border-radius: 20px;
+      border: 3px solid #f59e0b;
       background: #1e293b url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80') center/cover;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
     }
 
     .app-title-box {
       text-align: center;
-      padding: 12px 16px 6px 16px;
+      padding: 6px 12px 10px 12px;
     }
 
     .main-app-name {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       color: #38bdf8;
       letter-spacing: -0.5px;
     }
 
-    .date-pill {
-      display: inline-block;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #94a3b8;
+    .user-welcome-bar {
       font-size: 11px;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-top: 6px;
-      font-weight: 600;
+      color: #94a3b8;
+      background: #1e293b;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-top: 4px;
+      border: 1px solid #334155;
     }
 
-    /* Content Area */
-    .content-padding {
-      padding: 16px;
+    .filter-sticky-padding {
+      padding: 10px 14px;
+      background: #0f172a;
     }
 
-    /* Search & Location Select */
     .filter-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
     }
 
     .dark-input, .dark-select {
@@ -129,9 +137,9 @@
       background: #1e293b;
       border: 1px solid #334155;
       color: #f8fafc;
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 12px;
       outline: none;
     }
 
@@ -139,31 +147,26 @@
       border-color: #38bdf8;
     }
 
-    /* Horizontal Category Scroll Bar */
+    /* SCROLLABLE CATEGORIES */
     .cat-scroll-container {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 16px;
+      padding: 8px 14px;
       scrollbar-width: none;
+      background: #0f172a;
     }
 
-    .cat-scroll-container::-webkit-scrollbar {
-      display: none;
-    }
+    .cat-scroll-container::-webkit-scrollbar { display: none; }
 
     .cat-pill {
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 10px 14px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 14px;
       white-space: nowrap;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #cbd5e1;
     }
@@ -172,15 +175,20 @@
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
       border-color: #34d399;
       color: white;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
-    /* Card List Style (Mahestri Pro Border Cards) */
+    /* CONTENT SCROLLABLE AREA */
+    .content-padding {
+      padding: 14px;
+    }
+
+    /* CARDS LAYOUT */
     .pro-card {
       background: #1e293b;
       border-radius: 20px;
       padding: 16px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       border-left: 5px solid #10b981;
       border-top: 1px solid #334155;
       border-right: 1px solid #334155;
@@ -216,7 +224,7 @@
     }
 
     .item-loc {
-      font-size: 12px;
+      font-size: 11px;
       color: #94a3b8;
       margin-bottom: 10px;
       display: flex;
@@ -224,15 +232,17 @@
       gap: 4px;
     }
 
-    .item-desc {
+    /* HIGHLIGHTED SERVICES / PRODUCTS BOX */
+    .item-desc-highlight {
       font-size: 12px;
-      color: #cbd5e1;
-      background: #0f172a;
-      padding: 10px 12px;
-      border-radius: 12px;
+      color: #f1f5f9;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 12px 14px;
+      border-radius: 14px;
       margin-bottom: 12px;
-      line-height: 1.4;
-      border: 1px solid #1e293b;
+      line-height: 1.5;
+      border: 1px solid #38bdf8;
+      box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.1);
     }
 
     .card-actions {
@@ -269,10 +279,10 @@
       font-size: 18px;
     }
 
-    /* Floating Add Action */
+    /* FLOATING BUTTON */
     .floating-bar {
       position: fixed;
-      bottom: 75px;
+      bottom: 70px;
       left: 0;
       right: 0;
       display: flex;
@@ -284,15 +294,15 @@
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
       border: 2px solid #34d399;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border-radius: 30px;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12px;
       box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
       cursor: pointer;
     }
 
-    /* Bottom Nav Bar */
+    /* BOTTOM NAV BAR */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -302,7 +312,7 @@
       max-width: 480px;
       background: #0f172a;
       border-top: 1px solid #1e293b;
-      padding: 10px 16px 18px 16px;
+      padding: 8px 16px 14px 16px;
       display: flex;
       justify-content: space-around;
       z-index: 30;
@@ -312,24 +322,22 @@
       border: none;
       background: transparent;
       color: #64748b;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       cursor: pointer;
     }
 
-    .nav-btn.active {
-      color: #10b981;
-    }
+    .nav-btn.active { color: #10b981; }
 
-    /* Modal Overlay */
+    /* MODAL OVERLAY */
     .modal-bg {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(6px);
       display: none;
       align-items: center;
@@ -353,42 +361,44 @@
 
   <div class="app-container">
 
-    <!-- HERO HEADER WITH COVER IMAGE -->
-    <div class="hero-banner">
-      <div class="hero-overlay"></div>
-      <div class="top-action-bar">
-        <div style="font-size: 12px; font-weight: 800; color: #f8fafc; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 12px;">🌴 കോളയാട്, കണ്ണൂർ</div>
-        <button class="admin-badge-btn" onclick="toggleAdmin()" id="adminBtn">അഡ്മിൻ</button>
-      </div>
-    </div>
-
-    <!-- CIRCULAR LOGO AVATAR -->
-    <div class="profile-avatar-wrap">
-      <div class="profile-avatar"></div>
-    </div>
-
-    <!-- TITLE & DATE -->
-    <div class="app-title-box">
-      <div class="main-app-name">കോളയാട് കണക്ട്</div>
-      <div class="date-pill" id="liveDate">ഇന്ന്: ശനിയാഴ്ച, 24 ഒക്ടോബർ, 2026</div>
-    </div>
-
-    <div class="content-padding">
-
-      <!-- SEARCH & LOCATION FILTER -->
-      <div class="filter-group">
-        <input type="text" id="searchInput" class="dark-input" onkeyup="render()" placeholder="🔍 സ്ഥാപനങ്ങൾ, തൊഴിലാളികൾ തിരയുക...">
-        <select id="locationFilter" class="dark-select" onchange="render()">
-          <option value="all">📍 എല്ലാ പ്രദേശങ്ങളും (All Locations)</option>
-          <option value="കവല ജംഗ്ഷൻ">കവല ജംഗ്ഷൻ</option>
-          <option value="വായനശാലപ്പടി">വായനശാലപ്പടി</option>
-          <option value="മാർക്കറ്റ് റോഡ്">മാർക്കറ്റ് റോഡ്</option>
-          <option value="ഈസ്റ്റ് ഗ്രാമം">ഈസ്റ്റ് ഗ്രാമം</option>
-          <option value="ഹോസ്പിറ്റൽ ജംഗ്ഷൻ">ഹോസ്പിറ്റൽ ജംഗ്ഷൻ</option>
-        </select>
+    <!-- STICKY HEADER SECTION -->
+    <div class="sticky-header">
+      <div class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="top-action-bar">
+          <div style="font-size: 11px; font-weight: 800; color: #f8fafc; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 12px;">🌴 കോളയാട്, കണ്ണൂർ</div>
+          <button class="admin-badge-btn" onclick="toggleAdmin()" id="adminBtn">അഡ്മിൻ</button>
+        </div>
       </div>
 
-      <!-- HORIZONTAL CATEGORY SCROLL -->
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar"></div>
+      </div>
+
+      <div class="app-title-box">
+        <div class="main-app-name">കോളയാട് കണക്ട്</div>
+        <div class="user-welcome-bar" onclick="openProfileModal()">
+          <span id="userDisplayName">👤 പ്രൊഫൈൽ സെറ്റ് ചെയ്യുക</span>
+          <span style="color:#38bdf8;">(ലോഗിൻ)</span>
+        </div>
+      </div>
+
+      <!-- SEARCH & LOCATION FILTERS -->
+      <div class="filter-sticky-padding">
+        <div class="filter-group">
+          <input type="text" id="searchInput" class="dark-input" onkeyup="render()" placeholder="🔍 ഉൽപ്പന്നങ്ങൾ, സേവനങ്ങൾ, കടകൾ തിരയുക...">
+          <select id="locationFilter" class="dark-select" onchange="render()">
+            <option value="all">📍 എല്ലാ പ്രദേശങ്ങളും (All Locations)</option>
+            <option value="കവല ജംഗ്ഷൻ">കവല ജംഗ്ഷൻ</option>
+            <option value="വായനശാലപ്പടി">വായനശാലപ്പടി</option>
+            <option value="മാർക്കറ്റ് റോഡ്">മാർക്കറ്റ് റോഡ്</option>
+            <option value="ഈസ്റ്റ് ഗ്രാമം">ഈസ്റ്റ് ഗ്രാമം</option>
+            <option value="ഹോസ്പിറ്റൽ ജംഗ്ഷൻ">ഹോസ്പിറ്റൽ ജംഗ്ഷൻ</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CATEGORY HORIZONTAL SCROLL -->
       <div class="cat-scroll-container">
         <div class="cat-pill active" onclick="setCat('all', this)">📂 എല്ലാം</div>
         <div class="cat-pill" onclick="setCat('worker', this)">👷‍♂️ തൊഴിലാളികൾ</div>
@@ -400,26 +410,27 @@
         <div class="cat-pill" onclick="setCat('rental', this)">🚜 വാടക ഉപകരണങ്ങൾ</div>
         <div class="cat-pill" onclick="setCat('events', this)">💡 ലൈറ്റ് & സൗണ്ട്</div>
       </div>
+    </div>
 
-      <!-- LISTINGS AREA -->
+    <!-- SCROLLABLE LISTINGS SECTION -->
+    <div class="content-padding">
       <div id="listings"></div>
-
     </div>
 
     <!-- FLOATING ADD BUTTON -->
     <div class="floating-bar">
-      <button class="btn-add-pro" onclick="toggleModal('addModal')">+ പുതിയ വിവരങ്ങൾ ചേർക്കുക</button>
+      <button class="btn-add-pro" onclick="toggleModal('addModal')">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</button>
     </div>
 
-    <!-- BOTTOM NAVIGATION BAR -->
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
       <button class="nav-btn active" onclick="render()">
         <span style="font-size: 18px;">🏪</span>
         <span>ഡയറക്ടറി</span>
       </button>
-      <button class="nav-btn" onclick="showNotice()">
-        <span style="font-size: 18px;">📢</span>
-        <span>അറിയിപ്പുകൾ</span>
+      <button class="nav-btn" onclick="openProfileModal()">
+        <span style="font-size: 18px;">👤</span>
+        <span>മൈ പ്രൊഫൈൽ</span>
       </button>
       <button class="nav-btn" onclick="toggleAdmin()">
         <span style="font-size: 18px;">⚙️</span>
@@ -427,6 +438,20 @@
       </button>
     </nav>
 
+  </div>
+
+  <!-- USER PROFILE / LOGIN MODAL -->
+  <div class="modal-bg" id="profileModal">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 6px; font-weight:800;">നിങ്ങളുടെ പ്രൊഫൈൽ</h3>
+      <p style="font-size:11px; color:#94a3b8; margin-bottom:14px;">സാധനങ്ങൾ ഓർഡർ ചെയ്യാനും സേവനങ്ങൾക്കും നിങ്ങളുടെ വിവരങ്ങൾ ഒരിക്കൽ നൽകാമല്ലോ.</p>
+      <form onsubmit="saveUserProfile(event)">
+        <input type="text" id="uName" placeholder="നിങ്ങളുടെ പേര്" required class="dark-input" style="margin-bottom: 10px;">
+        <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 10px;">
+        <textarea id="uAddress" placeholder="വീട്ടുപേര് / പ്രദേശം (വിലാസം)" rows="2" required class="dark-input" style="margin-bottom: 14px; resize:none;"></textarea>
+        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 12px;">സേവ് ചെയ്യുക</button>
+      </form>
+    </div>
   </div>
 
   <!-- ADMIN MODAL -->
@@ -438,15 +463,19 @@
         <button onclick="toggleModal('adminModal')" class="dark-input" style="flex:1;">ക്യാൻസൽ</button>
         <button onclick="loginAdmin()" class="btn-pro-call" style="flex:1;">ലോഗിൻ</button>
       </div>
+      <div id="adminDataExport" style="display:none; margin-top:16px; text-align:left;">
+        <h4 style="font-size:12px; color:#38bdf8; margin-bottom:6px;">രജിസ്റ്റർ ചെയ്ത ഫോൺ നമ്പറുകൾ:</h4>
+        <textarea id="registeredNumbersText" class="dark-input" rows="4" readonly style="font-size:11px;"></textarea>
+      </div>
     </div>
   </div>
 
-  <!-- ADD MODAL -->
+  <!-- ADD SHOP / SERVICE MODAL -->
   <div class="modal-bg" id="addModal">
     <div class="modal-box">
       <h3 style="margin-bottom: 14px;">വിവരങ്ങൾ ചേർക്കുക</h3>
       <form onsubmit="saveShop(event)">
-        <input type="text" id="sName" placeholder="പേര് / സ്ഥാപനം" required class="dark-input" style="margin-bottom: 10px;">
+        <input type="text" id="sName" placeholder="പേര് / സ്ഥാപനത്തിന്റെ പേര്" required class="dark-input" style="margin-bottom: 10px;">
         <select id="sCat" class="dark-select" style="margin-bottom: 10px;">
           <option value="worker">തൊഴിലാളി / സേവനം</option>
           <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
@@ -458,7 +487,7 @@
           <option value="events">ലൈറ്റ് & സൗണ്ട്</option>
         </select>
         <input type="text" id="sLoc" placeholder="പ്രദേശം (ഉദാ: കവല ജംഗ്ഷൻ)" required class="dark-input" style="margin-bottom: 10px;">
-        <textarea id="sDesc" placeholder="വിവരണം" rows="2" class="dark-input" style="margin-bottom: 10px; resize: none;"></textarea>
+        <textarea id="sDesc" placeholder="ഉൽപ്പന്നങ്ങൾ / സേവന വിവരങ്ങൾ (ഹൈലൈറ്റ് ചെയ്യപ്പെടുന്നത്)" rows="3" class="dark-input" style="margin-bottom: 10px; resize: none;" required></textarea>
         <input type="tel" id="sPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 14px;">
         <button type="submit" class="btn-pro-call" style="width: 100%; padding: 12px;">സമർപ്പിക്കുക</button>
       </form>
@@ -468,13 +497,44 @@
   <script>
     let isAdmin = false;
     let selectedCat = 'all';
+    let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
 
     let shops = [
-      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "വീടുകളിലെ വയറിങ്, പ്ലംബിംഗ് പണികൾക്ക് വിളിക്കുക.", phone: "9876543210" },
-      { id: 2, name: "ഹരിശ്രീ സൂപ്പർമാർക്കറ്റ്", cat: "supermarket", catLabel: "സൂപ്പർമാർക്കറ്റ്", loc: "കവല ജംഗ്ഷൻ", desc: "പച്ചക്കറികൾ, പലചരക്ക് സാധനങ്ങൾ ലഭ്യം.", phone: "9876543211" },
-      { id: 3, name: "അൽ-മദീന ഹോട്ടൽ", cat: "hotel", catLabel: "ഹോട്ടൽ", loc: "മാർക്കറ്റ് റോഡ്", desc: "നാടൻ ഭക്ഷണങ്ങളും ബിരിയാണിയും ലഭ്യമാണ്.", phone: "9876543212" },
-      { id: 4, name: "സിറ്റി മെഡിക്കൽസ്", cat: "medical", catLabel: "മെഡിക്കൽ", loc: "ഹോസ്പിറ്റൽ ജംഗ്ഷൻ", desc: "24 മണിക്കൂർ മരുന്നു സേവനം.", phone: "9876543213" }
+      { id: 1, name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ സേവനങ്ങൾ: വീടുകളിലെ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾക്ക് വിളിക്കുക.", phone: "9876543210" },
+      { id: 2, name: "ഹരിശ്രീ സൂപ്പർമാർക്കറ്റ്", cat: "supermarket", catLabel: "സൂപ്പർമാർക്കറ്റ്", loc: "കവല ജംഗ്ഷൻ", desc: "🛒 ഉൽപ്പന്നങ്ങൾ: പച്ചക്കറികൾ, പലചരക്ക് സാധനങ്ങൾ, ഹോം ഡെലിവറി ലഭ്യമാണ്.", phone: "9876543211" },
+      { id: 3, name: "അൽ-മദീന ഹോട്ടൽ", cat: "hotel", catLabel: "ഹോട്ടൽ", loc: "മാർക്കറ്റ് റോഡ്", desc: "🍲 ലഭിക്കുന്നവ: നാടൻ ഭക്ഷണങ്ങൾ, ചിക്കൻ ബിരിയാണി, പൊറോട്ട, ഫ്രെഷ് ജ്യൂസുകൾ.", phone: "9876543212" },
+      { id: 4, name: "സിറ്റി മെഡിക്കൽസ്", cat: "medical", catLabel: "മെഡിക്കൽ", loc: "ഹോസ്പിറ്റൽ ജംഗ്ഷൻ", desc: "💊 സേവനങ്ങൾ: 24 മണിക്കൂർ മരുന്നു സേവനവും ഫസ്റ്റ് എയ്ഡ് സാമഗ്രികളും.", phone: "9876543213" }
     ];
+
+    function checkUserStatus() {
+      if(currentUser && currentUser.name) {
+        document.getElementById('userDisplayName').innerText = `👋 ${currentUser.name}`;
+      } else {
+        document.getElementById('userDisplayName').innerText = `👤 പ്രൊഫൈൽ സെറ്റ് ചെയ്യുക`;
+      }
+    }
+
+    function openProfileModal() {
+      if(currentUser) {
+        document.getElementById('uName').value = currentUser.name || '';
+        document.getElementById('uPhone').value = currentUser.phone || '';
+        document.getElementById('uAddress').value = currentUser.address || '';
+      }
+      toggleModal('profileModal');
+    }
+
+    function saveUserProfile(e) {
+      e.preventDefault();
+      currentUser = {
+        name: document.getElementById('uName').value,
+        phone: document.getElementById('uPhone').value,
+        address: document.getElementById('uAddress').value
+      };
+      localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
+      checkUserStatus();
+      toggleModal('profileModal');
+      alert("പ്രൊഫൈൽ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+    }
 
     function render() {
       const list = document.getElementById('listings');
@@ -493,7 +553,13 @@
         return;
       }
 
-      list.innerHTML = filtered.map(s => `
+      list.innerHTML = filtered.map(s => {
+        let waText = `ഹലോ ${s.name}, കോളയാട് കണക്ട് ആപ്പിൽ നിങ്ങളുടെ വിവരങ്ങൾ കണ്ടിട്ടാണ് ബന്ധപ്പെടുന്നത്.`;
+        if(currentUser && currentUser.name) {
+          waText += `%0A%0A*ഓർഡർ ചെയ്യുന്ന ആളുടെ വിവരങ്ങൾ:*%0Aപേര്: ${currentUser.name}%0Aഫോൺ: ${currentUser.phone}%0Aവിലാസം: ${currentUser.address}`;
+        }
+
+        return `
         <div class="pro-card ${s.cat}-card">
           <div class="card-top">
             <span class="badge-tag">${s.catLabel}</span>
@@ -501,14 +567,17 @@
           </div>
           <div class="item-name">${s.name}</div>
           <div class="item-loc">📍 ${s.loc}</div>
-          <div class="item-desc">${s.desc}</div>
+          
+          <!-- HIGHLIGHTED DESCRIPTION BOX -->
+          <div class="item-desc-highlight">${s.desc}</div>
+          
           <div class="card-actions">
             <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക ➡️</a>
-            <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-pro-wa">💬</a>
+            <a href="https://wa.me/91${s.phone}?text=${waText}" target="_blank" class="btn-pro-wa" title="WhatsApp Message">💬</a>
             ${isAdmin ? `<button onclick="delShop(${s.id})" style="background:#ef4444; color:white; border:none; padding:0 12px; border-radius:12px; font-weight:bold; cursor:pointer;">🗑️</button>` : ''}
           </div>
         </div>
-      `).join('');
+      `}).join('');
     }
 
     function setCat(cat, elem) {
@@ -516,16 +585,6 @@
       document.querySelectorAll('.cat-pill').forEach(e => e.classList.remove('active'));
       elem.classList.add('active');
       render();
-    }
-
-    function showNotice() {
-      document.getElementById('listings').innerHTML = `
-        <div class="pro-card" style="border-left-color: #f59e0b;">
-          <div class="badge-tag" style="color:#f59e0b;">അറിയിപ്പ്</div>
-          <div class="item-name" style="margin-top:8px;">കോളയാട് കണക്ട് വാർത്തകൾ</div>
-          <div class="item-desc">നിങ്ങളുടെ പ്രദേശത്തെ വാർത്തകളും അറിയിപ്പുകളും ഇവിടെ വരും!</div>
-        </div>
-      `;
     }
 
     function toggleModal(id) {
@@ -537,6 +596,7 @@
       if(isAdmin) {
         isAdmin = false;
         document.getElementById('adminBtn').innerText = "അഡ്മിൻ";
+        document.getElementById('adminDataExport').style.display = 'none';
         render();
       } else {
         toggleModal('adminModal');
@@ -547,6 +607,16 @@
       if(document.getElementById('adminPass').value === '1234') {
         isAdmin = true;
         document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
+        document.getElementById('adminDataExport').style.display = 'block';
+        
+        let allNums = "--- രജിസ്റ്റർ ചെയ്ത കടകൾ/തൊഴിലാളികൾ ---\n";
+        shops.forEach(s => allNums += `${s.name}: ${s.phone}\n`);
+        if(currentUser) {
+          allNums += "\n--- ഉപഭോക്തൃ വിവരങ്ങൾ ---\n";
+          allNums += `${currentUser.name} (${currentUser.address}): ${currentUser.phone}\n`;
+        }
+        document.getElementById('registeredNumbersText').value = allNums;
+
         toggleModal('adminModal');
         document.getElementById('adminPass').value = '';
         render();
@@ -578,6 +648,7 @@
       }
     }
 
+    checkUserStatus();
     render();
   </script>
 </body>
