@@ -141,19 +141,26 @@
       gap: 6px;
     }
 
+    /* CLEAR HIGH-CONTRAST INPUTS */
     .dark-input, .dark-select {
       width: 100%;
       background: #1e293b;
-      border: 1px solid #334155;
-      color: #f8fafc;
-      padding: 8px 12px;
+      border: 1px solid #475569;
+      color: #ffffff;
+      padding: 9px 12px;
       border-radius: 12px;
       font-size: 12px;
       outline: none;
     }
 
+    .dark-input::placeholder {
+      color: #cbd5e1;
+      opacity: 0.85;
+    }
+
     .dark-input:focus, .dark-select:focus {
-      border-color: #eab308;
+      border-color: #fde047;
+      box-shadow: 0 0 8px rgba(253, 224, 71, 0.2);
     }
 
     /* SCROLLABLE LISTINGS & CATEGORIES AREA */
@@ -175,7 +182,7 @@
       justify-content: space-between;
     }
 
-    /* GRID CATEGORY BOXES (രണ്ടാമത്തെ ചിത്രത്തിലെ പോലെ ക്രമീകരിച്ച കാറ്റഗറി പെട്ടികൾ) */
+    /* GRID CATEGORY BOXES */
     .category-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -203,6 +210,7 @@
       height: 42px;
       border-radius: 12px;
       background: rgba(234, 179, 8, 0.15);
+      border: 1px solid rgba(234, 179, 8, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -212,7 +220,7 @@
     .cat-box-title {
       font-size: 11px;
       font-weight: 700;
-      color: #cbd5e1;
+      color: #e2e8f0;
     }
 
     .cat-box.active {
@@ -228,6 +236,7 @@
 
     .cat-box.active .cat-box-icon {
       background: #0f172a;
+      border-color: transparent;
       color: #fde047;
     }
 
