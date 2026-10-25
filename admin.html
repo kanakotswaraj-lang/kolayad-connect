@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>അഡ്മിൻ പാനൽ - കോളയാട് കണക്ട്</title>
+  
+  <!-- Firebase SDK Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      getDocs, 
+      deleteDoc, 
+      doc 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
+      authDomain: "kolayad-connect.firebaseapp.com",
+      projectId: "kolayad-connect",
+      storageBucket: "kolayad-connect.firebasestorage.app",
+      messagingSenderId: "400179608074",
+      appId: "1:400179608074:web:b6f5c269d60662efcdfdf3",
+      measurementId: "G-EYK4SLBXBB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.getDocs = getDocs;
+    window.deleteDoc = deleteDoc;
+    window.doc = doc;
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #0b0f17; color: #f1f5f9; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+
+    .app-container {
+      width: 100%; max-width: 480px; height: 100vh; background: #0f172a;
+      border: 2px solid #eab308; display: flex; flex-direction: column; position: relative;
+      box-shadow: 0 0 35px rgba(234, 179, 8, 0.25);
+    }
+
+    @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
+
+    .sticky-header { flex-shrink: 0; background: #0f172a; border-bottom: 2px solid #1e293b; padding: 16px; text-align: center; }
+    .page-title { font-size: 18px; font-weight: 800; color: #fde047; }
+
+    .scrollable-body { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 85px; }
+    
+    .dark-input, .dark-select { width: 100%; background: #162032; border: 1.5px solid #eab308; color: #ffffff; padding: 9px 12px; border-radius: 10px; font-size: 12px; outline: none; margin-bottom: 8px; }
+
+    .btn-pro-call { width: 100%; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; border: none; padding: 9px; border-radius: 10px; font-size: 12px; font-weight: 800; text-align: center; cursor: pointer; }
+
+    .admin-tabs { display: flex; gap: 4px; background: #162032; padding: 4px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #334155; }
+    .admin-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-size: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+    .admin-tab-btn.active { background: #eab308; color: #0f172a; font-weight: 800; }
+
+    .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid #1e293b; padding: 6px 16px 12px 16px; display: flex; justify-content: space-around; z-index: 30; }
+    .nav-btn { border: none; background: transparent; color: #64748b; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; text-decoration: none; }
+    .nav-btn.active { color: #fde047; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="sticky-header">
+      <div class="page-title">⚙️ അഡ്മിൻ പാനൽ</div>
+    </div>
+
+    <div class="scrollable-body">
+      
+      <!-- ലോഗിൻ സ്റ്റെപ്പ് -->
+      <div id="adminLoginStep" style="background: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; text-align: center; margin-top: 40px;">
+        <h3 style="margin-bottom: 12px; font-size: 15px; color: #fde047;">അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</h3>
+        <form onsubmit="loginAdmin(event)">
+          <input type="password" id="adminPass" placeholder="Passcode (1234)" class="dark-input" style="text-align: center; margin-bottom: 12px;" required>
+          <button type="submit" class="btn-pro-call">ലോഗിൻ ചെയ്യുക</button>
+        </form>
+      </div>
+
+      <!-- ഡാഷ്‌ബോർഡ് സ്റ്റെപ്പ് -->
+      <div id="adminDashboardStep" style="display:none;">
+        
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" id="tabNoticeBtn" onclick="switchAdminTab('notices')">ഓഫറുകൾ</button>
+          <button class="admin-tab-btn" id="tabUsersBtn" onclick="switchAdminTab('users')">അംഗങ്ങൾ</button>
+          <button class="admin-tab-btn" id="tabLogoBtn" onclick="switchAdminTab('logo')">ലോഗോ</button>
+        </div>
+
+        <!-- ഓഫറുകൾ ടാബ് -->
+        <div id="adminNoticesTab">
+          <div style="background:#162032; padding:12px; border-radius:12px; border:1px solid #eab308; margin-bottom:12px;">
+            <h4 style="color:#eab308; margin-bottom:8px; font-size:12px;">➕ പുതിയ കട ഓഫർ / അറിയിപ്പ് ചേർക്കുക:</h4>
+            <form onsubmit="addNotice(event)">
+              <input type="text" id="offShop" placeholder="സ്ഥാപനത്തിന്റെ പേര്" class="dark-input" required>
+              <input type="text" id="offTag" placeholder="ഓഫർ ടാഗ് (ഉദാ: വമ്പൻ ഓഫർ)" class="dark-input" required>
+              <input type="text" id="offTitle" placeholder="വിഷയം / ഹെഡിംഗ്" class="dark-input" required>
+              <textarea id="offDesc" placeholder="ഓഫറിന്റെ വിവരങ്ങൾ" class="dark-input" rows="2" required></textarea>
+              
+              <select id="offColorTheme" class="dark-select">
+                <option value="linear-gradient(135deg, #059669 0%, #10b981 100%)|#ffffff">എമറാൾഡ് ഗ്രീൻ</option>
+                <option value="linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)|#ffffff">റോയൽ ബ്ലൂ</option>
+                <option value="linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)|#ffffff">പർപ്പിൾ വൈബ്</option>
+                <option value="linear-gradient(135deg, #d97706 0%, #f59e0b 100%)|#0f172a">ഗോൾഡൻ യെല്ലോ</option>
+              </select>
+
+              <button type="submit" class="btn-pro-call">ഓഫർ പബ്ലിഷ് ചെയ്യുക</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- അംഗങ്ങൾ ടാബ് -->
+        <div id="adminUsersTab" style="display:none;">
+          <div style="background:#162032; padding:12px; border-radius:12px; border:1px solid #eab308; margin-bottom:12px;">
+            <h4 style="color:#eab308; margin-bottom:8px; font-size:12px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ:</h4>
+            <div id="adminUserList" style="max-height: 250px; overflow-y: auto;">ലോഡ് ചെയ്യുന്നു...</div>
+          </div>
+        </div>
+
+        <!-- ലോഗോ ടാബ് -->
+        <div id="adminLogoTab" style="display:none;">
+          <div style="background:#162032; padding:12px; border-radius:12px; border:1px solid #eab308; margin-bottom:12px;">
+            <h4 style="color:#eab308; margin-bottom:8px; font-size:12px;">🖼️ പ്രൊഫൈൽ / ലോഗോ ഫോട്ടോ മാറ്റുക:</h4>
+            <form onsubmit="updateLogo(event)">
+              <input type="url" id="logoUrlInput" placeholder="Image URL ചേർക്കുക" class="dark-input" required>
+              <button type="submit" class="btn-pro-call">ചിത്രം അപ്‌ഡേറ്റ് ചെയ്യുക</button>
+            </form>
+          </div>
+        </div>
+
+        <button onclick="logoutAdmin()" style="width:100%; background:#ef4444; color:white; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:12px; margin-top: 10px;">ലോഗ്ഔട്ട് ചെയ്യുക</button>
+      </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-btn"><span style="font-size: 16px;">🏪</span><span>ഡയറക്ടറി</span></a>
+      <a href="profile.html" class="nav-btn"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></a>
+      <a href="admin.html" class="nav-btn active"><span style="font-size: 16px;">⚙️</span><span>അഡ്മിൻ</span></a>
+    </nav>
+  </div>
+
+  <script>
+    let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
+
+    function checkAdminState() {
+      if(isAdmin) {
+        document.getElementById('adminLoginStep').style.display = 'none';
+        document.getElementById('adminDashboardStep').style.display = 'block';
+        switchAdminTab('notices');
+      } else {
+        document.getElementById('adminLoginStep').style.display = 'block';
+        document.getElementById('adminDashboardStep').style.display = 'none';
+      }
+    }
+
+    function loginAdmin(e) {
+      e.preventDefault();
+      if(document.getElementById('adminPass').value === '1234') {
+        isAdmin = true;
+        localStorage.setItem('kolayad_admin', 'true');
+        checkAdminState();
+      } else {
+        alert("പാസ്‌വേഡ് തെറ്റാണ്!");
+      }
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      localStorage.setItem('kolayad_admin', 'false');
+      checkAdminState();
+    }
+
+    function switchAdminTab(tab) {
+      document.getElementById('adminNoticesTab').style.display = tab === 'notices' ? 'block' : 'none';
+      document.getElementById('adminUsersTab').style.display = tab === 'users' ? 'block' : 'none';
+      document.getElementById('adminLogoTab').style.display = tab === 'logo' ? 'block' : 'none';
+      
+      document.getElementById('tabNoticeBtn').className = tab === 'notices' ? 'admin-tab-btn active' : 'admin-tab-btn';
+      document.getElementById('tabUsersBtn').className = tab === 'users' ? 'admin-tab-btn active' : 'admin-tab-btn';
+      document.getElementById('tabLogoBtn').className = tab === 'logo' ? 'admin-tab-btn active' : 'admin-tab-btn';
+
+      if(tab === 'users') renderUsers();
+    }
+
+    async function renderUsers() {
+      const container = document.getElementById('adminUserList');
+      container.innerHTML = `<div style="font-size:11px; color:#cbd5e1;">ലോഡ് ചെയ്യുന്നു...</div>`;
+      try {
+        const userSnap = await window.getDocs(window.collection(window.db, "users"));
+        const userList = userSnap.docs.map(doc => doc.data());
+
+        if(userList.length === 0) {
+          container.innerHTML = `<div style="font-size:11px; color:#cbd5e1;">അംഗങ്ങൾ ആരും ചേർന്നിട്ടില്ല.</div>`;
+          return;
+        }
+        container.innerHTML = userList.map((u) => `
+          <div style="background:#0f172a; padding:8px; border-radius:8px; margin-bottom:6px; font-size:11px;">
+            <strong style="color:#fde047;">${u.name}</strong><br>
+            📞 ${u.phone} | 📍 ${u.address}
+          </div>
+        `).join('');
+      } catch(e) {
+        console.error(e);
+        container.innerHTML = `<div style="font-size:11px; color:#ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.</div>`;
+      }
+    }
+
+    function updateLogo(e) {
+      e.preventDefault();
+      const url = document.getElementById('logoUrlInput').value;
+      if(!url) return;
+      localStorage.setItem('kolayad_logo', url);
+      alert('പ്രൊഫൈൽ ഫോട്ടോ വിജയകരമായി മാറ്റി!');
+      document.getElementById('logoUrlInput').value = '';
+    }
+
+    async function addNotice(e) {
+      e.preventDefault();
+      const shopName = document.getElementById('offShop').value;
+      const tag = document.getElementById('offTag').value;
+      const title = document.getElementById('offTitle').value;
+      const desc = document.getElementById('offDesc').value;
+      const themeVal = document.getElementById('offColorTheme').value.split('|');
+      
+      if(!title || !desc) return alert('വിവരങ്ങൾ പൂർണ്ണമായി നൽകുക!');
+
+      const newNotice = { shopName, tag, title, desc, bg: themeVal[0], color: themeVal[1] };
+      
+      try {
+        await window.addDoc(window.collection(window.db, "notices"), newNotice);
+        alert('പുതിയ ഓഫർ വിജയകരമായി പബ്ലിഷ് ചെയ്തു!');
+        document.getElementById('offShop').value = '';
+        document.getElementById('offTag').value = '';
+        document.getElementById('offTitle').value = '';
+        document.getElementById('offDesc').value = '';
+      } catch (err) {
+        console.error(err);
+        alert("ഓഫർ സേവ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.");
+      }
+    }
+
+    checkAdminState();
+  </script>
+</body>
+</html>
