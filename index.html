@@ -101,7 +101,7 @@
 
   <div class="app-container">
     <div class="sticky-header">
-      <div class="hero-banner">
+      <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
@@ -187,7 +187,10 @@
     let selectedCat = 'all';
     let notices = [];
     let shops = [];
+
+    // ലോക്കോയും ബാക്ക്ഗ്രൗണ്ട് ഫോട്ടോയും ലോഡ് ചെയ്യുന്നു
     let currentLogo = localStorage.getItem('kolayad_logo') || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
+    let currentHeroBg = localStorage.getItem('kolayad_hero_bg') || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80';
 
     async function loadDataFromFirebase() {
       try {
@@ -219,10 +222,11 @@
     }
 
     function initApp() {
-      // ലോഗോ അപ്ഡേറ്റ്
+      // പ്രൊഫൈൽ ഫോട്ടോയും ഹെഡർ ബാനറും സെറ്റ് ചെയ്യുന്നു
       document.getElementById('profileAvatarImg').style.backgroundImage = `url('${currentLogo}')`;
+      document.getElementById('heroBannerBg').style.backgroundImage = `url('${currentHeroBg}')`;
 
-      // യൂസർ ലോഗിൻ പരിശോധന (ഫ്ലിപ്കാർട്ട് / ആമസോൺ മാതൃകയിൽ പേര് കാണിക്കാൻ)
+      // ഫ്ലിപ്കാർട്ട്/ആമസോൺ മാതൃകയിൽ യൂസർ പേര് കാണിക്കാൻ
       let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
       if (currentUser && currentUser.name) {
         document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
