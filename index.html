@@ -64,20 +64,22 @@
     .profile-avatar-wrap { position: relative; margin-top: -30px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { width: 55px; height: 55px; border-radius: 16px; border: 3px solid #eab308; background: #1e293b center/cover no-repeat; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 
-    .app-title-box { text-align: center; padding: 4px 10px 6px 10px; }
-    .main-app-name { font-size: 20px; font-weight: 800; color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); margin-bottom: 4px; }
+    .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
+    .main-app-name { font-size: 22px; font-weight: 800; color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); margin-bottom: 6px; }
     
     .user-welcome-bar { 
-      font-size: 12px; 
+      font-size: 14px; 
       font-weight: 800; 
       color: #0f172a; 
       background: linear-gradient(135deg, #fde047 0%, #eab308 100%); 
-      padding: 6px 16px; 
-      border-radius: 20px; 
-      border: 1px solid #fef08a; 
+      padding: 8px 20px; 
+      border-radius: 22px; 
+      border: 1.5px solid #fef08a; 
       cursor: pointer; 
       display: inline-flex; 
-      box-shadow: 0 4px 12px rgba(234,179,8,0.3);
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(234,179,8,0.35);
       transition: transform 0.2s ease;
     }
     .user-welcome-bar:active { transform: scale(0.97); }
@@ -86,7 +88,7 @@
     .dark-input, .dark-select { width: 100%; background: #162032; border: 1.5px solid #eab308; color: #ffffff; padding: 8px 12px; border-radius: 10px; font-size: 12px; outline: none; }
 
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 85px; }
-    .section-label { font-size: 12px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; }
+    .section-label { font-size: 13px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
 
     .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
     .banner-slider::-webkit-scrollbar { display: none; }
@@ -170,20 +172,21 @@
       
       <div class="section-label">
         <span>📢 പ്രധാന അറിയിപ്പുകൾ & കടകളുടെ ഓഫറുകൾ</span>
-        <span style="font-size:10px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
+        <span style="font-size:11px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
       </div>
       
       <div class="banner-slider" id="noticesSlider"></div>
 
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
-        <span style="font-size:10px; color:#fde047;" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
+        <span style="font-size:12px; font-weight:800; color:#fde047; background:rgba(234,179,8,0.15); padding:2px 8px; border-radius:6px; border:1px solid rgba(234,179,8,0.3);" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
       </div>
 
       <div class="category-grid-container">
         <div class="category-grid">
           <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
           <div class="cat-box" onclick="setCat('worker', this)"><div class="cat-box-icon">👷‍♂️</div><div class="cat-box-title">തൊഴിലാളികൾ</div></div>
+          <div class="cat-box" onclick="setCat('catering', this)"><div class="cat-box-icon">🍳</div><div class="cat-box-title">കാറ്ററിംഗ്</div></div>
           <div class="cat-box" onclick="setCat('supermarket', this)"><div class="cat-box-icon">🛒</div><div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div></div>
           <div class="cat-box" onclick="setCat('hotel', this)"><div class="cat-box-icon">🍲</div><div class="cat-box-title">ഹോട്ടൽ</div></div>
           <div class="cat-box" onclick="setCat('bakery', this)"><div class="cat-box-icon">🎂</div><div class="cat-box-title">ബേക്കറി</div></div>
@@ -312,6 +315,7 @@
         <input type="text" id="sName" placeholder="സ്ഥാപനത്തിന്റെ / തൊഴിലാളിയുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
         <select id="sCat" class="dark-select" style="margin-bottom: 8px;">
           <option value="worker">തൊഴിലാളി / സേവനം</option>
+          <option value="catering">കാറ്ററിംഗ്</option>
           <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
           <option value="hotel">ഹോട്ടൽ</option>
           <option value="bakery">ബേക്കറി</option>
