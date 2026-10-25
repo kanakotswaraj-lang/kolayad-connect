@@ -67,7 +67,6 @@
     .app-title-box { text-align: center; padding: 4px 10px 6px 10px; }
     .main-app-name { font-size: 20px; font-weight: 800; color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); margin-bottom: 4px; }
     
-    /* നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക ബാർ കൂടുതൽ ആകർഷകമാക്കിയിരിക്കുന്നു */
     .user-welcome-bar { 
       font-size: 12px; 
       font-weight: 800; 
@@ -601,17 +600,23 @@
         phone: document.getElementById('sPhone').value
       };
 
-      if(editId) {
-        await window.setDoc(window.doc(window.db, "shops", editId), shopData);
-        const idx = shops.findIndex(s => s.id == editId);
-        if(idx !== -1) shops[idx] = { id: editId, ...shopData };
-      } else {
-        const docRef = await window.addDoc(window.collection(window.db, "shops"), shopData);
-        shops.unshift({ id: docRef.id, ...shopData });
+      try {
+        if(editId) {
+          await window.setDoc(window.doc(window.db, "shops", editId), shopData);
+          const idx = shops.findIndex(s => s.id == editId);
+          if(idx !== -1) shops[idx] = { id: editId, ...shopData };
+        } else {
+          const docRef = await window.addDoc(window.collection(window.db, "shops"), shopData);
+          shops.unshift({ id: docRef.id, ...shopData });
+        }
+        
+        toggleModal('addModal');
+        render();
+        alert("സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+      } catch (err) {
+        console.error("Error saving shop: ", err);
+        alert("സേവ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു. വീണ്ടും ശ്രമിക്കുക.");
       }
-      
-      toggleModal('addModal');
-      render();
     }
 
     async function delShop(id) {
