@@ -11,11 +11,9 @@
     import { 
       getFirestore, 
       collection, 
-      addDoc, 
       getDocs, 
       deleteDoc, 
-      doc, 
-      setDoc 
+      doc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -33,11 +31,9 @@
 
     window.db = db;
     window.collection = collection;
-    window.addDoc = addDoc;
     window.getDocs = getDocs;
     window.deleteDoc = deleteDoc;
     window.doc = doc;
-    window.setDoc = setDoc;
   </script>
 
   <style>
@@ -59,7 +55,7 @@
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), #0f172a); }
 
     .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-    .admin-badge-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .admin-badge-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
 
     .profile-avatar-wrap { position: relative; margin-top: -30px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { width: 55px; height: 55px; border-radius: 16px; border: 3px solid #eab308; background: #1e293b center/cover no-repeat; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
@@ -68,24 +64,15 @@
     .main-app-name { font-size: 22px; font-weight: 800; color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); margin-bottom: 6px; }
     
     .user-welcome-bar { 
-      font-size: 14px; 
-      font-weight: 800; 
-      color: #0f172a; 
+      font-size: 14px; font-weight: 800; color: #0f172a; 
       background: linear-gradient(135deg, #fde047 0%, #eab308 100%); 
-      padding: 8px 20px; 
-      border-radius: 22px; 
-      border: 1.5px solid #fef08a; 
-      cursor: pointer; 
-      display: inline-flex; 
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 14px rgba(234,179,8,0.35);
-      transition: transform 0.2s ease;
+      padding: 8px 20px; border-radius: 22px; border: 1.5px solid #fef08a; 
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; box-shadow: 0 4px 14px rgba(234,179,8,0.35);
     }
-    .user-welcome-bar:active { transform: scale(0.97); }
 
     .filter-sticky-padding { padding: 6px 10px; background: #0f172a; }
-    .dark-input, .dark-select { width: 100%; background: #162032; border: 1.5px solid #eab308; color: #ffffff; padding: 8px 12px; border-radius: 10px; font-size: 12px; outline: none; }
+    .dark-input { width: 100%; background: #162032; border: 1.5px solid #eab308; color: #ffffff; padding: 8px 12px; border-radius: 10px; font-size: 12px; outline: none; }
 
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 85px; }
     .section-label { font-size: 13px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
@@ -96,10 +83,8 @@
     .bright-notice-card {
       min-width: 85%; scroll-snap-align: start;
       border-radius: 16px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-      cursor: pointer; transition: transform 0.2s ease; position: relative;
+      cursor: pointer; position: relative;
     }
-    .bright-notice-card:active { transform: scale(0.98); }
-
     .notice-shop-name { font-size: 11px; font-weight: 800; color: #fde047; background: rgba(15,23,42,0.6); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-bottom: 4px; }
     .notice-tag { background: rgba(0, 0, 0, 0.25); color: #ffffff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
     .notice-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
@@ -125,30 +110,25 @@
     .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
 
     .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; }
-    .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 20px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
+    .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 20px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
 
     .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid #1e293b; padding: 6px 16px 12px 16px; display: flex; justify-content: space-around; z-index: 30; }
-    .nav-btn { border: none; background: transparent; color: #64748b; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+    .nav-btn { border: none; background: transparent; color: #64748b; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; text-decoration: none; }
     .nav-btn.active { color: #fde047; }
 
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
-    .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: white; max-height: 90vh; overflow-y: auto; }
-
-    .admin-tabs { display: flex; gap: 4px; background: #0f172a; padding: 4px; border-radius: 12px; margin-bottom: 12px; }
-    .admin-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-size: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
-    .admin-tab-btn.active { background: #eab308; color: #0f172a; font-weight: 800; }
+    .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: white; }
   </style>
 </head>
 <body>
 
   <div class="app-container">
-
     <div class="sticky-header">
-      <div class="hero-banner" id="heroBannerBg">
+      <div class="hero-banner">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
-          <button class="admin-badge-btn" onclick="openAdminModal()" id="adminBtn">അഡ്മിൻ</button>
+          <a href="admin.html" class="admin-badge-btn">അഡ്മിൻ</a>
         </div>
       </div>
 
@@ -158,9 +138,9 @@
 
       <div class="app-title-box">
         <div class="main-app-name">കോളയാട് കണക്ട്</div>
-        <div class="user-welcome-bar" onclick="openProfileModal()">
+        <a href="profile.html" class="user-welcome-bar">
           <span>✨ നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</span>
-        </div>
+        </a>
       </div>
 
       <div class="filter-sticky-padding">
@@ -169,7 +149,6 @@
     </div>
 
     <div class="scrollable-body" id="scrollBody">
-      
       <div class="section-label">
         <span>📢 പ്രധാന അറിയിപ്പുകൾ & കടകളുടെ ഓഫറുകൾ</span>
         <span style="font-size:11px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
@@ -210,144 +189,25 @@
 
       <div class="section-label"><span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span></div>
       <div id="listings"></div>
-
     </div>
 
     <div class="floating-bar">
-      <button class="btn-add-pro" onclick="openAddShopModal()">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</button>
+      <a href="profile.html" class="btn-add-pro">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</a>
     </div>
 
     <nav class="bottom-nav">
-      <button class="nav-btn active" onclick="render()"><span style="font-size: 16px;">🏪</span><span>ഡയറക്ടറി</span></button>
-      <button class="nav-btn" onclick="openProfileModal()"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></button>
-      <button class="nav-btn" onclick="openAdminModal()"><span style="font-size: 16px;">⚙️</span><span>അഡ്മിൻ</span></button>
+      <a href="index.html" class="nav-btn active"><span style="font-size: 16px;">🏪</span><span>ഡയറക്ടറി</span></a>
+      <a href="profile.html" class="nav-btn"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></a>
+      <a href="admin.html" class="nav-btn"><span style="font-size: 16px;">⚙️</span><span>അഡ്മിൻ</span></a>
     </nav>
-
   </div>
 
   <div class="modal-bg" id="viewNoticeModal">
     <div class="modal-box" id="viewNoticeContent"></div>
   </div>
 
-  <div class="modal-bg" id="profileModal">
-    <div class="modal-box">
-      <h3 style="margin-bottom: 6px;">നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</h3>
-      <form onsubmit="saveUserProfile(event)">
-        <input type="text" id="uName" placeholder="നിങ്ങളുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
-        <input type="tel" id="uPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 8px;">
-        <textarea id="uAddress" placeholder="വീട്ടുപേര് / പ്രദേശം (വിലാസം)" rows="2" required class="dark-input" style="margin-bottom: 12px;"></textarea>
-        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-bg" id="adminModal">
-    <div class="modal-box" style="text-align: center;">
-      <h3 id="adminModalTitle" style="margin-bottom:10px;">⚙️ അഡ്മിൻ പാനൽ</h3>
-      
-      <div id="adminLoginStep">
-        <form onsubmit="loginAdmin(event)">
-          <input type="password" id="adminPass" placeholder="Passcode (1234)" class="dark-input" style="text-align: center; margin: 12px 0;" required>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" onclick="toggleModal('adminModal')" class="dark-input" style="flex:1; cursor:pointer;">ക്യാൻസൽ</button>
-            <button type="submit" class="btn-pro-call" style="flex:1;">ലോഗിൻ</button>
-          </div>
-        </form>
-      </div>
-
-      <div id="adminDashboardStep" style="display:none; text-align:left;">
-        
-        <div class="admin-tabs">
-          <button class="admin-tab-btn active" id="tabNoticeBtn" onclick="switchAdminTab('notices')">ഓഫറുകൾ</button>
-          <button class="admin-tab-btn" id="tabUsersBtn" onclick="switchAdminTab('users')">അംഗങ്ങൾ</button>
-          <button class="admin-tab-btn" id="tabLogoBtn" onclick="switchAdminTab('logo')">ലോഗോ</button>
-        </div>
-
-        <div id="adminNoticesTab">
-          <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px;">
-            <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">➕ പുതിയ കട ഓഫർ / അറിയിപ്പ് ചേർക്കുക:</h4>
-            <form onsubmit="addNotice(event)">
-              <input type="text" id="offShop" placeholder="സ്ഥാപനത്തിന്റെ പേര്" class="dark-input" style="margin-bottom:6px;" required>
-              <input type="text" id="offTag" placeholder="ഓഫർ ടാഗ്" class="dark-input" style="margin-bottom:6px;" required>
-              <input type="text" id="offTitle" placeholder="വിഷയം / ഹെഡിംഗ്" class="dark-input" style="margin-bottom:6px;" required>
-              <textarea id="offDesc" placeholder="ഓഫറിന്റെ വിവരങ്ങൾ" class="dark-input" rows="2" style="margin-bottom:6px;" required></textarea>
-              
-              <select id="offColorTheme" class="dark-select" style="margin-bottom:6px;">
-                <option value="linear-gradient(135deg, #059669 0%, #10b981 100%)|#ffffff">എമറാൾഡ് ഗ്രീൻ</option>
-                <option value="linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)|#ffffff">റോയൽ ബ്ലൂ</option>
-                <option value="linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)|#ffffff">പർപ്പിൾ വൈബ്</option>
-                <option value="linear-gradient(135deg, #d97706 0%, #f59e0b 100%)|#0f172a">ഗോൾഡൻ യെല്ലോ</option>
-              </select>
-
-              <button type="submit" class="btn-pro-call" style="width:100%; padding:7px; font-size:11px;">ഓഫർ പബ്ലിഷ് ചെയ്യുക</button>
-            </form>
-          </div>
-        </div>
-
-        <div id="adminUsersTab" style="display:none;">
-          <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px; max-height:220px; overflow-y:auto;">
-            <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ:</h4>
-            <div id="adminUserList"></div>
-          </div>
-        </div>
-
-        <div id="adminLogoTab" style="display:none;">
-          <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px;">
-            <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">🖼️ പ്രൊഫൈൽ / ലോഗോ ഫോട്ടോ മാറ്റുക:</h4>
-            <form onsubmit="updateLogo(event)">
-              <input type="url" id="logoUrlInput" placeholder="Image URL ചേർക്കുക" class="dark-input" style="margin-bottom:6px;" required>
-              <button type="submit" class="btn-pro-call" style="width:100%; padding:7px; font-size:11px;">ചിത്രം അപ്‌ഡേറ്റ് ചെയ്യുക</button>
-            </form>
-          </div>
-        </div>
-
-        <button onclick="logoutAdmin()" class="dark-input" style="width:100%; text-align:center; background:#ef4444; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; font-size:12px;">ലോഗ്ഔട്ട് ചെയ്യുക</button>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="modal-bg" id="addModal">
-    <div class="modal-box">
-      <h3 id="shopModalTitle">സ്ഥാപനം / സേവനം ചേർക്കുക</h3>
-      <form onsubmit="saveShop(event)">
-        <input type="hidden" id="editShopId" value="">
-        <input type="text" id="sName" placeholder="സ്ഥാപനത്തിന്റെ / തൊഴിലാളിയുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
-        <select id="sCat" class="dark-select" style="margin-bottom: 8px;">
-          <option value="worker">തൊഴിലാളി / സേവനം</option>
-          <option value="catering">കാറ്ററിംഗ്</option>
-          <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
-          <option value="hotel">ഹോട്ടൽ</option>
-          <option value="bakery">ബേക്കറി</option>
-          <option value="textiles">ടെക്സ്റ്റൈൽസ്</option>
-          <option value="tailor">തയ്യൽക്കട</option>
-          <option value="mobile">മൊബൈൽ ഷോപ്പ്</option>
-          <option value="fish">മത്സ്യ മാർക്കറ്റ്</option>
-          <option value="meat">ഇറച്ചിക്കട</option>
-          <option value="watch">വാച്ച് റിപ്പയർ</option>
-          <option value="lottery">ലോട്ടറി സ്റ്റാൾ</option>
-          <option value="csc">സിഎസ്സി സെന്റർ</option>
-          <option value="mill">ധാന്യപ്പൊടി മില്ല്</option>
-          <option value="workshop">വർക്ക്‌ഷോപ്പ്</option>
-          <option value="ayurveda">ആയുർവേദ ഷോപ്പ്</option>
-          <option value="stationery">സ്റ്റേഷനറി കട</option>
-          <option value="fruits">ഫ്രൂട്ട്സ് കട</option>
-          <option value="auto">ഓട്ടോ / ടാക്സി</option>
-          <option value="emergency">പ്രധാന നമ്പറുകൾ</option>
-        </select>
-        <input type="text" id="sLoc" placeholder="പ്രദേശം" required class="dark-input" style="margin-bottom: 8px;">
-        <textarea id="sDesc" placeholder="വിവരങ്ങൾ" rows="2" class="dark-input" style="margin-bottom: 8px;" required></textarea>
-        <input type="tel" id="sPhone" placeholder="ഫോൺ നമ്പർ" required class="dark-input" style="margin-bottom: 12px;">
-        <button type="submit" class="btn-pro-call" style="width: 100%; padding: 10px;">സമർപ്പിക്കുക</button>
-      </form>
-    </div>
-  </div>
-
   <script>
-    let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
     let selectedCat = 'all';
-    let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
-    let userList = [];
     let notices = [];
     let shops = [];
     let currentLogo = localStorage.getItem('kolayad_logo') || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
@@ -374,9 +234,6 @@
           ];
         }
 
-        const userSnap = await window.getDocs(window.collection(window.db, "users"));
-        userList = userSnap.docs.map(doc => doc.data());
-
         renderNotices();
         render();
       } catch (e) {
@@ -386,9 +243,6 @@
 
     function initApp() {
       document.getElementById('profileAvatarImg').style.backgroundImage = `url('${currentLogo}')`;
-      if(isAdmin) {
-        document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
-      }
       setTimeout(loadDataFromFirebase, 1000);
     }
 
@@ -401,7 +255,6 @@
           <span class="notice-tag">${n.tag}</span>
           <div class="notice-title" style="color: ${n.color};">${n.title}</div>
           <div class="notice-desc" style="color: ${n.color}; opacity: 0.95;">${n.desc}</div>
-          ${isAdmin ? `<button onclick="delNotice(event, '${n.id}')" style="position:absolute; top:8px; right:8px; background:#ef4444; color:white; border:none; padding:2px 6px; border-radius:6px; font-size:10px; cursor:pointer;">🗑️</button>` : ''}
         </div>
       `).join('');
     }
@@ -420,110 +273,6 @@
         <button onclick="toggleModal('viewNoticeModal')" class="btn-pro-call" style="width:100%; background:#ffffff; color:#0f172a; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
       `;
       toggleModal('viewNoticeModal');
-    }
-
-    async function renderUsers() {
-      const container = document.getElementById('adminUserList');
-      container.innerHTML = `<div style="font-size:11px; color:#cbd5e1;">ലോഡ് ചെയ്യുന്നു...</div>`;
-      try {
-        const userSnap = await window.getDocs(window.collection(window.db, "users"));
-        userList = userSnap.docs.map(doc => doc.data());
-      } catch(e) {
-        console.error(e);
-      }
-
-      if(userList.length === 0) {
-        container.innerHTML = `<div style="font-size:11px; color:#cbd5e1;">അംഗങ്ങൾ ആരും ചേർന്നിട്ടില്ല.</div>`;
-        return;
-      }
-      container.innerHTML = userList.map((u) => `
-        <div style="background:#0f172a; padding:8px; border-radius:8px; margin-bottom:6px; font-size:11px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <strong style="color:#fde047;">${u.name}</strong><br>
-            📞 ${u.phone} | 📍 ${u.address}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function switchAdminTab(tab) {
-      document.getElementById('adminNoticesTab').style.display = tab === 'notices' ? 'block' : 'none';
-      document.getElementById('adminUsersTab').style.display = tab === 'users' ? 'block' : 'none';
-      document.getElementById('adminLogoTab').style.display = tab === 'logo' ? 'block' : 'none';
-      
-      document.getElementById('tabNoticeBtn').className = tab === 'notices' ? 'admin-tab-btn active' : 'admin-tab-btn';
-      document.getElementById('tabUsersBtn').className = tab === 'users' ? 'admin-tab-btn active' : 'admin-tab-btn';
-      document.getElementById('tabLogoBtn').className = tab === 'logo' ? 'admin-tab-btn active' : 'admin-tab-btn';
-
-      if(tab === 'users') renderUsers();
-    }
-
-    function updateLogo(e) {
-      e.preventDefault();
-      const url = document.getElementById('logoUrlInput').value;
-      if(!url) return;
-      currentLogo = url;
-      localStorage.setItem('kolayad_logo', currentLogo);
-      document.getElementById('profileAvatarImg').style.backgroundImage = `url('${currentLogo}')`;
-      alert('പ്രൊഫൈൽ ഫോട്ടോ വിജയകരമായി മാറ്റി!');
-      document.getElementById('logoUrlInput').value = '';
-      toggleModal('adminModal');
-    }
-
-    async function addNotice(e) {
-      e.preventDefault();
-      const shopName = document.getElementById('offShop').value;
-      const tag = document.getElementById('offTag').value;
-      const title = document.getElementById('offTitle').value;
-      const desc = document.getElementById('offDesc').value;
-      const themeVal = document.getElementById('offColorTheme').value.split('|');
-      
-      if(!title || !desc) return alert('വിവരങ്ങൾ പൂർണ്ണമായി നൽകുക!');
-
-      const newNotice = { shopName, tag, title, desc, bg: themeVal[0], color: themeVal[1] };
-      const docRef = await window.addDoc(window.collection(window.db, "notices"), newNotice);
-      notices.unshift({ id: docRef.id, ...newNotice });
-      
-      renderNotices();
-      alert('പുതിയ ഓഫർ വിജയകരമായി പബ്ലിഷ് ചെയ്തു!');
-      document.getElementById('offShop').value = '';
-      document.getElementById('offTag').value = '';
-      document.getElementById('offTitle').value = '';
-      document.getElementById('offDesc').value = '';
-      toggleModal('adminModal');
-    }
-
-    async function delNotice(e, id) {
-      e.stopPropagation();
-      if(confirm('ഈ അറിയിപ്പ് നീക്കം ചെയ്യണോ?')) {
-        await window.deleteDoc(window.doc(window.db, "notices", id));
-        notices = notices.filter(n => n.id != id);
-        renderNotices();
-      }
-    }
-
-    function openProfileModal() {
-      if(currentUser) {
-        document.getElementById('uName').value = currentUser.name || '';
-        document.getElementById('uPhone').value = currentUser.phone || '';
-        document.getElementById('uAddress').value = currentUser.address || '';
-      }
-      toggleModal('profileModal');
-    }
-
-    async function saveUserProfile(e) {
-      e.preventDefault();
-      currentUser = { 
-        name: document.getElementById('uName').value, 
-        phone: document.getElementById('uPhone').value, 
-        address: document.getElementById('uAddress').value 
-      };
-      localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
-      
-      await window.setDoc(window.doc(window.db, "users", currentUser.phone), currentUser);
-      
-      document.getElementById('profileModal').style.display = 'none';
-      alert("നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
     }
 
     function render() {
@@ -549,10 +298,6 @@
           <div class="card-actions">
             <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
             <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-pro-wa">💬</a>
-            ${isAdmin ? `
-              <button onclick="editShop('${s.id}')" style="background:#eab308; color:#0f172a; border:none; padding:0 10px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:11px;">✏️ എഡിറ്റ്</button>
-              <button onclick="delShop('${s.id}')" style="background:#ef4444; color:white; border:none; padding:0 10px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:11px;">🗑️</button>
-            ` : ''}
           </div>
         </div>
       `).join('');
@@ -567,131 +312,9 @@
       render();
     }
 
-    function openAddShopModal() {
-      document.getElementById('shopModalTitle').innerText = "സ്ഥാപനം / സേവനം ചേർക്കുക";
-      document.getElementById('editShopId').value = "";
-      document.getElementById('sName').value = "";
-      document.getElementById('sLoc').value = "";
-      document.getElementById('sDesc').value = "";
-      document.getElementById('sPhone').value = "";
-      toggleModal('addModal');
-    }
-
-    function editShop(id) {
-      const s = shops.find(x => x.id == id);
-      if(!s) return;
-      document.getElementById('shopModalTitle').innerText = "വിവരങ്ങൾ എഡിറ്റ് ചെയ്യുക";
-      document.getElementById('editShopId').value = s.id;
-      document.getElementById('sName').value = s.name;
-      document.getElementById('sCat').value = s.cat || 'worker';
-      document.getElementById('sLoc').value = s.loc;
-      document.getElementById('sDesc').value = s.desc;
-      document.getElementById('sPhone').value = s.phone;
-      toggleModal('addModal');
-    }
-
-    async function saveShop(e) {
-      e.preventDefault();
-      const editId = document.getElementById('editShopId').value;
-      const catSelect = document.getElementById('sCat');
-      
-      const shopData = {
-        name: document.getElementById('sName').value,
-        cat: catSelect.value,
-        catLabel: catSelect.options[catSelect.selectedIndex].text,
-        loc: document.getElementById('sLoc').value,
-        desc: document.getElementById('sDesc').value,
-        phone: document.getElementById('sPhone').value
-      };
-
-      try {
-        if(editId) {
-          await window.setDoc(window.doc(window.db, "shops", editId), shopData);
-          const idx = shops.findIndex(s => s.id == editId);
-          if(idx !== -1) shops[idx] = { id: editId, ...shopData };
-        } else {
-          const docRef = await window.addDoc(window.collection(window.db, "shops"), shopData);
-          shops.unshift({ id: docRef.id, ...shopData });
-        }
-        
-        toggleModal('addModal');
-        render();
-        alert("സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
-      } catch (err) {
-        console.error("Error saving shop: ", err);
-        alert("സേവ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു. വീണ്ടും ശ്രമിക്കുക.");
-      }
-    }
-
-    async function delShop(id) {
-      if(confirm("ഈ വിവരം ഒഴിവാക്കണോ?")) {
-        await window.deleteDoc(window.doc(window.db, "shops", id));
-        shops = shops.filter(s => s.id != id);
-        render();
-      }
-    }
-
     function toggleModal(id) {
       const m = document.getElementById(id);
-      const isOpen = m.style.display === 'flex';
-      
-      if (!isOpen) {
-        m.style.display = 'flex';
-        history.pushState({ modalOpen: id }, '');
-      } else {
-        m.style.display = 'none';
-        if (history.state && history.state.modalOpen === id) {
-          history.back();
-        }
-      }
-    }
-
-    window.onpopstate = function(event) {
-      const modals = ['profileModal', 'adminModal', 'addModal', 'viewNoticeModal'];
-      modals.forEach(id => {
-        const m = document.getElementById(id);
-        if (m && m.style.display === 'flex') {
-          m.style.display = 'none';
-        }
-      });
-    };
-
-    function openAdminModal() {
-      if(isAdmin) {
-        document.getElementById('adminLoginStep').style.display = 'none';
-        document.getElementById('adminDashboardStep').style.display = 'block';
-        switchAdminTab('notices');
-      } else {
-        document.getElementById('adminLoginStep').style.display = 'block';
-        document.getElementById('adminDashboardStep').style.display = 'none';
-        document.getElementById('adminPass').value = '';
-      }
-      toggleModal('adminModal');
-    }
-
-    function loginAdmin(e) {
-      e.preventDefault();
-      if(document.getElementById('adminPass').value === '1234') {
-        isAdmin = true;
-        localStorage.setItem('kolayad_admin', 'true');
-        document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
-        document.getElementById('adminLoginStep').style.display = 'none';
-        document.getElementById('adminDashboardStep').style.display = 'block';
-        switchAdminTab('notices');
-        renderNotices();
-        render();
-      } else {
-        alert("പാസ്‌വേഡ് തെറ്റാണ്!");
-      }
-    }
-
-    function logoutAdmin() {
-      isAdmin = false;
-      localStorage.setItem('kolayad_admin', 'false');
-      document.getElementById('adminBtn').innerText = "അഡ്മിൻ";
-      toggleModal('adminModal');
-      renderNotices();
-      render();
+      m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
     }
 
     initApp();
