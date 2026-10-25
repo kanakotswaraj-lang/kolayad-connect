@@ -18,7 +18,6 @@
 
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
 
-    /* STICKY HEADER */
     .sticky-header { flex-shrink: 0; background: #0f172a; border-bottom: 2px solid #1e293b; z-index: 40; }
     .hero-banner { position: relative; height: 95px; background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), #0f172a); }
@@ -39,7 +38,7 @@
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 85px; }
     .section-label { font-size: 12px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; }
 
-    /* FLIPKART STYLE BANNER SLIDER */
+    /* OFFER SLIDER */
     .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
     .banner-slider::-webkit-scrollbar { display: none; }
 
@@ -50,6 +49,7 @@
     }
     .bright-notice-card:active { transform: scale(0.98); }
 
+    .notice-shop-name { font-size: 11px; font-weight: 800; color: #fde047; background: rgba(15,23,42,0.6); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-bottom: 4px; }
     .notice-tag { background: rgba(0, 0, 0, 0.25); color: #ffffff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
     .notice-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
     .notice-desc { font-size: 11px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -64,7 +64,7 @@
     .cat-box.active .cat-box-title { color: #0f172a; font-weight: 800; }
 
     /* CARDS */
-    .pro-card { background: #1e293b; border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1px solid #334155; border-left: 5px solid #eab308; }
+    .pro-card { background: #1e293b; border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1px solid #334155; border-left: 5px solid #eab308; position: relative; }
     .badge-tag { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(254, 224, 71, 0.12); color: #fde047; }
     .item-name { font-size: 15px; font-weight: 800; color: #f8fafc; margin-top: 4px; }
     .item-loc { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
@@ -72,7 +72,7 @@
     
     .card-actions { display: flex; gap: 8px; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
-    .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
 
     .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; }
     .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 20px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; }
@@ -82,13 +82,18 @@
     .nav-btn.active { color: #fde047; }
 
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
-    .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 360px; padding: 18px; color: white; max-height: 90vh; overflow-y: auto; }
+    .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: white; max-height: 90vh; overflow-y: auto; }
+
+    .admin-tabs { display: flex; gap: 4px; background: #0f172a; padding: 4px; border-radius: 12px; margin-bottom: 12px; }
+    .admin-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-size: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+    .admin-tab-btn.active { background: #eab308; color: #0f172a; font-weight: 800; }
   </style>
 </head>
 <body>
 
   <div class="app-container">
 
+    <!-- HEADER -->
     <div class="sticky-header">
       <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
@@ -110,16 +115,17 @@
       </div>
 
       <div class="filter-sticky-padding">
-        <input type="text" id="searchInput" class="dark-input" onkeyup="render()" placeholder="🔍 ഉൽപ്പന്നങ്ങൾ, സേവനങ്ങൾ, കടകൾ തിരയുക...">
+        <input type="text" id="searchInput" class="dark-input" onkeyup="render()" placeholder="🔍 സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, സാധനങ്ങൾ തിരയുക...">
       </div>
     </div>
 
+    <!-- MAIN BODY -->
     <div class="scrollable-body" id="scrollBody">
       
-      <!-- OFFERS SLIDER SECTION -->
+      <!-- OFFERS SECTION -->
       <div class="section-label">
-        <span>📢 പ്രധാന അറിയിപ്പുകൾ & ഓഫറുകൾ</span>
-        <span style="font-size:10px; color:#cbd5e1;">തൊട്ടാൽ വലുതായി വായിക്കാം 🔍</span>
+        <span>📢 പ്രധാന അറിയിപ്പുകൾ & കടകളുടെ ഓഫറുകൾ</span>
+        <span style="font-size:10px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
       </div>
       
       <div class="banner-slider" id="noticesSlider"></div>
@@ -160,10 +166,12 @@
 
     </div>
 
+    <!-- FLOATING ADD BUTTON -->
     <div class="floating-bar">
-      <button class="btn-add-pro" onclick="toggleModal('addModal')">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</button>
+      <button class="btn-add-pro" onclick="openAddShopModal()">+ പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</button>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
       <button class="nav-btn active" onclick="render()"><span style="font-size: 16px;">🏪</span><span>ഡയറക്ടറി</span></button>
       <button class="nav-btn" onclick="openProfileModal()"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></button>
@@ -172,7 +180,7 @@
 
   </div>
 
-  <!-- POPUP MODAL TO READ OFFER FULL SIZE -->
+  <!-- VIEW OFFER MODAL -->
   <div class="modal-bg" id="viewNoticeModal">
     <div class="modal-box" id="viewNoticeContent"></div>
   </div>
@@ -193,9 +201,9 @@
   <!-- ADMIN MODAL -->
   <div class="modal-bg" id="adminModal">
     <div class="modal-box" style="text-align: center;">
-      <h3 id="adminModalTitle" style="margin-bottom:10px;">അഡ്മിൻ പാനൽ ലോഗിൻ</h3>
+      <h3 id="adminModalTitle" style="margin-bottom:10px;">⚙️ അഡ്മിൻ പാനൽ</h3>
       
-      <!-- PASSWORD STEP -->
+      <!-- LOGIN FORM -->
       <div id="adminLoginStep">
         <form onsubmit="loginAdmin(event)">
           <input type="password" id="adminPass" placeholder="Passcode (1234)" class="dark-input" style="text-align: center; margin: 12px 0;" required>
@@ -206,36 +214,55 @@
         </form>
       </div>
 
-      <!-- DASHBOARD STEP -->
-      <div id="adminDashboardStep" style="display:none; text-align:left; margin-top:6px;">
+      <!-- DASHBOARD -->
+      <div id="adminDashboardStep" style="display:none; text-align:left;">
         
-        <!-- LOGO / PHOTO UPDATE SECTION -->
-        <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px;">
-          <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">🖼️ പ്രൊഫൈൽ / ലോഗോ ഫോട്ടോ മാറ്റുക:</h4>
-          <form onsubmit="updateLogo(event)">
-            <input type="url" id="logoUrlInput" placeholder="ഫോട്ടോയുടെ ലിങ്ക് (Image URL) ഇവിടെ ഒട്ടിക്കുക" class="dark-input" style="margin-bottom:6px;" required>
-            <button type="submit" class="btn-pro-call" style="width:100%; padding:6px; font-size:11px;">ഫോട്ടോ അപ്‌ഡേറ്റ് ചെയ്യുക</button>
-          </form>
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" id="tabNoticeBtn" onclick="switchAdminTab('notices')">ഓഫറുകൾ</button>
+          <button class="admin-tab-btn" id="tabUsersBtn" onclick="switchAdminTab('users')">അംഗങ്ങൾ</button>
+          <button class="admin-tab-btn" id="tabLogoBtn" onclick="switchAdminTab('logo')">ലോഗോ</button>
         </div>
 
-        <!-- ADD NOTICE SECTION -->
-        <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px;">
-          <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">➕ പുതിയ ഓഫർ / അറിയിപ്പ് ചേർക്കുക:</h4>
-          <form onsubmit="addNotice(event)">
-            <input type="text" id="offTag" placeholder="ടാഗ് (ഉദാ: വ്യാപാര ഓഫറുകൾ)" class="dark-input" style="margin-bottom:6px;" required>
-            <input type="text" id="offTitle" placeholder="വിഷയം / ഹെഡിംഗ്" class="dark-input" style="margin-bottom:6px;" required>
-            <textarea id="offDesc" placeholder="ഓഫറിന്റെ വിവരങ്ങൾ" class="dark-input" rows="2" style="margin-bottom:6px;" required></textarea>
-            
-            <select id="offColorTheme" class="dark-select" style="margin-bottom:6px;">
-              <option value="linear-gradient(135deg, #059669 0%, #10b981 100%)|#ffffff">എമറാൾഡ് ഗ്രീൻ (Emerald Green)</option>
-              <option value="linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)|#ffffff">റോയൽ ബ്ലൂ (Royal Blue)</option>
-              <option value="linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)|#ffffff">പർപ്പിൾ വൈബ് (Purple)</option>
-              <option value="linear-gradient(135deg, #d97706 0%, #f59e0b 100%)|#0f172a">ഗോൾഡൻ യെല്ലോ (Golden)</option>
-              <option value="linear-gradient(135deg, #dc2626 0%, #ef4444 100%)|#ffffff">റൂബി റെഡ് (Ruby Red)</option>
-            </select>
+        <!-- TAB 1: NOTICES & OFFERS -->
+        <div id="adminNoticesTab">
+          <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px;">
+            <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">➕ പുതിയ കട ഓഫർ / അറിയിപ്പ് ചേർക്കുക:</h4>
+            <form onsubmit="addNotice(event)">
+              <input type="text" id="offShop" placeholder="സ്ഥാപനത്തിന്റെ പേര് (ഉദാ: ഗ്രീൻ സൂപ്പർമാർക്കറ്റ്)" class="dark-input" style="margin-bottom:6px;" required>
+              <input type="text" id="offTag" placeholder="ഓഫർ ടാഗ് (ഉദാ: 10kg തക്കാളി എടുത്താൽ 2kg ഫ്രീ)" class="dark-input" style="margin-bottom:6px;" required>
+              <input type="text" id="offTitle" placeholder="വിഷയം / ഹെഡിംഗ് (ഉദാ: വമ്പൻ ഓഫർ)" class="dark-input" style="margin-bottom:6px;" required>
+              <textarea id="offDesc" placeholder="ഓഫറിന്റെ വിവരങ്ങൾ" class="dark-input" rows="2" style="margin-bottom:6px;" required></textarea>
+              
+              <select id="offColorTheme" class="dark-select" style="margin-bottom:6px;">
+                <option value="linear-gradient(135deg, #059669 0%, #10b981 100%)|#ffffff">എമറാൾഡ് ഗ്രീൻ (Emerald Green)</option>
+                <option value="linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)|#ffffff">റോയൽ ബ്ലൂ (Royal Blue)</option>
+                <option value="linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)|#ffffff">പർപ്പിൾ വൈബ് (Purple)</option>
+                <option value="linear-gradient(135deg, #d97706 0%, #f59e0b 100%)|#0f172a">ഗോൾഡൻ യെല്ലോ (Golden)</option>
+                <option value="linear-gradient(135deg, #dc2626 0%, #ef4444 100%)|#ffffff">റൂബി റെഡ് (Ruby Red)</option>
+              </select>
 
-            <button type="submit" class="btn-pro-call" style="width:100%; padding:6px; font-size:11px;">ഓഫർ പബ്ലിഷ് ചെയ്യുക</button>
-          </form>
+              <button type="submit" class="btn-pro-call" style="width:100%; padding:7px; font-size:11px;">ഓഫർ പബ്ലിഷ് ചെയ്യുക</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB 2: REGISTERED USERS -->
+        <div id="adminUsersTab" style="display:none;">
+          <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px; max-height:220px; overflow-y:auto;">
+            <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ:</h4>
+            <div id="adminUserList"></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: LOGO CHANGE -->
+        <div id="adminLogoTab" style="display:none;">
+          <div style="background:#162032; padding:10px; border-radius:12px; border:1px solid #eab308; margin-bottom:10px;">
+            <h4 style="color:#eab308; margin-bottom:6px; font-size:12px;">🖼️ പ്രൊഫൈൽ / ലോഗോ ഫോട്ടോ മാറ്റുക:</h4>
+            <form onsubmit="updateLogo(event)">
+              <input type="url" id="logoUrlInput" placeholder="Image URL ചേർക്കുക" class="dark-input" style="margin-bottom:6px;" required>
+              <button type="submit" class="btn-pro-call" style="width:100%; padding:7px; font-size:11px;">ചിത്രം അപ്‌ഡേറ്റ് ചെയ്യുക</button>
+            </form>
+          </div>
         </div>
 
         <button onclick="logoutAdmin()" class="dark-input" style="width:100%; text-align:center; background:#ef4444; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; font-size:12px;">ലോഗ്ഔട്ട് ചെയ്യുക</button>
@@ -244,11 +271,12 @@
     </div>
   </div>
 
-  <!-- ADD SHOP MODAL -->
+  <!-- ADD / EDIT SHOP MODAL -->
   <div class="modal-bg" id="addModal">
     <div class="modal-box">
-      <h3>സ്ഥാപനം / സേവനം ചേർക്കുക</h3>
+      <h3 id="shopModalTitle">സ്ഥാപനം / സേവനം ചേർക്കുക</h3>
       <form onsubmit="saveShop(event)">
+        <input type="hidden" id="editShopId" value="">
         <input type="text" id="sName" placeholder="സ്ഥാപനത്തിന്റെ / തൊഴിലാളിയുടെ പേര്" required class="dark-input" style="margin-bottom: 8px;">
         <select id="sCat" class="dark-select" style="margin-bottom: 8px;">
           <option value="worker">തൊഴിലാളി / സേവനം</option>
@@ -283,12 +311,12 @@
     let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
     let selectedCat = 'all';
     let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
+    let userList = JSON.parse(localStorage.getItem('kolayad_user_list')) || [];
     let currentLogo = localStorage.getItem('kolayad_logo') || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
     
     let notices = JSON.parse(localStorage.getItem('kolayad_notices')) || [
-      { id: 1, tag: "പ്രധാന അറിയിപ്പ്", title: "🎉 കോളയാട് കണക്ട് ആരംഭിച്ചു!", desc: "കോളയാട്ടിലെ എല്ലാ കടകളും തൊഴിലാളികളും സേവനങ്ങളും ഇനി നിങ്ങളുടെ വിരൽത്തുമ്പിൽ. വിവരങ്ങൾ സൗജന്യമായി ചേർക്കാം.", bg: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)", color: "#ffffff" },
-      { id: 2, tag: "വ്യാപാര ഓഫറുകൾ", title: "💥 വ്യാപാരികൾക്ക് വിശേഷ ഓഫർ", desc: "നിങ്ങളുടെ സ്ഥാപനങ്ങളുടെയും ഓഫറുകളുടെയും വിവരങ്ങൾ ആപ്പിൽ പ്രസിദ്ധീകരിക്കാൻ അഡ്മിനുമായി ബന്ധപ്പെടുക.", bg: "linear-gradient(135deg, #059669 0%, #10b981 100%)", color: "#ffffff" },
-      { id: 3, tag: "പുതിയ സേവനം", title: "🚀 ഹോം ഡെലിവറി ലഭ്യമാണ്", desc: "ആവശ്യമായ സാധനങ്ങൾ ഇനി വീട്ടിലെത്തും. കൂടുതൽ വിവരങ്ങൾക്ക് ബന്ധപ്പെടുക.", bg: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)", color: "#ffffff" }
+      { id: 1, shopName: "ഗ്രീൻ മാൾ", tag: "10 കിലോ തക്കാളി എടുക്കുമ്പോൾ 2 കിലോ ഫ്രീ", title: "വമ്പൻ ഓഫർ", desc: "ഇന്ന് ഏത് സാധനവും 10 കിലോ എടുത്താൽ 2 കിലോ ഫ്രീ ആയി ലഭിക്കുന്നതാണ്.", bg: "linear-gradient(135deg, #059669 0%, #10b981 100%)", color: "#ffffff" },
+      { id: 2, shopName: "കോളയാട് കണക്ട്", tag: "പ്രധാന അറിയിപ്പ്", title: "🎉 കോളയാട് കണക്ട് ആരംഭിച്ചു!", desc: "കോളയാട്ടിലെ എല്ലാ കടകളും തൊഴിലാളികളും സേവനങ്ങളും ഇനി നിങ്ങളുടെ വിരൽത്തുമ്പിൽ.", bg: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)", color: "#ffffff" }
     ];
 
     let shops = JSON.parse(localStorage.getItem('kolayad_shops')) || [
@@ -309,6 +337,7 @@
       if(!container) return;
       container.innerHTML = notices.map(n => `
         <div class="bright-notice-card" style="background: ${n.bg}; color: ${n.color};" onclick="viewNotice(${n.id})">
+          ${n.shopName ? `<div class="notice-shop-name">🏪 ${n.shopName}</div><br>` : ''}
           <span class="notice-tag">${n.tag}</span>
           <div class="notice-title" style="color: ${n.color};">${n.title}</div>
           <div class="notice-desc" style="color: ${n.color}; opacity: 0.95;">${n.desc}</div>
@@ -324,12 +353,50 @@
       modalBox.style.background = n.bg;
       modalBox.style.color = n.color;
       modalBox.innerHTML = `
+        ${n.shopName ? `<div style="font-size:12px; font-weight:bold; background:rgba(0,0,0,0.3); padding:4px 10px; border-radius:8px; display:inline-block; margin-bottom:8px;">🏪 ${n.shopName}</div><br>` : ''}
         <span class="notice-tag" style="font-size:11px;">${n.tag}</span>
         <h2 style="font-size:18px; margin:10px 0; color:${n.color};">${n.title}</h2>
         <p style="font-size:13px; line-height:1.6; margin-bottom:16px; color:${n.color};">${n.desc}</p>
         <button onclick="toggleModal('viewNoticeModal')" class="btn-pro-call" style="width:100%; background:#ffffff; color:#0f172a; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
       `;
       toggleModal('viewNoticeModal');
+    }
+
+    function renderUsers() {
+      const container = document.getElementById('adminUserList');
+      if(userList.length === 0) {
+        container.innerHTML = `<div style="font-size:11px; color:#cbd5e1;">അംഗങ്ങൾ ആരും ചേർന്നിട്ടില്ല.</div>`;
+        return;
+      }
+      container.innerHTML = userList.map((u, i) => `
+        <div style="background:#0f172a; padding:8px; border-radius:8px; margin-bottom:6px; font-size:11px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:#fde047;">${u.name}</strong><br>
+            📞 ${u.phone} | 📍 ${u.address}
+          </div>
+          <button onclick="delUser(${i})" style="background:#ef4444; color:white; border:none; padding:4px 6px; border-radius:6px; font-size:10px; cursor:pointer;">🗑️</button>
+        </div>
+      `).join('');
+    }
+
+    function delUser(idx) {
+      if(confirm('ഈ അംഗത്തെ നീക്കം ചെയ്യണോ?')) {
+        userList.splice(idx, 1);
+        localStorage.setItem('kolayad_user_list', JSON.stringify(userList));
+        renderUsers();
+      }
+    }
+
+    function switchAdminTab(tab) {
+      document.getElementById('adminNoticesTab').style.display = tab === 'notices' ? 'block' : 'none';
+      document.getElementById('adminUsersTab').style.display = tab === 'users' ? 'block' : 'none';
+      document.getElementById('adminLogoTab').style.display = tab === 'logo' ? 'block' : 'none';
+      
+      document.getElementById('tabNoticeBtn').className = tab === 'notices' ? 'admin-tab-btn active' : 'admin-tab-btn';
+      document.getElementById('tabUsersBtn').className = tab === 'users' ? 'admin-tab-btn active' : 'admin-tab-btn';
+      document.getElementById('tabLogoBtn').className = tab === 'logo' ? 'admin-tab-btn active' : 'admin-tab-btn';
+
+      if(tab === 'users') renderUsers();
     }
 
     function updateLogo(e) {
@@ -346,6 +413,7 @@
 
     function addNotice(e) {
       e.preventDefault();
+      const shopName = document.getElementById('offShop').value;
       const tag = document.getElementById('offTag').value;
       const title = document.getElementById('offTitle').value;
       const desc = document.getElementById('offDesc').value;
@@ -354,8 +422,9 @@
       if(!title || !desc) return alert('വിവരങ്ങൾ പൂർണ്ണമായി നൽകുക!');
 
       notices.unshift({ 
-        id: Date.now(), 
-        tag: tag || 'അറിയിപ്പ്', 
+        id: Date.now(),
+        shopName,
+        tag: tag || 'ഓഫർ', 
         title, 
         desc, 
         bg: themeVal[0], 
@@ -363,7 +432,8 @@
       });
       localStorage.setItem('kolayad_notices', JSON.stringify(notices));
       renderNotices();
-      alert('പുതിയ ഓഫർ / അറിയിപ്പ് വിജയകരമായി പബ്ലിഷ് ചെയ്തു!');
+      alert('പുതിയ ഓഫർ വിജയകരമായി പബ്ലിഷ് ചെയ്തു!');
+      document.getElementById('offShop').value = '';
       document.getElementById('offTag').value = '';
       document.getElementById('offTitle').value = '';
       document.getElementById('offDesc').value = '';
@@ -390,10 +460,21 @@
 
     function saveUserProfile(e) {
       e.preventDefault();
-      currentUser = { name: document.getElementById('uName').value, phone: document.getElementById('uPhone').value, address: document.getElementById('uAddress').value };
+      currentUser = { 
+        name: document.getElementById('uName').value, 
+        phone: document.getElementById('uPhone').value, 
+        address: document.getElementById('uAddress').value 
+      };
       localStorage.setItem('kolayad_user', JSON.stringify(currentUser));
+      
+      const exists = userList.some(u => u.phone === currentUser.phone);
+      if(!exists) {
+        userList.push(currentUser);
+        localStorage.setItem('kolayad_user_list', JSON.stringify(userList));
+      }
+      
       toggleModal('profileModal');
-      alert("വിവരങ്ങൾ സേവ് ചെയ്തു!");
+      alert("നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
     }
 
     function render() {
@@ -419,7 +500,10 @@
           <div class="card-actions">
             <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
             <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-pro-wa">💬</a>
-            ${isAdmin ? `<button onclick="delShop(${s.id})" style="background:#ef4444; color:white; border:none; padding:0 10px; border-radius:10px; font-weight:bold; cursor:pointer;">🗑️</button>` : ''}
+            ${isAdmin ? `
+              <button onclick="editShop(${s.id})" style="background:#eab308; color:#0f172a; border:none; padding:0 10px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:11px;">✏️ എഡിറ്റ്</button>
+              <button onclick="delShop(${s.id})" style="background:#ef4444; color:white; border:none; padding:0 10px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:11px;">🗑️</button>
+            ` : ''}
           </div>
         </div>
       `).join('');
@@ -434,18 +518,57 @@
       render();
     }
 
+    function openAddShopModal() {
+      document.getElementById('shopModalTitle').innerText = "സ്ഥാപനം / സേവനം ചേർക്കുക";
+      document.getElementById('editShopId').value = "";
+      document.getElementById('sName').value = "";
+      document.getElementById('sLoc').value = "";
+      document.getElementById('sDesc').value = "";
+      document.getElementById('sPhone').value = "";
+      toggleModal('addModal');
+    }
+
+    function editShop(id) {
+      const s = shops.find(x => x.id === id);
+      if(!s) return;
+      document.getElementById('shopModalTitle').innerText = "വിവരങ്ങൾ എഡിറ്റ് ചെയ്യുക";
+      document.getElementById('editShopId').value = s.id;
+      document.getElementById('sName').value = s.name;
+      document.getElementById('sCat').value = s.cat || 'worker';
+      document.getElementById('sLoc').value = s.loc;
+      document.getElementById('sDesc').value = s.desc;
+      document.getElementById('sPhone').value = s.phone;
+      toggleModal('addModal');
+    }
+
     function saveShop(e) {
       e.preventDefault();
-      const n = {
-        id: Date.now(),
-        name: document.getElementById('sName').value,
-        cat: document.getElementById('sCat').value,
-        catLabel: document.getElementById('sCat').options[document.getElementById('sCat').selectedIndex].text,
-        loc: document.getElementById('sLoc').value,
-        desc: document.getElementById('sDesc').value,
-        phone: document.getElementById('sPhone').value
-      };
-      shops.unshift(n);
+      const editId = document.getElementById('editShopId').value;
+      const catSelect = document.getElementById('sCat');
+      
+      if(editId) {
+        const idx = shops.findIndex(s => s.id == editId);
+        if(idx !== -1) {
+          shops[idx].name = document.getElementById('sName').value;
+          shops[idx].cat = catSelect.value;
+          shops[idx].catLabel = catSelect.options[catSelect.selectedIndex].text;
+          shops[idx].loc = document.getElementById('sLoc').value;
+          shops[idx].desc = document.getElementById('sDesc').value;
+          shops[idx].phone = document.getElementById('sPhone').value;
+        }
+      } else {
+        const n = {
+          id: Date.now(),
+          name: document.getElementById('sName').value,
+          cat: catSelect.value,
+          catLabel: catSelect.options[catSelect.selectedIndex].text,
+          loc: document.getElementById('sLoc').value,
+          desc: document.getElementById('sDesc').value,
+          phone: document.getElementById('sPhone').value
+        };
+        shops.unshift(n);
+      }
+      
       localStorage.setItem('kolayad_shops', JSON.stringify(shops));
       toggleModal('addModal');
       render();
@@ -468,11 +591,10 @@
       if(isAdmin) {
         document.getElementById('adminLoginStep').style.display = 'none';
         document.getElementById('adminDashboardStep').style.display = 'block';
-        document.getElementById('adminModalTitle').innerText = "അഡ്മിൻ ഡാഷ്‌ബോർഡ്";
+        switchAdminTab('notices');
       } else {
         document.getElementById('adminLoginStep').style.display = 'block';
         document.getElementById('adminDashboardStep').style.display = 'none';
-        document.getElementById('adminModalTitle').innerText = "അഡ്മിൻ പാനൽ ലോഗിൻ";
         document.getElementById('adminPass').value = '';
       }
       toggleModal('adminModal');
@@ -486,7 +608,7 @@
         document.getElementById('adminBtn').innerText = "ലോഗ്ഔട്ട്";
         document.getElementById('adminLoginStep').style.display = 'none';
         document.getElementById('adminDashboardStep').style.display = 'block';
-        document.getElementById('adminModalTitle').innerText = "അഡ്മിൻ ഡാഷ്‌ബോർഡ്";
+        switchAdminTab('notices');
         renderNotices();
         render();
       } else {
