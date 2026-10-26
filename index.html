@@ -89,11 +89,10 @@
     .item-name { font-size: 15px; font-weight: 800; color: #f8fafc; margin-top: 4px; }
     .item-loc { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
     .item-desc-highlight { font-size: 11px; color: #f1f5f9; background: #0f172a; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
-    .card-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .card-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
     .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
-    .btn-admin-edit { background: #3b82f6; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; text-decoration: none; }
-    .btn-admin-del { background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; }
+    .btn-admin-del { background: #ef4444; color: white; border: none; padding: 9px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; }
     .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; }
     .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 20px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
     .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid #1e293b; padding: 6px 16px 12px 16px; display: flex; justify-content: space-around; z-index: 30; }
@@ -107,11 +106,11 @@
 
   <div class="app-container">
     <div class="sticky-header">
-      <div class="hero-banner" id="heroBannerBg">
+      <div class="hero-banner" id="heroBannerBg" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80');">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
-          <a href="admin.html" class="admin-badge-btn">അഡ്മിൻ</a>
+          <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
         </div>
       </div>
 
@@ -201,6 +200,14 @@
           setTimeout(loadAppSettings, 500);
           return;
         }
+        
+        // അഡ്മിൻ ലോഗിൻ സ്റ്റേറ്റ് പരിശോധിച്ചു ബട്ടൺ മാറ്റുന്നു
+        if(isAdmin) {
+          document.getElementById('adminNavBadge').innerText = "അഡ്മിൻ (Online)";
+          document.getElementById('adminNavBadge').style.background = "#22c55e";
+          document.getElementById('adminNavBadge').style.color = "#0f172a";
+        }
+
         const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
         if (logoDoc.exists() && logoDoc.data().url) {
           document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
