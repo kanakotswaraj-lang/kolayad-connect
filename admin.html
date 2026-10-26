@@ -60,7 +60,6 @@
 <body>
 
   <div class="container">
-    <!-- ലോഗിൻ ബോക്സ് -->
     <div id="loginBox">
       <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
       <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
@@ -69,28 +68,24 @@
       <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
     </div>
 
-    <!-- അഡ്മിൻ പാനൽ -->
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
-      <!-- 1. പ്രൊഫൈൽ ലോഗോ -->
       <div class="form-group">
         <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
         <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
         <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- 2. ഹെറോ ബാനർ -->
       <div class="form-group" style="margin-top: 12px;">
         <label>ഹെറോ ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
         <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
         <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- 3. പ്രധാന അറിയിപ്പുകൾ (Notices) & കളർ തിരഞ്ഞെടുക്കാനുള്ള സൗകര്യം -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പും കളറും നൽകുക</h2>
-        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട് (ഉദാ: മെഗാ ഷോ)">
+        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട് (ഉദാ: ഓഫർ)">
         <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ ഇവിടെ എഴുതുക..." rows="3" style="resize: none;"></textarea>
         
         <label style="margin-top: 6px;">അറിയിപ്പ് ബോർഡിന്റെ കളർ തിരഞ്ഞെടുക്കുക:</label>
@@ -105,7 +100,14 @@
         <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- 4. രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ -->
+      <!-- അറിയിപ്പുകൾ മാനേജ് ചെയ്യാനും ഡിലീറ്റ് ചെയ്യാനുമുള്ള സെക്ഷൻ -->
+      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ നീക്കം ചെയ്യാൻ</h2>
+        <div id="adminNoticesListContainer" style="max-height: 150px; overflow-y: auto;">
+          <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+      </div>
+
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ</h2>
         <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
@@ -113,7 +115,6 @@
         </div>
       </div>
 
-      <!-- 5. ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📥 ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ</h2>
         <div id="feedbackListContainer" style="max-height: 150px; overflow-y: auto;">
@@ -121,7 +122,6 @@
         </div>
       </div>
 
-      <!-- 6. അഡ്മിൻ പാസ്‌വേഡ് മാറ്റാൻ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🔑 അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക</h2>
         <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക">
@@ -168,6 +168,7 @@
       document.getElementById('adminPanel').style.display = 'block';
       loadMembers();
       loadFeedbacks();
+      loadAdminNotices();
     }
 
     window.onload = function() {
@@ -217,7 +218,37 @@
         alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
         document.getElementById('noticeDescInput').value = '';
+        loadAdminNotices();
       } catch(e) { alert('പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+    }
+
+    async function loadAdminNotices() {
+      const container = document.getElementById('adminNoticesListContainer');
+      try {
+        const snap = await window.getDocs(window.collection(window.db, "notices"));
+        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അറിയിപ്പുകൾ ഒന്നുമില്ല.</p>`; return; }
+        let html = '';
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          html += `
+            <div class="member-card">
+              <div><strong>${data.title || 'തലക്കെട്ടില്ല'}</strong><br><span style="color: #94a3b8; font-size: 10px;">${data.date || ''}</span></div>
+              <button onclick="deleteNotice('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch(e) { container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`; }
+    }
+
+    async function deleteNotice(id) {
+      if(confirm('ഈ അറിയിപ്പ് നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
+        try {
+          await window.deleteDoc(window.doc(window.db, "notices", id));
+          alert('അറിയിപ്പ് വിജയകരമായി നീക്കം ചെയ്തു!');
+          loadAdminNotices();
+        } catch(e) { alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+      }
     }
 
     async function loadMembers() {
