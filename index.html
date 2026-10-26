@@ -320,7 +320,6 @@
         if(btn) btn.innerText = '🌙';
       }, 100);
     }
-
     async function loadAppSettings() {
       try {
         if (!window.db) {
@@ -342,16 +341,17 @@
           }
         }
 
+        // പ്രൊഫൈൽ ലോഗോ ലോഡ് ചെയ്യുന്ന ഭാഗം (ഡിഫോൾട്ട് ചിത്രം ഉറപ്പാക്കിയിരിക്കുന്നു)
+        let logoUrl = 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
         try {
           const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
           if (logoDoc.exists() && logoDoc.data().url) {
-            document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
-          } else {
-            document.getElementById('profileAvatarImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80')`;
+            logoUrl = logoDoc.data().url;
           }
         } catch(err) {
-          document.getElementById('profileAvatarImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80')`;
+          console.log("Logo fetch error, using default");
         }
+        document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoUrl}')`;
 
         try {
           const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
