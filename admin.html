@@ -87,12 +87,22 @@
         <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- 3. പ്രധാന അറിയിപ്പുകൾ (Notices) ചേർക്കാനുള്ള ബോക്സ് -->
+      <!-- 3. പ്രധാന അറിയിപ്പുകൾ (Notices) & കളർ തിരഞ്ഞെടുക്കാനുള്ള സൗകര്യം -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പ് നൽകുക</h2>
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പും കളറും നൽകുക</h2>
         <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട് (ഉദാ: മെഗാ ഷോ)">
         <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ ഇവിടെ എഴുതുക..." rows="3" style="resize: none;"></textarea>
-        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
+        
+        <label style="margin-top: 6px;">അറിയിപ്പ് ബോർഡിന്റെ കളർ തിരഞ്ഞെടുക്കുക:</label>
+        <select id="noticeColorInput" class="dark-input" style="padding: 8px;">
+          <option value="linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)">💜 റോയൽ പർപ്പിൾ (Purple)</option>
+          <option value="linear-gradient(135deg, #ea580c 0%, #c2410c 100%)">🧡 പ്രകാശമുള്ള ഓറഞ്ച് (Orange)</option>
+          <option value="linear-gradient(135deg, #059669 0%, #047857 100%)">💚 ആകർഷകമായ പച്ച (Green)</option>
+          <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 മനോഹരമായ നീല (Blue)</option>
+          <option value="linear-gradient(135deg, #db2777 0%, #9d174d 100%)">💖 പിങ്ക് & മെറൂൺ (Pink)</option>
+        </select>
+
+        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
       </div>
 
       <!-- 4. രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ -->
@@ -107,7 +117,7 @@
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📥 ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ</h2>
         <div id="feedbackListContainer" style="max-height: 150px; overflow-y: auto;">
-          <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+          <p style="font-size: 11px; color: #94a3b8;">അഭിപ്രായങ്ങൾ ഒന്നുമില്ല.</p>
         </div>
       </div>
 
@@ -195,11 +205,13 @@
     async function postNotice() {
       const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
+      const color = document.getElementById('noticeColorInput').value;
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
       try {
         await window.addDoc(window.collection(window.db, "notices"), { 
           title, 
           desc, 
+          color,
           date: new Date().toLocaleDateString('en-GB') 
         });
         alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
