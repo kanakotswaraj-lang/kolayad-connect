@@ -100,13 +100,26 @@
     .nav-btn.active { color: #fde047; }
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: white; }
+ /* പ്രധാന അറിയിപ്പുകൾ ഹെഡിംഗിന് ആനിമേഷൻ നൽകാൻ */
+.animated-notice-title {
+  color: #fde047;
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.7; text-shadow: 0 0 5px rgba(234,179,8,0.3); }
+  100% { opacity: 1; text-shadow: 0 0 15px rgba(234,179,8,0.8); }
+}
+
   </style>
+  
+  
 </head>
 <body>
 
   <div class="app-container">
     <div class="sticky-header">
-      <div class="hero-banner" id="heroBannerBg" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80');">
+      <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
@@ -115,7 +128,7 @@
       </div>
 
       <div class="profile-avatar-wrap">
-        <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
+        <div class="profile-avatar" id="profileAvatarImg"></div>
       </div>
 
       <div class="app-title-box">
@@ -130,11 +143,11 @@
       </div>
     </div>
 
-    <div class="scrollable-body" id="scrollBody">
-      <div class="section-label">
-        <span>📢 പ്രധാന അറിയിപ്പുകൾ & കടകളുടെ ഓഫറുകൾ</span>
-        <span style="font-size:11px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
-      </div>
+    <div class="section-label animated-notice-title">
+  <span>🔥 ഇന്നത്തെ പ്രധാന ഓഫറുകളും വിശേഷങ്ങളും</span>
+  <span style="font-size:11px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
+</div>
+
       
       <div class="banner-slider" id="noticesSlider"></div>
 
@@ -201,22 +214,32 @@
           return;
         }
         
-        // അഡ്മിൻ ലോഗിൻ സ്റ്റേറ്റ് പരിശോധിച്ചു ബട്ടൺ മാറ്റുന്നു
+        // അഡ്മിൻ ലോഗിൻ സ്റ്റേറ്റ് പരിശോധിക്കുന്നു
         if(isAdmin) {
           document.getElementById('adminNavBadge').innerText = "അഡ്മിൻ (Online)";
           document.getElementById('adminNavBadge').style.background = "#22c55e";
           document.getElementById('adminNavBadge').style.color = "#0f172a";
         }
 
-        const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
-        if (logoDoc.exists() && logoDoc.data().url) {
-          document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
+        // ഫയർബേസിൽ നിന്ന് ലോഗോ എടുക്കുന്നു, ഇല്ലെങ്കിൽ ഡിഫോൾട്ട് ഫോട്ടോ നൽകുന്നു
+        try {
+          const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
+          if (logoDoc.exists() && logoDoc.data().url) {
+            document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
+          } else {
+            document.getElementById('profileAvatarImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80')`;
+          }
+        } catch(err) {
+          document.getElementById('profileAvatarImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80')`;
         }
 
-        const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
-        if (bannerDoc.exists() && bannerDoc.data().url) {
-          document.getElementById('heroBannerBg').style.backgroundImage = `url('${bannerDoc.data().url}')`;
-        }
+        // ഫയർബേസിൽ നിന്ന് ബാനർ എടുക്കുന്നു
+        try {
+          const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
+          if (bannerDoc.exists() && bannerDoc.data().url) {
+            document.getElementById('heroBannerBg').style.backgroundImage = `url('${bannerDoc.data().url}')`;
+          }
+        } catch(err) {}
 
         const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
         if (!shopSnap.empty) {
