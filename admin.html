@@ -11,6 +11,7 @@
       getFirestore, 
       collection,
       getDocs,
+      addDoc,
       deleteDoc,
       doc,
       setDoc,
@@ -33,6 +34,7 @@
     window.db = db;
     window.collection = collection;
     window.getDocs = getDocs;
+    window.addDoc = addDoc;
     window.deleteDoc = deleteDoc;
     window.doc = doc;
     window.setDoc = setDoc;
@@ -47,7 +49,7 @@
     h2 { color: #fde047; font-size: 18px; margin-bottom: 14px; text-align: center; }
     .form-group { margin-bottom: 12px; }
     label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px; font-weight: bold; }
-    .dark-input { width: 100%; background: #1e293b; border: 2px solid #38bdf8; color: #f1f5f9; padding: 9px; border-radius: 10px; font-size: 12px; outline: none; }
+    .dark-input { width: 100%; background: #1e293b; border: 2px solid #38bdf8; color: #f1f5f9; padding: 9px; border-radius: 10px; font-size: 12px; outline: none; margin-bottom: 6px; }
     .btn-save { width: 100%; background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: none; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 6px; }
     .back-link { display: block; text-align: center; margin-top: 14px; color: #38bdf8; font-size: 12px; text-decoration: none; font-weight: bold; }
     #loginBox { display: block; text-align: center; padding: 20px 0; }
@@ -71,6 +73,7 @@
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
+      <!-- 1. ലോഗോ & ബാനർ -->
       <div class="form-group">
         <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
         <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
@@ -83,18 +86,34 @@
         <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- അംഗങ്ങളുടെ വിവരങ്ങൾ കാണുന്ന സെക്ഷൻ -->
+      <!-- 2. പ്രധാന അറിയിപ്പുകൾ (Notices) ചേർക്കൽ -->
+      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പ് നൽകുക</h2>
+        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
+        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
+        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 7px; font-size: 11px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
+      </div>
+
+      <!-- 3. രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ</h2>
-        <div id="membersListContainer" style="max-height: 180px; overflow-y: auto;">
+        <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
           <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
         </div>
       </div>
 
-      <!-- പാസ്‌വേഡ് മാറ്റുന്ന സെക്ഷൻ -->
+      <!-- 4. ഫീഡ്‌ബാക്ക് / പരാതികൾ കാണാൻ -->
+      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📥 ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ</h2>
+        <div id="feedbackListContainer" style="max-height: 150px; overflow-y: auto;">
+          <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+      </div>
+
+      <!-- 5. പാസ്‌വേഡ് മാറ്റാൻ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🔑 അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക</h2>
-        <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക" style="margin-bottom: 6px;">
+        <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക">
         <button onclick="updateAdminPassword()" class="btn-save" style="background: #3b82f6; color: white; padding: 7px; font-size: 11px;">പാസ്‌വേഡ് മാറ്റുക</button>
       </div>
 
@@ -137,6 +156,7 @@
       document.getElementById('loginBox').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
       loadMembers();
+      loadFeedbacks();
     }
 
     window.onload = function() {
@@ -145,87 +165,97 @@
       }
     };
 
-    // ലോഗോ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ക്ഷൻ
     async function uploadAndSaveLogo() {
       const fileInput = document.getElementById('logoFileInput');
-      if (fileInput.files.length === 0) {
-        alert('ദയവായി ഒരു ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!');
-        return;
-      }
-      const file = fileInput.files[0];
+      if (fileInput.files.length === 0) { alert('ദയവായി ഒരു ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
       const reader = new FileReader();
-      
       reader.onload = async function(e) {
-        const base64String = e.target.result;
         try {
-          await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: base64String });
+          await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: e.target.result });
           alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        } catch(err) {
-          console.error(err);
-          alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-        }
+        } catch(err) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(fileInput.files[0]);
     }
 
-    // ബാനർ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ക്ഷൻ
     async function uploadAndSaveBanner() {
       const fileInput = document.getElementById('bannerFileInput');
-      if (fileInput.files.length === 0) {
-        alert('ദയവായി ഒരു ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!');
-        return;
-      }
-      const file = fileInput.files[0];
+      if (fileInput.files.length === 0) { alert('ദയവായി ഒരു ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
       const reader = new FileReader();
-      
       reader.onload = async function(e) {
-        const base64String = e.target.result;
         try {
-          await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: base64String });
+          await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: e.target.result });
           alert('ഹെറോ ബാനർ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        } catch(err) {
-          console.error(err);
-          alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-        }
+        } catch(err) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+
+    async function postNotice() {
+      const title = document.getElementById('noticeTitleInput').value.trim();
+      const desc = document.getElementById('noticeDescInput').value.trim();
+      if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
+      try {
+        await window.addDoc(window.collection(window.db, "notices"), { title, desc, date: new Date().toLocaleDateString() });
+        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
+        document.getElementById('noticeTitleInput').value = '';
+        document.getElementById('noticeDescInput').value = '';
+      } catch(e) { alert('പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
     }
 
     async function loadMembers() {
       const container = document.getElementById('membersListContainer');
       try {
         const snap = await window.getDocs(window.collection(window.db, "shops"));
-        if (snap.empty) {
-          container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അംഗങ്ങൾ ആരും ലഭ്യമല്ല.</p>`;
-          return;
-        }
+        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അംഗങ്ങൾ ആരും ലഭ്യമല്ല.</p>`; return; }
         let html = '';
         snap.forEach(docSnap => {
           const data = docSnap.data();
           html += `
             <div class="member-card">
-              <div>
-                <strong>${data.name || 'പേരില്ല'}</strong><br>
-                <span style="color: #94a3b8;">📞 ${data.phone || 'നമ്പർ ഇല്ല'}</span>
-              </div>
+              <div><strong>${data.name || 'പേരില്ല'}</strong><br><span style="color: #94a3b8;">📞 ${data.phone || ''}</span></div>
               <button onclick="deleteMember('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
             </div>
           `;
         });
         container.innerHTML = html;
-      } catch(e) {
-        container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`;
-      }
+      } catch(e) { container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`; }
     }
 
     async function deleteMember(id) {
-      if(confirm('ഈ സ്ഥാപനം/അംഗത്തെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
+      if(confirm('ഈ സ്ഥാപനത്തെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
         try {
           await window.deleteDoc(window.doc(window.db, "shops", id));
           alert('വിജയകരമായി നീക്കം ചെയ്തു!');
           loadMembers();
         } catch(e) { alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
       }
+    }
+
+    async function loadFeedbacks() {
+      const container = document.getElementById('feedbackListContainer');
+      try {
+        const snap = await window.getDocs(window.collection(window.db, "feedbacks"));
+        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അഭിപ്രായങ്ങൾ ഒന്നുമില്ല.</p>`; return; }
+        let html = '';
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          html += `
+            <div class="member-card">
+              <div><strong>${data.name || 'അജ്ഞാതം'}</strong> (${data.phone || ''})<br><span style="color: #38bdf8;">${data.message || ''}</span></div>
+              <button onclick="deleteFeedback('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">ഡിലീറ്റ്</button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch(e) { container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`; }
+    }
+
+    async function deleteFeedback(id) {
+      try {
+        await window.deleteDoc(window.doc(window.db, "feedbacks", id));
+        loadFeedbacks();
+      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
     }
   </script>
 </body>
