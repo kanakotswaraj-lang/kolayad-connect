@@ -78,9 +78,9 @@
       </div>
 
       <div class="form-group" style="margin-top: 12px;">
-        <label>ഹെറോ ബാനർ ഇമേജ് ലിങ്ക് (URL):</label>
-        <input type="url" id="bannerUrlInput" class="dark-input" placeholder="https://...">
-        <button onclick="saveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        <label>ഹെറോ ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
+        <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+        <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
       <!-- അംഗങ്ങളുടെ വിവരങ്ങൾ കാണുന്ന സെക്ഷൻ -->
@@ -136,7 +136,6 @@
     function showPanel() {
       document.getElementById('loginBox').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
-      loadCurrentSettings();
       loadMembers();
     }
 
@@ -146,19 +145,11 @@
       }
     };
 
-    async function loadCurrentSettings() {
-      if (!window.db) return;
-      try {
-        const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
-        if (bannerDoc.exists()) document.getElementById('bannerUrlInput').value = bannerDoc.data().url || '';
-      } catch(e) { console.error(e); }
-    }
-
-    // ഫോണിൽ നിന്ന് ഫോട്ടോ സെലക്ട് ചെയ്ത് Base64 കോഡ് ആക്കി ഫയർബേസിൽ സേവ് ചെയ്യുന്ന ഫങ്ക്ഷൻ
+    // ലോഗോ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ക്ഷൻ
     async function uploadAndSaveLogo() {
       const fileInput = document.getElementById('logoFileInput');
       if (fileInput.files.length === 0) {
-        alert('ദയവായി ഒരു ഫോട്ടോ തിരഞ്ഞെടുക്കുക!');
+        alert('ദയവായി ഒരു ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!');
         return;
       }
       const file = fileInput.files[0];
@@ -177,13 +168,27 @@
       reader.readAsDataURL(file);
     }
 
-    async function saveBanner() {
-      const url = document.getElementById('bannerUrlInput').value.trim();
-      if(!url) { alert('ദയവായി ഒരു ലിങ്ക് നൽകുക!'); return; }
-      try {
-        await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url });
-        alert('ഹെറോ ബാനർ വിജയകരമായി സേവ് ചെയ്തു!');
-      } catch(e) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.'); }
+    // ബാനർ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ക്ഷൻ
+    async function uploadAndSaveBanner() {
+      const fileInput = document.getElementById('bannerFileInput');
+      if (fileInput.files.length === 0) {
+        alert('ദയവായി ഒരു ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!');
+        return;
+      }
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = async function(e) {
+        const base64String = e.target.result;
+        try {
+          await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: base64String });
+          alert('ഹെറോ ബാനർ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+        } catch(err) {
+          console.error(err);
+          alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+        }
+      };
+      reader.readAsDataURL(file);
     }
 
     async function loadMembers() {
