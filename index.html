@@ -12,7 +12,9 @@
       collection, 
       getDocs, 
       deleteDoc, 
-      doc 
+      doc,
+      setDoc,
+      getDoc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -33,6 +35,8 @@
     window.getDocs = getDocs;
     window.deleteDoc = deleteDoc;
     window.doc = doc;
+    window.setDoc = setDoc;
+    window.getDoc = getDoc;
   </script>
 
   <style>
@@ -85,9 +89,11 @@
     .item-name { font-size: 15px; font-weight: 800; color: #f8fafc; margin-top: 4px; }
     .item-loc { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
     .item-desc-highlight { font-size: 11px; color: #f1f5f9; background: #0f172a; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
-    .card-actions { display: flex; gap: 8px; }
+    .card-actions { display: flex; gap: 8px; margin-top: 8px; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
     .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
+    .btn-admin-edit { background: #3b82f6; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; text-decoration: none; }
+    .btn-admin-del { background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; }
     .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; }
     .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 20px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
     .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid #1e293b; padding: 6px 16px 12px 16px; display: flex; justify-content: space-around; z-index: 30; }
@@ -187,17 +193,24 @@
     let selectedCat = 'all';
     let notices = [];
     let shops = [];
+    let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
 
-    // ലോക്കോയും ബാക്ക്ഗ്രൗണ്ട് ഫോട്ടോയും ലോഡ് ചെയ്യുന്നു
-    let currentLogo = localStorage.getItem('kolayad_logo') || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
-    let currentHeroBg = localStorage.getItem('kolayad_hero_bg') || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80';
-
-    async function loadDataFromFirebase() {
+    async function loadAppSettings() {
       try {
         if (!window.db) {
-          setTimeout(loadDataFromFirebase, 500);
+          setTimeout(loadAppSettings, 500);
           return;
         }
+        const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
+        if (logoDoc.exists() && logoDoc.data().url) {
+          document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
+        }
+
+        const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
+        if (bannerDoc.exists() && bannerDoc.data().url) {
+          document.getElementById('heroBannerBg').style.backgroundImage = `url('${bannerDoc.data().url}')`;
+        }
+
         const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
         if (!shopSnap.empty) {
           shops = shopSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -222,17 +235,12 @@
     }
 
     function initApp() {
-      // പ്രൊഫൈൽ ഫോട്ടോയും ഹെഡർ ബാനറും സെറ്റ് ചെയ്യുന്നു
-      document.getElementById('profileAvatarImg').style.backgroundImage = `url('${currentLogo}')`;
-      document.getElementById('heroBannerBg').style.backgroundImage = `url('${currentHeroBg}')`;
-
-      // ഫ്ലിപ്കാർട്ട്/ആമസോൺ മാതൃകയിൽ യൂസർ പേര് കാണിക്കാൻ
       let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
       if (currentUser && currentUser.name) {
         document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
       }
 
-      setTimeout(loadDataFromFirebase, 1000);
+      setTimeout(loadAppSettings, 1000);
     }
 
     function renderNotices() {
@@ -287,9 +295,25 @@
           <div class="card-actions">
             <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
             <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-pro-wa">💬</a>
+            ${isAdmin ? `
+              <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
+            ` : ''}
           </div>
         </div>
       `).join('');
+    }
+
+    async function deleteShop(id) {
+      if(confirm('ഈ സ്ഥാപനം ഡിലീറ്റ് ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
+        try {
+          await window.deleteDoc(window.doc(window.db, "shops", id));
+          alert('സ്ഥാപനം വിജയകരമായി നീക്കം ചെയ്തു!');
+          loadAppSettings();
+        } catch(e) {
+          console.error(e);
+          alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+        }
+      }
     }
 
     function setCat(cat, elem) {
