@@ -178,19 +178,20 @@
       }
     }
 
-    function loginAdmin(e) {
+        function loginAdmin(e) {
       e.preventDefault();
       const enteredPass = document.getElementById('adminPassInput').value;
       let currentPass = localStorage.getItem('kolayad_admin_pass') || '1234';
       
       if(enteredPass === currentPass) {
-        isAdmin = true;
         localStorage.setItem('kolayad_admin', 'true');
-        checkAdminState();
+        // ലോഗിൻ വിജയമായാൽ നേരെ ഹോം പേജിലേക്ക് (ഡയറക്ടറിയിലേക്ക്) പോകും
+        window.location.href = 'index.html';
       } else {
         alert("പാസ്‌വേഡ് തെറ്റാണ്!");
       }
     }
+
 
     function logoutAdmin() {
       isAdmin = false;
