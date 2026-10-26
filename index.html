@@ -100,20 +100,18 @@
     .nav-btn.active { color: #fde047; }
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: white; }
- /* പ്രധാന അറിയിപ്പുകൾ ഹെഡിംഗിന് ആനിമേഷൻ നൽകാൻ */
-.animated-notice-title {
-  color: #fde047;
-  animation: pulseGlow 1.5s infinite alternate;
-}
 
-@keyframes pulseGlow {
-  0% { opacity: 0.7; text-shadow: 0 0 5px rgba(234,179,8,0.3); }
-  100% { opacity: 1; text-shadow: 0 0 15px rgba(234,179,8,0.8); }
-}
+    /* പ്രധാന അറിയിപ്പുകൾ ഹെഡിംഗിന് ആനിമേഷൻ നൽകാൻ */
+    .animated-notice-title {
+      color: #fde047;
+      animation: pulseGlow 1.5s infinite alternate;
+    }
 
+    @keyframes pulseGlow {
+      0% { opacity: 0.7; text-shadow: 0 0 5px rgba(234,179,8,0.3); }
+      100% { opacity: 1; text-shadow: 0 0 15px rgba(234,179,8,0.8); }
+    }
   </style>
-  
-  
 </head>
 <body>
 
@@ -143,11 +141,12 @@
       </div>
     </div>
 
-    <div class="section-label animated-notice-title">
-  <span>🔥 ഇന്നത്തെ പ്രധാന ഓഫറുകളും വിശേഷങ്ങളും</span>
-  <span style="font-size:11px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
-</div>
-
+    <!-- സ്‌ക്രോൾ ചെയ്യാവുന്ന മെയിൻ ബോഡിയുടെ ഉള്ളിലേക്ക് എല്ലാ സെക്ഷനുകളും മാറ്റിയിരിക്കുന്നു -->
+    <div class="scrollable-body" id="scrollBody">
+      <div class="section-label animated-notice-title">
+        <span>🔥 ഇന്നത്തെ പ്രധാന ഓഫറുകളും വിശേഷങ്ങളും</span>
+        <span style="font-size:11px; color:#cbd5e1;">തൊട്ടാൽ വായിക്കാം 🔍</span>
+      </div>
       
       <div class="banner-slider" id="noticesSlider"></div>
 
@@ -205,7 +204,6 @@
     let selectedCat = 'all';
     let notices = [];
     let shops = [];
-    let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
 
     async function loadAppSettings() {
       try {
@@ -214,14 +212,16 @@
           return;
         }
         
-        // അഡ്മിൻ ലോഗിൻ സ്റ്റേറ്റ് പരിശോധിക്കുന്നു
+        let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
         if(isAdmin) {
-          document.getElementById('adminNavBadge').innerText = "അഡ്മിൻ (Online)";
-          document.getElementById('adminNavBadge').style.background = "#22c55e";
-          document.getElementById('adminNavBadge').style.color = "#0f172a";
+          const badge = document.getElementById('adminNavBadge');
+          if(badge) {
+            badge.innerText = "അഡ്മിൻ (Online)";
+            badge.style.background = "#22c55e";
+            badge.style.color = "#0f172a";
+          }
         }
 
-        // ഫയർബേസിൽ നിന്ന് ലോഗോ എടുക്കുന്നു, ഇല്ലെങ്കിൽ ഡിഫോൾട്ട് ഫോട്ടോ നൽകുന്നു
         try {
           const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
           if (logoDoc.exists() && logoDoc.data().url) {
@@ -233,7 +233,6 @@
           document.getElementById('profileAvatarImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80')`;
         }
 
-        // ഫയർബേസിൽ നിന്ന് ബാനർ എടുക്കുന്നു
         try {
           const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
           if (bannerDoc.exists() && bannerDoc.data().url) {
@@ -270,7 +269,7 @@
         document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
       }
 
-      setTimeout(loadAppSettings, 1000);
+      setTimeout(loadAppSettings, 500);
     }
 
     function renderNotices() {
@@ -303,6 +302,7 @@
     }
 
     function render() {
+      let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
       const list = document.getElementById('listings');
       const q = document.getElementById('searchInput').value.toLowerCase();
       const filtered = shops.filter(s => {
