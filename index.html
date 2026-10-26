@@ -101,15 +101,16 @@
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: #1e293b; border: 1px solid #334155; border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: white; }
 
-    /* പ്രധാന അറിയിപ്പുകൾ ഹെഡിംഗിന് ആനിമേഷൻ നൽകാൻ */
+    /* ഓഫറുകൾ ഹെഡിംഗിന് ആകർഷകമായ ബ്ലിങ്കിംഗ്/പൾസ് ആനിമേഷൻ */
     .animated-notice-title {
       color: #fde047;
-      animation: pulseGlow 1.5s infinite alternate;
+      animation: superBlink 1.2s infinite ease-in-out;
     }
 
-    @keyframes pulseGlow {
-      0% { opacity: 0.7; text-shadow: 0 0 5px rgba(234,179,8,0.3); }
-      100% { opacity: 1; text-shadow: 0 0 15px rgba(234,179,8,0.8); }
+    @keyframes superBlink {
+      0% { opacity: 0.4; transform: scale(0.98); text-shadow: 0 0 2px rgba(234,179,8,0.2); }
+      50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 15px rgba(234,179,8,0.9); }
+      100% { opacity: 0.4; transform: scale(0.98); text-shadow: 0 0 2px rgba(234,179,8,0.2); }
     }
   </style>
 </head>
@@ -141,7 +142,6 @@
       </div>
     </div>
 
-    <!-- സ്‌ക്രോൾ ചെയ്യാവുന്ന മെയിൻ ബോഡിയുടെ ഉള്ളിലേക്ക് എല്ലാ സെക്ഷനുകളും മാറ്റിയിരിക്കുന്നു -->
     <div class="scrollable-body" id="scrollBody">
       <div class="section-label animated-notice-title">
         <span>🔥 ഇന്നത്തെ പ്രധാന ഓഫറുകളും വിശേഷങ്ങളും</span>
@@ -212,13 +212,18 @@
           return;
         }
         
+        // കൃത്യമായ അഡ്മിൻ ലോഗിൻ സ്റ്റേറ്റ് പരിശോധന
         let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
-        if(isAdmin) {
-          const badge = document.getElementById('adminNavBadge');
-          if(badge) {
+        const badge = document.getElementById('adminNavBadge');
+        if(badge) {
+          if(isAdmin) {
             badge.innerText = "അഡ്മിൻ (Online)";
             badge.style.background = "#22c55e";
             badge.style.color = "#0f172a";
+          } else {
+            badge.innerText = "അഡ്മിൻ";
+            badge.style.background = "rgba(15, 23, 42, 0.85)";
+            badge.style.color = "#fde047";
           }
         }
 
