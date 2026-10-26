@@ -9,6 +9,9 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
       getFirestore, 
+      collection,
+      getDocs,
+      deleteDoc,
       doc,
       setDoc,
       getDoc 
@@ -28,6 +31,9 @@
     const db = getFirestore(app);
 
     window.db = db;
+    window.collection = collection;
+    window.getDocs = getDocs;
+    window.deleteDoc = deleteDoc;
     window.doc = doc;
     window.setDoc = setDoc;
     window.getDoc = getDoc;
@@ -37,54 +43,119 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', sans-serif; }
     body { background-color: #0b0f17; color: #f1f5f9; display: flex; justify-content: center; min-height: 100vh; padding: 16px; }
-    .container { width: 100%; max-width: 480px; background: #0f172a; border: 2px solid #eab308; border-radius: 20px; padding: 20px; box-shadow: 0 0 25px rgba(234,179,8,0.2); }
-    h2 { color: #fde047; font-size: 20px; margin-bottom: 16px; text-align: center; }
-    .form-group { margin-bottom: 14px; }
-    label { font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px; font-weight: bold; }
-    .dark-input { width: 100%; background: #1e293b; border: 2px solid #38bdf8; color: #f1f5f9; padding: 10px; border-radius: 10px; font-size: 13px; outline: none; }
-    .btn-save { width: 100%; background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 10px; }
-    .back-link { display: block; text-align: center; margin-top: 16px; color: #38bdf8; font-size: 12px; text-decoration: none; font-weight: bold; }
+    .container { width: 100%; max-width: 480px; background: #0f172a; border: 2px solid #eab308; border-radius: 20px; padding: 20px; box-shadow: 0 0 25px rgba(234,179,8,0.2); height: fit-content; }
+    h2 { color: #fde047; font-size: 18px; margin-bottom: 14px; text-align: center; }
+    .form-group { margin-bottom: 12px; }
+    label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px; font-weight: bold; }
+    .dark-input { width: 100%; background: #1e293b; border: 2px solid #38bdf8; color: #f1f5f9; padding: 9px; border-radius: 10px; font-size: 12px; outline: none; }
+    .btn-save { width: 100%; background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: none; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 6px; }
+    .back-link { display: block; text-align: center; margin-top: 14px; color: #38bdf8; font-size: 12px; text-decoration: none; font-weight: bold; }
+    #loginBox { display: block; text-align: center; padding: 20px 0; }
+    #adminPanel { display: none; }
+    .member-card { background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
-
-    <div class="form-group">
-      <label>പ്രൊഫൈൽ ലോഗോ ഇമേജ് ലിങ്ക് (URL):</label>
-      <input type="url" id="logoUrlInput" class="dark-input" placeholder="https://...">
-      <button onclick="saveLogo()" class="btn-save" style="padding: 8px; font-size: 12px; margin-top: 6px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
+    <!-- ലോഗിൻ ബോക്സ് -->
+    <div id="loginBox">
+      <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
+      <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
+      <input type="password" id="adminPassInput" class="dark-input" placeholder="പാസ്‌വേഡ് നൽകുക" style="margin-bottom: 10px;">
+      <button onclick="checkAdminLogin()" class="btn-save">ലോഗിൻ ചെയ്യുക</button>
+      <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
     </div>
 
-    <div class="form-group" style="margin-top: 20px;">
-      <label>ഹെറോ ബാനർ ഇമേജ് ലിങ്ക് (URL):</label>
-      <input type="url" id="bannerUrlInput" class="dark-input" placeholder="https://...">
-      <button onclick="saveBanner()" class="btn-save" style="padding: 8px; font-size: 12px; margin-top: 6px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
-    </div>
+    <!-- അഡ്മിൻ പാനൽ -->
+    <div id="adminPanel">
+      <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
-    <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
+      <div class="form-group">
+        <label>പ്രൊഫൈൽ ലോഗോ ഇമേജ് ലിങ്ക് (Direct URL):</label>
+        <input type="url" id="logoUrlInput" class="dark-input" placeholder="https://... (.jpg / .png ലിങ്ക്)">
+        <button onclick="saveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
+      </div>
+
+      <div class="form-group" style="margin-top: 12px;">
+        <label>ഹെറോ ബാനർ ഇമേജ് ലിങ്ക് (URL):</label>
+        <input type="url" id="bannerUrlInput" class="dark-input" placeholder="https://...">
+        <button onclick="saveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
+      </div>
+
+      <!-- മെമ്പർമാരുടെ വിവരങ്ങൾ കാണുന്ന സെക്ഷൻ -->
+      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ</h2>
+        <div id="membersListContainer" style="max-height: 180px; overflow-y: auto;">
+          <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+      </div>
+
+      <!-- പാസ്‌വേഡ് റീസെറ്റ് / മാറ്റുന്ന സെക്ഷൻ -->
+      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🔑 അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക</h2>
+        <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക" style="margin-bottom: 6px;">
+        <button onclick="updateAdminPassword()" class="btn-save" style="background: #3b82f6; color: white; padding: 7px; font-size: 11px;">പാസ്‌വേഡ് മാറ്റുക</button>
+      </div>
+
+      <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; margin-top: 16px; cursor: pointer; font-size: 12px;">ലോഗ് ഔട്ട് ചെയ്യുക</button>
+      <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
+    </div>
   </div>
 
   <script>
-    async function loadCurrentSettings() {
-      if (!window.db) {
-        setTimeout(loadCurrentSettings, 500);
-        return;
+    // പാസ്‌വേഡ് മാനേജ്മെന്റ് (ലോക്കൽ സ്റ്റോറേജിൽ സേവ് ചെയ്യും)
+    function getStoredPassword() {
+      return localStorage.getItem('kolayad_admin_pass') || "admin123";
+    }
+
+    function checkAdminLogin() {
+      const pass = document.getElementById('adminPassInput').value;
+      if (pass === getStoredPassword()) {
+        localStorage.setItem('kolayad_admin', 'true');
+        showPanel();
+      } else {
+        alert('പാസ്‌വേഡ് തെറ്റാണ്!');
       }
+    }
+
+    function updateAdminPassword() {
+      const newPass = document.getElementById('newPassInput').value.trim();
+      if(!newPass) { alert('ദയവായി പുതിയ പാസ്‌വേഡ് നൽകുക!'); return; }
+      localStorage.setItem('kolayad_admin_pass', newPass);
+      alert('അഡ്മിൻ പാസ്‌വേഡ് വിജയകരമായി മാറ്റിയിരിക്കുന്നു!');
+      document.getElementById('newPassInput').value = '';
+    }
+
+    function adminLogout() {
+      localStorage.removeItem('kolayad_admin');
+      document.getElementById('adminPanel').style.display = 'none';
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('adminPassInput').value = '';
+    }
+
+    function showPanel() {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadCurrentSettings();
+      loadMembers();
+    }
+
+    window.onload = function() {
+      if (localStorage.getItem('kolayad_admin') === 'true') {
+        showPanel();
+      }
+    };
+
+    async function loadCurrentSettings() {
+      if (!window.db) return;
       try {
         const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
-        if (logoDoc.exists()) {
-          document.getElementById('logoUrlInput').value = logoDoc.data().url || '';
-        }
+        if (logoDoc.exists()) document.getElementById('logoUrlInput').value = logoDoc.data().url || '';
 
         const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
-        if (bannerDoc.exists()) {
-          document.getElementById('bannerUrlInput').value = bannerDoc.data().url || '';
-        }
-      } catch(e) {
-        console.error(e);
-      }
+        if (bannerDoc.exists()) document.getElementById('bannerUrlInput').value = bannerDoc.data().url || '';
+      } catch(e) { console.error(e); }
     }
 
     async function saveLogo() {
@@ -93,10 +164,7 @@
       try {
         await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url });
         alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി സേവ് ചെയ്തു!');
-      } catch(e) {
-        console.error(e);
-        alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-      }
+      } catch(e) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.'); }
     }
 
     async function saveBanner() {
@@ -105,13 +173,46 @@
       try {
         await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url });
         alert('ഹെറോ ബാനർ വിജയകരമായി സേവ് ചെയ്തു!');
+      } catch(e) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.'); }
+    }
+
+    // മെമ്പർമാരുടെ വിവരങ്ങൾ ഫയർബേസിൽ നിന്ന് എടുത്ത് കാണിക്കുന്ന ഫങ്ക്ഷൻ
+    async function loadMembers() {
+      const container = document.getElementById('membersListContainer');
+      try {
+        const snap = await window.getDocs(window.collection(window.db, "shops"));
+        if (snap.empty) {
+          container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അംഗങ്ങൾ ആരും ലഭ്യമല്ല.</p>`;
+          return;
+        }
+        let html = '';
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          html += `
+            <div class="member-card">
+              <div>
+                <strong>${data.name || 'പേരില്ല'}</strong><br>
+                <span style="color: #94a3b8;">📞 ${data.phone || 'നമ്പർ ഇല്ല'}</span>
+              </div>
+              <button onclick="deleteMember('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
       } catch(e) {
-        console.error(e);
-        alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+        container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`;
       }
     }
 
-    setTimeout(loadCurrentSettings, 500);
+    async function deleteMember(id) {
+      if(confirm('ഈ സ്ഥാപനം/അംഗത്തെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
+        try {
+          await window.deleteDoc(window.doc(window.db, "shops", id));
+          alert('വിജയകരമായി നീക്കം ചെയ്തു!');
+          loadMembers();
+        } catch(e) { alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+      }
+    }
   </script>
 </body>
 </html>
