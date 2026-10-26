@@ -72,9 +72,9 @@
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
       <div class="form-group">
-        <label>പ്രൊഫൈൽ ലോഗോ ഇമേജ് ലിങ്ക് (Direct URL):</label>
-        <input type="url" id="logoUrlInput" class="dark-input" placeholder="https://... (.jpg / .png ലിങ്ക്)">
-        <button onclick="saveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
+        <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+        <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
       <div class="form-group" style="margin-top: 12px;">
@@ -83,7 +83,7 @@
         <button onclick="saveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- മെമ്പർമാരുടെ വിവരങ്ങൾ കാണുന്ന സെക്ഷൻ -->
+      <!-- അംഗങ്ങളുടെ വിവരങ്ങൾ കാണുന്ന സെക്ഷൻ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ</h2>
         <div id="membersListContainer" style="max-height: 180px; overflow-y: auto;">
@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <!-- പാസ്‌വേഡ് റീസെറ്റ് / മാറ്റുന്ന സെക്ഷൻ -->
+      <!-- പാസ്‌വേഡ് മാറ്റുന്ന സെക്ഷൻ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🔑 അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക</h2>
         <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക" style="margin-bottom: 6px;">
@@ -104,7 +104,6 @@
   </div>
 
   <script>
-    // പാസ്‌വേഡ് മാനേജ്മെന്റ് (ലോക്കൽ സ്റ്റോറേജിൽ സേവ് ചെയ്യും)
     function getStoredPassword() {
       return localStorage.getItem('kolayad_admin_pass') || "admin123";
     }
@@ -150,21 +149,32 @@
     async function loadCurrentSettings() {
       if (!window.db) return;
       try {
-        const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
-        if (logoDoc.exists()) document.getElementById('logoUrlInput').value = logoDoc.data().url || '';
-
         const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
         if (bannerDoc.exists()) document.getElementById('bannerUrlInput').value = bannerDoc.data().url || '';
       } catch(e) { console.error(e); }
     }
 
-    async function saveLogo() {
-      const url = document.getElementById('logoUrlInput').value.trim();
-      if(!url) { alert('ദയവായി ഒരു ലിങ്ക് നൽകുക!'); return; }
-      try {
-        await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url });
-        alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി സേവ് ചെയ്തു!');
-      } catch(e) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.'); }
+    // ഫോണിൽ നിന്ന് ഫോട്ടോ സെലക്ട് ചെയ്ത് Base64 കോഡ് ആക്കി ഫയർബേസിൽ സേവ് ചെയ്യുന്ന ഫങ്ക്ഷൻ
+    async function uploadAndSaveLogo() {
+      const fileInput = document.getElementById('logoFileInput');
+      if (fileInput.files.length === 0) {
+        alert('ദയവായി ഒരു ഫോട്ടോ തിരഞ്ഞെടുക്കുക!');
+        return;
+      }
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = async function(e) {
+        const base64String = e.target.result;
+        try {
+          await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: base64String });
+          alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+        } catch(err) {
+          console.error(err);
+          alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+        }
+      };
+      reader.readAsDataURL(file);
     }
 
     async function saveBanner() {
@@ -176,7 +186,6 @@
       } catch(e) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.'); }
     }
 
-    // മെമ്പർമാരുടെ വിവരങ്ങൾ ഫയർബേസിൽ നിന്ന് എടുത്ത് കാണിക്കുന്ന ഫങ്ക്ഷൻ
     async function loadMembers() {
       const container = document.getElementById('membersListContainer');
       try {
