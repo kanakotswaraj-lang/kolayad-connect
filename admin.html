@@ -73,28 +73,29 @@
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
-      <!-- 1. ലോഗോ & ബാനർ -->
+      <!-- 1. പ്രൊഫൈൽ ലോഗോ -->
       <div class="form-group">
         <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
         <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
         <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
+      <!-- 2. ഹെറോ ബാനർ -->
       <div class="form-group" style="margin-top: 12px;">
         <label>ഹെറോ ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
         <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
         <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- 2. പ്രധാന അറിയിപ്പുകൾ (Notices) ചേർക്കൽ -->
+      <!-- 3. പ്രധാന അറിയിപ്പുകൾ (Notices) ചേർക്കാനുള്ള ബോക്സ് -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പ് നൽകുക</h2>
-        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
-        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
-        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 7px; font-size: 11px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
+        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട് (ഉദാ: മെഗാ ഷോ)">
+        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ ഇവിടെ എഴുതുക..." rows="3" style="resize: none;"></textarea>
+        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- 3. രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ -->
+      <!-- 4. രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ</h2>
         <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
@@ -102,7 +103,7 @@
         </div>
       </div>
 
-      <!-- 4. ഫീഡ്‌ബാക്ക് / പരാതികൾ കാണാൻ -->
+      <!-- 5. ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📥 ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ</h2>
         <div id="feedbackListContainer" style="max-height: 150px; overflow-y: auto;">
@@ -110,7 +111,7 @@
         </div>
       </div>
 
-      <!-- 5. പാസ്‌വേഡ് മാറ്റാൻ -->
+      <!-- 6. അഡ്മിൻ പാസ്‌വേഡ് മാറ്റാൻ -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
         <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🔑 അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക</h2>
         <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക">
@@ -196,7 +197,11 @@
       const desc = document.getElementById('noticeDescInput').value.trim();
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
       try {
-        await window.addDoc(window.collection(window.db, "notices"), { title, desc, date: new Date().toLocaleDateString() });
+        await window.addDoc(window.collection(window.db, "notices"), { 
+          title, 
+          desc, 
+          date: new Date().toLocaleDateString('en-GB') 
+        });
         alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
         document.getElementById('noticeDescInput').value = '';
