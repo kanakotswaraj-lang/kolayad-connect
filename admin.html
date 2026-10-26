@@ -191,13 +191,14 @@
         alert("പാസ്‌വേഡ് തെറ്റാണ്!");
       }
     }
-
-
     function logoutAdmin() {
       isAdmin = false;
       localStorage.setItem('kolayad_admin', 'false');
-      checkAdminState();
+      // ലോഗ് ഔട്ട് ചെയ്ത ഉടൻ ഹോം പേജിലേക്ക് (ഡയറക്ടറിയിലേക്ക്) പോകും
+      window.location.href = 'index.html';
     }
+
+
 
     function changeAdminPassword(e) {
       e.preventDefault();
