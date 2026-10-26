@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>അഡ്മിൻ പാനൽ - കോളയാട് കണക്ട്</title>
-    <!-- 1. ആദ്യം ഫയർബേസ് കണക്ഷൻ സ്ക്രിപ്റ്റ് നൽകുക -->
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
       getFirestore, 
       collection, 
+      addDoc, 
       getDocs, 
       deleteDoc, 
       doc,
@@ -38,136 +39,6 @@
     window.doc = doc;
     window.setDoc = setDoc;
     window.getDoc = getDoc;
-  </script>
-
-  <!-- 2. തൊട്ടുപിന്നാലെ ആപ്പിന്റെ ലോജിക് സ്ക്രിപ്റ്റ് നൽകുക -->
-  <script>
-    let selectedCat = 'all';
-    let notices = [];
-    let shops = [];
-
-    async function loadAppSettings() {
-      try {
-        if (!window.db) {
-          setTimeout(loadAppSettings, 500);
-          return;
-        }
-        // ഫയർബേസിൽ നിന്ന് ലോഗോ എടുത്തു മാറ്റുന്നു
-        const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
-        if (logoDoc.exists() && logoDoc.data().url) {
-          document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
-        }
-
-        // ഫയർബേസിൽ നിന്ന് ബാനർ ഫോട്ടോ എടുത്തു മാറ്റുന്നു
-        const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
-        if (bannerDoc.exists() && bannerDoc.data().url) {
-          document.getElementById('heroBannerBg').style.backgroundImage = `url('${bannerDoc.data().url}')`;
-        }
-
-        const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
-        if (!shopSnap.empty) {
-          shops = shopSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } else {
-          shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210" }];
-        }
-
-        const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
-        if (!noticeSnap.empty) {
-          notices = noticeSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } else {
-          notices = [
-            { id: '1', shopName: "ഗ്രീൻ മാൾ", tag: "വമ്പൻ ഓഫർ", title: "10 കിലോ തക്കാളി എടുക്കുമ്പോൾ 2 കിലോ ഫ്രീ", desc: "ഇന്ന് ഏത് സാധനവും 10 കിലോ എടുത്താൽ 2 കിലോ ഫ്രീ ആയി ലഭിക്കുന്നതാണ്.", bg: "linear-gradient(135deg, #059669 0%, #10b981 100%)", color: "#ffffff" }
-          ];
-        }
-
-        renderNotices();
-        render();
-      } catch (e) {
-        console.error("Firebase load error: ", e);
-      }
-    }
-
-    function initApp() {
-      let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
-      if (currentUser && currentUser.name) {
-        document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
-      }
-
-      setTimeout(loadAppSettings, 1000);
-    }
-
-    function renderNotices() {
-      const container = document.getElementById('noticesSlider');
-      if(!container) return;
-      container.innerHTML = notices.map(n => `
-        <div class="bright-notice-card" style="background: ${n.bg}; color: ${n.color};" onclick="viewNotice('${n.id}')">
-          ${n.shopName ? `<div class="notice-shop-name">🏪 ${n.shopName}</div><br>` : ''}
-          <span class="notice-tag">${n.tag}</span>
-          <div class="notice-title" style="color: ${n.color};">${n.title}</div>
-          <div class="notice-desc" style="color: ${n.color}; opacity: 0.95;">${n.desc}</div>
-        </div>
-      `).join('');
-    }
-
-    function viewNotice(id) {
-      const n = notices.find(x => x.id == id);
-      if(!n) return;
-      const modalBox = document.getElementById('viewNoticeContent');
-      modalBox.style.background = n.bg;
-      modalBox.style.color = n.color;
-      modalBox.innerHTML = `
-        ${n.shopName ? `<div style="font-size:12px; font-weight:bold; background:rgba(0,0,0,0.3); padding:4px 10px; border-radius:8px; display:inline-block; margin-bottom:8px;">🏪 ${n.shopName}</div><br>` : ''}
-        <span class="notice-tag" style="font-size:11px;">${n.tag}</span>
-        <h2 style="font-size:18px; margin:10px 0; color:${n.color};">${n.title}</h2>
-        <p style="font-size:13px; line-height:1.6; margin-bottom:16px; color:${n.color};">${n.desc}</p>
-        <button onclick="toggleModal('viewNoticeModal')" class="btn-pro-call" style="width:100%; background:#ffffff; color:#0f172a; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
-      `;
-      toggleModal('viewNoticeModal');
-    }
-
-    function render() {
-      const list = document.getElementById('listings');
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = shops.filter(s => {
-        const matchCat = selectedCat === 'all' || s.cat === selectedCat;
-        const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q);
-        return matchCat && matchQ;
-      });
-
-      if(filtered.length === 0) {
-        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:20px; font-size:12px;">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല!</div>`;
-        return;
-      }
-
-      list.innerHTML = filtered.map(s => `
-        <div class="pro-card">
-          <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
-          <div class="item-name">${s.name}</div>
-          <div class="item-loc">📍 ${s.loc}</div>
-          <div class="item-desc-highlight">${s.desc}</div>
-          <div class="card-actions">
-            <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
-            <a href="https://wa.me/91${s.phone}" target="_blank" class="btn-pro-wa">💬</a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function setCat(cat, elem) {
-      selectedCat = cat;
-      document.querySelectorAll('.cat-box').forEach(e => e.classList.remove('active'));
-      elem.classList.add('active');
-      const txt = elem.querySelector('.cat-box-title').innerText;
-      document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
-      render();
-    }
-
-    function toggleModal(id) {
-      const m = document.getElementById(id);
-      m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
-    }
-
-    initApp();
   </script>
 
   <style>
@@ -355,6 +226,10 @@
       const container = document.getElementById('adminUserList');
       container.innerHTML = `<div style="font-size:11px; color:#cbd5e1;">ലോഡ് ചെയ്യുന്നു...</div>`;
       try {
+        if (!window.db) {
+          container.innerHTML = `<div style="font-size:11px; color:#ef4444;">ഫയർബേസ് കണക്ഷൻ ലഭ്യമായില്ല.</div>`;
+          return;
+        }
         const userSnap = await window.getDocs(window.collection(window.db, "users"));
         const userList = userSnap.docs.map(doc => doc.data());
 
@@ -364,13 +239,13 @@
         }
         container.innerHTML = userList.map((u) => `
           <div style="background:#0f172a; padding:8px; border-radius:8px; margin-bottom:6px; font-size:11px;">
-            <strong style="color:#fde047;">${u.name}</strong><br>
-            📞 ${u.phone} | 📍 ${u.address}
+            <strong style="color:#fde047;">${u.name || 'പേരില്ല'}</strong><br>
+            📞 ${u.phone || 'നമ്പരില്ല'} | 📍 ${u.address || 'വിലാസമില്ല'}
           </div>
         `).join('');
       } catch(e) {
         console.error(e);
-        container.innerHTML = `<div style="font-size:11px; color:#ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.</div>`;
+        container.innerHTML = `<div style="font-size:11px; color:#ef4444;">അംഗങ്ങളുടെ ഡാറ്റ ലഭ്യമല്ല അല്ലെങ്കിൽ ഡാറ്റാബേസ് ശൂന്യമാണ്.</div>`;
       }
     }
 
