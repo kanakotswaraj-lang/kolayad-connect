@@ -80,17 +80,18 @@
     .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 2px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
     
     /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രത്തിന്റെ കറുപ്പ് നിറം കുറച്ച് ക്ലാരിറ്റി കൂട്ടിയിരിക്കുന്നു */
-        .hero-banner { 
+            .hero-banner { 
       position: relative; 
-      height: 105px; /* ഉയരം കുറച്ചു കൂടി കൂട്ടിയിരിക്കുന്നു */
-      background: url('...') center/cover no-repeat; 
+      height: 100px; /* ഉയരം ഒരൽപ്പം ക്രമീകരിച്ചിരിക്കുന്നു */
+      background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      /* മുകളിൽ പൂർണ്ണമായും വ്യക്തത നൽകി, പ്രൊഫൈൽ ഫോട്ടോയ്ക്ക് സമീപം മാത്രം കറുപ്പ് വരുന്ന രീതി */
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 50%, var(--bg-app) 100%); 
+      /* കറുപ്പ് നിറം താഴേക്ക് കുറച്ചുകൂടി നീണ്ടുനിൽക്കുന്ന രീതിയിൽ ഗ്രേഡിയന്റ് ക്രമീകരിച്ചിരിക്കുന്നു */
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 30%, rgba(15, 23, 42, 0.85) 85%, var(--bg-app) 100%); 
     }
+
 
     .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
     
