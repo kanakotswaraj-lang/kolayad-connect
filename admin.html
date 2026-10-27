@@ -71,6 +71,55 @@
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
+      <!-- പുതിയ സ്ഥാപനം അല്ലെങ്കിൽ സേവനം ചേർക്കാനുള്ള ഫോം (കാറ്റഗറി സെലക്ട് ചെയ്യാൻ ഉൾപ്പെടെ) -->
+      <div class="form-group" style="background: #1e293b; padding: 12px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 16px;">
+        <h2 style="font-size: 14px; text-align: left; margin-bottom: 8px; color: #38bdf8;">🏪 പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</h2>
+        
+        <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
+        <input type="text" id="newShopName" class="dark-input" placeholder="ഉദാ: മാവേലി നഴ്സറി">
+        
+        <label>കാറ്റഗറി തിരഞ്ഞെടുക്കുക:</label>
+        <select id="newShopCategory" class="dark-input" style="padding: 8px;">
+          <option value="">കാറ്റഗറി തിരഞ്ഞെടുക്കുക</option>
+          <option value="worker">തൊഴിലാളികൾ</option>
+          <option value="catering">കാറ്ററിംഗ്</option>
+          <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
+          <option value="hotel">ഹോട്ടൽ</option>
+          <option value="bakery">ബേക്കറി</option>
+          <option value="textiles">ടെക്സ്റ്റൈൽസ്</option>
+          <option value="tailor">തയ്യൽക്കട</option>
+          <option value="mobile">മൊബൈൽ ഷോപ്പ്</option>
+          <option value="fish">മത്സ്യ മാർക്കറ്റ്</option>
+          <option value="meat">ഇറച്ചിക്കടകൾ</option>
+          <option value="watch">വാച്ച് റിപ്പയർ</option>
+          <option value="lottery">ലോട്ടറി സ്റ്റാൾ</option>
+          <option value="csc">സിഎസ്സി സെന്റർ</option>
+          <option value="mill">ധാന്യപ്പൊടി മില്ല്</option>
+          <option value="workshop">വർക്ക്‌ഷോപ്പ്</option>
+          <option value="ayurveda">ആയുർവേദ ഷോപ്പ്</option>
+          <option value="stationery">സ്റ്റേഷനറി കട</option>
+          <option value="fruits">ഫ്രൂട്ട്സ് കട</option>
+          <option value="auto">ഓട്ടോ / ടാക്സി</option>
+          <option value="nursery">നഴ്സറി</option>
+          <option value="society">സൊസൈറ്റി / സഹകരണ സംഘങ്ങൾ</option>
+          <option value="emergency">പ്രധാന നമ്പറുകൾ</option>
+        </select>
+
+        <label style="margin-top: 6px;">സ്ഥലം / വിലാസം:</label>
+        <input type="text" id="newShopLoc" class="dark-input" placeholder="ഉദാ: കോളയാട് ജംഗ്ഷൻ">
+        
+        <label>ഫോൺ നമ്പർ:</label>
+        <input type="text" id="newShopPhone" class="dark-input" placeholder="ഉദാ: 9876543210">
+
+        <label>ഗൂഗിൾ മാപ്പ് ലിങ്ക് (ഓപ്ഷണൽ):</label>
+        <input type="url" id="newShopMap" class="dark-input" placeholder="https://maps.app.goo.gl/...">
+
+        <label>വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
+        <textarea id="newShopDesc" class="dark-input" placeholder="സേവനങ്ങളെക്കുറിച്ചുള്ള വിവരങ്ങൾ..." rows="2" style="resize: none;"></textarea>
+        
+        <button onclick="addNewShopByAdmin()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 4px;">സ്ഥാപനം ആഡ് ചെയ്യുക</button>
+      </div>
+
       <div class="form-group">
         <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
         <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
@@ -176,6 +225,49 @@
         showPanel();
       }
     };
+
+    // അഡ്മിൻ വഴി പുതിയ സ്ഥാപനം ഡാറ്റാബേസിലേക്ക് ചേർക്കാനുള്ള ഫങ്ക്ഷൻ
+    async function addNewShopByAdmin() {
+      const name = document.getElementById('newShopName').value.trim();
+      const cat = document.getElementById('newShopCategory').value;
+      const loc = document.getElementById('newShopLoc').value.trim();
+      const phone = document.getElementById('newShopPhone').value.trim();
+      const mapLink = document.getElementById('newShopMap').value.trim();
+      const desc = document.getElementById('newShopDesc').value.trim();
+
+      if(!name || !cat || !loc || !phone || !desc) {
+        alert('ദയവായി എല്ലാ വിവരങ്ങളും പൂരിപ്പിക്കുക!');
+        return;
+      }
+
+      const selectElem = document.getElementById('newShopCategory');
+      const catLabel = selectElem.options[selectElem.selectedIndex].text;
+
+      try {
+        await window.addDoc(window.collection(window.db, "shops"), {
+          name,
+          cat,
+          catLabel,
+          loc,
+          phone,
+          mapLink,
+          desc
+        });
+        alert('പുതിയ സ്ഥാപനം വിജയകരമായി ചേർത്തു!');
+        
+        document.getElementById('newShopName').value = '';
+        document.getElementById('newShopCategory').value = '';
+        document.getElementById('newShopLoc').value = '';
+        document.getElementById('newShopPhone').value = '';
+        document.getElementById('newShopMap').value = '';
+        document.getElementById('newShopDesc').value = '';
+        
+        loadMembers();
+      } catch(e) {
+        console.error(e);
+        alert('സ്ഥാപനം ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+      }
+    }
 
     async function uploadAndSaveLogo() {
       const fileInput = document.getElementById('logoFileInput');
