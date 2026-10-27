@@ -57,7 +57,7 @@
       --highlight-bg: #0f172a;
     }
 
-    /* Light Mode സ്റ്റൈലുകൾ (വ്യക്തമായി വായിക്കാൻ കഴിയുന്ന രൂപത്തിൽ) */
+    /* Light Mode സ്റ്റൈലുകൾ */
     body.light-mode {
       --bg-body: #e2e8f0;
       --bg-app: #ffffff;
@@ -78,8 +78,11 @@
 
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
     .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 2px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
+    
+    /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രത്തിന്റെ കറുപ്പ് നിറം കുറച്ച് ക്ലാരിറ്റി കൂട്ടിയിരിക്കുന്നു */
     .hero-banner { position: relative; height: 85px; background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; }
-    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), var(--bg-app)); }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.7)); }
+    
     .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
     
     .theme-toggle-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -117,9 +120,19 @@
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 120px; }
     .section-label { font-size: 13px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
     
-    .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
+    /* പ്രധാന അറിയിപ്പുകൾക്ക് ചുറ്റുമുള്ള ബോക്സ് (കള്ളി) സ്റ്റൈൽ */
+    .notices-box-container {
+      background: var(--bg-card);
+      border: 2px solid #eab308;
+      border-radius: 18px;
+      padding: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(234, 179, 8, 0.15);
+    }
+
+    .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: none; }
     .banner-slider::-webkit-scrollbar { display: none; }
-    .bright-notice-card { min-width: 85%; scroll-snap-align: start; border-radius: 16px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); cursor: pointer; position: relative; color: #ffffff; }
+    .bright-notice-card { min-width: 85%; scroll-snap-align: start; border-radius: 14px; padding: 12px 14px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); cursor: pointer; position: relative; color: #ffffff; }
     .notice-shop-name { font-size: 11px; font-weight: 800; color: #fde047; background: rgba(15,23,42,0.6); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-bottom: 4px; }
     .notice-tag { background: rgba(0, 0, 0, 0.25); color: #ffffff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
     .notice-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; color: #ffffff; }
@@ -193,15 +206,14 @@
 
     <div class="scrollable-body" id="scrollBody">
       
-      <!-- ഇന്നത്തെ പ്രധാന അറിയിപ്പുകളും സെർച്ച് ബോക്സും -->
-      <div style="margin: 6px 0 10px 0;">
+      <!-- ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ചുറ്റും കള്ളിയുള്ള ബോക്സിൽ -->
+      <div class="notices-box-container">
         <div style="font-size: 14px; font-weight: 800; color: #fde047; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
           🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
         </div>
         <input type="text" id="noticeSearchInput" class="dark-input" placeholder="🔍 അറിയിപ്പുകൾ പരതുക (ഉദാ: ഓഫർ, മീറ്റിംഗ്)..." onkeyup="filterNotices()" style="font-size: 12px; padding: 8px 12px; margin-bottom: 8px;">
+        <div class="banner-slider" id="noticesSlider"></div>
       </div>
-      
-      <div class="banner-slider" id="noticesSlider"></div>
 
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
@@ -232,8 +244,7 @@
           <div class="cat-box" onclick="setCat('auto', this)"><div class="cat-box-icon">🛺</div><div class="cat-box-title">ഓട്ടോ / ടാക്സി</div></div>
           <div class="cat-box" onclick="setCat('emergency', this)"><div class="cat-box-icon">🚨</div><div class="cat-box-title">പ്രധാന നമ്പറുകൾ</div></div>
           <div class="cat-box" onclick="setCat('nursery', this)"><div class="cat-box-icon">🌱</div><div class="cat-box-title">നഴ്സറി</div></div>
-<div class="cat-box" onclick="setCat('society', this)"><div class="cat-box-icon">🤝</div><div class="cat-box-title">സൊസൈറ്റി / സംഘങ്ങൾ</div></div>
-
+          <div class="cat-box" onclick="setCat('society', this)"><div class="cat-box-icon">🤝</div><div class="cat-box-title">സൊസൈറ്റി / സംഘങ്ങൾ</div></div>
         </div>
       </div>
 
@@ -311,14 +322,12 @@
     let notices = [];
     let shops = [];
 
-    // തീം ടോഗിൾ ചെയ്യാനുള്ള ഫങ്ക്ഷൻ
     function toggleTheme() {
       const isLight = document.body.classList.toggle('light-mode');
       document.getElementById('themeBtn').innerText = isLight ? '🌙' : '☀️';
       localStorage.setItem('kolayad_theme', isLight ? 'light' : 'dark');
     }
 
-    // മുൻപ് സേവ് ചെയ്ത തീം ലോഡ് ചെയ്യുക
     if (localStorage.getItem('kolayad_theme') === 'light') {
       document.body.classList.add('light-mode');
       setTimeout(() => {
@@ -354,9 +363,7 @@
           if (logoDoc.exists() && logoDoc.data().url) {
             logoUrl = logoDoc.data().url;
           }
-        } catch(err) {
-          console.log("Logo fetch error, using default");
-        }
+        } catch(err) {}
         document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoUrl}')`;
 
         try {
@@ -398,7 +405,6 @@
       setTimeout(loadAppSettings, 500);
     }
 
-    // അറിയിപ്പുകൾ റെൻഡർ ചെയ്യുക
     function renderNotices() {
       const container = document.getElementById('noticesSlider');
       if(!container) return;
@@ -422,7 +428,6 @@
       }).join('');
     }
 
-    // സെർച്ച് ഫംഗ്ഷൻ
     function filterNotices() {
       const query = document.getElementById('noticeSearchInput').value.toLowerCase();
       const noticeCards = document.querySelectorAll('.bright-notice-card');
