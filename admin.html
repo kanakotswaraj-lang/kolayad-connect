@@ -269,30 +269,85 @@
       }
     }
 
+        // ലോഗോ അപ്ഡേറ്റ് ചെയ്യാനുള്ള കോഡ്
     async function uploadAndSaveLogo() {
       const fileInput = document.getElementById('logoFileInput');
       if (fileInput.files.length === 0) { alert('ദയവായി ഒരു ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+      
+      const file = fileInput.files[0];
       const reader = new FileReader();
       reader.onload = async function(e) {
-        try {
-          await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: e.target.result });
-          alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        } catch(err) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = async function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // ഇമേജ് സൈസ് ചെറുതാക്കുക (Max width/height 300px)
+          const MAX_SIZE = 300;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+          } else {
+            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+          try {
+            await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: compressedDataUrl });
+            alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+          } catch(err) {
+            console.error(err);
+            alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു. ഫയലിന്റെ സൈസ് വളരെ വലുതായിരിക്കാം.');
+          }
+        };
       };
-      reader.readAsDataURL(fileInput.files[0]);
+      reader.readAsDataURL(file);
     }
 
+    // ബാനർ അപ്ഡേറ്റ് ചെയ്യാനുള്ള കോഡ്
     async function uploadAndSaveBanner() {
       const fileInput = document.getElementById('bannerFileInput');
       if (fileInput.files.length === 0) { alert('ദയവായി ഒരു ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+      
+      const file = fileInput.files[0];
       const reader = new FileReader();
       reader.onload = async function(e) {
-        try {
-          await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: e.target.result });
-          alert('ഹെറോ ബാനർ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        } catch(err) { alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = async function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          const MAX_SIZE = 600;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+          } else {
+            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+          try {
+            await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: compressedDataUrl });
+            alert('ഹെറോ ബാനർ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+          } catch(err) {
+            console.error(err);
+            alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+          }
+        };
       };
-      reader.readAsDataURL(fileInput.files[0]);
+      reader.readAsDataURL(file);
     }
 
     async function postNotice() {
