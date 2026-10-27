@@ -77,40 +77,37 @@
     }
 
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
-    .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 2px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
     
-    /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രത്തിന്റെ കറുപ്പ് നിറം കുറച്ച് ക്ലാരിറ്റി കൂട്ടിയിരിക്കുന്നു */
-            
-       .hero-banner { 
+    .sticky-header { 
+      flex-shrink: 0; 
+      background: transparent; /* ഇവിടെ മാറ്റം വരുത്തിയിരിക്കുന്നു */
+      border-bottom: 2px solid var(--border-color); 
+      z-index: 40; 
+      position: sticky; 
+      top: 0; 
+    }
+    
+    .hero-banner { 
       position: relative; 
-      height: 90px; 
+      height: 100px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
+    
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രം മുകളിൽ നന്നായി കാണാനും, താഴെ മാത്രം കറുപ്പ് വരുന്ന രീതി */
-      background: linear-gradient(to bottom, transparent 40%, rgba(15, 23, 42, 0.9) 85%, var(--bg-app) 100%); 
+      /* മുകളിൽ പൂർണ്ണ വ്യക്തതയും, താഴെ മാത്രം നേരിയ കറുപ്പ് ഷെയ്ഡും നൽകാൻ */
+      background: linear-gradient(to bottom, transparent 50%, var(--bg-app) 100%); 
     }
 
-
-
-    .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-    
-    .theme-toggle-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .admin-badge-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
-    .profile-avatar-wrap { position: relative; margin-top: -35px; display: flex; justify-content: center; z-index: 5; }
-    .profile-avatar { 
-      width: 70px; 
-      height: 70px; 
-      border-radius: 20px; 
-      border: 3.5px solid #eab308; 
-      background: #1e293b center/cover no-repeat; 
-      box-shadow: 0 6px 18px rgba(0,0,0,0.6); 
-      transition: transform 0.3s ease;
-    }
-    .profile-avatar:hover {
-      transform: scale(1.05);
+    .profile-avatar-wrap { 
+      position: relative; 
+      margin-top: -35px; 
+      display: flex; 
+      justify-content: center; 
+      z-index: 5; 
+      background: var(--bg-app); /* പ്രൊഫൈൽ ഭാഗത്ത് മാത്രം ആപ്പ് കളർ വരാൻ */
+      padding-top: 4px;
     }
 
     .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
