@@ -155,8 +155,10 @@
     .item-loc { font-size: 11px; color: var(--text-sub); margin-bottom: 8px; }
     .item-desc-highlight { font-size: 11px; color: var(--text-main); background: var(--highlight-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
     
-    /* സ്ഥാപനത്തിന്റെ ഫോട്ടോ കാർഡിൽ ഭംഗിയായി കാണിക്കാൻ */
-    .shop-thumb-img { width: 100%; height: 160px; border-radius: 12px; object-fit: cover; margin-bottom: 8px; border: 1px solid var(--border-color); }
+    /* സ്ഥാപനത്തിന്റെ ഒന്നിലധികം ഫോട്ടോകൾ സ്ലൈഡ് ചെയ്ത് കാണിക്കാൻ */
+    .shop-images-slider { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: none; margin-bottom: 8px; }
+    .shop-images-slider::-webkit-scrollbar { display: none; }
+    .shop-thumb-img { min-width: 100%; height: 160px; border-radius: 12px; object-fit: cover; scroll-snap-align: start; border: 1px solid var(--border-color); }
 
     .card-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
@@ -522,25 +524,35 @@
 
       const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
 
-      list.innerHTML = filtered.map(s => `
-        <div class="pro-card">
-          <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
-          <div class="item-name">${s.name}</div>
-          <div class="item-loc">📍 ${s.loc}</div>
-          ${s.imageUrl ? `<img src="${s.imageUrl}" class="shop-thumb-img" alt="${s.name}">` : ''}
-          <div class="item-desc-highlight">${s.desc}</div>
-          <div class="card-actions">
-            <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
-            <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-            <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">📲 ഷെയർ</button>
-            ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
-            ${isAdmin ? `
-              <button onclick="openEditShop('${s.id}')" class="btn-admin-edit">എഡിറ്റ്</button>
-              <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
-            ` : ''}
+      list.innerHTML = filtered.map(s => {
+        // അഡ്മിൻ അപ്‌ലോഡ് ചെയ്ത ഫോട്ടോകൾ (imageUrl, imageUrl2, imageUrl3, imageUrl4) ഒന്നിച്ച് എടുക്കുന്നു
+        let photos = [s.imageUrl, s.imageUrl2, s.imageUrl3, s.imageUrl4].filter(img => img);
+        let photosHtml = photos.length > 0 ? `
+          <div class="shop-images-slider">
+            ${photos.map(img => `<img src="${img}" class="shop-thumb-img" alt="${s.name}">`).join('')}
           </div>
-        </div>
-      `).join('');
+        ` : '';
+
+        return `
+          <div class="pro-card">
+            <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
+            <div class="item-name">${s.name}</div>
+            <div class="item-loc">📍 ${s.loc}</div>
+            ${photosHtml}
+            <div class="item-desc-highlight">${s.desc}</div>
+            <div class="card-actions">
+              <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
+              <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
+              <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">📲 ഷെയർ</button>
+              ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
+              ${isAdmin ? `
+                <button onclick="openEditShop('${s.id}')" class="btn-admin-edit">എഡിറ്റ്</button>
+                <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function openEditShop(id) {
@@ -558,7 +570,6 @@
       history.pushState({ modalOpen: true }, '');
     }
 
-    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് Base64 കോഡ് ആക്കി മാറ്റുന്ന ഫങ്ഷൻ
     async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -568,7 +579,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 700; // ഫോട്ടോയുടെ പരമാവധി വീതി
+            const MAX_WIDTH = 700;
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -581,8 +592,6 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            // 60% ക്വാളിറ്റിയിൽ കംപ്രസ് ചെയ്ത് Base64 സ്ട്രിംഗ് ആയി മാറ്റുന്നു
             const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
             resolve(compressedDataUrl);
           };
