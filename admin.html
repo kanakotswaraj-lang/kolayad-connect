@@ -15,7 +15,8 @@
       doc,
       setDoc,
       getDoc,
-      updateDoc 
+      updateDoc,
+      addDoc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -39,6 +40,7 @@
     window.setDoc = setDoc;
     window.getDoc = getDoc;
     window.updateDoc = updateDoc;
+    window.addDoc = addDoc;
   </script>
 
   <style>
@@ -104,7 +106,7 @@
       </div>
 
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">✏️ സ്ഥാപനത്തിന്റെ 4 ഫോട്ടോകൾ കൈകാര്യം ചെയ്യാൻ</h2>
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">✏️ ഏതൊരു സ്ഥാപനത്തിന്റെയും 4 ഫോട്ടോകൾ മാറ്റാൻ</h2>
         
         <label>സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
         <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
@@ -116,7 +118,7 @@
           <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
           <input type="text" id="admEditName" class="dark-input">
 
-          <label>പ്രധാന ഫോട്ടോ (Photo 1):</label>
+          <label>ഒന്നാമത്തെ ഫോട്ടോ (Photo 1):</label>
           <input type="file" id="admPhoto1" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
           <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
@@ -277,7 +279,6 @@
         
         let updateData = { name };
         
-        // ഫോട്ടോ 1 കൈകാര്യം ചെയ്യാൻ
         if (remove1) {
           updateData.imageUrl = "";
         } else if (file1) {
@@ -286,7 +287,6 @@
           updateData.imageUrl = shop.imageUrl || "";
         }
 
-        // ഫോട്ടോ 2 കൈകാര്യം ചെയ്യാൻ
         if (remove2) {
           updateData.imageUrl2 = "";
         } else if (file2) {
@@ -295,7 +295,6 @@
           updateData.imageUrl2 = shop.imageUrl2 || "";
         }
 
-        // ഫോട്ടോ 3 കൈകാര്യം ചെയ്യാൻ
         if (remove3) {
           updateData.imageUrl3 = "";
         } else if (file3) {
@@ -304,7 +303,6 @@
           updateData.imageUrl3 = shop.imageUrl3 || "";
         }
 
-        // ഫോട്ടോ 4 കൈകാര്യം ചെയ്യാൻ
         if (remove4) {
           updateData.imageUrl4 = "";
         } else if (file4) {
@@ -352,6 +350,7 @@
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
 
       try {
+        alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നു...');
         let imageUrl = "";
         if (file) imageUrl = await compressImageToString(file);
 
@@ -360,11 +359,15 @@
           date: new Date().toLocaleDateString('en-GB') 
         });
 
-        alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്തു!');
+        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
         document.getElementById('noticeDescInput').value = '';
+        document.getElementById('noticeImageFile').value = '';
         loadAdminNotices();
-      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
+      } catch(e) {
+        console.error(e);
+        alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+      }
     }
 
     async function loadAdminNotices() {
