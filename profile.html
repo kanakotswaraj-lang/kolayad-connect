@@ -13,12 +13,6 @@
       doc,
       setDoc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { 
-      getStorage, 
-      ref, 
-      uploadBytes, 
-      getDownloadURL 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
@@ -32,13 +26,8 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app);
 
     window.db = db;
-    window.storage = storage;
-    window.ref = ref;
-    window.uploadBytes = uploadBytes;
-    window.getDownloadURL = getDownloadURL;
     window.collection = collection;
     window.doc = doc;
     window.setDoc = setDoc;
@@ -162,8 +151,8 @@
   </div>
 
   <script>
-    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് ഫയർബേസ് സ്റ്റോറേജിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ഷൻ
-    async function uploadCompressedImage(file) {
+    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് Base64 കോഡ് ആക്കി മാറ്റുന്ന ഫങ്ഷൻ
+    async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -186,19 +175,9 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            canvas.toBlob(async (blob) => {
-              try {
-                const imageFileName = `shops/${Date.now()}_compressed.jpg`;
-                const storageRef = window.ref(window.storage, imageFileName);
-                
-                const snapshot = await window.uploadBytes(storageRef, blob);
-                const downloadURL = await window.getDownloadURL(snapshot.ref);
-                
-                resolve(downloadURL);
-              } catch (error) {
-                reject(error);
-              }
-            }, 'image/jpeg', 0.6); // 60% ക്വാളിറ്റി (സൈസ് തീരെ കുറവായിരിക്കും)
+            // 60% ക്വാളിറ്റിയിൽ കംപ്രസ് ചെയ്ത് Base64 സ്ട്രിംഗ് ആയി മാറ്റുന്നു
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            resolve(compressedDataUrl);
           };
         };
         reader.onerror = (error) => reject(error);
@@ -221,8 +200,8 @@
       try {
         let imageUrl = "";
         if (imageFile) {
-          alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
-          imageUrl = await uploadCompressedImage(imageFile);
+          alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് സേവ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+          imageUrl = await compressImageToString(imageFile);
         }
 
         const shopId = 'shop_' + Date.now();
