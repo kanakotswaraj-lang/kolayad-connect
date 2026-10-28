@@ -17,12 +17,6 @@
       getDoc,
       updateDoc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { 
-      getStorage, 
-      ref, 
-      uploadBytes, 
-      getDownloadURL 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
@@ -36,13 +30,8 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app);
 
     window.db = db;
-    window.storage = storage;
-    window.ref = ref;
-    window.uploadBytes = uploadBytes;
-    window.getDownloadURL = getDownloadURL;
     window.collection = collection;
     window.getDocs = getDocs;
     window.deleteDoc = deleteDoc;
@@ -166,8 +155,8 @@
     .item-loc { font-size: 11px; color: var(--text-sub); margin-bottom: 8px; }
     .item-desc-highlight { font-size: 11px; color: var(--text-main); background: var(--highlight-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
     
-    /* സ്ഥാപനത്തിന്റെ ഫോട്ടോ കാർഡിൽ കാണിക്കാൻ */
-    .shop-thumb-img { width: 100%; height: 140px; border-radius: 10px; object-fit: cover; margin-bottom: 8px; border: 1px solid var(--border-color); }
+    /* സ്ഥാപനത്തിന്റെ ഫോട്ടോ കാർഡിൽ ഭംഗിയായി കാണിക്കാൻ */
+    .shop-thumb-img { width: 100%; height: 160px; border-radius: 12px; object-fit: cover; margin-bottom: 8px; border: 1px solid var(--border-color); }
 
     .card-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
@@ -312,7 +301,7 @@
     </div>
   </div>
 
-  <!-- സ്ഥാപനം എഡിറ്റ് ചെയ്യാനുള്ള മോഡൽ (ഫോട്ടോ അപ്‌ലോഡ് ഫീൽഡ് ഉൾപ്പെടെ) -->
+  <!-- സ്ഥാപനം എഡിറ്റ് ചെയ്യാനുള്ള മോഡൽ -->
   <div class="modal-bg" id="editShopModal" onclick="closeModalOnBg(event, 'editShopModal')">
     <div class="modal-box">
       <h3 style="color:#eab308; margin-bottom:12px; font-size:15px;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
@@ -569,8 +558,8 @@
       history.pushState({ modalOpen: true }, '');
     }
 
-    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് ഫയർബേസ് സ്റ്റോറേജിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ഷൻ
-    async function uploadCompressedImage(file) {
+    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് Base64 കോഡ് ആക്കി മാറ്റുന്ന ഫങ്ഷൻ
+    async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -593,19 +582,9 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            canvas.toBlob(async (blob) => {
-              try {
-                const imageFileName = `shops/${Date.now()}_compressed.jpg`;
-                const storageRef = window.ref(window.storage, imageFileName);
-                
-                const snapshot = await window.uploadBytes(storageRef, blob);
-                const downloadURL = await window.getDownloadURL(snapshot.ref);
-                
-                resolve(downloadURL);
-              } catch (error) {
-                reject(error);
-              }
-            }, 'image/jpeg', 0.6); // 60% ക്വാളിറ്റി (സൈസ് തീരെ കുറവായിരിക്കും)
+            // 60% ക്വാളിറ്റിയിൽ കംപ്രസ് ചെയ്ത് Base64 സ്ട്രിംഗ് ആയി മാറ്റുന്നു
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            resolve(compressedDataUrl);
           };
         };
         reader.onerror = (error) => reject(error);
@@ -627,7 +606,7 @@
 
         if (imageFile) {
           alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
-          const imageUrl = await uploadCompressedImage(imageFile);
+          const imageUrl = await compressImageToString(imageFile);
           updateData.imageUrl = imageUrl;
         }
 
