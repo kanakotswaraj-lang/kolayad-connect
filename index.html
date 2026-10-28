@@ -151,8 +151,23 @@
     
     .pro-card { background: var(--bg-card); border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-color); border-left: 5px solid #eab308; position: relative; }
     .badge-tag { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(254, 224, 71, 0.12); color: #fde047; }
-    .item-name { font-size: 15px; font-weight: 800; color: var(--text-main); margin-top: 4px; }
-    .item-loc { font-size: 11px; color: var(--text-sub); margin-bottom: 8px; }
+.item-name { 
+  font-size: 17px; 
+  font-weight: 800; 
+  color: #ffffff; /* അക്ഷരങ്ങൾ പൂർണ്ണമായും വെളുപ്പ് നിറത്തിൽ */
+  margin-top: 6px; 
+  margin-bottom: 2px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9); /* കൂടുതൽ വ്യക്തതയ്ക്ക് ഷാഡോ */
+}
+
+.item-loc { 
+  font-size: 11.5px; 
+  color: #fde047; /* വിലാസം മനോഹരമായ മഞ്ഞ നിറത്തിൽ നൽകിയാൽ പെട്ടെന്ന് വായിച്ചെടുക്കാം */
+  margin-bottom: 8px; 
+  font-weight: 600;
+}
+
+    
     .item-desc-highlight { font-size: 11px; color: var(--text-main); background: var(--highlight-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
     
     /* സ്ഥാപനത്തിന്റെ ഒന്നിലധികം ഫോട്ടോകൾ സ്ലൈഡ് ചെയ്ത് കാണിക്കാൻ */
