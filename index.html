@@ -156,7 +156,20 @@
     .item-desc-highlight { font-size: 11px; color: var(--text-main); background: var(--highlight-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
     
     /* സ്ഥാപനത്തിന്റെ ഒന്നിലധികം ഫോട്ടോകൾ സ്ലൈഡ് ചെയ്ത് കാണിക്കാൻ */
- .shop-images-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px; scrollbar-width: none; margin-bottom: 8px; background: rgba(15, 23, 42, 0.4); border-radius: 14px; }
+.shop-images-slider { 
+  display: flex; 
+  gap: 10px; 
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  padding: 8px; 
+  scrollbar-width: none; 
+  margin-bottom: 8px; 
+  background: #111827; /* ഫോട്ടോയ്ക്ക് പിന്നിൽ നൽകുന്ന പുതിയ ബാക്ക്ഗ്രൗണ്ട് കളർ */
+  border: 1.5px solid #eab308; /* മനോഹരമായ മഞ്ഞ ബോർഡർ */
+  border-radius: 14px; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
 .shop-images-slider::-webkit-scrollbar { display: none; }
 .shop-thumb-img { min-width: 85%; height: 240px; border-radius: 12px; object-fit: cover; scroll-snap-align: center; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 
