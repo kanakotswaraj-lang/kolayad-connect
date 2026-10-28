@@ -15,7 +15,8 @@
       deleteDoc,
       doc,
       setDoc,
-      getDoc 
+      getDoc,
+      updateDoc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -39,6 +40,7 @@
     window.doc = doc;
     window.setDoc = setDoc;
     window.getDoc = getDoc;
+    window.updateDoc = updateDoc;
   </script>
 
   <style>
@@ -71,110 +73,82 @@
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
-      <!-- പുതിയ സ്ഥാപനം അല്ലെങ്കിൽ സേവനം ചേർക്കാനുള്ള ഫോം (കാറ്റഗറി സെലക്ട് ചെയ്യാൻ ഉൾപ്പെടെ) -->
-      <div class="form-group" style="background: #1e293b; padding: 12px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 16px;">
-        <h2 style="font-size: 14px; text-align: left; margin-bottom: 8px; color: #38bdf8;">🏪 പുതിയ സ്ഥാപനം / സേവനം ചേർക്കുക</h2>
-        
-        <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
-        <input type="text" id="newShopName" class="dark-input" placeholder="ഉദാ: മാവേലി നഴ്സറി">
-        
-        <label>കാറ്റഗറി തിരഞ്ഞെടുക്കുക:</label>
-        <select id="newShopCategory" class="dark-input" style="padding: 8px;">
-          <option value="">കാറ്റഗറി തിരഞ്ഞെടുക്കുക</option>
-          <option value="worker">തൊഴിലാളികൾ</option>
-          <option value="catering">കാറ്ററിംഗ്</option>
-          <option value="supermarket">സൂപ്പർമാർക്കറ്റ്</option>
-          <option value="hotel">ഹോട്ടൽ</option>
-          <option value="bakery">ബേക്കറി</option>
-          <option value="textiles">ടെക്സ്റ്റൈൽസ്</option>
-          <option value="tailor">തയ്യൽക്കട</option>
-          <option value="mobile">മൊബൈൽ ഷോപ്പ്</option>
-          <option value="fish">മത്സ്യ മാർക്കറ്റ്</option>
-          <option value="meat">ഇറച്ചിക്കടകൾ</option>
-          <option value="watch">വാച്ച് റിപ്പയർ</option>
-          <option value="lottery">ലോട്ടറി സ്റ്റാൾ</option>
-          <option value="csc">സിഎസ്സി സെന്റർ</option>
-          <option value="mill">ധാന്യപ്പൊടി മില്ല്</option>
-          <option value="workshop">വർക്ക്‌ഷോപ്പ്</option>
-          <option value="ayurveda">ആയുർവേദ ഷോപ്പ്</option>
-          <option value="stationery">സ്റ്റേഷനറി കട</option>
-          <option value="fruits">ഫ്രൂട്ട്സ് കട</option>
-          <option value="auto">ഓട്ടോ / ടാക്സി</option>
-          <option value="nursery">നഴ്സറി</option>
-          <option value="society">സൊസൈറ്റി / സഹകരണ സംഘങ്ങൾ</option>
-          <option value="emergency">പ്രധാന നമ്പറുകൾ</option>
-        </select>
-
-        <label style="margin-top: 6px;">സ്ഥലം / വിലാസം:</label>
-        <input type="text" id="newShopLoc" class="dark-input" placeholder="ഉദാ: കോളയാട് ജംഗ്ഷൻ">
-        
-        <label>ഫോൺ നമ്പർ:</label>
-        <input type="text" id="newShopPhone" class="dark-input" placeholder="ഉദാ: 9876543210">
-
-        <label>ഗൂഗിൾ മാപ്പ് ലിങ്ക് (ഓപ്ഷണൽ):</label>
-        <input type="url" id="newShopMap" class="dark-input" placeholder="https://maps.app.goo.gl/...">
-
-        <label>വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
-        <textarea id="newShopDesc" class="dark-input" placeholder="സേവനങ്ങളെക്കുറിച്ചുള്ള വിവരങ്ങൾ..." rows="2" style="resize: none;"></textarea>
-        
-        <button onclick="addNewShopByAdmin()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 4px;">സ്ഥാപനം ആഡ് ചെയ്യുക</button>
-      </div>
-
+      <!-- ലോഗോ & ബാനർ -->
       <div class="form-group">
-        <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
+        <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ:</label>
         <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
         <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
       <div class="form-group" style="margin-top: 12px;">
-        <label>ഹെറോ ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
+        <label>ഹെറോ ബാനർ ഫോട്ടോ:</label>
         <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
         <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
       </div>
 
+      <!-- പ്രധാന അറിയിപ്പും ഫോട്ടോയും -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പും കളറും നൽകുക</h2>
-        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട് (ഉദാ: ഓഫർ)">
-        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ ഇവിടെ എഴുതുക..." rows="3" style="resize: none;"></textarea>
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📢 പ്രധാന അറിയിപ്പും ഫോട്ടോയും നൽകുക</h2>
+        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
+        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
         
-        <label style="margin-top: 6px;">അറിയിപ്പ് ബോർഡിന്റെ കളർ തിരഞ്ഞെടുക്കുക:</label>
+        <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ:</label>
+        <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+
+        <label style="margin-top: 6px;">കളർ:</label>
         <select id="noticeColorInput" class="dark-input" style="padding: 8px;">
-          <option value="linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)">💜 റോയൽ പർപ്പിൾ (Purple)</option>
-          <option value="linear-gradient(135deg, #ea580c 0%, #c2410c 100%)">🧡 പ്രകാശമുള്ള ഓറഞ്ച് (Orange)</option>
-          <option value="linear-gradient(135deg, #059669 0%, #047857 100%)">💚 ആകർഷകമായ പച്ച (Green)</option>
-          <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 മനോഹരമായ നീല (Blue)</option>
-          <option value="linear-gradient(135deg, #db2777 0%, #9d174d 100%)">💖 പിങ്ക് & മെറൂൺ (Pink)</option>
+          <option value="linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)">💜 റോയൽ പർപ്പിൾ</option>
+          <option value="linear-gradient(135deg, #ea580c 0%, #c2410c 100%)">🧡 ഓറഞ്ച്</option>
+          <option value="linear-gradient(135deg, #059669 0%, #047857 100%)">💚 പച്ച</option>
+          <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 നീല</option>
         </select>
 
         <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- അറിയിപ്പുകൾ കാണാനും ഡിലീറ്റ് ചെയ്യാനുമുള്ള ഭാഗം -->
+      <!-- സ്ഥാപനങ്ങൾ എഡിറ്റ് ചെയ്യാനും ഒന്നിലധികം ഫോട്ടോകൾ ചേർക്കാനുമുള്ള ഭാഗം -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ നീക്കം ചെയ്യാൻ</h2>
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">✏️ സ്ഥാപനത്തിന്റെ കൂടുതൽ ഫോട്ടോകൾ ചേർക്കാൻ (Admin Edit)</h2>
+        
+        <label>സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
+        <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
+          <option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>
+        </select>
+
+        <div id="adminEditFormArea" style="display: none; margin-top: 10px; background: #1e293b; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
+          <input type="hidden" id="editDocId">
+          <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
+          <input type="text" id="admEditName" class="dark-input">
+
+          <label>പ്രധാന ഫോട്ടോ (Main Photo):</label>
+          <input type="file" id="admPhoto1" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+
+          <label>രണ്ടാമത്തെ ഫോട്ടോ (Extra Photo 2):</label>
+          <input type="file" id="admPhoto2" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+
+          <label>മൂന്നാമത്തെ ഫോട്ടോ (Extra Photo 3):</label>
+          <input type="file" id="admPhoto3" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+
+          <label>നാലാമത്തെ ഫോട്ടോ (Extra Photo 4):</label>
+          <input type="file" id="admPhoto4" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+
+          <button onclick="saveAdminMultiplePhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">ഫോട്ടോകളും മാറ്റങ്ങളും സേവ് ചെയ്യുക</button>
+        </div>
+      </div>
+
+      <!-- നിലവിലുള്ള അറിയിപ്പുകൾ നീക്കം ചെയ്യാൻ -->
+      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ</h2>
         <div id="adminNoticesListContainer" style="max-height: 150px; overflow-y: auto;">
           <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
         </div>
       </div>
 
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത അംഗങ്ങൾ</h2>
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">👥 രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ</h2>
         <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
           <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
         </div>
-      </div>
-
-      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">📥 ജനങ്ങളുടെ അഭിപ്രായങ്ങൾ / പരാതികൾ</h2>
-        <div id="feedbackListContainer" style="max-height: 150px; overflow-y: auto;">
-          <p style="font-size: 11px; color: #94a3b8;">അഭിപ്രായങ്ങൾ ഒന്നുമില്ല.</p>
-        </div>
-      </div>
-
-      <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">🔑 അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക</h2>
-        <input type="password" id="newPassInput" class="dark-input" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക">
-        <button onclick="updateAdminPassword()" class="btn-save" style="background: #3b82f6; color: white; padding: 7px; font-size: 11px;">പാസ്‌വേഡ് മാറ്റുക</button>
       </div>
 
       <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; margin-top: 16px; cursor: pointer; font-size: 12px;">ലോഗ് ഔട്ട് ചെയ്യുക</button>
@@ -183,6 +157,8 @@
   </div>
 
   <script>
+    let allShopsData = [];
+
     function getStoredPassword() {
       return localStorage.getItem('kolayad_admin_pass') || "admin123";
     }
@@ -197,27 +173,18 @@
       }
     }
 
-    function updateAdminPassword() {
-      const newPass = document.getElementById('newPassInput').value.trim();
-      if(!newPass) { alert('ദയവായി പുതിയ പാസ്‌വേഡ് നൽകുക!'); return; }
-      localStorage.setItem('kolayad_admin_pass', newPass);
-      alert('അഡ്മിൻ പാസ്‌വേഡ് വിജയകരമായി മാറ്റിയിരിക്കുന്നു!');
-      document.getElementById('newPassInput').value = '';
-    }
-
     function adminLogout() {
       localStorage.removeItem('kolayad_admin');
       document.getElementById('adminPanel').style.display = 'none';
       document.getElementById('loginBox').style.display = 'block';
-      document.getElementById('adminPassInput').value = '';
     }
 
     function showPanel() {
       document.getElementById('loginBox').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
       loadMembers();
-      loadFeedbacks();
       loadAdminNotices();
+      loadShopDropdown();
     }
 
     window.onload = function() {
@@ -226,147 +193,138 @@
       }
     };
 
-    // അഡ്മിൻ വഴി പുതിയ സ്ഥാപനം ഡാറ്റാബേസിലേക്ക് ചേർക്കാനുള്ള ഫങ്ക്ഷൻ
-    async function addNewShopByAdmin() {
-      const name = document.getElementById('newShopName').value.trim();
-      const cat = document.getElementById('newShopCategory').value;
-      const loc = document.getElementById('newShopLoc').value.trim();
-      const phone = document.getElementById('newShopPhone').value.trim();
-      const mapLink = document.getElementById('newShopMap').value.trim();
-      const desc = document.getElementById('newShopDesc').value.trim();
+    async function compressImageToString(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 700;
+            const scaleSize = MAX_WIDTH / img.width;
+            
+            if (scaleSize < 1) {
+              canvas.width = MAX_WIDTH;
+              canvas.height = img.height * scaleSize;
+            } else {
+              canvas.width = img.width;
+              canvas.height = img.height;
+            }
 
-      if(!name || !cat || !loc || !phone || !desc) {
-        alert('ദയവായി എല്ലാ വിവരങ്ങളും പൂരിപ്പിക്കുക!');
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.6));
+          };
+        };
+        reader.onerror = (error) => reject(error);
+      });
+    }
+
+    async function loadShopDropdown() {
+      const select = document.getElementById('adminShopSelect');
+      try {
+        const snap = await window.getDocs(window.collection(window.db, "shops"));
+        allShopsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let html = '<option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>';
+        allShopsData.forEach(s => {
+          html += `<option value="${s.id}">${s.name} (${s.loc || ''})</option>`;
+        });
+        select.innerHTML = html;
+      } catch(e) { console.error(e); }
+    }
+
+    function loadShopDetailsForEdit() {
+      const id = document.getElementById('adminShopSelect').value;
+      const formArea = document.getElementById('adminEditFormArea');
+      if (!id) {
+        formArea.style.display = 'none';
         return;
       }
-
-      const selectElem = document.getElementById('newShopCategory');
-      const catLabel = selectElem.options[selectElem.selectedIndex].text;
-
-      try {
-        await window.addDoc(window.collection(window.db, "shops"), {
-          name,
-          cat,
-          catLabel,
-          loc,
-          phone,
-          mapLink,
-          desc
-        });
-        alert('പുതിയ സ്ഥാപനം വിജയകരമായി ചേർത്തു!');
-        
-        document.getElementById('newShopName').value = '';
-        document.getElementById('newShopCategory').value = '';
-        document.getElementById('newShopLoc').value = '';
-        document.getElementById('newShopPhone').value = '';
-        document.getElementById('newShopMap').value = '';
-        document.getElementById('newShopDesc').value = '';
-        
-        loadMembers();
-      } catch(e) {
-        console.error(e);
-        alert('സ്ഥാപനം ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+      const shop = allShopsData.find(x => x.id === id);
+      if (shop) {
+        document.getElementById('editDocId').value = shop.id;
+        document.getElementById('admEditName').value = shop.name || '';
+        document.getElementById('admPhoto1').value = '';
+        document.getElementById('admPhoto2').value = '';
+        document.getElementById('admPhoto3').value = '';
+        document.getElementById('admPhoto4').value = '';
+        formArea.style.display = 'block';
       }
     }
 
-        // ലോഗോ അപ്ഡേറ്റ് ചെയ്യാനുള്ള കോഡ്
-    async function uploadAndSaveLogo() {
-      const fileInput = document.getElementById('logoFileInput');
-      if (fileInput.files.length === 0) { alert('ദയവായി ഒരു ലോഗോ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+    async function saveAdminMultiplePhotos() {
+      const id = document.getElementById('editDocId').value;
+      const name = document.getElementById('admEditName').value;
       
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = async function() {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          
-          // ഇമേജ് സൈസ് ചെറുതാക്കുക (Max width/height 300px)
-          const MAX_SIZE = 300;
-          let width = img.width;
-          let height = img.height;
-          if (width > height) {
-            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
-          } else {
-            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      const file1 = document.getElementById('admPhoto1').files[0];
+      const file2 = document.getElementById('admPhoto2').files[0];
+      const file3 = document.getElementById('admPhoto3').files[0];
+      const file4 = document.getElementById('admPhoto4').files[0];
 
-          try {
-            await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: compressedDataUrl });
-            alert('പ്രൊഫൈൽ ലോഗോ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-          } catch(err) {
-            console.error(err);
-            alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു. ഫയലിന്റെ സൈസ് വളരെ വലുതായിരിക്കാം.');
-          }
-        };
-      };
-      reader.readAsDataURL(file);
+      try {
+        alert('ഫോട്ടോകൾ കംപ്രസ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+        const shop = allShopsData.find(x => x.id === id) || {};
+        
+        let updateData = { name };
+        if (file1) updateData.imageUrl = await compressImageToString(file1);
+        if (file2) updateData.imageUrl2 = await compressImageToString(file2);
+        if (file3) updateData.imageUrl3 = await compressImageToString(file3);
+        if (file4) updateData.imageUrl4 = await compressImageToString(file4);
+
+        await window.updateDoc(window.doc(window.db, "shops", id), updateData);
+        alert('സ്ഥാപനത്തിന്റെ ഫോട്ടോകളും വിവരങ്ങളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+        loadShopDropdown();
+        document.getElementById('adminEditFormArea').style.display = 'none';
+      } catch(e) {
+        console.error(e);
+        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+      }
     }
 
-    // ബാനർ അപ്ഡേറ്റ് ചെയ്യാനുള്ള കോഡ്
-    async function uploadAndSaveBanner() {
-      const fileInput = document.getElementById('bannerFileInput');
-      if (fileInput.files.length === 0) { alert('ദയവായി ഒരു ബാനർ ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
-      
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = async function() {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          
-          const MAX_SIZE = 600;
-          let width = img.width;
-          let height = img.height;
-          if (width > height) {
-            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
-          } else {
-            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+    async function uploadAndSaveLogo() {
+      const file = document.getElementById('logoFileInput').files[0];
+      if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+      try {
+        const compressed = await compressImageToString(file);
+        await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: compressed });
+        alert('ലോഗോ അപ്ഡേറ്റ് ചെയ്തു!');
+      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
+    }
 
-          try {
-            await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: compressedDataUrl });
-            alert('ഹെറോ ബാനർ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-          } catch(err) {
-            console.error(err);
-            alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-          }
-        };
-      };
-      reader.readAsDataURL(file);
+    async function uploadAndSaveBanner() {
+      const file = document.getElementById('bannerFileInput').files[0];
+      if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+      try {
+        const compressed = await compressImageToString(file);
+        await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: compressed });
+        alert('ബാനർ അപ്ഡേറ്റ് ചെയ്തു!');
+      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
     }
 
     async function postNotice() {
       const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
       const color = document.getElementById('noticeColorInput').value;
+      const file = document.getElementById('noticeImageFile').files[0];
+
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
+
       try {
+        let imageUrl = "";
+        if (file) imageUrl = await compressImageToString(file);
+
         await window.addDoc(window.collection(window.db, "notices"), { 
-          title, 
-          desc, 
-          color,
+          title, desc, color, imageUrl, 
           date: new Date().toLocaleDateString('en-GB') 
         });
-        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
+
+        alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
         document.getElementById('noticeDescInput').value = '';
         loadAdminNotices();
-      } catch(e) { alert('പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
     }
 
     async function loadAdminNotices() {
@@ -379,22 +337,19 @@
           const data = docSnap.data();
           html += `
             <div class="member-card">
-              <div><strong>${data.title || 'തലക്കെട്ടില്ല'}</strong><br><span style="color: #94a3b8; font-size: 10px;">${data.date || ''}</span></div>
+              <div><strong>${data.title || ''}</strong></div>
               <button onclick="deleteNotice('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
             </div>
           `;
         });
         container.innerHTML = html;
-      } catch(e) { container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`; }
+      } catch(e) {}
     }
 
     async function deleteNotice(id) {
-      if(confirm('ഈ അറിയിപ്പ് നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
-        try {
-          await window.deleteDoc(window.doc(window.db, "notices", id));
-          alert('അറിയിപ്പ് വിജയകരമായി നീക്കം ചെയ്തു!');
-          loadAdminNotices();
-        } catch(e) { alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+      if(confirm('ഈ അറിയിപ്പ് നീക്കം ചെയ്യണോ?')) {
+        await window.deleteDoc(window.doc(window.db, "notices", id));
+        loadAdminNotices();
       }
     }
 
@@ -402,55 +357,27 @@
       const container = document.getElementById('membersListContainer');
       try {
         const snap = await window.getDocs(window.collection(window.db, "shops"));
-        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അംഗങ്ങൾ ആരും ലഭ്യമല്ല.</p>`; return; }
+        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">സ്ഥാപനങ്ങളൊന്നുമില്ല.</p>`; return; }
         let html = '';
         snap.forEach(docSnap => {
           const data = docSnap.data();
           html += `
             <div class="member-card">
-              <div><strong>${data.name || 'പേരില്ല'}</strong><br><span style="color: #94a3b8;">📞 ${data.phone || ''}</span></div>
+              <div><strong>${data.name || ''}</strong><br><span style="color: #94a3b8;">📞 ${data.phone || ''}</span></div>
               <button onclick="deleteMember('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
             </div>
           `;
         });
         container.innerHTML = html;
-      } catch(e) { container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`; }
+      } catch(e) {}
     }
 
     async function deleteMember(id) {
-      if(confirm('ഈ സ്ഥാപനത്തെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
-        try {
-          await window.deleteDoc(window.doc(window.db, "shops", id));
-          alert('വിജയകരമായി നീക്കം ചെയ്തു!');
-          loadMembers();
-        } catch(e) { alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ്.'); }
+      if(confirm('ഈ സ്ഥാപനം നീക്കം ചെയ്യണോ?')) {
+        await window.deleteDoc(window.doc(window.db, "shops", id));
+        loadMembers();
+        loadShopDropdown();
       }
-    }
-
-    async function loadFeedbacks() {
-      const container = document.getElementById('feedbackListContainer');
-      try {
-        const snap = await window.getDocs(window.collection(window.db, "feedbacks"));
-        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അഭിപ്രായങ്ങൾ ഒന്നുമില്ല.</p>`; return; }
-        let html = '';
-        snap.forEach(docSnap => {
-          const data = docSnap.data();
-          html += `
-            <div class="member-card">
-              <div><strong>${data.name || 'അജ്ഞാതം'}</strong> (${data.phone || ''})<br><span style="color: #38bdf8;">${data.message || ''}</span></div>
-              <button onclick="deleteFeedback('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">ഡിലീറ്റ്</button>
-            </div>
-          `;
-        });
-        container.innerHTML = html;
-      } catch(e) { container.innerHTML = `<p style="font-size: 11px; color: #ef4444;">ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`; }
-    }
-
-    async function deleteFeedback(id) {
-      try {
-        await window.deleteDoc(window.doc(window.db, "feedbacks", id));
-        loadFeedbacks();
-      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
     }
   </script>
 </body>
