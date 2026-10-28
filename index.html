@@ -17,6 +17,12 @@
       getDoc,
       updateDoc 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { 
+      getStorage, 
+      ref, 
+      uploadBytes, 
+      getDownloadURL 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
@@ -30,8 +36,13 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
     window.db = db;
+    window.storage = storage;
+    window.ref = ref;
+    window.uploadBytes = uploadBytes;
+    window.getDownloadURL = getDownloadURL;
     window.collection = collection;
     window.getDocs = getDocs;
     window.deleteDoc = deleteDoc;
@@ -45,7 +56,6 @@
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
     
-    /* തീം വേരിയബിളുകൾ (Dark Mode Default) */
     :root {
       --bg-body: #0b0f17;
       --bg-app: #0f172a;
@@ -57,7 +67,6 @@
       --highlight-bg: #0f172a;
     }
 
-    /* Light Mode സ്റ്റൈലുകൾ */
     body.light-mode {
       --bg-body: #e2e8f0;
       --bg-app: #ffffff;
@@ -80,9 +89,7 @@
     
     .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 2px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
     
-    /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രത്തിന്റെ കറുപ്പ് നിറം കുറച്ച് ക്ലാരിറ്റി കൂട്ടിയിരിക്കുന്നു */
-            
-       .hero-banner { 
+    .hero-banner { 
       position: relative; 
       height: 90px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
@@ -90,11 +97,8 @@
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രം മുകളിൽ നന്നായി കാണാനും, താഴെ മാത്രം കറുപ്പ് വരുന്ന രീതി */
       background: linear-gradient(to bottom, transparent 40%, rgba(15, 23, 42, 0.9) 85%, var(--bg-app) 100%); 
     }
-
-
 
     .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
     
@@ -110,9 +114,7 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.6); 
       transition: transform 0.3s ease;
     }
-    .profile-avatar:hover {
-      transform: scale(1.05);
-    }
+    .profile-avatar:hover { transform: scale(1.05); }
 
     .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
     .main-app-name { font-size: 22px; font-weight: 800; color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); margin-bottom: 4px; }
@@ -133,7 +135,6 @@
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 120px; }
     .section-label { font-size: 13px; font-weight: 800; color: #fde047; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
     
-    /* പ്രധാന അറിയിപ്പുകൾക്ക് ചുറ്റുമുള്ള ബോക്സ് (കള്ളി) സ്റ്റൈൽ */
     .notices-box-container {
       background: var(--bg-card);
       border: 2px solid #eab308;
@@ -146,7 +147,6 @@
     .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: none; }
     .banner-slider::-webkit-scrollbar { display: none; }
     .bright-notice-card { min-width: 85%; scroll-snap-align: start; border-radius: 14px; padding: 12px 14px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); cursor: pointer; position: relative; color: #ffffff; }
-    .notice-shop-name { font-size: 11px; font-weight: 800; color: #fde047; background: rgba(15,23,42,0.6); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-bottom: 4px; }
     .notice-tag { background: rgba(0, 0, 0, 0.25); color: #ffffff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
     .notice-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; color: #ffffff; }
     .notice-desc { font-size: 11px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #ffffff; opacity: 0.95; }
@@ -166,6 +166,9 @@
     .item-loc { font-size: 11px; color: var(--text-sub); margin-bottom: 8px; }
     .item-desc-highlight { font-size: 11px; color: var(--text-main); background: var(--highlight-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ca8a04; }
     
+    /* സ്ഥാപനത്തിന്റെ ഫോട്ടോ കാർഡിൽ കാണിക്കാൻ */
+    .shop-thumb-img { width: 100%; height: 140px; border-radius: 10px; object-fit: cover; margin-bottom: 8px; border: 1px solid var(--border-color); }
+
     .card-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
     .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
@@ -219,7 +222,6 @@
 
     <div class="scrollable-body" id="scrollBody">
       
-      <!-- ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ചുറ്റും കള്ളിയുള്ള ബോക്സിൽ -->
       <div class="notices-box-container">
         <div style="font-size: 14px; font-weight: 800; color: #fde047; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
           🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
@@ -310,6 +312,7 @@
     </div>
   </div>
 
+  <!-- സ്ഥാപനം എഡിറ്റ് ചെയ്യാനുള്ള മോഡൽ (ഫോട്ടോ അപ്‌ലോഡ് ഫീൽഡ് ഉൾപ്പെടെ) -->
   <div class="modal-bg" id="editShopModal" onclick="closeModalOnBg(event, 'editShopModal')">
     <div class="modal-box">
       <h3 style="color:#eab308; margin-bottom:12px; font-size:15px;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
@@ -325,6 +328,10 @@
         <input type="url" id="editShopMap" class="dark-input" placeholder="https://maps.app.goo.gl/...">
         <label style="font-size:11px; color:var(--text-sub);">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
         <textarea id="editShopDesc" class="dark-input" rows="3" required></textarea>
+        
+        <label style="font-size:11px; color:var(--text-sub);">സ്ഥാപനത്തിന്റെ ഫോട്ടോ മാറ്റാൻ:</label>
+        <input type="file" id="editShopImageFile" class="dark-input" accept="image/*" style="padding: 6px;">
+
         <button type="submit" class="btn-pro-call" style="margin-top:6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
       </form>
     </div>
@@ -390,7 +397,7 @@
         if (!shopSnap.empty) {
           shops = shopSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         } else {
-          shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", mapLink: "" }];
+          shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", mapLink: "", imageUrl: "" }];
         }
 
         const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
@@ -531,6 +538,7 @@
           <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
           <div class="item-name">${s.name}</div>
           <div class="item-loc">📍 ${s.loc}</div>
+          ${s.imageUrl ? `<img src="${s.imageUrl}" class="shop-thumb-img" alt="${s.name}">` : ''}
           <div class="item-desc-highlight">${s.desc}</div>
           <div class="card-actions">
             <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
@@ -555,9 +563,53 @@
       document.getElementById('editShopPhone').value = s.phone || '';
       document.getElementById('editShopMap').value = s.mapLink || '';
       document.getElementById('editShopDesc').value = s.desc || '';
+      document.getElementById('editShopImageFile').value = ''; // Reset file input
       
       toggleModal('editShopModal');
       history.pushState({ modalOpen: true }, '');
+    }
+
+    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് ഫയർബേസ് സ്റ്റോറേജിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ഷൻ
+    async function uploadCompressedImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 700; // ഫോട്ടോയുടെ പരമാവധി വീതി
+            const scaleSize = MAX_WIDTH / img.width;
+            
+            if (scaleSize < 1) {
+              canvas.width = MAX_WIDTH;
+              canvas.height = img.height * scaleSize;
+            } else {
+              canvas.width = img.width;
+              canvas.height = img.height;
+            }
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(async (blob) => {
+              try {
+                const imageFileName = `shops/${Date.now()}_compressed.jpg`;
+                const storageRef = window.ref(window.storage, imageFileName);
+                
+                const snapshot = await window.uploadBytes(storageRef, blob);
+                const downloadURL = await window.getDownloadURL(snapshot.ref);
+                
+                resolve(downloadURL);
+              } catch (error) {
+                reject(error);
+              }
+            }, 'image/jpeg', 0.6); // 60% ക്വാളിറ്റി (സൈസ് തീരെ കുറവായിരിക്കും)
+          };
+        };
+        reader.onerror = (error) => reject(error);
+      });
     }
 
     async function updateShopData(e) {
@@ -568,11 +620,18 @@
       const phone = document.getElementById('editShopPhone').value;
       const mapLink = document.getElementById('editShopMap').value;
       const desc = document.getElementById('editShopDesc').value;
+      const imageFile = document.getElementById('editShopImageFile').files[0];
 
       try {
-        await window.updateDoc(window.doc(window.db, "shops", id), {
-          name, loc, phone, mapLink, desc
-        });
+        let updateData = { name, loc, phone, mapLink, desc };
+
+        if (imageFile) {
+          alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+          const imageUrl = await uploadCompressedImage(imageFile);
+          updateData.imageUrl = imageUrl;
+        }
+
+        await window.updateDoc(window.doc(window.db, "shops", id), updateData);
         alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
         toggleModal('editShopModal');
         loadAppSettings();
