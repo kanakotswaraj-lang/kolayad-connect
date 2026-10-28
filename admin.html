@@ -55,6 +55,7 @@
     #loginBox { display: block; text-align: center; padding: 20px 0; }
     #adminPanel { display: none; }
     .member-card { background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .checkbox-label { font-size: 11px; color: #ef4444; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -104,9 +105,9 @@
         <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
       </div>
 
-      <!-- സ്ഥാപനത്തിന്റെ 4 ഫോട്ടോകൾ അപ്ഡേറ്റ് ചെയ്യാൻ -->
+      <!-- സ്ഥാപനത്തിന്റെ 4 ഫോട്ടോകളും റിമൂവ് ഓപ്ഷനും -->
       <div style="margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">✏️ സ്ഥാപനത്തിന്റെ 4 ഫോട്ടോകൾ ചേർക്കാൻ (Admin Edit)</h2>
+        <h2 style="font-size: 15px; text-align: left; margin-bottom: 8px;">✏️ സ്ഥാപനത്തിന്റെ 4 ഫോട്ടോകൾ കൈകാര്യം ചെയ്യാൻ</h2>
         
         <label>സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
         <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
@@ -120,17 +121,21 @@
 
           <label>പ്രധാന ഫോട്ടോ (Photo 1):</label>
           <input type="file" id="admPhoto1" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
           <label>രണ്ടാമത്തെ ഫോട്ടോ (Photo 2):</label>
           <input type="file" id="admPhoto2" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
           <label>മൂന്നാമത്തെ ഫോട്ടോ (Photo 3):</label>
           <input type="file" id="admPhoto3" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
           <label>നാലാമത്തെ ഫോട്ടോ (Photo 4):</label>
           <input type="file" id="admPhoto4" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
-          <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">4 ഫോട്ടോകളും സേവ് ചെയ്യുക</button>
+          <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
         </div>
       </div>
 
@@ -191,7 +196,7 @@
       }
     };
 
-    // 4 ഫോട്ടോകളും ഒന്നിച്ച് സുരക്ഷിതമായി സേവ് ചെയ്യാൻ പാകത്തിൽ സൈസ് ഒപ്റ്റിമൈസ് ചെയ്ത കംപ്രഷൻ ഫങ്ഷൻ
+    // ഫയർബേസ് 1MB പരിധി കവിയാത്ത രീതിയിൽ ഫോട്ടോ ശക്തമായി കംപ്രസ് ചെയ്യുന്ന ഫങ്ഷൻ
     async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -201,7 +206,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400; // ഫോട്ടോകളുടെ സൈസ് കവിയാതിരിക്കാൻ കൃത്യമായ വീതി
+            const MAX_WIDTH = 350; // സൈസ് വളരെ കുറയാൻ വീതി 350px ആയി ക്രമീകരിച്ചിരിക്കുന്നു
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -214,7 +219,7 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL('image/jpeg', 0.4)); // 40% ക്വാളിറ്റി (സൈസ് തീരെ ചെറുതായിരിക്കും, 4 ഫോട്ടോകളും എററില്ലാതെ സേവ് ചെയ്യാം)
+            resolve(canvas.toDataURL('image/jpeg', 0.35)); // 35% ക്വാളിറ്റി (സൈസ് തീരെ ചെറുതായിരിക്കും, 4 ഫോട്ടോകളും സുരക്ഷിതമായി സേവ് ചെയ്യാം)
           };
         };
         reader.onerror = (error) => reject(error);
@@ -249,6 +254,10 @@
         document.getElementById('admPhoto2').value = '';
         document.getElementById('admPhoto3').value = '';
         document.getElementById('admPhoto4').value = '';
+        document.getElementById('removePhoto1').checked = false;
+        document.getElementById('removePhoto2').checked = false;
+        document.getElementById('removePhoto3').checked = false;
+        document.getElementById('removePhoto4').checked = false;
         formArea.style.display = 'block';
       }
     }
@@ -262,22 +271,46 @@
       const file3 = document.getElementById('admPhoto3').files[0];
       const file4 = document.getElementById('admPhoto4').files[0];
 
+      const remove1 = document.getElementById('removePhoto1').checked;
+      const remove2 = document.getElementById('removePhoto2').checked;
+      const remove3 = document.getElementById('removePhoto3').checked;
+      const remove4 = document.getElementById('removePhoto4').checked;
+
       try {
-        alert('4 ഫോട്ടോകളും കംപ്രസ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+        alert('ഫോട്ടോകൾ കംപ്രസ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
         let updateData = { name };
         
-        if (file1) updateData.imageUrl = await compressImageToString(file1);
-        if (file2) updateData.imageUrl2 = await compressImageToString(file2);
-        if (file3) updateData.imageUrl3 = await compressImageToString(file3);
-        if (file4) updateData.imageUrl4 = await compressImageToString(file4);
+        if (remove1) {
+          updateData.imageUrl = "";
+        } else if (file1) {
+          updateData.imageUrl = await compressImageToString(file1);
+        }
+
+        if (remove2) {
+          updateData.imageUrl2 = "";
+        } else if (file2) {
+          updateData.imageUrl2 = await compressImageToString(file2);
+        }
+
+        if (remove3) {
+          updateData.imageUrl3 = "";
+        } else if (file3) {
+          updateData.imageUrl3 = await compressImageToString(file3);
+        }
+
+        if (remove4) {
+          updateData.imageUrl4 = "";
+        } else if (file4) {
+          updateData.imageUrl4 = await compressImageToString(file4);
+        }
 
         await window.updateDoc(window.doc(window.db, "shops", id), updateData);
-        alert('സ്ഥാപനത്തിന്റെ 4 ഫോട്ടോകളും വിവരങ്ങളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
         loadShopDropdown();
         document.getElementById('adminEditFormArea').style.display = 'none';
       } catch(e) {
         console.error(e);
-        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു. ഫയലിന്റെ സൈസ് വളരെ വലുതായിരിക്കാം.');
       }
     }
 
