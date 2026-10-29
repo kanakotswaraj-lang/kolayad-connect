@@ -46,14 +46,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
     
     :root {
-      --bg-body: #0b0f17;
-      --bg-app: #0f172a;
-      --bg-card: #1e293b;
-      --bg-input: #1e293b;
+      --bg-body: #070b14;
+      --bg-app: #0b1329;
+      --bg-card: #111d38;
+      --bg-input: #111d38;
       --text-main: #f1f5f9;
       --text-sub: #94a3b8;
-      --border-color: #334155;
-      --highlight-bg: #0f172a;
+      --border-color: #1e293b;
+      --highlight-bg: #0b1329;
     }
 
     body.light-mode {
@@ -86,20 +86,20 @@
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      background: linear-gradient(to bottom, transparent 40%, rgba(15, 23, 42, 0.9) 85%, var(--bg-app) 100%); 
+      background: linear-gradient(to bottom, transparent 40%, rgba(11, 19, 41, 0.95) 85%, var(--bg-app) 100%); 
     }
 
     .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
     
-    .theme-toggle-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .admin-badge-btn { background: rgba(15, 23, 42, 0.85); border: 1px solid #eab308; color: #fde047; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
+    .theme-toggle-btn { background: rgba(11, 19, 41, 0.9); border: 1px solid #eab308; color: #fde047; padding: 4px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .admin-badge-btn { background: rgba(11, 19, 41, 0.9); border: 1px solid #eab308; color: #fde047; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
     .profile-avatar-wrap { position: relative; margin-top: -35px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { 
       width: 70px; 
       height: 70px; 
       border-radius: 20px; 
       border: 3.5px solid #eab308; 
-      background: #1e293b center/cover no-repeat; 
+      background: #111d38 center/cover no-repeat; 
       box-shadow: 0 6px 18px rgba(0,0,0,0.6); 
       transition: transform 0.3s ease;
     }
@@ -108,7 +108,7 @@
     .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
     .main-app-name { font-size: 22px; font-weight: 800; color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); margin-bottom: 4px; }
     .user-welcome-bar { 
-      font-size: 13px; font-weight: 800; color: #0f172a; 
+      font-size: 13px; font-weight: 800; color: #0b1329; 
       background: linear-gradient(135deg, #fde047 0%, #eab308 100%); 
       padding: 6px 16px; border-radius: 22px; border: 1.5px solid #fef08a; 
       cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
@@ -146,8 +146,8 @@
     .cat-box-icon { font-size: 18px; width: 34px; height: 34px; border-radius: 10px; background: rgba(234, 179, 8, 0.15); display: flex; align-items: center; justify-content: center; color: #fde047; }
     .cat-box-title { font-size: 10px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
     .cat-box.active { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); }
-    .cat-box.active .cat-box-title { color: #0f172a; font-weight: 800; }
-    .cat-box.active .cat-box-icon { background: rgba(15,23,42,0.2); color: #0f172a; }
+    .cat-box.active .cat-box-title { color: #0b1329; font-weight: 800; }
+    .cat-box.active .cat-box-icon { background: rgba(11,19,41,0.2); color: #0b1329; }
     
     .pro-card { background: var(--bg-card); border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-color); border-left: 5px solid #eab308; position: relative; }
     .badge-tag { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(254, 224, 71, 0.12); color: #fde047; }
@@ -177,7 +177,7 @@
       padding: 8px; 
       scrollbar-width: none; 
       margin-bottom: 8px; 
-      background: #111827; 
+      background: #070b14; 
       border: 1.5px solid #eab308; 
       border-radius: 14px; 
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
@@ -187,7 +187,7 @@
     .shop-thumb-img { min-width: 85%; height: 240px; border-radius: 12px; object-fit: cover; scroll-snap-align: center; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 
     .card-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
-    .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0f172a; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
+    .btn-pro-call { flex: 1; background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0b1329; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
     .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
     .btn-pro-share { background: #25d366; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; }
     .btn-pro-map { background: #3b82f6; color: white; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
@@ -195,7 +195,7 @@
     .btn-admin-del { background: #ef4444; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; }
     
     .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; gap: 8px; padding: 0 16px; }
-    .btn-add-pro { flex: 1; background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0f172a; border: 2px solid #fef08a; padding: 9px 10px; border-radius: 25px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
+    .btn-add-pro { flex: 1; background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0b1329; border: 2px solid #fef08a; padding: 9px 10px; border-radius: 25px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
     .btn-emergency-quick { background: #ef4444; color: white; border: 2px solid #fca5a5; padding: 9px 14px; border-radius: 25px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(239,68,68,0.3); }
 
     .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg-app); border-top: 1px solid var(--border-color); padding: 6px 16px 12px 16px; display: flex; justify-content: space-around; z-index: 30; }
@@ -213,7 +213,7 @@
       <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
-          <div style="font-size: 11px; font-weight: 800; color: #0f172a; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
+          <div style="font-size: 11px; font-weight: 800; color: #0b1329; background: rgba(254, 240, 138, 0.9); padding: 3px 10px; border-radius: 10px;">🌴 കോളയാട്, കണ്ണൂർ</div>
           <div style="display: flex; gap: 6px; align-items: center;">
             <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
             <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
@@ -325,7 +325,7 @@
           <a href="tel:1912" style="background:#22c55e; color:white; padding:6px 12px; border-radius:8px; text-decoration:none; font-weight:bold;">📞 കോൾ</a>
         </div>
       </div>
-      <button onclick="toggleModal('emergencyModal')" class="btn-pro-call" style="width:100%; margin-top:14px; background:#ffffff; color:#0f172a; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+      <button onclick="toggleModal('emergencyModal')" class="btn-pro-call" style="width:100%; margin-top:14px; background:#ffffff; color:#0b1329; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
@@ -386,10 +386,10 @@
           if(isAdmin) {
             badge.innerText = "അഡ്മിൻ (Online)";
             badge.style.background = "#22c55e";
-            badge.style.color = "#0f172a";
+            badge.style.color = "#0b1329";
           } else {
             badge.innerText = "അഡ്മിൻ";
-            badge.style.background = "rgba(15, 23, 42, 0.85)";
+            badge.style.background = "rgba(11, 19, 41, 0.9)";
             badge.style.color = "#fde047";
           }
         }
@@ -495,7 +495,7 @@
         <h2 style="font-size:18px; margin:10px 0; color:#ffffff;">${n.title || ''}</h2>
         <p style="font-size:13px; line-height:1.6; margin-bottom:12px; color:#ffffff; opacity:0.95;">${n.desc || ''}</p>
         ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.2);" />` : ''}
-        <button onclick="toggleModal('viewNoticeModal')" class="btn-pro-call" style="width:100%; background:#ffffff; color:#0f172a; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+        <button onclick="toggleModal('viewNoticeModal')" class="btn-pro-call" style="width:100%; background:#ffffff; color:#0b1329; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
       `;
       toggleModal('viewNoticeModal');
       history.pushState({ modalOpen: true }, '');
@@ -507,10 +507,9 @@
     }
 
     function shareShop(name, loc, phone, desc) {
-  const text = `🌴 *കോളയാട് കണക്ട് ഡയറക്ടറി* 🌴\n\n📌 *${name}*\n📍 സ്ഥലം: ${loc}\n📞 ഫോൺ: ${phone}\nℹ️ വിവരങ്ങൾ: ${desc}\n\nകൂടുതൽ പ്രാദേശിക വിവരങ്ങൾക്ക് വിസിറ്റ് ചെയ്യൂ: https://kanakotswaraj-lang.github.io/kolayad-connect/`;
-  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-}
-
+      const text = `🌴 *കോളയാട് കണക്ട് ഡയറക്ടറി* 🌴\n\n📌 *${name}*\n📍 സ്ഥലം: ${loc}\n📞 ഫോൺ: ${phone}\nℹ️ വിവരങ്ങൾ: ${desc}\n\nകൂടുതൽ പ്രാദേശിക വിവരങ്ങൾക്ക് വിസിറ്റ് ചെയ്യൂ: https://kanakotswaraj-lang.github.io/kolayad-connect/`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
 
     window.addEventListener('popstate', function(event) {
       const modal = document.getElementById('viewNoticeModal');
