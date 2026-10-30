@@ -343,6 +343,8 @@
 
     async function postNotice() {
       const title = document.getElementById('noticeTitleInput').value.trim();
+        async function postNotice() {
+      const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
       const color = document.getElementById('noticeColorInput').value;
       const file = document.getElementById('noticeImageFile').files[0];
@@ -354,10 +356,26 @@
         let imageUrl = "";
         if (file) imageUrl = await compressImageToString(file);
 
+        // 1. അറിയിപ്പ് 'notices' കളക്ഷനിൽ സേവ് ചെയ്യുന്നു
         await window.addDoc(window.collection(window.db, "notices"), { 
           title, desc, color, imageUrl, 
           date: new Date().toLocaleDateString('en-GB') 
         });
+
+        // 2. ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്ത എല്ലാവരുടെയും FCM ടോക്കണുകൾ എടുത്ത് നോട്ടിഫിക്കേഷൻ അയക്കാൻ തയ്യാറെടുക്കുന്നു
+        const tokensSnap = await window.getDocs(window.collection(window.db, "fcm_tokens"));
+        let tokens = [];
+        tokensSnap.forEach(tDoc => {
+          if (tDoc.data().token) {
+            tokens.push(tDoc.data().token);
+          }
+        });
+
+        if (tokens.length > 0) {
+          console.log('Target FCM Tokens found:', tokens.length);
+          // ശ്രദ്ധിക്കുക: ബ്രൗസറിൽ നിന്ന് നേരിട്ട് FCM HTTP v1 API വഴി സെർവർ കീ ഇല്ലാതെ അയക്കുന്നത് സുരക്ഷാ കാരണങ്ങളാൽ ഫയർബേസ് നേരിട്ട് അനുവദിക്കില്ല. 
+          // എങ്കിലും ഈ ടോക്കണുകൾ ഉപയോഗിച്ച് ക്ലൗഡ് ഫങ്ഷൻസ് വഴിയോ അല്ലെങ്കിൽ ഫയർബേസ് കൺസോൾ വഴിയോ നോട്ടിഫിക്കേഷൻ തൽക്ഷണം പുഷ് ചെയ്യാവുന്നതാണ്.
+        }
 
         alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
@@ -369,6 +387,7 @@
         alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
       }
     }
+
 
     async function loadAdminNotices() {
       const container = document.getElementById('adminNoticesListContainer');
