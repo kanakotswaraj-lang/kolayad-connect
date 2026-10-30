@@ -30,6 +30,47 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+
+const messaging = getMessaging(app);
+
+// ഉപയോക്താവിൽ നിന്ന് Permission വാങ്ങി ടോക്കൺ എടുക്കുന്നു
+async function requestNotificationPermission() {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+      
+      // നിങ്ങളുടെ VAPID Key താഴെ നൽകുക
+      const currentToken = await getToken(messaging, { 
+        vapidKey:BOUTUS1pKC5dX9jiJ3jjLsDcVxYAUojE8l4kHWjSLP9l_VG7LALGYUytBhYtBIklghGxRu6IJKdJgehqFj6fc0o
+      });
+
+      if (currentToken) {
+        console.log('FCM Token:', currentToken);
+        // ടോക്കൺ ഫയർബേസ് ഡാറ്റാബേസിൽ സേവ് ചെയ്യുന്നു
+        await setDoc(doc(db, "fcm_tokens", currentToken), {
+          token: currentToken,
+          createdAt: new Date().toISOString()
+        });
+      }
+    }
+  } catch (err) {
+    console.error('An error occurred while retrieving token. ', err);
+  }
+}
+
+// Service Worker രജിസ്റ്റർ ചെയ്യുന്നു
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker registered with scope:', registration.scope);
+      requestNotificationPermission();
+    }).catch((err) => {
+      console.error('Service Worker registration failed:', err);
+    });
+}
+
 
     window.db = db;
     window.collection = collection;
