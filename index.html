@@ -61,8 +61,8 @@
       --bg-app: #0b1329;
       --bg-card: #111d38;
       --bg-input: #111d38;
-      --text-main: #f1f5f9;
-      --text-sub: #cbd5e1;
+      --text-main: #ffffff;
+      --text-sub: #94a3b8;
       --border-color: #1e293b;
       --highlight-bg: #162241;
     }
@@ -103,10 +103,10 @@
 
     .profile-avatar-wrap { position: relative; margin-top: -30px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { 
-      width: 60px; 
-      height: 60px; 
-      border-radius: 16px; 
-      border: 3px solid #1e3a8a; 
+      width: 65px; 
+      height: 65px; 
+      border-radius: 18px; 
+      border: 3.5px solid #1e3a8a; 
       background: var(--bg-card) center/cover no-repeat; 
       box-shadow: 0 4px 12px rgba(30,58,138,0.2); 
       transition: transform 0.3s ease;
@@ -116,7 +116,7 @@
 
     .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
     .main-app-name { font-size: 22px; font-weight: 800; color: #1e3a8a; text-shadow: 0 1px 4px rgba(30,58,138,0.1); margin-bottom: 4px; }
-    body.dark-mode .main-app-name { color: #facc15; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+    body.dark-mode .main-app-name { color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); }
 
     .user-welcome-bar { 
       font-size: 13px; font-weight: 800; color: #ffffff; 
@@ -133,7 +133,7 @@
       padding: 10px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; 
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); margin-bottom: 8px;
     }
-    body.dark-mode .dark-input { border-color: #38bdf8; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15); }
+    body.dark-mode .dark-input { border-color: #38bdf8; color: #ffffff; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15); }
     .dark-input::placeholder { color: var(--text-sub); font-weight: normal; }
     
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 120px; background-color: var(--bg-body); }
@@ -188,6 +188,7 @@
       margin-top: 6px; 
       margin-bottom: 2px;
     }
+    body.dark-mode .item-name { color: #ffffff; }
 
     .item-loc { 
       font-size: 11.5px; 
@@ -198,6 +199,7 @@
     body.dark-mode .item-loc { color: #fde047; }
     
     .item-desc-highlight { font-size: 11px; color: var(--text-main); background: var(--highlight-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border-color); font-weight: 500; }
+    body.dark-mode .item-desc-highlight { color: #e2e8f0; }
     
     .shop-images-slider { 
       display: flex; 
@@ -256,7 +258,7 @@
       </div>
 
       <div class="profile-avatar-wrap">
-        <div class="profile-avatar" id="profileAvatarImg"></div>
+        <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
       </div>
 
       <div class="app-title-box">
@@ -274,7 +276,7 @@
     <div class="scrollable-body" id="scrollBody">
       
       <div class="notices-box-container">
-        <div style="font-size: 14px; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;" id="noticeHeading">
+        <div style="font-size: 14px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;" id="noticeHeading">
           🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
         </div>
         <input type="text" id="noticeSearchInput" class="dark-input" placeholder="🔍 അറിയിപ്പുകൾ പരതുക (ഉദാ: ഓഫർ, മീറ്റിംഗ്)..." onkeyup="filterNotices()" style="font-size: 12px; padding: 8px 12px; margin-bottom: 8px;">
@@ -283,7 +285,7 @@
 
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
-        <span style="font-size:12px; font-weight:800; color:#1e3a8a; background:rgba(30,58,138,0.1); padding:2px 8px; border-radius:6px; border:1px solid rgba(30,58,138,0.2);" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
+        <span style="font-size:12px; font-weight:800; color:var(--text-main); background:rgba(30,58,138,0.1); padding:2px 8px; border-radius:6px; border:1px solid var(--border-color);" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
       </div>
 
       <div class="category-grid-container">
@@ -400,16 +402,14 @@
 
     if (localStorage.getItem('kolayad_theme') === 'dark') {
       document.body.classList.add('dark-mode');
-      setTimeout(() => {
-        const btn = document.getElementById('themeBtn');
-        if(btn) btn.innerText = '☀️';
-      }, 100);
+      const btn = document.getElementById('themeBtn');
+      if(btn) btn.innerText = '☀️';
     }
 
     async function loadAppSettings() {
       try {
         if (!window.db) {
-          setTimeout(loadAppSettings, 500);
+          setTimeout(loadAppSettings, 200);
           return;
         }
         
@@ -427,14 +427,12 @@
           }
         }
 
-        let logoUrl = 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
         try {
           const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
           if (logoDoc.exists() && logoDoc.data().url) {
-            logoUrl = logoDoc.data().url;
+            document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
           }
         } catch(err) {}
-        document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoUrl}')`;
 
         try {
           const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
@@ -472,7 +470,7 @@
         document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
       }
 
-      setTimeout(loadAppSettings, 500);
+      loadAppSettings();
     }
 
     function renderNotices() {
