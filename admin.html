@@ -59,29 +59,39 @@
     .member-card { background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
     .checkbox-label { font-size: 11px; color: #ef4444; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-weight: bold; }
     
-    /* സെക്ഷൻ കാർഡുകൾക്കുള്ള സ്റ്റൈൽ */
+    /* കൊളാപ്സിബിൾ സെക്ഷൻ സ്റ്റൈൽ */
     .admin-section {
       background: #131c31;
       border: 1px solid #334155;
       border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
     }
-    .admin-section h3 {
+    .section-header {
+      padding: 14px;
       font-size: 14px;
       color: #38bdf8;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #1e293b;
-      padding-bottom: 6px;
+      cursor: pointer;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
+      font-weight: bold;
+      background: #1e293b;
+    }
+    .section-header:hover {
+      background: #253349;
+    }
+    .section-content {
+      padding: 14px;
+      display: none;
+      border-top: 1px solid #334155;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- ലോഗിൻ ബോക്സ് -->
     <div id="loginBox">
       <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
       <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
@@ -90,90 +100,111 @@
       <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
     </div>
 
+    <!-- അഡ്മിൻ പാനൽ (തുടക്കത്തിൽ ഹൈഡ് ചെയ്തിരിക്കുന്നു) -->
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
       <!-- സെക്ഷൻ 1: ആപ്പ് ഡിസൈൻ & ബ്രാൻഡിംഗ് -->
       <div class="admin-section">
-        <h3>🎨 ആപ്പ് ലോഗോ & ബാനർ</h3>
-        <div class="form-group">
-          <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ:</label>
-          <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-          <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        <div class="section-header" onclick="toggleSection('sec1')">
+          <span>🎨 ആപ്പ് ലോഗോ & ബാനർ</span>
+          <span>▼</span>
         </div>
+        <div id="sec1" class="section-content">
+          <div class="form-group">
+            <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ:</label>
+            <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+            <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
+          </div>
 
-        <div class="form-group" style="margin-top: 10px;">
-          <label>ഹെറോ ബാനർ ഫോട്ടോ:</label>
-          <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-          <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
+          <div class="form-group" style="margin-top: 10px;">
+            <label>ഹെറോ ബാനർ ഫോട്ടോ:</label>
+            <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+            <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
+          </div>
         </div>
       </div>
 
       <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകൾ -->
       <div class="admin-section">
-        <h3>📢 പ്രധാന അറിയിപ്പുകൾ</h3>
-        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
-        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
-        
-        <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ:</label>
-        <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+        <div class="section-header" onclick="toggleSection('sec2')">
+          <span>📢 പ്രധാന അറിയിപ്പുകൾ</span>
+          <span>▼</span>
+        </div>
+        <div id="sec2" class="section-content">
+          <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
+          <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
+          
+          <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ:</label>
+          <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
 
-        <label style="margin-top: 6px;">കളർ:</label>
-        <select id="noticeColorInput" class="dark-input" style="padding: 8px;">
-          <option value="linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)">💜 റോയൽ പർപ്പിൾ</option>
-          <option value="linear-gradient(135deg, #ea580c 0%, #c2410c 100%)">🧡 ഓറഞ്ച്</option>
-          <option value="linear-gradient(135deg, #059669 0%, #047857 100%)">💚 പച്ച</option>
-          <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 നീല</option>
-        </select>
+          <label style="margin-top: 6px;">കളർ:</label>
+          <select id="noticeColorInput" class="dark-input" style="padding: 8px;">
+            <option value="linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)">💜 റോയൽ പർപ്പിൾ</option>
+            <option value="linear-gradient(135deg, #ea580c 0%, #c2410c 100%)">🧡 ഓറഞ്ച്</option>
+            <option value="linear-gradient(135deg, #059669 0%, #047857 100%)">💚 പച്ച</option>
+            <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 നീല</option>
+          </select>
 
-        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
+          <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
 
-        <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
-          <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ:</label>
-          <div id="adminNoticesListContainer" style="max-height: 120px; overflow-y: auto;">
-            <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+          <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
+            <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ:</label>
+            <div id="adminNoticesListContainer" style="max-height: 120px; overflow-y: auto;">
+              <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- സെക്ഷൻ 3: സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാറ്റാൻ -->
       <div class="admin-section">
-        <h3>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</h3>
-        <label>സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
-        <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
-          <option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>
-        </select>
+        <div class="section-header" onclick="toggleSection('sec3')">
+          <span>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</span>
+          <span>▼</span>
+        </div>
+        <div id="sec3" class="section-content">
+          <label>സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
+          <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
+            <option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>
+          </select>
 
-        <div id="adminEditFormArea" style="display: none; margin-top: 10px; background: #1e293b; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
-          <input type="hidden" id="editDocId">
-          <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
-          <input type="text" id="admEditName" class="dark-input">
+          <div id="adminEditFormArea" style="display: none; margin-top: 10px; background: #0f172a; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
+            <input type="hidden" id="editDocId">
+            <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
+            <input type="text" id="admEditName" class="dark-input">
 
-          <label>ഒന്നാമത്തെ ഫോട്ടോ (Photo 1):</label>
-          <input type="file" id="admPhoto1" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-          <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label>ഒന്നാമത്തെ ഫോട്ടോ (Photo 1):</label>
+            <input type="file" id="admPhoto1" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
-          <label>രണ്ടാമത്തെ ഫോട്ടോ (Photo 2):</label>
-          <input type="file" id="admPhoto2" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-          <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label>രണ്ടാമത്തെ ഫോട്ടോ (Photo 2):</label>
+            <input type="file" id="admPhoto2" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
-          <label>മൂന്നാമത്തെ ഫോട്ടോ (Photo 3):</label>
-          <input type="file" id="admPhoto3" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-          <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label>മൂന്നാമത്തെ ഫോട്ടോ (Photo 3):</label>
+            <input type="file" id="admPhoto3" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
-          <label>നാലാമത്തെ ഫോട്ടോ (Photo 4):</label>
-          <input type="file" id="admPhoto4" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-          <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label>നാലാമത്തെ ഫോട്ടോ (Photo 4):</label>
+            <input type="file" id="admPhoto4" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
-          <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
+            <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
+          </div>
         </div>
       </div>
 
       <!-- സെക്ഷൻ 4: രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ -->
       <div class="admin-section">
-        <h3>👥 രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ</h3>
-        <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
-          <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+        <div class="section-header" onclick="toggleSection('sec4')">
+          <span>👥 രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ</span>
+          <span>▼</span>
+        </div>
+        <div id="sec4" class="section-content">
+          <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
+            <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+          </div>
         </div>
       </div>
 
@@ -214,6 +245,17 @@
         showPanel();
       }
     };
+
+    // സെക്ഷൻ ടോഗിൾ ചെയ്യാനുള്ള ഫങ്ഷൻ (തുറക്കാനും അടയ്ക്കാനും)
+    function toggleSection(sectionId) {
+      const sec = document.getElementById(sectionId);
+      if (sec.style.display === 'block') {
+        sec.style.display = 'none';
+      } else {
+        // വേണമെങ്കിൽ മറ്റുള്ളവ അടയ്ക്കാനും ഇത് ഉപയോഗിക്കാം, നിലവിൽ ക്ലിക്ക് ചെയ്തത് മാത്രം ഓപ്പൺ ആകും
+        sec.style.display = 'block';
+      }
+    }
 
     async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
