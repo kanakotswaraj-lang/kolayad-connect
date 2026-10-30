@@ -168,7 +168,7 @@
     .cat-box-title { font-size: 10px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
     body.dark-mode .cat-box-title { color: #ffffff; font-weight: 700; }
 
-    /* Active State: Light Dark Blue / Active Blue Gradient with white text (matching image #2 style) */
+    /* Active State: Light Dark Blue / Active Blue Gradient with white text */
     .cat-box.active { background: linear-gradient(135deg, #2563eb 100%, #1d4ed8 0%); border-color: #60a5fa; }
     body.dark-mode .cat-box.active { background: linear-gradient(135deg, #2563eb 100%, #1d4ed8 0%); border-color: #60a5fa; box-shadow: 0 0 15px rgba(37,99,235,0.4); }
     .cat-box.active .cat-box-title { color: #ffffff; font-weight: 800; }
@@ -290,6 +290,9 @@
       <div class="category-grid-container">
         <div class="category-grid">
           <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
+          <div class="cat-box" onclick="setCat('hospital', this)"><div class="cat-box-icon">🏥</div><div class="cat-box-title">ആശുപത്രികൾ</div></div>
+          <div class="cat-box" onclick="setCat('bank', this)"><div class="cat-box-icon">🏦</div><div class="cat-box-title">ബാങ്കുകൾ</div></div>
+          <div class="cat-box" onclick="setCat('cooperative', this)"><div class="cat-box-icon">🏛️</div><div class="cat-box-title">സഹകരണ സ്ഥാപനങ്ങൾ</div></div>
           <div class="cat-box" onclick="setCat('worker', this)"><div class="cat-box-icon">👷‍♂️</div><div class="cat-box-title">തൊഴിലാളികൾ</div></div>
           <div class="cat-box" onclick="setCat('catering', this)"><div class="cat-box-icon">🍳</div><div class="cat-box-title">കാറ്ററിംഗ്</div></div>
           <div class="cat-box" onclick="setCat('supermarket', this)"><div class="cat-box-icon">🛒</div><div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div></div>
@@ -537,7 +540,7 @@
     }
 
     function shareShop(name, loc, phone, desc) {
-      const text = `🌴 *കോളയാട് കണക്ട് ഡയറക്ടറി* 🌴\n\n📌 *${name}*\n📍 സ്ഥലം: ${loc}\n📞 ഫോൺ: ${phone}\nℹ️ വിവരങ്ങൾ: ${desc}\n\nകൂടുതൽ പ്രാദേശിക വിവരങ്ങൾക്ക് വിസിറ്റ് ചെയ്യൂ: https://kanakotswaraj-lang.github.io/kolayad-connect/`;
+      const text = `🌴 *കോളയാട് കണക്ട് ഡയറക്ടറി* 🌴\n\n📌 *${name}*\n📍 സ്ഥലം: ${loc}\n📞 ഫോൺ: ${phone}\nℹ️ വിവരങ്ങൾ: ${desc}\n\nകൂടുതൽ പ്രാദേശിക വിവരങ്ങൾക്ക് വിസിറ്റ് ചെയ്യൂ: https://kolayadconnect.in`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 
