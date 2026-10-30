@@ -44,12 +44,12 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
-        inset: 0; 
-          :root {
-      --bg-body: #f8fafc;
+    
+    :root {
+      --bg-body: #f1f5f9;
       --bg-app: #ffffff;
       --bg-card: #ffffff;
-      --bg-input: #f1f5f9;
+      --bg-input: #f8fafc;
       --text-main: #0f172a;
       --text-sub: #475569;
       --border-color: #cbd5e1;
@@ -62,7 +62,7 @@
       --bg-card: #111d38;
       --bg-input: #111d38;
       --text-main: #f1f5f9;
-      --text-sub: #94a3b8;
+      --text-sub: #cbd5e1;
       --border-color: #1e293b;
       --highlight-bg: #162241;
     }
@@ -73,6 +73,7 @@
       border: 2px solid #1e3a8a; display: flex; flex-direction: column; position: relative;
       box-shadow: 0 0 35px rgba(30, 58, 138, 0.15);
     }
+    body.dark-mode .app-container { border-color: #eab308; box-shadow: 0 0 35px rgba(234, 179, 8, 0.25); }
 
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
     
@@ -80,22 +81,26 @@
     
     .hero-banner { 
       position: relative; 
-      height: 90px; 
+      height: 110px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      background: linear-gradient(to bottom, transparent 40%, rgba(255, 255, 255, 0.95) 85%, var(--bg-app) 100%); 
+      background: linear-gradient(to bottom, transparent 20%, rgba(255, 255, 255, 0.75) 75%, var(--bg-app) 100%); 
     }
     body.dark-mode .hero-overlay { 
-      background: linear-gradient(to bottom, transparent 40%, rgba(11, 19, 41, 0.98) 85%, var(--bg-app) 100%); 
+      background: linear-gradient(to bottom, transparent 20%, rgba(11, 19, 41, 0.95) 85%, var(--bg-app) 100%); 
     }
 
     .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
     
     .theme-toggle-btn { background: rgba(30, 58, 138, 0.9); border: 1px solid #1e3a8a; color: #ffffff; padding: 4px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    body.dark-mode .theme-toggle-btn { background: rgba(11, 19, 41, 0.9); border-color: #eab308; color: #fde047; }
+
     .admin-badge-btn { background: rgba(30, 58, 138, 0.9); border: 1px solid #1e3a8a; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
+    body.dark-mode .admin-badge-btn { background: rgba(11, 19, 41, 0.9); border-color: #eab308; color: #fde047; }
+
     .profile-avatar-wrap { position: relative; margin-top: -35px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { 
       width: 70px; 
@@ -106,6 +111,7 @@
       box-shadow: 0 6px 18px rgba(30,58,138,0.2); 
       transition: transform 0.3s ease;
     }
+    body.dark-mode .profile-avatar { border-color: #eab308; }
     .profile-avatar:hover { transform: scale(1.05); }
 
     .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
@@ -127,7 +133,9 @@
       padding: 10px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; 
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); margin-bottom: 8px;
     }
+    body.dark-mode .dark-input { border-color: #38bdf8; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15); }
     .dark-input::placeholder { color: var(--text-sub); font-weight: normal; }
+    
     .scrollable-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 120px; background-color: var(--bg-body); }
     
     .section-label { font-size: 13px; font-weight: 800; color: #1e3a8a; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
@@ -141,7 +149,7 @@
       margin-bottom: 16px;
       box-shadow: 0 4px 20px rgba(30, 58, 138, 0.1);
     }
-    body.dark-mode .notices-box-container { border-color: #eab308; }
+    body.dark-mode .notices-box-container { border-color: #eab308; box-shadow: 0 4px 20px rgba(234, 179, 8, 0.15); }
 
     .banner-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: none; }
     .banner-slider::-webkit-scrollbar { display: none; }
@@ -152,12 +160,13 @@
     
     .category-grid-container { max-height: 200px; overflow-y: auto; margin-bottom: 14px; padding-right: 4px; }
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    
     .cat-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
     .cat-box-icon { font-size: 18px; width: 34px; height: 34px; border-radius: 10px; background: rgba(30, 58, 138, 0.1); display: flex; align-items: center; justify-content: center; color: #1e3a8a; }
     body.dark-mode .cat-box-icon { background: rgba(234, 179, 8, 0.15); color: #fde047; }
     
     .cat-box-title { font-size: 10px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
-    body.dark-mode .cat-box-title { color: #f1f5f9; font-weight: 700; }
+    body.dark-mode .cat-box-title { color: #ffffff; font-weight: 700; }
 
     .cat-box.active { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
     body.dark-mode .cat-box.active { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); }
@@ -229,8 +238,7 @@
     
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: var(--text-main); max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-
-     </style>
+  </style>
 </head>
 <body>
 
@@ -266,7 +274,7 @@
     <div class="scrollable-body" id="scrollBody">
       
       <div class="notices-box-container">
-        <div style="font-size: 14px; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+        <div style="font-size: 14px; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;" id="noticeHeading">
           🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
         </div>
         <input type="text" id="noticeSearchInput" class="dark-input" placeholder="🔍 അറിയിപ്പുകൾ പരതുക (ഉദാ: ഓഫർ, മീറ്റിംഗ്)..." onkeyup="filterNotices()" style="font-size: 12px; padding: 8px 12px; margin-bottom: 8px;">
@@ -351,13 +359,13 @@
           <a href="tel:1912" style="background:#22c55e; color:white; padding:6px 12px; border-radius:8px; text-decoration:none; font-weight:bold;">📞 കോൾ</a>
         </div>
       </div>
-      <button onclick="toggleModal('emergencyModal')" class="btn-pro-call" style="width:100%; margin-top:14px; background:#f1f5f9; color:#0f172a; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+      <button onclick="toggleModal('emergencyModal')" class="btn-pro-call" style="width:100%; margin-top:14px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
   <div class="modal-bg" id="editShopModal" onclick="closeModalOnBg(event, 'editShopModal')">
     <div class="modal-box">
-      <h3 style="color:#1e3a8a; margin-bottom:12px; font-size:15px;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
+      <h3 style="color:#eab308; margin-bottom:12px; font-size:15px;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
       <form onsubmit="updateShopData(event)">
         <input type="hidden" id="editShopId">
         <label style="font-size:11px; color:var(--text-sub);">സ്ഥാപനത്തിന്റെ പേര്:</label>
@@ -414,8 +422,8 @@
             badge.style.color = "#0b1329";
           } else {
             badge.innerText = "അഡ്മിൻ";
-            badge.style.background = "rgba(30, 58, 138, 0.9)";
-            badge.style.color = "#ffffff";
+            badge.style.background = "";
+            badge.style.color = "";
           }
         }
 
@@ -656,7 +664,7 @@
       e.preventDefault();
       const id = document.getElementById('editShopId').value;
       const name = document.getElementById('editShopName').value;
-      const loc = document.getElementById('editShopLoc'.value);
+      const loc = document.getElementById('editShopLoc').value;
       const phone = document.getElementById('editShopPhone').value;
       const mapLink = document.getElementById('editShopMap').value;
       const desc = document.getElementById('editShopDesc').value;
@@ -698,7 +706,7 @@
       selectedCat = cat;
       document.querySelectorAll('.cat-box').forEach(e => e.classList.remove('active'));
       elem.classList.add('active');
-      const txt = elem.querySelector('.cat-box-title').innerText;
+      const txt =.querySelector('.cat-box-title').innerText;
       document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
       render();
     }
