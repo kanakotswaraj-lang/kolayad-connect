@@ -101,14 +101,14 @@
     .admin-badge-btn { background: rgba(30, 58, 138, 0.9); border: 1px solid #1e3a8a; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
     body.dark-mode .admin-badge-btn { background: rgba(11, 19, 41, 0.9); border-color: #eab308; color: #fde047; }
 
-    .profile-avatar-wrap { position: relative; margin-top: -35px; display: flex; justify-content: center; z-index: 5; }
+    .profile-avatar-wrap { position: relative; margin-top: -30px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { 
-      width: 70px; 
-      height: 70px; 
-      border-radius: 20px; 
-      border: 3.5px solid #1e3a8a; 
+      width: 60px; 
+      height: 60px; 
+      border-radius: 16px; 
+      border: 3px solid #1e3a8a; 
       background: var(--bg-card) center/cover no-repeat; 
-      box-shadow: 0 6px 18px rgba(30,58,138,0.2); 
+      box-shadow: 0 4px 12px rgba(30,58,138,0.2); 
       transition: transform 0.3s ease;
     }
     body.dark-mode .profile-avatar { border-color: #eab308; }
@@ -706,7 +706,7 @@
       selectedCat = cat;
       document.querySelectorAll('.cat-box').forEach(e => e.classList.remove('active'));
       elem.classList.add('active');
-      const txt =.querySelector('.cat-box-title').innerText;
+      const txt = elem.querySelector('.cat-box-title').innerText;
       document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
       render();
     }
