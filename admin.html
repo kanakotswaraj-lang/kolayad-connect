@@ -59,7 +59,6 @@
     .member-card { background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
     .checkbox-label { font-size: 11px; color: #ef4444; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-weight: bold; }
     
-    /* കൊളാപ്സിബിൾ സെക്ഷൻ സ്റ്റൈൽ */
     .admin-section {
       background: #131c31;
       border: 1px solid #334155;
@@ -78,9 +77,7 @@
       font-weight: bold;
       background: #1e293b;
     }
-    .section-header:hover {
-      background: #253349;
-    }
+    .section-header:hover { background: #253349; }
     .section-content {
       padding: 14px;
       display: none;
@@ -91,7 +88,6 @@
 <body>
 
   <div class="container">
-    <!-- ലോഗിൻ ബോക്സ് -->
     <div id="loginBox">
       <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
       <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
@@ -100,11 +96,10 @@
       <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
     </div>
 
-    <!-- അഡ്മിൻ പാനൽ (തുടക്കത്തിൽ ഹൈഡ് ചെയ്തിരിക്കുന്നു) -->
     <div id="adminPanel">
       <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
-      <!-- സെക്ഷൻ 1: ആപ്പ് ഡിസൈൻ & ബ്രാൻഡിംഗ് -->
+      <!-- സെക്ഷൻ 1 -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec1')">
           <span>🎨 ആപ്പ് ലോഗോ & ബാനർ</span>
@@ -125,7 +120,7 @@
         </div>
       </div>
 
-      <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകൾ -->
+      <!-- സെക്ഷൻ 2 -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec2')">
           <span>📢 പ്രധാന അറിയിപ്പുകൾ</span>
@@ -135,7 +130,7 @@
           <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
           <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
           
-          <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ:</label>
+          <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ (ഓപ്ഷണൽ):</label>
           <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
 
           <label style="margin-top: 6px;">കളർ:</label>
@@ -157,7 +152,7 @@
         </div>
       </div>
 
-      <!-- സെക്ഷൻ 3: സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാറ്റാൻ -->
+      <!-- സെക്ഷൻ 3 -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec3')">
           <span>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</span>
@@ -195,7 +190,7 @@
         </div>
       </div>
 
-      <!-- സെക്ഷൻ 4: രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ -->
+      <!-- സെക്ഷൻ 4 -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec4')">
           <span>👥 രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ</span>
@@ -246,17 +241,12 @@
       }
     };
 
-    // സെക്ഷൻ ടോഗിൾ ചെയ്യാനുള്ള ഫങ്ഷൻ (തുറക്കാനും അടയ്ക്കാനും)
     function toggleSection(sectionId) {
       const sec = document.getElementById(sectionId);
-      if (sec.style.display === 'block') {
-        sec.style.display = 'none';
-      } else {
-        // വേണമെങ്കിൽ മറ്റുള്ളവ അടയ്ക്കാനും ഇത് ഉപയോഗിക്കാം, നിലവിൽ ക്ലിക്ക് ചെയ്തത് മാത്രം ഓപ്പൺ ആകും
-        sec.style.display = 'block';
-      }
+      sec.style.display = (sec.style.display === 'block') ? 'none' : 'block';
     }
 
+    // എല്ലാ ഫോട്ടോകളും ഏറ്റവും ചെറിയ സൈസിലേക്ക് ಕംപ്രസ് ചെയ്യുന്ന ഫങ്ഷൻ
     async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -266,7 +256,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400;
+            const MAX_WIDTH = 400; // ഫോട്ടോയുടെ പരമാവധി വീതി കുറച്ച് സൈസ് ചെറുതാക്കുന്നു
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -279,8 +269,10 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL('image/jpeg', 0.4));
+            // ക്വാളിറ്റി 0.3 (30%) ആക്കി കുറച്ച് വളരെ ചെറിയ സൈസ് ഉറപ്പാക്കുന്നു
+            resolve(canvas.toDataURL('image/jpeg', 0.3));
           };
+          img.onerror = (err) => reject(err);
         };
         reader.onerror = (error) => reject(error);
       });
@@ -337,7 +329,7 @@
       const remove4 = document.getElementById('removePhoto4').checked;
 
       try {
-        alert('ഫോട്ടോകൾ പ്രോസസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+        alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
         const shop = allShopsData.find(x => x.id === id) || {};
         
         let updateData = { name };
@@ -388,6 +380,7 @@
       const file = document.getElementById('logoFileInput').files[0];
       if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
       try {
+        alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്തു സേവ് ചെയ്യുന്നു...');
         const compressed = await compressImageToString(file);
         await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: compressed });
         alert('ലോഗോ അപ്ഡേറ്റ് ചെയ്തു!');
@@ -398,6 +391,7 @@
       const file = document.getElementById('bannerFileInput').files[0];
       if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
       try {
+        alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്തു സേവ് ചെയ്യുന്നു...');
         const compressed = await compressImageToString(file);
         await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: compressed });
         alert('ബാനർ അപ്ഡേറ്റ് ചെയ്തു!');
@@ -413,9 +407,11 @@
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
 
       try {
-        alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നു...');
+        alert('അറിയിപ്പും ഫോട്ടോയും പ്രോസസ്സ് ചെയ്യുന്നു...');
         let imageUrl = "";
-        if (file) imageUrl = await compressImageToString(file);
+        if (file) {
+          imageUrl = await compressImageToString(file);
+        }
 
         await window.addDoc(window.collection(window.db, "notices"), { 
           title, desc, color, imageUrl, 
