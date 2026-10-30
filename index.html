@@ -57,14 +57,14 @@
     }
 
     body.dark-mode {
-      --bg-body: #070b14;
-      --bg-app: #0b1329;
-      --bg-card: #111d38;
-      --bg-input: #111d38;
+      --bg-body: #060913;
+      --bg-app: #0b132b;
+      --bg-card: #101a38;
+      --bg-input: #101a38;
       --text-main: #ffffff;
       --text-sub: #94a3b8;
-      --border-color: #1e293b;
-      --highlight-bg: #162241;
+      --border-color: #1e2947;
+      --highlight-bg: #152244;
     }
 
     body { background-color: var(--bg-body); color: var(--text-main); display: flex; justify-content: center; height: 100vh; overflow: hidden; }
@@ -81,34 +81,31 @@
     
     .hero-banner { 
       position: relative; 
-      height: 110px; 
+      height: 150px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      background: linear-gradient(to bottom, transparent 20%, rgba(255, 255, 255, 0.75) 75%, var(--bg-app) 100%); 
+      background: linear-gradient(to bottom, transparent 30%, rgba(255, 255, 255, 0.85) 80%, var(--bg-app) 100%); 
     }
     body.dark-mode .hero-overlay { 
-      background: linear-gradient(to bottom, transparent 20%, rgba(11, 19, 41, 0.95) 85%, var(--bg-app) 100%); 
+      background: linear-gradient(to bottom, transparent 25%, rgba(11, 19, 43, 0.88) 85%, var(--bg-app) 100%); 
     }
 
-    .top-action-bar { position: absolute; top: 6px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+    .top-action-bar { position: absolute; top: 8px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
     
-    .theme-toggle-btn { background: rgba(30, 58, 138, 0.9); border: 1px solid #1e3a8a; color: #ffffff; padding: 4px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    body.dark-mode .theme-toggle-btn { background: rgba(11, 19, 41, 0.9); border-color: #eab308; color: #fde047; }
+    .theme-toggle-btn { background: rgba(16, 26, 56, 0.9); border: 1px solid #eab308; color: #fde047; padding: 5px 10px; border-radius: 20px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .admin-badge-btn { background: rgba(16, 26, 56, 0.9); border: 1px solid #eab308; color: #fde047; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
 
-    .admin-badge-btn { background: rgba(30, 58, 138, 0.9); border: 1px solid #1e3a8a; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
-    body.dark-mode .admin-badge-btn { background: rgba(11, 19, 41, 0.9); border-color: #eab308; color: #fde047; }
-
-    .profile-avatar-wrap { position: relative; margin-top: -30px; display: flex; justify-content: center; z-index: 5; }
+    .profile-avatar-wrap { position: relative; margin-top: -38px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { 
-      width: 65px; 
-      height: 65px; 
+      width: 70px; 
+      height: 70px; 
       border-radius: 18px; 
       border: 3.5px solid #1e3a8a; 
       background: var(--bg-card) center/cover no-repeat; 
-      box-shadow: 0 4px 12px rgba(30,58,138,0.2); 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
       transition: transform 0.3s ease;
     }
     body.dark-mode .profile-avatar { border-color: #eab308; }
@@ -116,7 +113,7 @@
 
     .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
     .main-app-name { font-size: 22px; font-weight: 800; color: #1e3a8a; text-shadow: 0 1px 4px rgba(30,58,138,0.1); margin-bottom: 4px; }
-    body.dark-mode .main-app-name { color: #facc15; text-shadow: 0 2px 8px rgba(234,179,8,0.4); }
+    body.dark-mode .main-app-name { color: #facc15; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
 
     .user-welcome-bar { 
       font-size: 13px; font-weight: 800; color: #ffffff; 
@@ -125,7 +122,7 @@
       cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
       text-decoration: none; box-shadow: 0 4px 14px rgba(30,58,138,0.25);
     }
-    body.dark-mode .user-welcome-bar { color: #0b1329; background: linear-gradient(135deg, #fde047 0%, #eab308 100%); border-color: #fef08a; }
+    body.dark-mode .user-welcome-bar { color: #0b132b; background: linear-gradient(135deg, #fde047 0%, #eab308 100%); border-color: #fef08a; }
 
     .filter-sticky-padding { padding: 8px 12px; background: var(--bg-app); }
     .dark-input { 
@@ -171,9 +168,9 @@
     .cat-box.active { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
     body.dark-mode .cat-box.active { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); }
     .cat-box.active .cat-box-title { color: #ffffff; font-weight: 800; }
-    body.dark-mode .cat-box.active .cat-box-title { color: #0b1329; }
+    body.dark-mode .cat-box.active .cat-box-title { color: #0b132b; }
     .cat-box.active .cat-box-icon { background: rgba(255,255,255,0.2); color: #ffffff; }
-    body.dark-mode .cat-box.active .cat-box-icon { background: rgba(11,19,41,0.2); color: #0b1329; }
+    body.dark-mode .cat-box.active .cat-box-icon { background: rgba(11,19,43,0.2); color: #0b132b; }
     
     .pro-card { background: var(--bg-card); border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-color); border-left: 5px solid #1e3a8a; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
     body.dark-mode .pro-card { border-left-color: #eab308; }
@@ -219,7 +216,7 @@
 
     .card-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
     .btn-pro-call { flex: 1; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #ffffff; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11px; font-weight: 800; text-align: center; cursor: pointer; }
-    body.dark-mode .btn-pro-call { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0b1329; }
+    body.dark-mode .btn-pro-call { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); color: #0b132b; }
 
     .btn-pro-wa { width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; }
     .btn-pro-share { background: #16a34a; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; }
@@ -229,7 +226,7 @@
     
     .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; gap: 8px; padding: 0 16px; }
     .btn-add-pro { flex: 1; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #ffffff; border: 2px solid #93c5fd; padding: 9px 10px; border-radius: 25px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(30,58,138,0.2); }
-    body.dark-mode .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0b1329; border: 2px solid #fef08a; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
+    body.dark-mode .btn-add-pro { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #0b132b; border: 2px solid #fef08a; box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
 
     .btn-emergency-quick { background: #dc2626; color: white; border: 2px solid #fca5a5; padding: 9px 14px; border-radius: 25px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(220,38,38,0.2); }
 
@@ -419,7 +416,7 @@
           if(isAdmin) {
             badge.innerText = "അഡ്മിൻ (Online)";
             badge.style.background = "#22c55e";
-            badge.style.color = "#0b1329";
+            badge.style.color = "#0b132b";
           } else {
             badge.innerText = "അഡ്മിൻ";
             badge.style.background = "";
