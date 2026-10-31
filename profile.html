@@ -11,7 +11,8 @@
       getFirestore, 
       collection, 
       doc,
-      setDoc 
+      setDoc,
+      getDocs 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -31,6 +32,7 @@
     window.collection = collection;
     window.doc = doc;
     window.setDoc = setDoc;
+    window.getDocs = getDocs;
   </script>
 
   <style>
@@ -82,7 +84,7 @@
     .nav-btn.active { color: #fde047; }
   </style>
 </head>
-<body>
+<body onload="loadDynamicCategories()">
 
   <div class="app-container">
     <div class="header">
@@ -127,8 +129,11 @@
         <label>സ്ഥലം / വിലാസം *</label>
         <input type="text" id="shopLoc" class="dark-input" placeholder="ഉദാ: കോളയാട് / കവല ജംഗ്ഷൻ" required>
 
-        <label>ഫോൺ നമ്പർ (10 അക്കം) *</label>
-        <input type="text" id="shopPhone" class="dark-input" placeholder="9876543210" pattern="[0-9]{10}" required>
+        <label>പ്രധാന ഫോൺ നമ്പർ / ലാൻഡ്‌ലൈൻ *</label>
+        <input type="text" id="shopPhone" class="dark-input" placeholder="04902302437 അല്ലെങ്കിൽ 9876543210" required>
+
+        <label>രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ)</label>
+        <input type="text" id="shopPhone2" class="dark-input" placeholder="മറ്റൊരു നമ്പർ ഉണ്ടെങ്കിൽ നൽകുക">
 
         <label>ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക് (ഓപ്ഷണൽ)</label>
         <input type="url" id="shopMap" class="dark-input" placeholder="https://maps.app.goo.gl/...">
@@ -151,7 +156,25 @@
   </div>
 
   <script>
-    // ഫോട്ടോ പരമാവധി കംപ്രസ് ചെയ്ത് Base64 കോഡ് ആക്കി മാറ്റുന്ന ഫങ്ഷൻ
+    // ഫയർബേസിൽ നിന്ന് അഡ്മിൻ ചേർത്ത പുതിയ കാറ്റഗറികൾ കൂടി ലോഡ് ചെയ്ത് ഡ്രൗപ്പ്ഡൗണിൽ ഉൾപ്പെടുത്തുന്നു
+    async function loadDynamicCategories() {
+      try {
+        const select = document.getElementById('shopCat');
+        const snap = await window.getDocs(window.collection(window.db, "categories"));
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.name) {
+            const opt = document.createElement('option');
+            opt.value = data.name;
+            opt.textContent = data.name;
+            select.appendChild(opt);
+          }
+        });
+      } catch (e) {
+        console.error("Categories load error:", e);
+      }
+    }
+
     async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -161,7 +184,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 700; // ഫോട്ടോയുടെ പരമാവധി വീതി
+            const MAX_WIDTH = 700;
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -174,8 +197,6 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            // 60% ക്വാളിറ്റിയിൽ കംപ്രസ് ചെയ്ത് Base64 സ്ട്രിംഗ് ആയി മാറ്റുന്നു
             const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
             resolve(compressedDataUrl);
           };
@@ -193,6 +214,7 @@
       const catLabel = catSelect.options[catSelect.selectedIndex].text;
       const loc = document.getElementById('shopLoc').value;
       const phone = document.getElementById('shopPhone').value;
+      const phone2 = document.getElementById('shopPhone2').value;
       const mapLink = document.getElementById('shopMap').value;
       const desc = document.getElementById('shopDesc').value;
       const imageFile = document.getElementById('shopImageFile').files[0];
@@ -211,6 +233,7 @@
           catLabel,
           loc,
           phone,
+          phone2,
           mapLink,
           desc,
           imageUrl,
