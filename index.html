@@ -202,7 +202,6 @@
     }
     body.dark-mode .notices-box-container { border-color: #1e294b; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
 
-    /* അറിയിപ്പുകൾ ഹോറിസോന്റൽ സ്ലൈഡർ */
     .banner-slider { 
       display: flex; 
       gap: 12px; 
@@ -225,11 +224,9 @@
     }
     .notice-tag { background: rgba(0, 0, 0, 0.3); color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
     
-    /* അക്ഷരങ്ങളുടെ വലിപ്പം കൂട്ടിയിരിക്കുന്നു */
     .notice-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; color: #ffffff; line-height: 1.3; }
     .notice-desc { font-size: 13px; font-weight: 600; line-height: 1.5; margin-bottom: 12px; color: #ffffff; }
     
-    /* ഫോട്ടോയുടെ ഹൈറ്റ് കൂട്ടിയിരിക്കുന്നു (260px) */
     .notice-img-wrap {
       width: 100%;
       height: 260px;
@@ -310,7 +307,6 @@
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 380px; padding: 18px; color: var(--text-main); max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
 
-    /* ഫോട്ടോ സൂം ചെയ്ത് കാണാനുള്ള മോഡൽ സ്റ്റൈൽ */
     #imageZoomModal { background: rgba(0,0,0,0.9); z-index: 100; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
   </style>
@@ -362,11 +358,8 @@
       </div>
 
       <div class="category-grid-container">
-        <div class="category-grid">
+        <div class="category-grid" id="categoryGridContainer">
           <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
-          <div class="cat-box" onclick="setCat('hospital', this)"><div class="cat-box-icon">🏥</div><div class="cat-box-title">ആശുപത്രികൾ</div></div>
-          <div class="cat-box" onclick="setCat('bank', this)"><div class="cat-box-icon">🏦</div><div class="cat-box-title">ബാങ്കുകൾ</div></div>
-          <div class="cat-box" onclick="setCat('cooperative', this)"><div class="cat-box-icon">🏛️</div><div class="cat-box-title">സഹകരണ സ്ഥാപനങ്ങൾ</div></div>
           <div class="cat-box" onclick="setCat('worker', this)"><div class="cat-box-icon">👷‍♂️</div><div class="cat-box-title">തൊഴിലാളികൾ</div></div>
           <div class="cat-box" onclick="setCat('catering', this)"><div class="cat-box-icon">🍳</div><div class="cat-box-title">കാറ്ററിംഗ്</div></div>
           <div class="cat-box" onclick="setCat('supermarket', this)"><div class="cat-box-icon">🛒</div><div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div></div>
@@ -408,7 +401,6 @@
     </nav>
   </div>
 
-  <!-- ഫോട്ടോ സൂം ചെയ്ത് കാണാനുള്ള മോഡൽ -->
   <div class="modal-bg" id="imageZoomModal" onclick="closeZoomModal(event)">
     <div style="position:relative; width:100%; max-width:450px; text-align:center;">
       <img id="zoomedImage" src="" alt="Zoomed Image">
@@ -458,8 +450,10 @@
         <input type="text" id="editShopName" class="dark-input" required>
         <label style="font-size:11px; color:var(--text-sub);">സ്ഥലം / വിലാസം:</label>
         <input type="text" id="editShopLoc" class="dark-input" required>
-        <label style="font-size:11px; color:var(--text-sub);">ഫോൺ നമ്പർ:</label>
+        <label style="font-size:11px; color:var(--text-sub);">ഒന്നാമത്തെ ഫോൺ നമ്പർ:</label>
         <input type="text" id="editShopPhone" class="dark-input" required>
+        <label style="font-size:11px; color:var(--text-sub);">രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ):</label>
+        <input type="text" id="editShopPhone2" class="dark-input">
         <label style="font-size:11px; color:var(--text-sub);">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക്:</label>
         <input type="url" id="editShopMap" class="dark-input" placeholder="https://maps.app.goo.gl/...">
         <label style="font-size:11px; color:var(--text-sub);">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
@@ -525,11 +519,31 @@
           }
         } catch(err) {}
 
+        // ഫയർബേസിൽ നിന്ന് കാറ്റഗറികൾ ലോഡ് ചെയ്ത് ഗ്രിഡിൽ ചേർക്കുന്നു
+        try {
+          const catSnap = await window.getDocs(window.collection(window.db, "categories"));
+          const gridContainer = document.getElementById('categoryGridContainer');
+          if (!catSnap.empty && gridContainer) {
+            let dynamicCatHtml = `
+              <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
+            `;
+            catSnap.forEach(docSnap => {
+              const cData = docSnap.data();
+              if (cData.name) {
+                dynamicCatHtml += `
+                  <div class="cat-box" onclick="setCat('${cData.name}', this)"><div class="cat-box-icon">🏷️</div><div class="cat-box-title">${cData.name}</div></div>
+                `;
+              }
+            });
+            gridContainer.innerHTML = dynamicCatHtml;
+          }
+        } catch(err) {}
+
         const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
         if (!shopSnap.empty) {
           shops = shopSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         } else {
-          shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", mapLink: "", imageUrl: "" }];
+          shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", phone2: "", mapLink: "", imageUrl: "" }];
         }
 
         const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
@@ -655,7 +669,7 @@
       const list = document.getElementById('listings');
       const q = document.getElementById('searchInput').value.toLowerCase();
       const filtered = shops.filter(s => {
-        const matchCat = selectedCat === 'all' || s.cat === selectedCat;
+        const matchCat = selectedCat === 'all' || s.cat === selectedCat || s.catLabel === selectedCat;
         const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q);
         return matchCat && matchQ;
       });
@@ -672,6 +686,14 @@
         let photosHtml = photos.length > 0 ? `
           <div class="shop-images-slider">
             ${photos.map(img => `<img src="${img}" class="shop-thumb-img" alt="${s.name}" onclick="openZoomModal('${img}')">`).join('')}
+          </div>
+        ` : '';
+
+        // രണ്ടാമത്തെ ഫോൺ നമ്പർ ഉണ്ടെങ്കിൽ അതിനുള്ള കോൾ & വാട്സാപ്പ് ബട്ടണുകൾ തയ്യാറാക്കുന്നു
+        let phone2Html = s.phone2 ? `
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <a href="tel:${s.phone2}" class="btn-pro-call" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">📞 2-ാം നമ്പർ കോൾ</a>
+            <a href="https://wa.me/91${s.phone2}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
           </div>
         ` : '';
 
@@ -692,6 +714,7 @@
                 <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
               ` : ''}
             </div>
+            ${phone2Html}
           </div>
         `;
       }).join('');
@@ -704,6 +727,7 @@
       document.getElementById('editShopName').value = s.name || '';
       document.getElementById('editShopLoc').value = s.loc || '';
       document.getElementById('editShopPhone').value = s.phone || '';
+      document.getElementById('editShopPhone2').value = s.phone2 || '';
       document.getElementById('editShopMap').value = s.mapLink || '';
       document.getElementById('editShopDesc').value = s.desc || '';
       document.getElementById('editShopImageFile').value = ''; 
@@ -748,12 +772,13 @@
       const name = document.getElementById('editShopName').value;
       const loc = document.getElementById('editShopLoc').value;
       const phone = document.getElementById('editShopPhone').value;
+      const phone2 = document.getElementById('editShopPhone2').value;
       const mapLink = document.getElementById('editShopMap').value;
       const desc = document.getElementById('editShopDesc').value;
       const imageFile = document.getElementById('editShopImageFile').files[0];
 
       try {
-        let updateData = { name, loc, phone, mapLink, desc };
+        let updateData = { name, loc, phone, phone2, mapLink, desc };
 
         if (imageFile) {
           alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
