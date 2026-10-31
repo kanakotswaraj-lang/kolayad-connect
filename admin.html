@@ -203,6 +203,26 @@
         </div>
       </div>
 
+      <!-- സെക്ഷൻ 5: പുതിയ കാറ്റഗറി മാനേജ്മെന്റ് -->
+      <div class="admin-section">
+        <div class="section-header" onclick="toggleSection('sec5')">
+          <span>📂 കാറ്റഗറികൾ മാനേജ് ചെയ്യുക</span>
+          <span>▼</span>
+        </div>
+        <div id="sec5" class="section-content">
+          <label>പുതിയ കാറ്റഗറിയുടെ പേര് നൽകുക:</label>
+          <input type="text" id="newCategoryInput" class="dark-input" placeholder="ഉദാഹരണത്തിന്: സൂപ്പർമാർക്കറ്റ്">
+          <button onclick="addNewCategory()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">കാറ്റഗറി ചേർക്കുക</button>
+
+          <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
+            <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള കാറ്റഗറികൾ:</label>
+            <div id="adminCategoriesListContainer" style="max-height: 120px; overflow-y: auto;">
+              <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 12px;">ലോഗ് ഔട്ട് ചെയ്യുക</button>
       <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
     </div>
@@ -233,6 +253,7 @@
       loadMembers();
       loadAdminNotices();
       loadShopDropdown();
+      loadAdminCategories();
     }
 
     window.onload = function() {
@@ -246,7 +267,6 @@
       sec.style.display = (sec.style.display === 'block') ? 'none' : 'block';
     }
 
-    // എല്ലാ ഫോട്ടോകളും ഏറ്റവും ചെറിയ സൈസിലേക്ക് ಕംപ്രസ് ചെയ്യുന്ന ഫങ്ഷൻ
     async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -256,7 +276,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400; // ഫോട്ടോയുടെ പരമാവധി വീതി കുറച്ച് സൈസ് ചെറുതാക്കുന്നു
+            const MAX_WIDTH = 400; 
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -269,7 +289,6 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            // ക്വാളിറ്റി 0.3 (30%) ആക്കി കുറച്ച് വളരെ ചെറിയ സൈസ് ഉറപ്പാക്കുന്നു
             resolve(canvas.toDataURL('image/jpeg', 0.3));
           };
           img.onerror = (err) => reject(err);
@@ -463,9 +482,10 @@
         let html = '';
         snap.forEach(docSnap => {
           const data = docSnap.data();
+          const phone2Text = data.phone2 ? `<br><span style="color: #94a3b8;">📞 2: ${data.phone2}</span>` : '';
           html += `
             <div class="member-card">
-              <div><strong>${data.name || ''}</strong><br><span style="color: #94a3b8;">📞 ${data.phone || ''}</span></div>
+              <div><strong>${data.name || ''}</strong><br><span style="color: #94a3b8;">📞 1: ${data.phone || ''}</span>${phone2Text}</div>
               <button onclick="deleteMember('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
             </div>
           `;
@@ -479,6 +499,47 @@
         await window.deleteDoc(window.doc(window.db, "shops", id));
         loadMembers();
         loadShopDropdown();
+      }
+    }
+
+    // പുതിയ കാറ്റഗറി ചേർക്കാനുള്ള ഫങ്ഷൻ
+    async function addNewCategory() {
+      const catName = document.getElementById('newCategoryInput').value.trim();
+      if (!catName) { alert('കാറ്റഗറിയുടെ പേര് നൽകുക!'); return; }
+      try {
+        await window.addDoc(window.collection(window.db, "categories"), { name: catName });
+        alert('പുതിയ കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
+        document.getElementById('newCategoryInput').value = '';
+        loadAdminCategories();
+      } catch(e) {
+        console.error(e);
+        alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+      }
+    }
+
+    async function loadAdminCategories() {
+      const container = document.getElementById('adminCategoriesListContainer');
+      try {
+        const snap = await window.getDocs(window.collection(window.db, "categories"));
+        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">കാറ്റഗറികൾ ഒന്നുമില്ല.</p>`; return; }
+        let html = '';
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          html += `
+            <div class="member-card">
+              <div><strong>${data.name || ''}</strong></div>
+              <button onclick="deleteCategory('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch(e) {}
+    }
+
+    async function deleteCategory(id) {
+      if(confirm('ഈ കാറ്റഗറി നീക്കം ചെയ്യണോ?')) {
+        await window.deleteDoc(window.doc(window.db, "categories", id));
+        loadAdminCategories();
       }
     }
   </script>
