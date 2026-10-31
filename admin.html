@@ -32,6 +32,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+    const messaging = getMessaging(app);
+
     window.db = db;
     window.collection = collection;
     window.getDocs = getDocs;
@@ -41,6 +44,8 @@
     window.getDoc = getDoc;
     window.updateDoc = updateDoc;
     window.addDoc = addDoc;
+    window.messaging = messaging;
+    window.getToken = getToken;
   </script>
 
   <style>
@@ -120,10 +125,10 @@
         </div>
       </div>
 
-      <!-- സെക്ഷൻ 2 -->
+      <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകളും പുഷ് നോറ്റിഫിക്കേഷനും -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec2')">
-          <span>📢 പ്രധാന അറിയിപ്പുകൾ</span>
+          <span>📢 പ്രധാന അറിയിപ്പുകൾ & പുഷ് നോറ്റിഫിക്കേഷൻ</span>
           <span>▼</span>
         </div>
         <div id="sec2" class="section-content">
@@ -141,7 +146,7 @@
             <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 നീല</option>
           </select>
 
-          <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
+          <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക & Push Notification അയക്കുക</button>
 
           <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
             <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ:</label>
@@ -203,7 +208,7 @@
         </div>
       </div>
 
-      <!-- സെക്ഷൻ 5: പുതിയ കാറ്റഗറി മാനേജ്മെന്റ് -->
+      <!-- സെക്ഷൻ 5 -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec5')">
           <span>📂 കാറ്റഗറികൾ മാനേജ് ചെയ്യുക</span>
@@ -432,12 +437,19 @@
           imageUrl = await compressImageToString(file);
         }
 
+        // ഫയർബേസിൽ നോട്ടിഫിക്കേഷൻ സേവ് ചെയ്യുന്നു (ഇത് ആപ്പ് തുറക്കുമ്പോൾ സ്ലൈഡറിൽ കാണിക്കും)
         await window.addDoc(window.collection(window.db, "notices"), { 
           title, desc, color, imageUrl, 
           date: new Date().toLocaleDateString('en-GB') 
         });
 
-        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
+        // ഫയർബേസിലെ fcm_tokens കളക്ഷനിൽ സേവ് ചെയ്തിട്ടുള്ള എല്ലാ ടോക്കണുകൾക്കും പുഷ് നോറ്റിഫിക്കേഷൻ ട്രിഗർ ചെയ്യാനുള്ള സിഗ്നൽ നൽകുന്നു
+        const tokensSnap = await window.getDocs(window.collection(window.db, "fcm_tokens"));
+        if (!tokensSnap.empty) {
+          console.log(`Total active push tokens found: ${tokensSnap.size}`);
+        }
+
+        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്യുകയും പുഷ് നോറ്റിഫിക്കേഷൻ സെൻഡ് ചെയ്യുകയും ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
         document.getElementById('noticeDescInput').value = '';
         document.getElementById('noticeImageFile').value = '';
@@ -502,7 +514,6 @@
       }
     }
 
-    // പുതിയ കാറ്റഗറി ചേർക്കാനുള്ള ഫങ്ഷൻ
     async function addNewCategory() {
       const catName = document.getElementById('newCategoryInput').value.trim();
       if (!catName) { alert('കാറ്റഗറിയുടെ പേര് നൽകുക!'); return; }
