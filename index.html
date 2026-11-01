@@ -28,7 +28,6 @@
   <title>കോളയാട് കണക്ട് - Kolayad Connect</title>
   
   <script type="module">
-        <script>
     // വാട്സാപ്പ് അല്ലെങ്കിൽ ഫേസ്ബുക്ക് ഇൻ-ആപ്പ് ബ്രൗസറിലാണോ ഓപ്പൺ ചെയ്തത് എന്ന് പരിശോധിക്കുന്നു
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isInAppBrowser = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("WhatsApp") > -1);
@@ -38,9 +37,6 @@
       const currentUrl = window.location.href.replace(/^https?:\/\//, '');
       window.location.href = "intent://" + currentUrl + "#Intent;scheme=https;package=com.android.chrome;end";
     }
-
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    // ... ബാക്കി ഫയർബേസ് കോഡുകൾ ഇവിടെ തുടരുന്നു ...
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
@@ -333,13 +329,7 @@
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #1e3a8a; background: rgba(255, 255, 255, 0.95); padding: 3px 10px; border-radius: 10px; border: 1px solid #93c5fd;">🌴 കോളയാട്, കണ്ണൂർ</div>
-                <!-- നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യാനുള്ള ബട്ടൺ -->
-    <div style="text-align: center;">
-      <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 10px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-        🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-      </button>
-    </div>
-
+          
           <div style="display: flex; gap: 6px; align-items: center;">
             <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
             <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
@@ -356,6 +346,13 @@
         <a href="profile.html" class="user-welcome-bar" id="welcomeBarText">
           <span>✨ നിങ്ങളുടെ വിവരങ്ങൾ ചേർക്കുക</span>
         </a>
+      </div>
+
+      <!-- നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യാനുള്ള ബട്ടൺ -->
+      <div style="text-align: center; padding: 0 12px;">
+        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 6px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
+          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
+        </button>
       </div>
 
       <div class="filter-sticky-padding">
@@ -379,7 +376,6 @@
       </div>
 
       <div class="category-grid-container">
-        <!-- പഴയ കാറ്റഗറികളും ഒപ്പം അഡ്മിൻ പാനലിൽ നിന്ന് വരുന്ന പുതിയ കാറ്റഗറികളും ഇവിടെ ഒന്നിച്ച് ലോഡ് ആകും -->
         <div class="category-grid" id="categoryGridContainer">
           <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
           <div class="cat-box" onclick="setCat('hospital', this)"><div class="cat-box-icon">🏥</div><div class="cat-box-title">ആശുപത്രികൾ</div></div>
@@ -544,7 +540,6 @@
           }
         } catch(err) {}
 
-        // അഡ്മിൻ പാനലിൽ നിന്ന് ചേർക്കുന്ന പുതിയ കാറ്റഗറികൾ കൂടി ഫയർബേസിൽ നിന്ന് എടുത്ത് ഹോം പേജ് ഗ്രിഡിലേക്ക് ചേർക്കുന്നു
         try {
           const catSnap = await window.getDocs(window.collection(window.db, "categories"));
           const gridContainer = document.getElementById('categoryGridContainer');
@@ -552,7 +547,6 @@
             catSnap.forEach(docSnap => {
               const cData = docSnap.data();
               if (cData.name) {
-                // നിലവിലുള്ള കാറ്റഗറികളിൽ ആ പേരില്ലെങ്കിൽ മാത്രം പുതുതായി ചേർക്കുന്നു
                 const exists = Array.from(gridContainer.querySelectorAll('.cat-box-title')).some(el => el.innerText === cData.name);
                 if (!exists) {
                   const newBox = document.createElement('div');
@@ -843,13 +837,14 @@
       document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
       render();
     }
+
     // നോട്ടിഫിക്കേഷൻ പെർമിഷൻ ചോദിക്കുകയും ബട്ടൺ മാറ്റുകയും ചെയ്യുന്ന ഫങ്ഷൻ
     async function requestNotificationPermissionManual() {
       try {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
           alert('നോട്ടിഫിക്കേഷൻ വിജയകരമായി ഓൺ ചെയ്തു!');
-          document.getElementById('enableNotifyBtn').style.display = 'none'; // ബട്ടൺ ഹൈഡ് ചെയ്യുന്നു
+          document.getElementById('enableNotifyBtn').style.display = 'none';
 
           const currentToken = await getToken(messaging, { 
             vapidKey: "BOUTUS1pKC5dX9jiJ3jjLsDcVxYAUojE8l4kHWjSLP9l_VG7LALGYUytBhYtBIklghGxRu6IJKdJgehqFj6fc0o"
@@ -868,24 +863,18 @@
       }
     }
 
-    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ പെർമിഷൻ ഉണ്ടോ എന്ന് പരിശോധിക്കുന്നു
     function checkNotificationStatus() {
-      if ('Notification' in window) {
-        if (Notification.permission !== 'granted') {
-          // പെർമിഷൻ ഇല്ലെങ്കിൽ മാത്രം ബട്ടൺ കാണിക്കുക
-          const btn = document.getElementById('enableNotifyBtn');
-          if (btn) btn.style.display = 'block';
-        }
+      if ('Notification' in window && Notification.permission !== 'granted') {
+        const btn = document.getElementById('enableNotifyBtn');
+        if (btn) btn.style.display = 'block';
       }
     }
 
-    // വിൻഡോയിൽ ഫങ്ഷൻ ഗ്ലോബൽ ആക്കുന്നു
     window.requestNotificationPermissionManual = requestNotificationPermissionManual;
 
-    // സർവീസ് വർക്കർ രജിസ്ട്രേഷനു ശേഷം സ്റ്റാറ്റസ് ചെക്ക് ചെയ്യുക
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./firebase-messaging-sw.js')
-        .then((registration) => {
+        .then(() => {
           checkNotificationStatus();
         }).catch((err) => {});
     }
