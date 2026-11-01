@@ -19,8 +19,8 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title || 'കോളയാട് കണക്ട് അറിയിപ്പ്';
   const notificationOptions = {
     body: payload.notification.body || '',
-    icon: payload.notification.image || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80'
-  };
+    icon: 'https://kolayadconnect.in/logo.png'
+
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
