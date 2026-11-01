@@ -333,6 +333,13 @@
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
           <div style="font-size: 11px; font-weight: 800; color: #1e3a8a; background: rgba(255, 255, 255, 0.95); padding: 3px 10px; border-radius: 10px; border: 1px solid #93c5fd;">🌴 കോളയാട്, കണ്ണൂർ</div>
+                <!-- നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യാനുള്ള ബട്ടൺ -->
+    <div style="text-align: center;">
+      <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 10px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
+      </button>
+    </div>
+
           <div style="display: flex; gap: 6px; align-items: center;">
             <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
             <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
@@ -835,6 +842,52 @@
       const txt = elem.querySelector('.cat-box-title').innerText;
       document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
       render();
+    }
+    // നോട്ടിഫിക്കേഷൻ പെർമിഷൻ ചോദിക്കുകയും ബട്ടൺ മാറ്റുകയും ചെയ്യുന്ന ഫങ്ഷൻ
+    async function requestNotificationPermissionManual() {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          alert('നോട്ടിഫിക്കേഷൻ വിജയകരമായി ഓൺ ചെയ്തു!');
+          document.getElementById('enableNotifyBtn').style.display = 'none'; // ബട്ടൺ ഹൈഡ് ചെയ്യുന്നു
+
+          const currentToken = await getToken(messaging, { 
+            vapidKey: "BOUTUS1pKC5dX9jiJ3jjLsDcVxYAUojE8l4kHWjSLP9l_VG7LALGYUytBhYtBIklghGxRu6IJKdJgehqFj6fc0o"
+          });
+          if (currentToken) {
+            await setDoc(doc(db, "fcm_tokens", currentToken), {
+              token: currentToken,
+              createdAt: new Date().toISOString()
+            });
+          }
+        } else if (permission === 'denied') {
+          alert('നോട്ടിഫിക്കേഷൻ ബ്ലോക്ക് ചെയ്തിരിക്കുകയാണ്. ബ്രൗസർ സെറ്റിങ്സിൽ പോയി അനുവാദം നൽകുക.');
+        }
+      } catch (err) {
+        console.error('Error getting permission:', err);
+      }
+    }
+
+    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ പെർമിഷൻ ഉണ്ടോ എന്ന് പരിശോധിക്കുന്നു
+    function checkNotificationStatus() {
+      if ('Notification' in window) {
+        if (Notification.permission !== 'granted') {
+          // പെർമിഷൻ ഇല്ലെങ്കിൽ മാത്രം ബട്ടൺ കാണിക്കുക
+          const btn = document.getElementById('enableNotifyBtn');
+          if (btn) btn.style.display = 'block';
+        }
+      }
+    }
+
+    // വിൻഡോയിൽ ഫങ്ഷൻ ഗ്ലോബൽ ആക്കുന്നു
+    window.requestNotificationPermissionManual = requestNotificationPermissionManual;
+
+    // സർവീസ് വർക്കർ രജിസ്ട്രേഷനു ശേഷം സ്റ്റാറ്റസ് ചെക്ക് ചെയ്യുക
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        .then((registration) => {
+          checkNotificationStatus();
+        }).catch((err) => {});
     }
 
     initApp();
