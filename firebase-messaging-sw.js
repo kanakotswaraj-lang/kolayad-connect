@@ -20,12 +20,12 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: payload.notification.body || '',
     icon: 'https://kolayadconnect.in/logo.png'
-
+  };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// നോട്ടിഫിക്കേഷനിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ ആപ്പ് ഓപ്പൺ ആകാനുള്ള കോഡ് ഇവിടെ ചേർക്കുക:
+// നോട്ടിഫിക്കേഷനിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ ആപ്പ് ഓപ്പൺ ആകാനുള്ള കോഡ്
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   event.waitUntil(
