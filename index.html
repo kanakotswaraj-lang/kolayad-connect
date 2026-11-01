@@ -28,6 +28,20 @@
   <title>കോളയാട് കണക്ട് - Kolayad Connect</title>
   
   <script type="module">
+        <script>
+    // വാട്സാപ്പ് അല്ലെങ്കിൽ ഫേസ്ബുക്ക് ഇൻ-ആപ്പ് ബ്രൗസറിലാണോ ഓപ്പൺ ചെയ്തത് എന്ന് പരിശോധിക്കുന്നു
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isInAppBrowser = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("WhatsApp") > -1);
+
+    // ആൻഡ്രോയിഡ് ഫോണുകളിൽ നേരിട്ട് ക്രോം ബ്രൗസറിലേക്ക് റീഡയറക്ട് ചെയ്യാനുള്ള കോഡ്
+    if (isInAppBrowser && /Android/i.test(ua)) {
+      const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+      window.location.href = "intent://" + currentUrl + "#Intent;scheme=https;package=com.android.chrome;end";
+    }
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    // ... ബാക്കി ഫയർബേസ് കോഡുകൾ ഇവിടെ തുടരുന്നു ...
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
       getFirestore, 
