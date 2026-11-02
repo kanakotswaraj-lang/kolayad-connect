@@ -328,7 +328,11 @@
       <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
         <div class="top-action-bar">
-          <div style="font-size: 11px; font-weight: 800; color: #1e3a8a; background: rgba(255, 255, 255, 0.95); padding: 3px 10px; border-radius: 10px; border: 1px solid #93c5fd;">🌴 കോളയാട്, കണ്ണൂർ</div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <!-- ഹാംബർഗർ മെനു ബട്ടൺ -->
+            <button onclick="toggleSidebar()" style="background: rgba(13, 24, 56, 0.9); border: 1px solid #3b82f6; color: #38bdf8; padding: 5px 10px; border-radius: 20px; font-size: 13px; cursor: pointer;">☰</button>
+            <div style="font-size: 11px; font-weight: 800; color: #1e3a8a; background: rgba(255, 255, 255, 0.95); padding: 3px 10px; border-radius: 10px; border: 1px solid #93c5fd;">🌴 കോളയാട്</div>
+          </div>
           
           <div style="display: flex; gap: 6px; align-items: center;">
             <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
@@ -408,6 +412,28 @@
 
       <div class="section-label"><span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span></div>
       <div id="listings"></div>
+
+      <!-- ഫൂട്ടർ (Footer) ഭാഗം -->
+      <footer style="background: #0d1733; color: #ffffff; padding: 20px 14px; margin-top: 24px; border-radius: 14px; font-size: 12px; border: 1px solid #1e3a8a;">
+        <div style="margin-bottom: 16px;">
+          <h4 style="color: #60a5fa; margin-bottom: 8px; font-size: 13px; font-weight: 800;">Contact Us</h4>
+          <p style="color: #cbd5e1; margin-bottom: 4px;">📞 Phone: 04902302437</p>
+          <p style="color: #cbd5e1; margin-bottom: 4px;">💬 WhatsApp Support</p>
+          <p style="color: #cbd5e1;">📍 Kolayad, Kannur</p>
+        </div>
+        
+        <div style="margin-bottom: 16px;">
+          <h4 style="color: #60a5fa; margin-bottom: 8px; font-size: 13px; font-weight: 800;">Services & Quick Links</h4>
+          <p style="color: #cbd5e1; margin-bottom: 4px;">➔ Project Details & Services</p>
+          <p style="color: #cbd5e1; margin-bottom: 4px;">➔ Kudumbasree & Harithakarma</p>
+          <p style="color: #cbd5e1;">➔ Privacy Policy & Terms</p>
+        </div>
+
+        <div style="text-align: center; border-top: 1px solid #1e294b; padding-top: 12px; color: #94a3b8; font-size: 11px;">
+          Official Kolayad Connect Directory.<br>Maintained for local community support.
+        </div>
+      </footer>
+
     </div>
 
     <div class="floating-bar">
@@ -420,6 +446,39 @@
       <a href="profile.html" class="nav-btn"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></a>
       <a href="admin.html" class="nav-btn"><span style="font-size: 16px;">⚙️</span><span>അഡ്മിൻ</span></a>
     </nav>
+  </div>
+
+  <!-- ഹാംബർഗർ സൈഡ് മെനു (Sidebar Menu) -->
+  <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: flex-start;">
+    <div style="width: 280px; background: var(--bg-app); height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 15px rgba(0,0,0,0.3); overflow-y: auto;">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #1e3a8a;">മെനു (Menu)</h3>
+        <button onclick="toggleSidebar()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-main);">✕</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
+        <a href="index.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">🏠 ഹോം / ഡയറക്ടറി</a>
+        <a href="profile.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">👤 എന്റെ വിവരങ്ങൾ</a>
+        <a href="admin.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">⚙️ അഡ്മിൻ പാനൽ</a>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
+        
+        <strong style="color: #60a5fa; font-size: 12px;">Services</strong>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ Project Details</a>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ Services</a>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ Kudumbasree</a>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ Harithakarma Sena</a>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
+
+        <strong style="color: #60a5fa; font-size: 12px;">Quick Links</strong>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ About Us</a>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ Contact Us</a>
+        <a href="#" style="color: var(--text-sub); text-decoration: none;">➔ Terms & Conditions</a>
+      </div>
+
+    </div>
   </div>
 
   <div class="modal-bg" id="imageZoomModal" onclick="closeZoomModal(event)">
@@ -492,6 +551,16 @@
     let selectedCat = 'all';
     let notices = [];
     let shops = [];
+
+    // ഹാംബർഗർ സൈഡ് മെനു ടോഗിൾ ചെയ്യാനുള്ള ഫങ്ഷൻ
+    function toggleSidebar() {
+      const menu = document.getElementById('sideMenu');
+      if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'flex';
+      }
+    }
 
     function toggleTheme() {
       const isDark = document.body.classList.toggle('dark-mode');
