@@ -179,8 +179,8 @@
             <input type="text" id="admEditName" class="dark-input">
 
             <label style="margin-top: 6px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോകൾ (ഒന്നിലധികം തിരഞ്ഞെടുക്കാം):</label>
-<input type="file" id="admMultiplePhotos" accept="image/*" multiple class="dark-input" style="padding: 6px; font-size: 11px;">
-<label class="checkbox-label"><input type="checkbox" id="removeAllPhotos"> ❌ എല്ലാ ഫോട്ടോകളും ഒഴിവാക്കുക</label>
+            <input type="file" id="admMultiplePhotos" accept="image/*" multiple class="dark-input" style="padding: 6px; font-size: 11px;">
+            <label class="checkbox-label"><input type="checkbox" id="removeAllPhotos"> ❌ എല്ലാ ഫോട്ടോകളും ഒഴിവാക്കുക</label>
 
             <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
           </div>
@@ -331,56 +331,50 @@
       if (shop) {
         document.getElementById('editDocId').value = shop.id;
         document.getElementById('admEditName').value = shop.name || '';
-        document.getElementById('admPhoto1').value = '';
-        document.getElementById('admPhoto2').value = '';
-        document.getElementById('admPhoto3').value = '';
-        document.getElementById('admPhoto4').value = '';
-        document.getElementById('removePhoto1').checked = false;
-        document.getElementById('removePhoto2').checked = false;
-        document.getElementById('removePhoto3').checked = false;
-        document.getElementById('removePhoto4').checked = false;
+        document.getElementById('admMultiplePhotos').value = '';
+        document.getElementById('removeAllPhotos').checked = false;
         formArea.style.display = 'block';
       }
     }
 
     async function saveAdminPhotos() {
-  const id = document.getElementById('editDocId').value;
-  const name = document.getElementById('admEditName').value;
-  const photoFiles = document.getElementById('admMultiplePhotos').files;
-  const removeAll = document.getElementById('removeAllPhotos').checked;
+      const id = document.getElementById('editDocId').value;
+      const name = document.getElementById('admEditName').value;
+      const photoFiles = document.getElementById('admMultiplePhotos').files;
+      const removeAll = document.getElementById('removeAllPhotos').checked;
 
-  try {
-    alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
-    let updateData = { name };
-    
-    if (removeAll) {
-      updateData.imageUrl = "";
-      updateData.imageUrl2 = "";
-      updateData.imageUrl3 = "";
-      updateData.imageUrl4 = "";
-    } else if (photoFiles.length > 0) {
-      let compressedImages = [];
-      for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
-        let compressed = await compressImageToString(photoFiles[i]);
-        compressedImages.push(compressed);
+      try {
+        alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+        let updateData = { name };
+        
+        if (removeAll) {
+          updateData.imageUrl = "";
+          updateData.imageUrl2 = "";
+          updateData.imageUrl3 = "";
+          updateData.imageUrl4 = "";
+        } else if (photoFiles.length > 0) {
+          let compressedImages = [];
+          for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
+            let compressed = await compressImageToString(photoFiles[i]);
+            compressedImages.push(compressed);
+          }
+
+          updateData.imageUrl = compressedImages[0] || "";
+          updateData.imageUrl2 = compressedImages[1] || "";
+          updateData.imageUrl3 = compressedImages[2] || "";
+          updateData.imageUrl4 = compressedImages[3] || "";
+        }
+
+        await window.updateDoc(window.doc(window.db, "shops", id), updateData);
+        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+        allShopsData = [];
+        loadShopDropdown();
+        document.getElementById('adminEditFormArea').style.display = 'none';
+      } catch(e) {
+        console.error(e);
+        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
       }
-
-      updateData.imageUrl = compressedImages[0] || "";
-      updateData.imageUrl2 = compressedImages[1] || "";
-      updateData.imageUrl3 = compressedImages[2] || "";
-      updateData.imageUrl4 = compressedImages[3] || "";
     }
-
-    await window.updateDoc(window.doc(window.db, "shops", id), updateData);
-    alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-    allShopsData = [];
-    loadShopDropdown();
-    document.getElementById('adminEditFormArea').style.display = 'none';
-  } catch(e) {
-    console.error(e);
-    alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-  }
-}
 
     async function uploadAndSaveLogo() {
       const file = document.getElementById('logoFileInput').files[0];
