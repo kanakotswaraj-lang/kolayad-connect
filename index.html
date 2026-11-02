@@ -476,22 +476,24 @@
     </div>
   </div>
 
-  <!-- Services മോഡൽ പേജ് -->
-  <div class="modal-bg" id="servicesModal" onclick="closeModalOnBg(event, 'servicesModal')">
+  
+
+  <!-- Contact Us മോഡൽ പേജ് -->
+  <div class="modal-bg" id="contactModal" onclick="closeModalOnBg(event, 'contactModal')">
     <div class="modal-box">
-      <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">🛠️ പ്രധാനം സേവനങ്ങൾ (Services)</h3>
+      <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">📞 ബന്ധപ്പെടാൻ (Contact Us)</h3>
       <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; margin-bottom:12px;">
         <div style="background:var(--highlight-bg); padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>Project Details:</strong> പഞ്ചായത്ത് / പ്രാദേശിക വികസന പദ്ധതികളുടെ വിവരങ്ങൾ.
+          <strong>ഫോൺ നമ്പർ:</strong> <a href="tel:04902302437" style="color:#2563eb; text-decoration:none; font-weight:bold;">0490 2302437</a>
         </div>
         <div style="background:var(--highlight-bg); padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>Kudumbasree:</strong> കുടുംബശ്രീ സംരംഭങ്ങൾക്കും യൂണിറ്റുകൾക്കുമുള്ള പിന്തുണ.
+          <strong>സപ്പോർട്ട് വാട്സാപ്പ്:</strong> <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color:#22c55e; text-decoration:none; font-weight:bold;">💬 ചാറ്റ് ചെയ്യുക (6238020523)</a>
         </div>
         <div style="background:var(--highlight-bg); padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>Harithakarma Sena:</strong> ഹരിത കർമ്മ സേനയുടെ സേവനങ്ങളും വിവരങ്ങളും.
+          <strong>സ്ഥലം:</strong> കോളയാട്, കണ്ണൂർ, കേരളം.
         </div>
       </div>
-      <button onclick="toggleModal('servicesModal')" class="btn-pro-call" style="width:100%; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+      <button onclick="toggleModal('contactModal')" class="btn-pro-call" style="width:100%; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
@@ -520,15 +522,15 @@
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
         <a href="index.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">🏠 ഹോം / ഡയറക്ടറി</a>
         <a href="profile.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">👤 എന്റെ വിവരങ്ങൾ</a>
         <a href="admin.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">⚙️ അഡ്മിൻ പാനൽ</a>
         
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
-        
-        <strong style="color: #60a5fa; font-size: 12px;">Services</strong>
-        <a href="#" onclick="toggleSidebar(); toggleModal('servicesModal');" style="color: var(--text-sub); text-decoration: none;">➔ Project Details & Services</a>
-        <a href="#" onclick="toggleSidebar(); toggleModal('servicesModal');" style="color: var(--text-sub); text-decoration: none;">➔ Kudumbasree & Harithakarma</a>
+
+        <strong style="color: #60a5fa; font-size: 12px;">സഹായത്തിനും സംശയങ്ങൾക്കും (Support)</strong>
+        <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color: #22c55e; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: bold;">💬 വാട്സാപ്പിൽ സന്ദേശം അയക്കാം</a>
 
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
 
@@ -537,6 +539,7 @@
         <a href="#" onclick="toggleSidebar(); toggleModal('contactModal');" style="color: var(--text-sub); text-decoration: none;">➔ Contact Us</a>
         <a href="#" onclick="toggleSidebar(); toggleModal('termsModal');" style="color: var(--text-sub); text-decoration: none;">➔ Terms & Conditions</a>
       </div>
+
 
     </div>
   </div>
