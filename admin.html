@@ -157,14 +157,18 @@
         </div>
       </div>
 
-      <!-- സെക്ഷൻ 3 -->
+      <!-- സെക്ഷൻ 3: സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ് & സേർച്ച് -->
       <div class="admin-section">
         <div class="section-header" onclick="toggleSection('sec3')">
           <span>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</span>
           <span>▼</span>
         </div>
         <div id="sec3" class="section-content">
-          <label>സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
+          <!-- സ്ഥാപനങ്ങൾ തിരയാനുള്ള സേർച്ച് ബോക്സ് -->
+          <label>സ്ഥാപനം തിരയുക (Search Shop):</label>
+          <input type="text" id="shopSearchBox" class="dark-input" placeholder="🔍 സ്ഥാപനത്തിന്റെ പേര് ടൈപ്പ് ചെയ്യുക..." onkeyup="filterShopDropdown()">
+
+          <label style="margin-top: 6px;">സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
           <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
             <option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>
           </select>
@@ -174,21 +178,9 @@
             <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
             <input type="text" id="admEditName" class="dark-input">
 
-            <label>ഒന്നാമത്തെ ഫോട്ടോ (Photo 1):</label>
-            <input type="file" id="admPhoto1" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-
-            <label>രണ്ടാമത്തെ ഫോട്ടോ (Photo 2):</label>
-            <input type="file" id="admPhoto2" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-
-            <label>മൂന്നാമത്തെ ഫോട്ടോ (Photo 3):</label>
-            <input type="file" id="admPhoto3" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-
-            <label>നാലാമത്തെ ഫോട്ടോ (Photo 4):</label>
-            <input type="file" id="admPhoto4" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label style="margin-top: 6px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോകൾ (ഒന്നിലധികം തിരഞ്ഞെടുക്കാം):</label>
+<input type="file" id="admMultiplePhotos" accept="image/*" multiple class="dark-input" style="padding: 6px; font-size: 11px;">
+<label class="checkbox-label"><input type="checkbox" id="removeAllPhotos"> ❌ എല്ലാ ഫോട്ടോകളും ഒഴിവാക്കുക</label>
 
             <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
           </div>
@@ -281,7 +273,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400; 
+            const MAX_WIDTH = 500; 
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -294,7 +286,7 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL('image/jpeg', 0.3));
+            resolve(canvas.toDataURL('image/jpeg', 0.6));
           };
           img.onerror = (err) => reject(err);
         };
@@ -302,17 +294,30 @@
       });
     }
 
-    async function loadShopDropdown() {
+    async function loadShopDropdown(filterText = '') {
       const select = document.getElementById('adminShopSelect');
       try {
-        const snap = await window.getDocs(window.collection(window.db, "shops"));
-        allShopsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        if (allShopsData.length === 0) {
+          const snap = await window.getDocs(window.collection(window.db, "shops"));
+          allShopsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+        
         let html = '<option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>';
+        const query = filterText.toLowerCase();
+        
         allShopsData.forEach(s => {
-          html += `<option value="${s.id}">${s.name} (${s.loc || ''})</option>`;
+          const nameLoc = `${s.name || ''} (${s.loc || ''})`.toLowerCase();
+          if (!query || nameLoc.includes(query)) {
+            html += `<option value="${s.id}">${s.name} (${s.loc || ''})</option>`;
+          }
         });
         select.innerHTML = html;
       } catch(e) { console.error(e); }
+    }
+
+    function filterShopDropdown() {
+      const query = document.getElementById('shopSearchBox').value;
+      loadShopDropdown(query);
     }
 
     function loadShopDetailsForEdit() {
@@ -339,66 +344,43 @@
     }
 
     async function saveAdminPhotos() {
-      const id = document.getElementById('editDocId').value;
-      const name = document.getElementById('admEditName').value;
-      
-      const file1 = document.getElementById('admPhoto1').files[0];
-      const file2 = document.getElementById('admPhoto2').files[0];
-      const file3 = document.getElementById('admPhoto3').files[0];
-      const file4 = document.getElementById('admPhoto4').files[0];
+  const id = document.getElementById('editDocId').value;
+  const name = document.getElementById('admEditName').value;
+  const photoFiles = document.getElementById('admMultiplePhotos').files;
+  const removeAll = document.getElementById('removeAllPhotos').checked;
 
-      const remove1 = document.getElementById('removePhoto1').checked;
-      const remove2 = document.getElementById('removePhoto2').checked;
-      const remove3 = document.getElementById('removePhoto3').checked;
-      const remove4 = document.getElementById('removePhoto4').checked;
-
-      try {
-        alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
-        const shop = allShopsData.find(x => x.id === id) || {};
-        
-        let updateData = { name };
-        
-        if (remove1) {
-          updateData.imageUrl = "";
-        } else if (file1) {
-          updateData.imageUrl = await compressImageToString(file1);
-        } else {
-          updateData.imageUrl = shop.imageUrl || "";
-        }
-
-        if (remove2) {
-          updateData.imageUrl2 = "";
-        } else if (file2) {
-          updateData.imageUrl2 = await compressImageToString(file2);
-        } else {
-          updateData.imageUrl2 = shop.imageUrl2 || "";
-        }
-
-        if (remove3) {
-          updateData.imageUrl3 = "";
-        } else if (file3) {
-          updateData.imageUrl3 = await compressImageToString(file3);
-        } else {
-          updateData.imageUrl3 = shop.imageUrl3 || "";
-        }
-
-        if (remove4) {
-          updateData.imageUrl4 = "";
-        } else if (file4) {
-          updateData.imageUrl4 = await compressImageToString(file4);
-        } else {
-          updateData.imageUrl4 = shop.imageUrl4 || "";
-        }
-
-        await window.updateDoc(window.doc(window.db, "shops", id), updateData);
-        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        loadShopDropdown();
-        document.getElementById('adminEditFormArea').style.display = 'none';
-      } catch(e) {
-        console.error(e);
-        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+  try {
+    alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+    let updateData = { name };
+    
+    if (removeAll) {
+      updateData.imageUrl = "";
+      updateData.imageUrl2 = "";
+      updateData.imageUrl3 = "";
+      updateData.imageUrl4 = "";
+    } else if (photoFiles.length > 0) {
+      let compressedImages = [];
+      for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
+        let compressed = await compressImageToString(photoFiles[i]);
+        compressedImages.push(compressed);
       }
+
+      updateData.imageUrl = compressedImages[0] || "";
+      updateData.imageUrl2 = compressedImages[1] || "";
+      updateData.imageUrl3 = compressedImages[2] || "";
+      updateData.imageUrl4 = compressedImages[3] || "";
     }
+
+    await window.updateDoc(window.doc(window.db, "shops", id), updateData);
+    alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+    allShopsData = [];
+    loadShopDropdown();
+    document.getElementById('adminEditFormArea').style.display = 'none';
+  } catch(e) {
+    console.error(e);
+    alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+  }
+}
 
     async function uploadAndSaveLogo() {
       const file = document.getElementById('logoFileInput').files[0];
@@ -437,17 +419,10 @@
           imageUrl = await compressImageToString(file);
         }
 
-        // ഫയർബേസിൽ നോട്ടിഫിക്കേഷൻ സേവ് ചെയ്യുന്നു (ഇത് ആപ്പ് തുറക്കുമ്പോൾ സ്ലൈഡറിൽ കാണിക്കും)
         await window.addDoc(window.collection(window.db, "notices"), { 
           title, desc, color, imageUrl, 
           date: new Date().toLocaleDateString('en-GB') 
         });
-
-        // ഫയർബേസിലെ fcm_tokens കളക്ഷനിൽ സേവ് ചെയ്തിട്ടുള്ള എല്ലാ ടോക്കണുകൾക്കും പുഷ് നോറ്റിഫിക്കേഷൻ ട്രിഗർ ചെയ്യാനുള്ള സിഗ്നൽ നൽകുന്നു
-        const tokensSnap = await window.getDocs(window.collection(window.db, "fcm_tokens"));
-        if (!tokensSnap.empty) {
-          console.log(`Total active push tokens found: ${tokensSnap.size}`);
-        }
 
         alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്യുകയും പുഷ് നോറ്റിഫിക്കേഷൻ സെൻഡ് ചെയ്യുകയും ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
@@ -510,6 +485,7 @@
       if(confirm('ഈ സ്ഥാപനം നീക്കം ചെയ്യണോ?')) {
         await window.deleteDoc(window.doc(window.db, "shops", id));
         loadMembers();
+        allShopsData = [];
         loadShopDropdown();
       }
     }
