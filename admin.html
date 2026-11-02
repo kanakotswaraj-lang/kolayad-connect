@@ -178,9 +178,14 @@
             <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
             <input type="text" id="admEditName" class="dark-input">
 
-            <label style="margin-top: 6px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോകൾ (ഒന്നിലധികം തിരഞ്ഞെടുക്കാം):</label>
+            <label style="margin-top: 6px;">പുതിയ ഫോട്ടോകൾ ഒന്നിച്ച് തിരഞ്ഞെടുക്കാം (മാക്‌സിമം 4 എണ്ണം):</label>
             <input type="file" id="admMultiplePhotos" accept="image/*" multiple class="dark-input" style="padding: 6px; font-size: 11px;">
-            <label class="checkbox-label"><input type="checkbox" id="removeAllPhotos"> ❌ എല്ലാ ഫോട്ടോകളും ഒഴിവാക്കുക</label>
+
+            <label style="margin-top: 8px; color: #38bdf8; font-weight: bold;">വ്യക്തിഗതമായി ഫോട്ടോകൾ ഒഴിവാക്കാൻ:</label>
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+            <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
 
             <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
           </div>
@@ -332,7 +337,10 @@
         document.getElementById('editDocId').value = shop.id;
         document.getElementById('admEditName').value = shop.name || '';
         document.getElementById('admMultiplePhotos').value = '';
-        document.getElementById('removeAllPhotos').checked = false;
+        document.getElementById('removePhoto1').checked = false;
+        document.getElementById('removePhoto2').checked = false;
+        document.getElementById('removePhoto3').checked = false;
+        document.getElementById('removePhoto4').checked = false;
         formArea.style.display = 'block';
       }
     }
@@ -341,28 +349,58 @@
       const id = document.getElementById('editDocId').value;
       const name = document.getElementById('admEditName').value;
       const photoFiles = document.getElementById('admMultiplePhotos').files;
-      const removeAll = document.getElementById('removeAllPhotos').checked;
+
+      const remove1 = document.getElementById('removePhoto1').checked;
+      const remove2 = document.getElementById('removePhoto2').checked;
+      const remove3 = document.getElementById('removePhoto3').checked;
+      const remove4 = document.getElementById('removePhoto4').checked;
 
       try {
         alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+        const shop = allShopsData.find(x => x.id === id) || {};
         let updateData = { name };
-        
-        if (removeAll) {
-          updateData.imageUrl = "";
-          updateData.imageUrl2 = "";
-          updateData.imageUrl3 = "";
-          updateData.imageUrl4 = "";
-        } else if (photoFiles.length > 0) {
-          let compressedImages = [];
-          for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
-            let compressed = await compressImageToString(photoFiles[i]);
-            compressedImages.push(compressed);
-          }
 
-          updateData.imageUrl = compressedImages[0] || "";
-          updateData.imageUrl2 = compressedImages[1] || "";
-          updateData.imageUrl3 = compressedImages[2] || "";
-          updateData.imageUrl4 = compressedImages[3] || "";
+        // Compress new uploaded photos if any
+        let compressedImages = [];
+        for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
+          let compressed = await compressImageToString(photoFiles[i]);
+          compressedImages.push(compressed);
+        }
+
+        // Slot 1 logic
+        if (remove1) {
+          updateData.imageUrl = "";
+        } else if (compressedImages.length > 0) {
+          updateData.imageUrl = compressedImages.shift();
+        } else {
+          updateData.imageUrl = shop.imageUrl || "";
+        }
+
+        // Slot 2 logic
+        if (remove2) {
+          updateData.imageUrl2 = "";
+        } else if (compressedImages.length > 0) {
+          updateData.imageUrl2 = compressedImages.shift();
+        } else {
+          updateData.imageUrl2 = shop.imageUrl2 || "";
+        }
+
+        // Slot 3 logic
+        if (remove3) {
+          updateData.imageUrl3 = "";
+        } else if (compressedImages.length > 0) {
+          updateData.imageUrl3 = compressedImages.shift();
+        } else {
+          updateData.imageUrl3 = shop.imageUrl3 || "";
+        }
+
+        // Slot 4 logic
+        if (remove4) {
+          updateData.imageUrl4 = "";
+        } else if (compressedImages.length > 0) {
+          updateData.imageUrl4 = compressedImages.shift();
+        } else {
+          updateData.imageUrl4 = shop.imageUrl4 || "";
         }
 
         await window.updateDoc(window.doc(window.db, "shops", id), updateData);
