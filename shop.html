@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>കടയുടെ വിവരങ്ങൾ - കോളയാട് കണക്ട്</title>
+    <link rel="stylesheet" href="style.css"> <!-- നിങ്ങളുടെ നിലവിലുള്ള സിഎസ്എസ് ഫയൽ ഇവിടെ നൽകാം -->
+</head>
+<body style="background-color: #f4f6f9; font-family: sans-serif; padding: 20px;">
+
+    <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <a href="index.html" style="text-decoration: none; color: #0056b3; font-weight: bold;">← തിരിച്ച് ഹോം പേജിലേക്ക്</a>
+        
+        <div id="shop-details" style="margin-top: 20px;">
+            <p style="text-align: center; color: #666;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK കോംപാറ്റ് വേർഷൻ -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // നിങ്ങളുടെ ഫയർബേസ് കോൺഫിഗറേഷൻ
+        const firebaseConfig = {
+          apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
+          authDomain: "kolayad-connect.firebaseapp.com",
+          projectId: "kolayad-connect",
+          storageBucket: "kolayad-connect.firebasestorage.app",
+          messagingSenderId: "400179608074",
+          appId: "1:400179608074:web:b6f5c269d60662efcdfdf3"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // URL-ൽ നിന്ന് കടയുടെ ID എടുക്കുന്നു (ഉദാഹരണത്തിന്: shop.html?id=ABC123xyz)
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopId = urlParams.get('id');
+
+        const shopDetailsDiv = document.getElementById('shop-details');
+
+        if (shopId) {
+            // ഫയർബേസ് ഫയർസ്റ്റോറിൽ നിന്ന് ആ ഐഡി ഉള്ള കടയുടെ ഡാറ്റ മാത്രം എടുക്കുന്നു
+            db.collection("shops").doc(shopId).get().then((doc) => {
+                if (doc.exists) {
+                    const shop = doc.data();
+                    shopDetailsDiv.innerHTML = `
+                        <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
+                        <p style="color: #e74c3c; font-weight: bold; margin-bottom: 15px;">📍 ${shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
+                        <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px;">${shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
+                        
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">കോൾ ചെയ്യുക</a>
+                        </div>
+                    `;
+                } else {
+                    shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
+                }
+            }).catch((error) => {
+                console.error("Error getting document:", error);
+                shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.</p>`;
+            });
+        } else {
+            shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">സ്ഥാപനത്തിന്റെ ലിങ്ക് കൃത്യമല്ല.</p>`;
+        }
+    </script>
+</body>
+</html>
