@@ -40,20 +40,31 @@
 
         const shopDetailsDiv = document.getElementById('shop-details');
 
-        if (shopId) {
+                if (shopId) {
             // ഫയർബേസ് ഫയർസ്റ്റോറിൽ നിന്ന് ആ ഐഡി ഉള്ള കടയുടെ ഡാറ്റ മാത്രം എടുക്കുന്നു
             db.collection("shops").doc(shopId).get().then((doc) => {
                 if (doc.exists) {
                     const shop = doc.data();
+
+                    // ഒന്നിലധികം ഫോട്ടോകൾ ഉണ്ടെങ്കിൽ അവ സ്ലൈഡർ ആയി കാണിക്കാൻ
+                    let photos = [shop.imageUrl, shop.imageUrl2, shop.imageUrl3, shop.imageUrl4].filter(img => img);
+
+                    let photosHtml = photos.length > 0 ? `
+                        <div style="display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 15px; scrollbar-width: none; border-radius: 12px;">
+                            ${photos.map(img => `<img src="${img}" style="min-width: 100%; height: 240px; border-radius: 12px; object-fit: cover; border: 1px solid #ddd;" alt="Shop Image">`).join('')}
+                        </div>
+                    ` : '';
+
                     shopDetailsDiv.innerHTML = `
-    <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
-    <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
-    <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
-    
-    <div style="margin-top: 20px; display: flex; gap: 10px;">
-        <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
-    </div>
-`;
+                        ${photosHtml}
+                        <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
+                        <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
+                        <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
+                        
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
+                        </div>
+                    `;
 
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
@@ -62,9 +73,10 @@
                 console.error("Error getting document:", error);
                 shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.</p>`;
             });
-        } else {
-            shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">സ്ഥാപനത്തിന്റെ ലിങ്ക് കൃത്യമല്ല.</p>`;
         }
+
+
+            
     </script>
 </body>
 </html>
