@@ -12,14 +12,15 @@
       .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 10px 16px; border-radius: 10px; transition: 0.3s; margin-bottom: 15px; font-size: 15px; }
       .back-btn:hover { background: #c7d2fe; }
 
-      .shop-images-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 15px; scrollbar-width: none; border-radius: 12px; }
-      .shop-thumb-img { min-width: 100%; height: 240px; border-radius: 12px; object-fit: cover; border: 1px solid #ddd; scroll-snap-align: center; cursor: zoom-in; }
+      /* ഫോട്ടോ സ്ലൈഡറും വലിപ്പം കൂട്ടിയ സ്റ്റൈലും */
+      .shop-images-slider { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 15px; scrollbar-width: none; border-radius: 14px; }
+      .shop-thumb-img { min-width: 100%; height: 320px; border-radius: 14px; object-fit: cover; border: 1px solid #ddd; scroll-snap-align: center; cursor: zoom-in; }
       
       /* സൂം മോഡൽ സ്റ്റൈൽ */
       .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
       #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
 
-      /* അഡ്മിൻ അപ്‌ലോഡ് സെക്ഷൻ (തുടക്കത്തിൽ കാണില്ല) */
+      /* അഡ്മിൻ അപ്‌ലോഡ് സെക്ഷൻ */
       .upload-box { background: #f8fafc; border: 2px dashed #3b82f6; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; display: none; }
     </style>
 </head>
@@ -37,7 +38,7 @@
 
         <!-- അഡ്മിൻ ലോഗിൻ ചെയ്താൽ മാത്രം കാണുന്ന ഫോട്ടോ അപ്‌ലോഡ് ബോക്സ് -->
         <div id="adminUploadSection" class="upload-box">
-            <h4 style="margin: 0 0 10px 0; color: #1e3a8a; font-size: 16px;">➕ ഈ പേജിലേക്ക് പുതിയ ഫോട്ടോ ചേർക്കുക (അഡ്മിൻ മാത്രം)</h4>
+            <h4 style="margin: 0 0 10px 0; color: #1e3a8a; font-size: 16px;">➕ ഈ പേജിലേക്ക് കൂടുതൽ ഫോട്ടോകൾ ചേർക്കുക</h4>
             <input type="file" id="newShopPhoto" accept="image/*" style="margin-bottom: 10px; width: 100%; padding: 6px; background: white; border-radius: 6px; border: 1px solid #cbd5e1;">
             <button onclick="uploadNewPhoto()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;">ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുക</button>
             <p id="uploadStatus" style="font-size: 13px; margin-top: 8px; color: #059669; font-weight: bold;"></p>
@@ -97,12 +98,10 @@
                     currentShopData = doc.data();
                     renderShopDetails(currentShopData);
 
-                    // അഡ്മിൻ ലോഗിൻ പരിശോധന (localStorage-ൽ isAdmin === 'true' ആണെങ്കിൽ മാത്രം ബോക്സ് കാണിക്കും)
-                    // അഡ്മിൻ ലോഗിൻ പരിശോധന (kolayad_admin പരിശോധിക്കുന്നു)
-if (localStorage.getItem('kolayad_admin') === 'true') {
-    document.getElementById('adminUploadSection').style.display = 'block';
-}
-
+                    // അഡ്മിൻ ലോഗിൻ പരിശോധന
+                    if (localStorage.getItem('kolayad_admin') === 'true') {
+                        document.getElementById('adminUploadSection').style.display = 'block';
+                    }
 
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
@@ -116,7 +115,14 @@ if (localStorage.getItem('kolayad_admin') === 'true') {
         }
 
         function renderShopDetails(shop) {
-            let photos = [shop.imageUrl, shop.imageUrl2, shop.imageUrl3, shop.imageUrl4].filter(img => img);
+            // പഴയ ഫീൽഡുകളും പുതിയ array ഫോട്ടോകളും ഒന്നിച്ച് ശേഖരിക്കുന്നു
+            let photos = [];
+            if (shop.shopImages && Array.isArray(shop.shopImages)) {
+                photos = [...shop.shopImages];
+            } else {
+                // പഴയ സിംഗപ്പൂർ/നാല് ഫോട്ടോ രീതി സപ്പോർട്ട് ചെയ്യാൻ
+                photos = [shop.imageUrl, shop.imageUrl2, shop.imageUrl3, shop.imageUrl4].filter(img => img);
+            }
 
             let photosHtml = photos.length > 0 ? `
                 <div class="shop-images-slider">
@@ -153,7 +159,7 @@ if (localStorage.getItem('kolayad_admin') === 'true') {
                 img.src = e.target.result;
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
+                    const MAX_WIDTH = 900;
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -161,17 +167,23 @@ if (localStorage.getItem('kolayad_admin') === 'true') {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
 
                     statusText.innerText = 'ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...';
 
-                    let updateData = {};
-                    if (!currentShopData.imageUrl2) updateData.imageUrl2 = compressedDataUrl;
-                    else if (!currentShopData.imageUrl3) updateData.imageUrl3 = compressedDataUrl;
-                    else if (!currentShopData.imageUrl4) updateData.imageUrl4 = compressedDataUrl;
-                    else updateData.imageUrl2 = compressedDataUrl;
+                    // നിലവിലുള്ള അറേയോ അല്ലെങ്കിൽ പഴയ ഫോട്ടോകളോ എടുത്ത് പുതിയത് അതിലേക്ക് ചേർക്കുന്നു
+                    let existingImages = [];
+                    if (currentShopData.shopImages && Array.isArray(currentShopData.shopImages)) {
+                        existingImages = [...currentShopData.shopImages];
+                    } else {
+                        existingImages = [currentShopData.imageUrl, currentShopData.imageUrl2, currentShopData.imageUrl3, currentShopData.imageUrl4].filter(img => img);
+                    }
 
-                    db.collection("shops").doc(shopId).update(updateData).then(() => {
+                    existingImages.push(compressedDataUrl);
+
+                    db.collection("shops").doc(shopId).update({
+                        shopImages: existingImages
+                    }).then(() => {
                         statusText.innerText = 'ഫോട്ടോ വിജയകരമായി അപ്‌ലോഡ് ചെയ്തു!';
                         setTimeout(() => { location.reload(); }, 1500);
                     }).catch((error) => {
