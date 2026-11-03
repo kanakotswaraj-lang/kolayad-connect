@@ -827,7 +827,14 @@
                 <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
               ` : ''}
             </div>
+                        <div style="margin-top: 10px;">
+                <a href="shop.html?id=${s.id}" style="display: block; text-align: center; background: #28a745; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                    കൂടുതൽ വിവരങ്ങൾ കാണുക ➔
+                </a>
+            </div>
+
             ${phone2Html}
+            
           </div>
         `;
       }).join('');
