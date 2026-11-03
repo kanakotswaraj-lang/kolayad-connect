@@ -98,9 +98,11 @@
                     renderShopDetails(currentShopData);
 
                     // അഡ്മിൻ ലോഗിൻ പരിശോധന (localStorage-ൽ isAdmin === 'true' ആണെങ്കിൽ മാത്രം ബോക്സ് കാണിക്കും)
-                    if (localStorage.getItem('isAdmin') === 'true') {
-                        document.getElementById('adminUploadSection').style.display = 'block';
-                    }
+                    // അഡ്മിൻ ലോഗിൻ പരിശോധന (kolayad_admin പരിശോധിക്കുന്നു)
+if (localStorage.getItem('kolayad_admin') === 'true') {
+    document.getElementById('adminUploadSection').style.display = 'block';
+}
+
 
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
