@@ -12,10 +12,18 @@
       .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 10px 16px; border-radius: 10px; transition: 0.3s; margin-bottom: 15px; font-size: 15px; }
       .back-btn:hover { background: #c7d2fe; }
 
-      /* ഫോട്ടോ സ്ലൈഡറും വലിപ്പം കൂട്ടിയ സ്റ്റൈലും */
-      .shop-images-slider { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 15px; scrollbar-width: none; border-radius: 14px; }
-      .shop-thumb-img { min-width: 100%; height: 320px; border-radius: 14px; object-fit: cover; border: 1px solid #ddd; scroll-snap-align: center; cursor: zoom-in; }
+      .shop-images-slider { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 8px; scrollbar-width: none; border-radius: 14px; }
+      .shop-thumb-container { min-width: 100%; position: relative; scroll-snap-align: center; }
+      .shop-thumb-img { width: 100%; height: 320px; border-radius: 14px; object-fit: cover; border: 1px solid #ddd; cursor: zoom-in; }
       
+      /* ഫോട്ടോ ഡിലീറ്റ് ബട്ടൺ സ്റ്റൈൽ */
+      .delete-photo-btn { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; display: none; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+
+      /* സ്ലൈഡർ ഇൻഡിക്കേറ്റർ ഡോട്സ് */
+      .slider-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
+      .dot { width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%; transition: 0.3s; }
+      .dot.active { background: #2563eb; width: 22px; border-radius: 4px; }
+
       /* സൂം മോഡൽ സ്റ്റൈൽ */
       .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
       #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
@@ -76,6 +84,7 @@
         const shopId = urlParams.get('id');
         const shopDetailsDiv = document.getElementById('shop-details');
         let currentShopData = null;
+        const isAdmin = localStorage.getItem('kolayad_admin') === 'true';
 
         function openZoomModal(imgSrc) {
             document.getElementById('zoomedImage').src = imgSrc;
@@ -98,11 +107,9 @@
                     currentShopData = doc.data();
                     renderShopDetails(currentShopData);
 
-                    // അഡ്മിൻ ലോഗിൻ പരിശോധന
-                    if (localStorage.getItem('kolayad_admin') === 'true') {
+                    if (isAdmin) {
                         document.getElementById('adminUploadSection').style.display = 'block';
                     }
-
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
                 }
@@ -115,23 +122,39 @@
         }
 
         function renderShopDetails(shop) {
-            // പഴയ ഫീൽഡുകളും പുതിയ array ഫോട്ടോകളും ഒന്നിച്ച് ശേഖരിക്കുന്നു
             let photos = [];
             if (shop.shopImages && Array.isArray(shop.shopImages)) {
                 photos = [...shop.shopImages];
             } else {
-                // പഴയ സിംഗപ്പൂർ/നാല് ഫോട്ടോ രീതി സപ്പോർട്ട് ചെയ്യാൻ
                 photos = [shop.imageUrl, shop.imageUrl2, shop.imageUrl3, shop.imageUrl4].filter(img => img);
             }
 
-            let photosHtml = photos.length > 0 ? `
-                <div class="shop-images-slider">
-                    ${photos.map(img => `<img src="${img}" class="shop-thumb-img" alt="Shop Image" onclick="openZoomModal('${img}')">`).join('')}
-                </div>
-            ` : '';
+            let photosHtml = '';
+            let dotsHtml = '';
+
+            if (photos.length > 0) {
+                photosHtml = `
+                    <div class="shop-images-slider" id="imageSlider" onscroll="updateActiveDot(${photos.length})">
+                        ${photos.map((img, index) => `
+                            <div class="shop-thumb-container">
+                                <img src="${img}" class="shop-thumb-img" alt="Shop Image" onclick="openZoomModal('${img}')">
+                                ${isAdmin ? `<button class="delete-photo-btn" style="display: block;" onclick="deletePhoto(${index})">🗑️ ഡിലീറ്റ്</button>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                // ഫോട്ടോകളുടെ എണ്ണത്തിനനുസരിച്ച് ഡോട്ടുകൾ സെറ്റ് ചെയ്യുന്നു
+                dotsHtml = `
+                    <div class="slider-dots" id="sliderDots">
+                        ${photos.map((_, index) => `<div class="dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`).join('')}
+                    </div>
+                `;
+            }
 
             shopDetailsDiv.innerHTML = `
                 ${photosHtml}
+                ${dotsHtml}
                 <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
                 <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
                 <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
@@ -140,6 +163,48 @@
                     <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
                 </div>
             `;
+        }
+
+        // ഫോട്ടോ സ്വൈപ്പ് ചെയ്യുമ്പോൾ ഏത് ഡോട്ടാണ് ആക്ടീവ് ആകേണ്ടത് എന്ന് നിശ്ചയിക്കാൻ
+        function updateActiveDot(totalPhotos) {
+            const slider = document.getElementById('imageSlider');
+            if (!slider) return;
+            const scrollLeft = slider.scrollLeft;
+            const slideWidth = slider.clientWidth;
+            const currentIndex = Math.round(scrollLeft / slideWidth);
+
+            const dots = document.querySelectorAll('.slider-dots .dot');
+            dots.forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // ഫോട്ടോ ഡിലീറ്റ് ചെയ്യാനുള്ള ഫങ്ഷൻ
+        function deletePhoto(index) {
+            if (!confirm('ഈ ഫോട്ടോ ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?')) return;
+
+            let existingImages = [];
+            if (currentShopData.shopImages && Array.isArray(currentShopData.shopImages)) {
+                existingImages = [...currentShopData.shopImages];
+            } else {
+                existingImages = [currentShopData.imageUrl, currentShopData.imageUrl2, currentShopData.imageUrl3, currentShopData.imageUrl4].filter(img => img);
+            }
+
+            existingImages.splice(index, 1);
+
+            db.collection("shops").doc(shopId).update({
+                shopImages: existingImages
+            }).then(() => {
+                alert('ഫോട്ടോ വിജയകരമായി ഡിലീറ്റ് ചെയ്തു!');
+                location.reload();
+            }).catch((error) => {
+                console.error("Error deleting photo: ", error);
+                alert('ഫോട്ടോ ഡിലീറ്റ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.');
+            });
         }
 
         function uploadNewPhoto() {
@@ -151,7 +216,7 @@
             }
 
             statusText.innerText = 'ഫോട്ടോ പ്രോസസ്സ് ചെയ്യുന്നു...';
-            const file = fileInput.files[0];
+            const file = fileInput.files.FILE_0 || fileInput.files[0];
             const reader = new FileReader();
 
             reader.onload = function(e) {
@@ -159,7 +224,7 @@
                 img.src = e.target.result;
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 900;
+                    const MAX_WIDTH = 800;
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -167,16 +232,21 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
 
                     statusText.innerText = 'ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...';
 
-                    // നിലവിലുള്ള അറേയോ അല്ലെങ്കിൽ പഴയ ഫോട്ടോകളോ എടുത്ത് പുതിയത് അതിലേക്ക് ചേർക്കുന്നു
                     let existingImages = [];
                     if (currentShopData.shopImages && Array.isArray(currentShopData.shopImages)) {
                         existingImages = [...currentShopData.shopImages];
                     } else {
                         existingImages = [currentShopData.imageUrl, currentShopData.imageUrl2, currentShopData.imageUrl3, currentShopData.imageUrl4].filter(img => img);
+                    }
+
+                    if (existingImages.length >= 6) {
+                        alert('പരമാവധി 6 ഫോട്ടോകൾ മാത്രമേ ചേർക്കാൻ കഴിയൂ! ദയവായി പഴയ ഫോട്ടോകൾ ഡിലീറ്റ് ചെയ്യുക.');
+                        statusText.innerText = '';
+                        return;
                     }
 
                     existingImages.push(compressedDataUrl);
