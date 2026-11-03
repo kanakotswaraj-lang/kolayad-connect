@@ -46,14 +46,15 @@
                 if (doc.exists) {
                     const shop = doc.data();
                     shopDetailsDiv.innerHTML = `
-                        <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
-                        <p style="color: #e74c3c; font-weight: bold; margin-bottom: 15px;">📍 ${shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
-                        <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px;">${shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
-                        
-                        <div style="margin-top: 20px; display: flex; gap: 10px;">
-                            <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">കോൾ ചെയ്യുക</a>
-                        </div>
-                    `;
+    <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
+    <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
+    <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
+    
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
+    </div>
+`;
+
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
                 }
