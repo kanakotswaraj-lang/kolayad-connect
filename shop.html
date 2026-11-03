@@ -4,24 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>കടയുടെ വിവരങ്ങൾ - കോളയാട് കണക്ട്</title>
-    <link rel="stylesheet" href="style.css"> <!-- നിങ്ങളുടെ നിലവിലുള്ള സിഎസ്എസ് ഫയൽ ഇവിടെ നൽകാം -->
-</head>
-<body style="background-color: #f4f6f9; font-family: sans-serif; padding: 20px;">
+    <style>
+      body { background-color: #f4f6f9; font-family: sans-serif; padding: 20px; margin: 0; }
+      .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+      
+      /* സ്റ്റൈലിഷ് ബാക്ക് ബട്ടൺ */
+      .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 8px 14px; border-radius: 8px; transition: 0.3s; margin-bottom: 15px; }
+      .back-btn:hover { background: #c7d2fe; }
 
-    <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-        <a href="index.html" style="text-decoration: none; color: #0056b3; font-weight: bold;">← തിരിച്ച് ഹോം പേജിലേക്ക്</a>
+      .shop-images-slider { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 15px; scrollbar-width: none; border-radius: 12px; }
+      .shop-thumb-img { min-width: 100%; height: 240px; border-radius: 12px; object-fit: cover; border: 1px solid #ddd; scroll-snap-align: center; cursor: zoom-in; }
+      
+      /* സൂം മോഡൽ സ്റ്റൈൽ */
+      .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+      #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
+
+      /* അഡ്മിൻ അപ്‌ലോഡ് സെക്ഷൻ */
+      .upload-box { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- സ്റ്റൈലിഷ് ബാക്ക് ബട്ടൺ -->
+        <a href="index.html" class="back-btn">
+            <span>←</span> തിരിച്ച് ഹോം പേജിലേക്ക്
+        </a>
         
-        <div id="shop-details" style="margin-top: 20px;">
+        <div id="shop-details" style="margin-top: 10px;">
             <p style="text-align: center; color: #666;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+
+        <!-- അഡ്മിൻമാർക്ക് മാത്രം കാണാവുന്ന ഫോട്ടോ അപ്‌ലോഡ് ബോക്സ് -->
+        <div id="adminUploadSection" class="upload-box">
+            <h4 style="margin: 0 0 10px 0; color: #334155; font-size: 15px;">➕ ഈ പേജിലേക്ക് പുതിയ ഫോട്ടോ ചേർക്കുക</h4>
+            <input type="file" id="newShopPhoto" accept="image/*" style="margin-bottom: 10px; width: 100%;">
+            <button onclick="uploadNewPhoto()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%;">ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക</button>
+            <p id="uploadStatus" style="font-size: 13px; margin-top: 8px; color: #059669;"></p>
         </div>
     </div>
 
-    <!-- Firebase SDK കോംപാറ്റ് വേർഷൻ -->
+    <!-- ഫോട്ടോ സൂം ചെയ്യാനുള്ള മോഡൽ -->
+    <div class="modal-bg" id="imageZoomModal" onclick="closeZoomModal(event)">
+        <div style="position:relative; width:100%; max-width:450px; text-align:center;">
+            <img id="zoomedImage" src="" alt="Zoomed Image">
+            <button onclick="closeZoomModalDirect()" style="margin-top:12px; background:#ef4444; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:bold; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // നിങ്ങളുടെ ഫയർബേസ് കോൺഫിഗറേഷൻ
         const firebaseConfig = {
           apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
           authDomain: "kolayad-connect.firebaseapp.com",
@@ -34,37 +69,37 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // URL-ൽ നിന്ന് കടയുടെ ID എടുക്കുന്നു (ഉദാഹരണത്തിന്: shop.html?id=ABC123xyz)
         const urlParams = new URLSearchParams(window.location.search);
         const shopId = urlParams.get('id');
-
         const shopDetailsDiv = document.getElementById('shop-details');
+        let currentShopData = null;
 
-                if (shopId) {
-            // ഫയർബേസ് ഫയർസ്റ്റോറിൽ നിന്ന് ആ ഐഡി ഉള്ള കടയുടെ ഡാറ്റ മാത്രം എടുക്കുന്നു
+        function openZoomModal(imgSrc) {
+            document.getElementById('zoomedImage').src = imgSrc;
+            document.getElementById('imageZoomModal').style.display = 'flex';
+        }
+
+        function closeZoomModal(event) {
+            if (event.target.id === 'imageZoomModal') {
+                document.getElementById('imageZoomModal').style.display = 'none';
+            }
+        }
+
+        function closeZoomModalDirect() {
+            document.getElementById('imageZoomModal').style.display = 'none';
+        }
+
+        if (shopId) {
             db.collection("shops").doc(shopId).get().then((doc) => {
                 if (doc.exists) {
-                    const shop = doc.data();
+                    currentShopData = doc.data();
+                    
+                    // അഡ്മിൻ ലോഗിൻ പരിശോധന (localStorage-ൽ isAdmin ഉണ്ടെങ്കിൽ അപ്‌ലോഡ് ബോക്സ് കാണിക്കും)
+                    if (localStorage.getItem('isAdmin') === 'true') {
+                        document.getElementById('adminUploadSection').style.display = 'block';
+                    }
 
-                    // ഒന്നിലധികം ഫോട്ടോകൾ ഉണ്ടെങ്കിൽ അവ സ്ലൈഡർ ആയി കാണിക്കാൻ
-                    let photos = [shop.imageUrl, shop.imageUrl2, shop.imageUrl3, shop.imageUrl4].filter(img => img);
-
-                    let photosHtml = photos.length > 0 ? `
-                        <div style="display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 15px; scrollbar-width: none; border-radius: 12px;">
-                            ${photos.map(img => `<img src="${img}" style="min-width: 100%; height: 240px; border-radius: 12px; object-fit: cover; border: 1px solid #ddd;" alt="Shop Image">`).join('')}
-                        </div>
-                    ` : '';
-
-                    shopDetailsDiv.innerHTML = `
-                        ${photosHtml}
-                        <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
-                        <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
-                        <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
-                        
-                        <div style="margin-top: 20px; display: flex; gap: 10px;">
-                            <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
-                        </div>
-                    `;
+                    renderShopDetails(currentShopData);
 
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
@@ -73,10 +108,80 @@
                 console.error("Error getting document:", error);
                 shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.</p>`;
             });
+        } else {
+            shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">സ്ഥാപനത്തിന്റെ ലിങ്ക് കൃത്യമല്ല.</p>`;
         }
 
+        function renderShopDetails(shop) {
+            let photos = [shop.imageUrl, shop.imageUrl2, shop.imageUrl3, shop.imageUrl4].filter(img => img);
 
-            
+            let photosHtml = photos.length > 0 ? `
+                <div class="shop-images-slider">
+                    ${photos.map(img => `<img src="${img}" class="shop-thumb-img" alt="Shop Image" onclick="openZoomModal('${img}')">`).join('')}
+                </div>
+            ` : '';
+
+            shopDetailsDiv.innerHTML = `
+                ${photosHtml}
+                <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
+                <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
+                <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
+                
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
+                </div>
+            `;
+        }
+
+        // ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്ന ഫങ്ഷൻ
+        function uploadNewPhoto() {
+            const fileInput = document.getElementById('newShopPhoto');
+            const statusText = document.getElementById('uploadStatus');
+            if (fileInput.files.length === 0) {
+                alert('ദയവായി ഒരു ഫോട്ടോ തിരഞ്ഞെടുക്കുക.');
+                return;
+            }
+
+            statusText.innerText = 'ഫോട്ടോ പ്രോസസ്സ് ചെയ്യുന്നു...';
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // കംപ്രസ് ചെയ്ത ഇമേജ് ബേസ്64 കോഡാക്കി മാറ്റുന്നു
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+                    statusText.innerText = 'ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...';
+
+                    // നിലവിലുള്ള ഫോട്ടോ ഫീൽഡുകളിൽ ഏതെങ്കിലും ഒഴിഞ്ഞുകിടപ്പുണ്ടെങ്കിൽ അവിടെ സേവ് ചെയ്യും
+                    let updateData = {};
+                    if (!currentShopData.imageUrl2) updateData.imageUrl2 = compressedDataUrl;
+                    else if (!currentShopData.imageUrl3) updateData.imageUrl3 = compressedDataUrl;
+                    else if (!currentShopData.imageUrl4) updateData.imageUrl4 = compressedDataUrl;
+                    else updateData.imageUrl2 = compressedDataUrl; // എല്ലാം ഫുൾ ആണെങ്കിൽ രണ്ടാമത്തേത് മാറ്റും
+
+                    db.collection("shops").doc(shopId).update(updateData).then(() => {
+                        statusText.innerText = 'ഫോട്ടോ വിജയകരമായി അപ്‌ലോഡ് ചെയ്തു!';
+                        setTimeout(() => { location.reload(); }, 1500);
+                    }).catch((error) => {
+                        console.error("Error updating document: ", error);
+                        statusText.innerText = 'അപ്‌ലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.';
+                    });
+                }
+            };
+            reader.readAsDataURL(file);
+        }
     </script>
 </body>
 </html>
