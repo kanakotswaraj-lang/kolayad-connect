@@ -14,22 +14,34 @@
       .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
       .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 10px 16px; border-radius: 10px; transition: 0.3s; margin-bottom: 20px; font-size: 15px; }
       .back-btn:hover { background: #c7d2fe; }
+      
+      /* അഡ്മിൻ ഫോം സ്റ്റൈൽ */
+      .admin-form-box { background: #f8fafc; border: 2px dashed #3b82f6; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none; }
+      .form-input { width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- തിരിച്ച് ഹോം പേജിലേക്ക് പോകാനുള്ള ബട്ടൺ -->
-        <a href="index.html" class="back-btn"><span>←</span> തിരിച്ച് ഹോം പേജിലേക്ക്</a>
         
         <h3 style="color:#dc2626; margin-bottom:15px; font-size:18px; text-align:center;">🚨 അത്യാഹിത / പ്രധാന നമ്പറുകൾ</h3>
         
+        <!-- അഡ്മിൻ ലോഗിൻ ചെയ്താൽ മാത്രം കാണുന്ന പുതിയ നമ്പർ ചേർക്കാനുള്ള ബോക്സ് -->
+        <div id="adminEmergencySection" class="admin-form-box">
+            <h4 style="margin: 0 0 10px 0; color: #1e3a8a; font-size: 15px;">➕ പുതിയ എമർജൻസി നമ്പർ ചേർക്കുക</h4>
+            <input type="text" id="newName" class="form-input" placeholder="സ്ഥാപനത്തിന്റെ/ആളിന്റെ പേര് (ഉദാ: പോലീസ് സ്റ്റേഷൻ)">
+            <input type="text" id="newDesc" class="form-input" placeholder="സ്ഥലം/വിവരണം (ഉദാ: പേരാവൂർ)">
+            <input type="text" id="newPhone" class="form-input" placeholder="ഫോൺ നമ്പർ">
+            <button onclick="addNewEmergencyNumber()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;">നമ്പർ സേവ് ചെയ്യുക</button>
+            <p id="addStatus" style="font-size: 13px; margin-top: 8px; color: #059669; font-weight: bold; text-align: center;"></p>
+        </div>
+
         <!-- ഫയർബേസിൽ നിന്നുള്ള നമ്പറുകൾ ഇവിടെ ഓട്ടോമാറ്റിക്കായി വരും -->
         <div id="emergencyListContainer">
             <p style="text-align:center; color:#64748b; font-size:13px;">നമ്പറുകൾ ലോഡ് ചെയ്യുന്നു...</p>
         </div>
 
-        <a href="index.html" style="background:#e2e8f0; color:#1e293b; text-decoration:none; display:block; text-align:center; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 20px;">ഹോം പേജിലേക്ക് മടങ്ങുക</a>
+        <a href="index.html" style="background:#e2e8f0; color:#1e293b; text-decoration:none; display:block; text-align:center; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 20px;">🏠  ഹോം പേജിലേക്ക് മടങ്ങുക</a>
     </div>
 
     <script>
@@ -48,11 +60,18 @@
         }
         const db = firebase.firestore();
 
+        // അഡ്മിൻ ആണോ എന്ന് പരിശോധിക്കുക
+        const isAdmin = localStorage.getItem('kolayad_admin') === 'true';
+        if (isAdmin) {
+            document.getElementById('adminEmergencySection').style.display = 'block';
+        }
+
+        // നമ്പറുകൾ ലോഡ് ചെയ്യുന്ന ഫംഗ്ഷൻ
         function loadEmergencyNumbers() {
             const container = document.getElementById('emergencyListContainer');
             db.collection("emergency_numbers").get().then((querySnapshot) => {
                 if (querySnapshot.empty) {
-                    container.innerHTML = `<p style="text-align:center; color:#64748b; font-size:13px;">നമ്പറുകൾ ഒന്നും ചേർത്തിട്ടില്ല. ദയവായി ഫയർബേസിൽ നമ്പറുകൾ ആഡ് ചെയ്യുക.</p>`;
+                    container.innerHTML = `<p style="text-align:center; color:#64748b; font-size:13px;">നമ്പറുകൾ ഒന്നും ചേർത്തിട്ടില്ല.</p>`;
                     return;
                 }
 
@@ -73,6 +92,35 @@
             }).catch((error) => {
                 console.error("Error getting emergency numbers: ", error);
                 container.innerHTML = `<p style="text-align:center; color:#dc2626; font-size:13px;">നമ്പറുകൾ ലോഡ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.</p>`;
+            });
+        }
+
+        // ആപ്പിൽ നിന്ന് പുതിയ നമ്പർ ഫയർബേസിലേക്ക് ആഡ് ചെയ്യുന്ന ഫംഗ്ഷൻ
+        function addNewEmergencyNumber() {
+            const name = document.getElementById('newName').value.trim();
+            const desc = document.getElementById('newDesc').value.trim();
+            const phone = document.getElementById('newPhone').value.trim();
+            const statusText = document.getElementById('addStatus');
+
+            if (!name || !phone) {
+                alert('ദയവായി പേരും ഫോൺ നമ്പറും നൽകുക.');
+                return;
+            }
+
+            statusText.innerText = 'സേവ് ചെയ്യുന്നു...';
+
+            db.collection("emergency_numbers").add({
+                name: name,
+                desc: desc,
+                phone: phone
+            }).then(() => {
+                statusText.innerText = 'നമ്പർ വിജയകരമായി ചേർത്തു!';
+                setTimeout(() => {
+                    location.reload();
+                }, 1200);
+            }).catch((error) => {
+                console.error("Error adding document: ", error);
+                statusText.innerText = 'നമ്പർ ചേർക്കുന്നതിൽ പരാജയപ്പെട്ടു.';
             });
         }
 
