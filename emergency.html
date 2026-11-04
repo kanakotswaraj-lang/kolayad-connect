@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>എമർജൻസി നമ്പറുകൾ - കോളയാട് കണക്ട്</title>
+    <style>
+      body { background-color: #f4f6f9; font-family: sans-serif; padding: 20px; margin: 0; }
+      .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+      
+      .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 10px 16px; border-radius: 10px; transition: 0.3s; margin-bottom: 20px; font-size: 15px; }
+      .back-btn:hover { background: #c7d2fe; }
+
+      .emergency-card { background: #fff1f2; border-left: 5px solid #e11d48; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+      .emergency-info h3 { margin: 0 0 5px 0; color: #9f1239; font-size: 18px; }
+      .emergency-info p { margin: 0; color: #475569; font-size: 16px; font-weight: bold; }
+      
+      .call-btn { background: #e11d48; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; }
+      .delete-btn { background: #64748b; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 5px; }
+
+      .upload-box { background: #f8fafc; border: 2px dashed #e11d48; padding: 15px; border-radius: 10px; margin-top: 25px; display: none; }
+      .input-field { width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn"><span>←</span> തിരിച്ച് ഹോം പേജിലേക്ക്</a>
+        
+        <h2 style="color: #e11d48; margin-top: 0; text-align: center;">🚨 അത്യാഹിത / എമർജൻസി നമ്പറുകൾ</h2>
+        
+        <div id="emergency-list">
+            <p style="text-align: center; color: #666;">നമ്പറുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+
+        <!-- അഡ്മിൻ ലോഗിൻ ചെയ്താൽ മാത്രം പുതിയ എമർജൻസി നമ്പർ ചേർക്കാൻ കാണുന്ന ബോക്സ് -->
+        <div id="adminEmergencyBox" class="upload-box">
+            <h4 style="margin: 0 0 10px 0; color: #e11d48;">➕ പുതിയ എമർജൻസി നമ്പർ ചേർക്കുക</h4>
+            <input type="text" id="emerTitle" class="input-field" placeholder="സ്ഥാപനത്തിന്റെ അല്ലെങ്കിൽ സേവനത്തിന്റെ പേര് (ഉദാ: പോലീസ് സ്റ്റേഷൻ)">
+            <input type="tel" id="emerPhone" class="input-field" placeholder="ഫോൺ നമ്പർ">
+            <button onclick="addEmergencyNumber()" style="background: #e11d48; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;">നമ്പർ സേവ് ചെയ്യുക</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
+          authDomain: "kolayad-connect.firebaseapp.com",
+          projectId: "kolayad-connect",
+          storageBucket: "kolayad-connect.firebasestorage.app",
+          messagingSenderId: "400179608074",
+          appId: "1:400179608074:web:b6f5c269d60662efcdfdf3"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const isAdmin = localStorage.getItem('kolayad_admin') === 'true';
+
+        if (isAdmin) {
+            document.getElementById('adminEmergencyBox').style.display = 'block';
+        }
+
+        const listDiv = document.getElementById('emergency-list');
+
+        // ഫയർബേസിൽ നിന്ന് എമർജൻസി നമ്പറുകൾ ഫെച്ച് ചെയ്യുന്നു
+        function loadEmergencyNumbers() {
+            db.collection("emergencyNumbers").get().then((querySnapshot) => {
+                let html = "";
+                if (querySnapshot.empty) {
+                    listDiv.innerHTML = `<p style="text-align: center; color: #666;">നമ്പറുകൾ ഒന്നും ചേർത്തിട്ടില്ല.</p>`;
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    let item = doc.data();
+                    let docId = doc.id;
+                    html += `
+                        <div class="emergency-card">
+                            <div class="emergency-info">
+                                <h3>${item.title}</h3>
+                                <p>📞 ${item.phone}</p>
+                                ${isAdmin ? `<button class="delete-btn" onclick="deleteEmergency('${docId}')">ഡിലീറ്റ് ചെയ്യുക</button>` : ''}
+                            </div>
+                            <div>
+                                <a href="tel:${item.phone}" class="call-btn">കോൾ</a>
+                            </div>
+                        </div>
+                    `;
+                });
+                listDiv.innerHTML = html;
+            }).catch((error) => {
+                console.error("Error getting emergency numbers: ", error);
+                listDiv.innerHTML = `<p style="color: red; text-align: center;">നമ്പറുകൾ ലോഡ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.</p>`;
+            });
+        }
+
+        loadEmergencyNumbers();
+
+        // പുതിയ നമ്പർ ഫയർബേസിലേക്ക് ചേർക്കാൻ
+        function addEmergencyNumber() {
+            const title = document.getElementById('emerTitle').value.trim();
+            const phone = document.getElementById('emerPhone').value.trim();
+
+            if (!title || !phone) {
+                alert('ദയവായി പേരും ഫോൺ നമ്പറും നൽകുക.');
+                return;
+            }
+
+            db.collection("emergencyNumbers").add({
+                title: title,
+                phone: phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert('എമർജൻസി നമ്പർ വിജയകരമായി ചേർത്തു!');
+                location.reload();
+            }).catch((error) => {
+                console.error("Error adding emergency number: ", error);
+                alert('സേവ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.');
+            });
+        }
+
+        // നമ്പർ ഡിലീറ്റ് ചെയ്യാൻ (അഡ്മിന് മാത്രം)
+        function deleteEmergency(docId) {
+            if (!confirm('ഈ നമ്പർ ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?')) return;
+
+            db.collection("emergencyNumbers").doc(docId).delete().then(() => {
+                alert('നമ്പർ ഡിലീറ്റ് ചെയ്തു!');
+                location.reload();
+            }).catch((error) => {
+                console.error("Error deleting: ", error);
+                alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.');
+            });
+        }
+    </script>
+</body>
+</html>
