@@ -204,7 +204,7 @@
             });
         }
 
-        function uploadNewPhoto() {
+                function uploadNewPhoto() {
             const fileInput = document.getElementById('newShopPhoto');
             const statusText = document.getElementById('uploadStatus');
             if (fileInput.files.length === 0) {
@@ -221,7 +221,7 @@
                 img.src = e.target.result;
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
+                    const MAX_WIDTH = 600; // സൈസ് കൂടുതൽ കുറയ്ക്കാൻ വീതി 600 ആക്കി മാറ്റിയിരിക്കുന്നു
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -229,7 +229,8 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    // ക്വാളിറ്റി 0.5 ആയി കുറച്ച് എം.ബി വളരെ കുറയ്ക്കുന്നു
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5);
 
                     statusText.innerText = 'ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...';
 
@@ -261,6 +262,7 @@
             };
             reader.readAsDataURL(file);
         }
+
     </script>
 </body>
 </html>
