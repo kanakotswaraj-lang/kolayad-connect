@@ -433,12 +433,7 @@
   <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: flex-start;">
     <div style="width: 280px; background: var(--bg-app); height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 15px rgba(0,0,0,0.3); overflow-y: auto;">
       
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
-        <h3 style="font-size: 16px; font-weight: 800; color: #1e3a8a;">മെനു (Menu)</h3>
-        <button onclick="toggleSidebar()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-main);">✕</button>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
         <a href="index.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">🏠 ഹോം / ഡയറക്ടറി</a>
         <a href="profile.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">👤 എന്റെ വിവരങ്ങൾ</a>
         <a href="admin.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">⚙️ അഡ്മിൻ പാനൽ</a>
@@ -448,6 +443,9 @@
         <strong style="color: #60a5fa; font-size: 12px;">സഹായത്തിനും സംശയങ്ങൾക്കും (Support)</strong>
         <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color: #22c55e; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: bold;">💬 വാട്സാപ്പിൽ സന്ദേശം അയക്കാം</a>
 
+        <!-- 👇 പുതിയ ഫീഡ്‌ബാക്ക് ബട്ടൺ ഇവിടെ ചേർക്കുക -->
+        <a href="#" onclick="toggleSidebar(); toggleModal('feedbackModal');" style="color: #2563eb; text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input); font-weight: bold; display: flex; align-items: center; gap: 6px;">⭐ അഭിപ്രായങ്ങളും ഫീഡ്‌ബാക്കും</a>
+
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
 
         <strong style="color: #60a5fa; font-size: 12px;">Quick Links</strong>
@@ -455,6 +453,7 @@
         <a href="#" onclick="toggleSidebar(); toggleModal('contactModal');" style="color: var(--text-sub); text-decoration: none;">➔ Contact Us</a>
         <a href="#" onclick="toggleSidebar(); toggleModal('termsModal');" style="color: var(--text-sub); text-decoration: none;">➔ Terms & Conditions</a>
       </div>
+
     </div>
   </div>
 
@@ -540,6 +539,31 @@
       </form>
     </div>
   </div>
+      <!-- ഫീഡ്‌ബാക്ക് മോഡൽ പേജ് -->
+  <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
+    <div class="modal-box">
+      <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
+      <form onsubmit="submitFeedback(event)">
+        <label style="font-size:11px; color:var(--text-sub);">പേര് (ഓപ്ഷണൽ):</label>
+        <input type="text" id="fbName" class="dark-input" placeholder="നിങ്ങളുടെ പേര്">
+        
+        <label style="font-size:11px; color:var(--text-sub);">റേറ്റിംഗ് (1 മുതൽ 5 വരെ സ്റ്റാർ):</label>
+        <select id="fbRating" class="dark-input">
+          <option value="5">⭐⭐⭐⭐⭐ (വളരെ മികച്ചത്)</option>
+          <option value="4">⭐⭐⭐⭐ (നല്ലത്)</option>
+          <option value="3">⭐⭐⭐ (ശരാശരി)</option>
+          <option value="2">⭐⭐ (കൂടുതൽ മെച്ചപ്പെടാനുണ്ട്)</option>
+          <option value="1">⭐ (മോശം)</option>
+        </select>
+
+        <label style="font-size:11px; color:var(--text-sub);">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
+        <textarea id="fbComment" class="dark-input" rows="3" placeholder="ആപ്പിനെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങൾ ഇവിടെ എഴുതുക..." required></textarea>
+
+        <button type="submit" class="btn-pro-call" style="margin-top:6px; width:100%;">ഫീഡ്‌ബാക്ക് അയക്കുക</button>
+      </form>
+    </div>
+  </div>
+
 
   <script>
     let selectedCat = 'all';
@@ -953,6 +977,28 @@
         .then(() => {
           checkNotificationStatus();
         }).catch((err) => {});
+    }
+    async function submitFeedback(e) {
+      e.preventDefault();
+      const name = document.getElementById('fbName').value.trim() || 'അജ്ഞാതൻ';
+      const rating = document.getElementById('fbRating').value;
+      const comment = document.getElementById('fbComment').value.trim();
+
+      try {
+        await window.setDoc(window.doc(window.collection(window.db, "feedbacks")), {
+          name: name,
+          rating: rating,
+          comment: comment,
+          createdAt: new Date().toISOString()
+        });
+        alert('താങ്കളുടെ വിലയേറിയ അഭിപ്രായത്തിന് നന്ദി!');
+        toggleModal('feedbackModal');
+        document.getElementById('fbName').value = '';
+        document.getElementById('fbComment').value = '';
+      } catch (err) {
+        console.error("Error saving feedback: ", err);
+        alert('ഫീഡ്‌ബാക്ക് അയക്കുന്നതിൽ പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.');
+      }
     }
 
     initApp();
