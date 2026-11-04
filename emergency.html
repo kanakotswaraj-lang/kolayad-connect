@@ -5,11 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>എമർജൻസി നമ്പറുകൾ - കോളയാട് കണക്ട്</title>
     
-    <!-- Firebase SDK ഇമ്പോർട്ട് ചെയ്യുന്നു -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    <!-- Firebase SDKs (Compat Version) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
+    <style>
+      body { background-color: #f4f6f9; font-family: sans-serif; padding: 20px; margin: 0; }
+      .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+      .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 10px 16px; border-radius: 10px; transition: 0.3s; margin-bottom: 20px; font-size: 15px; }
+      .back-btn:hover { background: #c7d2fe; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- തിരിച്ച് ഹോം പേജിലേക്ക് പോകാനുള്ള ബട്ടൺ -->
+        <a href="index.html" class="back-btn"><span>←</span> തിരിച്ച് ഹോം പേജിലേക്ക്</a>
+        
+        <h3 style="color:#dc2626; margin-bottom:15px; font-size:18px; text-align:center;">🚨 അത്യാഹിത / പ്രധാന നമ്പറുകൾ</h3>
+        
+        <!-- ഫയർബേസിൽ നിന്നുള്ള നമ്പറുകൾ ഇവിടെ ഓട്ടോമാറ്റിക്കായി വരും -->
+        <div id="emergencyListContainer">
+            <p style="text-align:center; color:#64748b; font-size:13px;">നമ്പറുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+
+        <a href="index.html" style="background:#e2e8f0; color:#1e293b; text-decoration:none; display:block; text-align:center; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 20px;">ഹോം പേജിലേക്ക് മടങ്ങുക</a>
+    </div>
+
+    <script>
         const firebaseConfig = {
           apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
           authDomain: "kolayad-connect.firebaseapp.com",
@@ -20,15 +43,16 @@
           measurementId: "G-EYK4SLBXBB"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
 
-        async function loadEmergencyNumbers() {
+        function loadEmergencyNumbers() {
             const container = document.getElementById('emergencyListContainer');
-            try {
-                const querySnapshot = await getDocs(collection(db, "emergency_numbers"));
+            db.collection("emergency_numbers").get().then((querySnapshot) => {
                 if (querySnapshot.empty) {
-                    container.innerHTML = `<p style="text-align:center; color:#64748b; font-size:13px;">നമ്പറുകൾ ഒന്നും ചേർത്തിട്ടില്ല.</p>`;
+                    container.innerHTML = `<p style="text-align:center; color:#64748b; font-size:13px;">നമ്പറുകൾ ഒന്നും ചേർത്തിട്ടില്ല. ദയവായി ഫയർബേസിൽ നമ്പറുകൾ ആഡ് ചെയ്യുക.</p>`;
                     return;
                 }
 
@@ -46,35 +70,13 @@
                     `;
                 });
                 container.innerHTML = html;
-            } catch (e) {
-                console.error("Error loading emergency numbers: ", e);
+            }).catch((error) => {
+                console.error("Error getting emergency numbers: ", error);
                 container.innerHTML = `<p style="text-align:center; color:#dc2626; font-size:13px;">നമ്പറുകൾ ലോഡ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.</p>`;
-            }
+            });
         }
 
         loadEmergencyNumbers();
     </script>
-
-    <style>
-      body { background-color: #f4f6f9; font-family: sans-serif; padding: 20px; margin: 0; }
-      .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-      .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #1e3a8a; font-weight: bold; background: #e0e7ff; padding: 10px 16px; border-radius: 10px; transition: 0.3s; margin-bottom: 20px; font-size: 15px; }
-      .back-btn:hover { background: #c7d2fe; }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        
-        <h3 style="color:#dc2626; margin-bottom:15px; font-size:18px; text-align:center;">🚨 അത്യാഹിത / പ്രധാന നമ്പറുകൾ</h3>
-        
-        <!-- ഫയർബേസിൽ നിന്നുള്ള നമ്പറുകൾ ഇവിടെ ഓട്ടോമാറ്റിക്കായി വരും -->
-        <div id="emergencyListContainer">
-            <p style="text-align:center; color:#64748b; font-size:13px;">ലോഡ് ചെയ്യുന്നു...</p>
-        </div>
-
-        <a href="index.html" style="background:#e2e8f0; color:#1e293b; text-decoration:none; display:block; text-align:center; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 20px;">ഹോം പേജിലേക്ക് മടങ്ങുക</a>
-    </div>
-
 </body>
 </html>
