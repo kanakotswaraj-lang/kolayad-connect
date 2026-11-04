@@ -539,7 +539,8 @@
       </form>
     </div>
   </div>
-      <!-- ഫീഡ്‌ബാക്ക് മോഡൽ പേജ് -->
+      
+  <!-- ഫീഡ്‌ബാക്ക് മോഡൽ പേജ് -->
   <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
     <div class="modal-box">
       <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
@@ -547,14 +548,13 @@
         <label style="font-size:11px; color:var(--text-sub);">പേര് (ഓപ്ഷണൽ):</label>
         <input type="text" id="fbName" class="dark-input" placeholder="നിങ്ങളുടെ പേര്">
         
-        <label style="font-size:11px; color:var(--text-sub);">റേറ്റിംഗ് (1 മുതൽ 5 വരെ സ്റ്റാർ):</label>
-        <select id="fbRating" class="dark-input">
-          <option value="5">⭐⭐⭐⭐⭐ (വളരെ മികച്ചത്)</option>
-          <option value="4">⭐⭐⭐⭐ (നല്ലത്)</option>
-          <option value="3">⭐⭐⭐ (ശരാശരി)</option>
-          <option value="2">⭐⭐ (കൂടുതൽ മെച്ചപ്പെടാനുണ്ട്)</option>
-          <option value="1">⭐ (മോശം)</option>
-        </select>
+        <label style="font-size:11px; color:var(--text-sub);">റേറ്റിംഗ്:</label>
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;" id="starRatingGroup">
+          <button type="button" onclick="setRating(5, this)" class="star-btn active" style="flex:1; padding:8px; background:#2563eb; border:1.5px solid #3b82f6; border-radius:10px; color:white; font-weight:bold; cursor:pointer; font-size:11px;">⭐⭐⭐⭐⭐</button>
+          <button type="button" onclick="setRating(4, this)" class="star-btn" style="flex:1; padding:8px; background:var(--bg-input); border:1.5px solid var(--border-color); border-radius:10px; color:var(--text-main); font-weight:bold; cursor:pointer; font-size:11px;">⭐⭐⭐⭐</button>
+          <button type="button" onclick="setRating(3, this)" class="star-btn" style="flex:1; padding:8px; background:var(--bg-input); border:1.5px solid var(--border-color); border-radius:10px; color:var(--text-main); font-weight:bold; cursor:pointer; font-size:11px;">⭐⭐⭐</button>
+        </div>
+        <input type="hidden" id="fbRating" value="5">
 
         <label style="font-size:11px; color:var(--text-sub);">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
         <textarea id="fbComment" class="dark-input" rows="3" placeholder="ആപ്പിനെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങൾ ഇവിടെ എഴുതുക..." required></textarea>
@@ -978,6 +978,20 @@
           checkNotificationStatus();
         }).catch((err) => {});
     }
+          let currentRating = "5";
+    function setRating(val, elem) {
+      currentRating = val;
+      document.getElementById('fbRating').value = val;
+      document.querySelectorAll('.star-btn').forEach(btn => {
+        btn.style.background = 'var(--bg-input)';
+        btn.style.color = 'var(--text-main)';
+        btn.style.borderColor = 'var(--border-color)';
+      });
+      elem.style.background = '#2563eb';
+      elem.style.color = 'white';
+      elem.style.borderColor = '#3b82f6';
+    }
+
     async function submitFeedback(e) {
       e.preventDefault();
       const name = document.getElementById('fbName').value.trim() || 'അജ്ഞാതൻ';
