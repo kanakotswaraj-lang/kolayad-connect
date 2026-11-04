@@ -13,11 +13,11 @@
       .back-btn:hover { background: #c7d2fe; }
 
       .shop-images-slider { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 0; margin-bottom: 8px; scrollbar-width: none; border-radius: 14px; }
-      .shop-thumb-container { min-width: 100%; position: relative; scroll-snap-align: center; }
-      .shop-thumb-img { width: 100%; height: 320px; border-radius: 14px; object-fit: cover; border: 1px solid #ddd; cursor: zoom-in; }
+      .shop-thumb-container { min-width: 100%; scroll-snap-align: center; text-align: center; }
+      .shop-thumb-img { width: 100%; height: 300px; border-radius: 14px; object-fit: cover; border: 1px solid #ddd; cursor: zoom-in; }
       
-      /* ഫോട്ടോ ഡിലീറ്റ് ബട്ടൺ സ്റ്റൈൽ */
-      .delete-photo-btn { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; display: none; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+      /* വ്യക്തമായി കാണുന്ന ഡിലീറ്റ് ബട്ടൺ സ്റ്റൈൽ (ഫോട്ടോയ്ക്ക് താഴെ) */
+      .delete-photo-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 14px; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
       /* സ്ലൈഡർ ഇൻഡിക്കേറ്റർ ഡോട്സ് */
       .slider-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
@@ -138,13 +138,12 @@
                         ${photos.map((img, index) => `
                             <div class="shop-thumb-container">
                                 <img src="${img}" class="shop-thumb-img" alt="Shop Image" onclick="openZoomModal('${img}')">
-                                ${isAdmin ? `<button class="delete-photo-btn" style="display: block;" onclick="deletePhoto(${index})">🗑️ ഡിലീറ്റ്</button>` : ''}
+                                ${isAdmin ? `<button class="delete-photo-btn" onclick="deletePhoto(${index})">🗑️ ഈ ഫോട്ടോ ഡിലീറ്റ് ചെയ്യുക</button>` : ''}
                             </div>
                         `).join('')}
                     </div>
                 `;
 
-                // ഫോട്ടോകളുടെ എണ്ണത്തിനനുസരിച്ച് ഡോട്ടുകൾ സെറ്റ് ചെയ്യുന്നു
                 dotsHtml = `
                     <div class="slider-dots" id="sliderDots">
                         ${photos.map((_, index) => `<div class="dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`).join('')}
@@ -165,7 +164,6 @@
             `;
         }
 
-        // ഫോട്ടോ സ്വൈപ്പ് ചെയ്യുമ്പോൾ ഏത് ഡോട്ടാണ് ആക്ടീവ് ആകേണ്ടത് എന്ന് നിശ്ചയിക്കാൻ
         function updateActiveDot(totalPhotos) {
             const slider = document.getElementById('imageSlider');
             if (!slider) return;
@@ -183,7 +181,6 @@
             });
         }
 
-        // ഫോട്ടോ ഡിലീറ്റ് ചെയ്യാനുള്ള ഫങ്ഷൻ
         function deletePhoto(index) {
             if (!confirm('ഈ ഫോട്ടോ ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?')) return;
 
@@ -216,7 +213,7 @@
             }
 
             statusText.innerText = 'ഫോട്ടോ പ്രോസസ്സ് ചെയ്യുന്നു...';
-            const file = fileInput.files.FILE_0 || fileInput.files[0];
+            const file = fileInput.files[0];
             const reader = new FileReader();
 
             reader.onload = function(e) {
@@ -243,8 +240,8 @@
                         existingImages = [currentShopData.imageUrl, currentShopData.imageUrl2, currentShopData.imageUrl3, currentShopData.imageUrl4].filter(img => img);
                     }
 
-                    if (existingImages.length >= 6) {
-                        alert('പരമാവധി 6 ഫോട്ടോകൾ മാത്രമേ ചേർക്കാൻ കഴിയൂ! ദയവായി പഴയ ഫോട്ടോകൾ ഡിലീറ്റ് ചെയ്യുക.');
+                    if (existingImages.length >= 8) {
+                        alert('പരമാവധി 8 ഫോട്ടോകൾ മാത്രമേ ചേർക്കാൻ കഴിയൂ! ദയവായി പഴയ ഫോട്ടോകൾ ഡിലീറ്റ് ചെയ്യുക.');
                         statusText.innerText = '';
                         return;
                     }
