@@ -138,13 +138,15 @@
           <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ (ഓപ്ഷണൽ):</label>
           <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
 
-          <label style="margin-top: 6px;">കളർ:</label>
-          <select id="noticeColorInput" class="dark-input" style="padding: 8px;">
-            <option value="linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)">💜 റോയൽ പർപ്പിൾ</option>
-            <option value="linear-gradient(135deg, #ea580c 0%, #c2410c 100%)">🧡 ഓറഞ്ച്</option>
-            <option value="linear-gradient(135deg, #059669 0%, #047857 100%)">💚 പച്ച</option>
-            <option value="linear-gradient(135deg, #0284c7 0%, #0369a1 100%)">💙 നീല</option>
-          </select>
+          <!-- 4 കളർ തീം മോഡൽ ബട്ടണുകൾ -->
+          <label style="margin-top: 6px; font-size: 11px; color: var(--text-sub);">കളർ മോഡൽ തെരഞ്ഞെടുക്കുക:</label>
+          <div style="display: flex; gap: 6px; margin-top: 4px; margin-bottom: 10px;">
+            <button type="button" onclick="selectTheme('blue', this)" class="theme-btn active" style="flex:1; padding: 6px; background: #2563eb; color: white; border: 2px solid white; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ബ്ലൂ</button>
+            <button type="button" onclick="selectTheme('gold', this)" class="theme-btn" style="flex:1; padding: 6px; background: #f59e0b; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗോൾഡ്</button>
+            <button type="button" onclick="selectTheme('red', this)" class="theme-btn" style="flex:1; padding: 6px; background: #ef4444; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">റെഡ്</button>
+            <button type="button" onclick="selectTheme('green', this)" class="theme-btn" style="flex:1; padding: 6px; background: #10b981; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗ്രീൻ</button>
+          </div>
+          <input type="hidden" id="noticeColorInput" value="blue">
 
           <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക & Push Notification അയക്കുക</button>
 
@@ -240,6 +242,13 @@
 
   <script>
     let allShopsData = [];
+
+    // തീം സെലക്ട് ചെയ്യാനുള്ള ഫങ്ഷൻ
+    function selectTheme(theme, btn) {
+      document.getElementById('noticeColorInput').value = theme;
+      document.querySelectorAll('.theme-btn').forEach(b => b.style.border = '1.5px solid transparent');
+      btn.style.border = '2px solid white';
+    }
 
     function checkAdminLogin() {
       const pass = document.getElementById('adminPassInput').value;
@@ -368,14 +377,12 @@
         const shop = allShopsData.find(x => x.id === id) || {};
         let updateData = { name };
 
-        // Compress new uploaded photos if any
         let compressedImages = [];
         for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
           let compressed = await compressImageToString(photoFiles[i]);
           compressedImages.push(compressed);
         }
 
-        // Slot 1 logic
         if (remove1) {
           updateData.imageUrl = "";
         } else if (compressedImages.length > 0) {
@@ -384,7 +391,6 @@
           updateData.imageUrl = shop.imageUrl || "";
         }
 
-        // Slot 2 logic
         if (remove2) {
           updateData.imageUrl2 = "";
         } else if (compressedImages.length > 0) {
@@ -393,7 +399,6 @@
           updateData.imageUrl2 = shop.imageUrl2 || "";
         }
 
-        // Slot 3 logic
         if (remove3) {
           updateData.imageUrl3 = "";
         } else if (compressedImages.length > 0) {
@@ -402,7 +407,6 @@
           updateData.imageUrl3 = shop.imageUrl3 || "";
         }
 
-        // Slot 4 logic
         if (remove4) {
           updateData.imageUrl4 = "";
         } else if (compressedImages.length > 0) {
@@ -447,7 +451,7 @@
     async function postNotice() {
       const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
-      const color = document.getElementById('noticeColorInput').value;
+      const color = document.getElementById('noticeColorInput').value; // 'blue', 'gold', 'red', അല്ലെങ്കിൽ 'green'
       const file = document.getElementById('noticeImageFile').files[0];
 
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
@@ -569,7 +573,7 @@
         loadAdminCategories();
       }
     }
-    // ഫീഡ്‌ബാക്കുകൾ ഫയർബേസിൽ നിന്ന് എടുത്ത് അഡ്മിൻ പാനലിൽ കാണിക്കാനുള്ള ഫങ്ഷൻ
+    
     async function loadAdminFeedbacks() {
       try {
         if (!window.db) {
@@ -605,9 +609,7 @@
       }
     }
     
-    // അഡ്മിൻ പേജ് ലോഡ് ചെയ്യുമ്പോൾ ഫീഡ്‌ബാക്കുകൾ വിളിക്കുക
     loadAdminFeedbacks();
-
   </script>
 </body>
 </html>
