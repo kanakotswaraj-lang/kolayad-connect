@@ -983,48 +983,54 @@
           checkNotificationStatus();
         }).catch((err) => {});
     }
-        // നാല് കളർ തീമുകൾക്കുമുള്ള ഗൂഗിൾ പേ സ്റ്റൈൽ ഡിസൈൻ കോൺഫിഗറേഷൻ (ഗോൾഡ് തീമിൽ കറുത്ത അക്ഷരങ്ങൾ നൽകി)
-const themeStyles = {
-  blue: { 
-    border: '#1e3a8a', 
-    headerBg: 'linear-gradient(135deg, #1d4ed8, #3b82f6)', 
-    headerText: '#ffffff', 
-    badgeBg: 'rgba(255,255,255,0.2)', 
-    btnBg: '#2563eb', 
-    btnText: '#ffffff', 
-    tag: '📢 പ്രധാന അറിയിപ്പ്' 
-  },
-  gold: { 
-    border: '#b45309', 
-    headerBg: 'linear-gradient(135deg, #f59e0b, #d97706)', // കൂടുതൽ വ്യക്തതയുള്ള മഞ്ഞ/ഗോൾഡ് ഗ്രേഡിയൻ്റ്
-    headerText: '#000000', // മഞ്ഞ ബാക്ക്ഗ്രൗണ്ടിൽ വായിക്കാൻ എളുപ്പമുള്ള കറുത്ത അക്ഷരങ്ങൾ
-    badgeBg: 'rgba(0,0,0,0.15)', 
-    btnBg: '#f59e0b', 
-    btnText: '#000000', // ബട്ടണിലെ എഴുത്ത് കറുപ്പ്
-    tag: '⭐ പ്രത്യേക ഓഫർ' 
-  },
-  red:  { 
-    border: '#b91c1c', 
-    headerBg: 'linear-gradient(135deg, #b91c1c, #ef4444)', 
-    headerText: '#ffffff', 
-    badgeBg: 'rgba(0,0,0,0.2)', 
-    btnBg: '#ef4444', 
-    btnText: '#ffffff', 
-    tag: '🚨 അടിയന്തര അറിയിപ്പ്' 
-  },
-  green:{ 
-    border: '#047857', 
-    headerBg: 'linear-gradient(135deg, #047857, #10b981)', 
-    headerText: '#ffffff', 
-    badgeBg: 'rgba(0,0,0,0.2)', 
-    btnBg: '#10b981', 
-    btnText: '#ffffff', 
-    tag: '🌿 പുതിയ സേവനം' 
-  }
-};
+          // ഗൂഗിൾ പേ പോലെ 3 ടോൺ കളർ ഷേഡുകളുള്ള കാർഡ് ഡിസൈൻ
+  const themeStyles = {
+    blue: {
+      cardBg: '#e0f2fe',      // ലൈറ്റ് ബ്ലൂ ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#bae6fd',    // ഹെഡർ ഭാഗം
+      badgeBg: '#0284c7',     // ബാഡ്ജ് (തീയതി)
+      tagColor: '#0369a1',    // ടാഗ് ടെക്സ്റ്റ്
+      titleColor: '#0f172a',  // മെയിൻ ടെക്സ്റ്റ്
+      descColor: '#334155',   // വിവരങ്ങൾ
+      btnBg: '#0284c7',       // ബട്ടൺ
+      btnText: '#ffffff',
+      tag: '📢 പ്രധാന അറിയിപ്പ്'
+    },
+    gold: {
+      cardBg: '#fef3c7',      // ലൈറ്റ് ഗോൾഡ്/മഞ്ഞ ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#fde68a',
+      badgeBg: '#d97706',
+      tagColor: '#b45309',
+      titleColor: '#0f172a',
+      descColor: '#334155',
+      btnBg: '#d97706',
+      btnText: '#ffffff',
+      tag: '⭐ പ്രത്യേക ഓഫർ'
+    },
+    red: {
+      cardBg: '#ffe4e6',      // ലൈറ്റ് റെഡ്/പിങ്ക് ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#fecdd3',
+      badgeBg: '#e11d48',
+      tagColor: '#be123c',
+      titleColor: '#0f172a',
+      descColor: '#334155',
+      btnBg: '#e11d48',
+      btnText: '#ffffff',
+      tag: '🚨 അടിയന്തര അറിയിപ്പ്'
+    },
+    green: {
+      cardBg: '#dcfce7',      // ലൈറ്റ് ഗ്രീൻ ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#bbf7d0',
+      badgeBg: '#16a34a',
+      tagColor: '#15803d',
+      titleColor: '#0f172a',
+      descColor: '#334155',
+      btnBg: '#16a34a',
+      btnText: '#ffffff',
+      tag: '🌿 പുതിയ സേവനം'
+    }
+  };
 
-
-  // ഹോം പേജിൽ അറിയിപ്പുകൾ ലോഡ് ചെയ്ത് ഗൂഗിൾ പേ ലേഔട്ടിൽ കാണിക്കുന്ന ഫങ്ഷൻ
   async function loadHomeNotifications() {
     const container = document.getElementById('notificationListContainer'); 
     if (!container) return;
@@ -1042,24 +1048,32 @@ const themeStyles = {
         const themeKey = data.color || 'blue'; 
         const st = themeStyles[themeKey] || themeStyles.blue;
 
-        let imageHtml = data.imageUrl ? `<div style="padding: 0 16px 12px 16px; background: #1e293b;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 10px; max-height: 200px; object-fit: cover;"></div>` : '';
+        let imageHtml = data.imageUrl ? `<div style="padding: 0 14px 10px 14px;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 12px; max-height: 180px; object-fit: cover;"></div>` : '';
 
         html += `
-          <div style="background: #0f172a; border-radius: 20px; overflow: hidden; border: 1.5px solid ${st.border}; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-            <div style="background: ${st.headerBg}; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 11px; font-weight: 800; color: ${st.headerText};">${st.tag}</span>
-              <span style="font-size: 11px; font-weight: bold; color: ${st.headerText}; background: ${st.badgeBg}; padding: 2px 8px; border-radius: 12px;">${data.date || ''}</span>
+          <div style="background: ${st.cardBg}; border-radius: 20px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.05); min-width: 260px;">
+            
+            <!-- 1. ഹെഡർ ഭാഗം -->
+            <div style="background: ${st.headerBg}; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 11px; font-weight: 800; color: ${st.tagColor};">${st.tag}</span>
+              <span style="font-size: 10px; font-weight: bold; color: #ffffff; background: ${st.badgeBg}; padding: 3px 8px; border-radius: 10px;">${data.date || ''}</span>
             </div>
-            <div style="padding: 16px; background: #1e293b;">
-              <h4 style="font-size: 15px; font-weight: bold; color: #f8fafc; margin-bottom: 6px;">${data.title}</h4>
-              <p style="font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.5;">${data.desc}</p>
+
+            <!-- 2. കൺടെന്റ് ഭാഗം -->
+            <div style="padding: 14px;">
+              <h4 style="font-size: 15px; font-weight: 800; color: ${st.titleColor}; margin-bottom: 6px;">${data.title}</h4>
+              <p style="font-size: 12px; color: ${st.descColor}; margin: 0; line-height: 1.5; font-weight: 600;">${data.desc}</p>
             </div>
+
             ${imageHtml}
-            <div style="padding: 10px 16px; background: #0f172a; border-top: 1px solid ${st.border}; display: flex; justify-content: flex-end;">
-              <button onclick="viewNotifDetails('${docSnap.id}')" style="background: ${st.btnBg}; color: ${st.btnText}; border: none; padding: 7px 16px; border-radius: 18px; font-weight: bold; font-size: 12px; cursor: pointer;">
+
+            <!-- 3. ബട്ടൺ ഭാഗം -->
+            <div style="padding: 10px 14px; display: flex; justify-content: flex-end;">
+              <button onclick="viewNotifDetails('${docSnap.id}')" style="background: ${st.btnBg}; color: ${st.btnText}; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 11px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
                 കൂടുതൽ അറിയുക ›
               </button>
             </div>
+
           </div>
         `;
       });
@@ -1069,8 +1083,8 @@ const themeStyles = {
     }
   }
 
-  // പേജ് ലോഡ് ചെയ്യുമ്പോൾ ഫങ്ഷൻ പ്രവർത്തിക്കാൻ വിളിക്കുക
   loadHomeNotifications();
+
 
           let currentRating = "5";
     function setRating(val, elem) {
