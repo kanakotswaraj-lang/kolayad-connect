@@ -371,11 +371,10 @@
           🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
         </div>
         <input type="text" id="noticeSearchInput" class="dark-input" placeholder="🔍 അറിയിപ്പുകൾ പരതുക (ഉദാ: ഓഫർ, മീറ്റിംഗ്)..." onkeyup="filterNotices()" style="font-size: 12px; padding: 8px 12px; margin-bottom: 8px;">
-       <div class="notices-box-container" id="notificationListContainer">
-  <!-- ഫയർബേസിൽ നിന്നുള്ള ഗൂഗിൾ പേ സ്റ്റൈൽ അറിയിപ്പുകൾ ഓട്ടോമാറ്റിക്കായി ഇവിടെയാണ് വരുന്നത് -->
-</div>
-
-          <div class="banner-slider" id="noticesSlider"></div>
+        
+        <!-- അറിയിപ്പുകൾ കാണിക്കുന്ന പ്രധാന കണ്ടെയ്നർ -->
+        <div id="notificationListContainer"></div>
+        <div class="banner-slider" id="noticesSlider"></div>
       </div>
 
       <div class="section-label">
@@ -437,7 +436,7 @@
   <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: flex-start;">
     <div style="width: 280px; background: var(--bg-app); height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 15px rgba(0,0,0,0.3); overflow-y: auto;">
       
-            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
         <a href="index.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">🏠 ഹോം / ഡയറക്ടറി</a>
         <a href="profile.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">👤 എന്റെ വിവരങ്ങൾ</a>
         <a href="admin.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">⚙️ അഡ്മിൻ പാനൽ</a>
@@ -447,10 +446,8 @@
         <strong style="color: #60a5fa; font-size: 12px;">സഹായത്തിനും സംശയങ്ങൾക്കും (Support)</strong>
         <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color: #22c55e; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: bold;">💬 വാട്സാപ്പിൽ സന്ദേശം അയക്കാം</a>
 
-        <!-- 👇 പുതിയ ഫീഡ്‌ബാക്ക് ബട്ടൺ ഇവിടെ ചേർക്കുക -->
-          <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
-                <a href="#" onclick="toggleSidebar(); toggleModal('feedbackModal'); history.pushState({modalOpen:true}, '');" style="color: #f59e0b; text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input); font-weight: bold; display: flex; align-items: center; gap: 6px;">⭐ അഭിപ്രായങ്ങളും ഫീഡ്‌ബാക്കും</a>
-
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
+        <a href="#" onclick="toggleSidebar(); toggleModal('feedbackModal'); history.pushState({modalOpen:true}, '');" style="color: #f59e0b; text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input); font-weight: bold; display: flex; align-items: center; gap: 6px;">⭐ അഭിപ്രായങ്ങളും ഫീഡ്‌ബാക്കും</a>
 
         <strong style="color: #60a5fa; font-size: 12px;">Quick Links</strong>
         <a href="#" onclick="toggleSidebar(); toggleModal('aboutModal');" style="color: var(--text-sub); text-decoration: none;">➔ About Us</a>
@@ -511,12 +508,10 @@
     </div>
   </div>
 
-    <div class="floating-bar">
-      <a href="emergency.html" class="btn-emergency-quick" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">🚨 എമർജൻസി നമ്പറുകൾ</a>
-      <a href="profile.html" class="btn-add-pro">+ സ്ഥാപനം ചേർക്കുക</a>
-    </div>
-
-
+  <div class="floating-bar">
+    <a href="emergency.html" class="btn-emergency-quick" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">🚨 എമർജൻസി നമ്പറുകൾ</a>
+    <a href="profile.html" class="btn-add-pro">+ സ്ഥാപനം ചേർക്കുക</a>
+  </div>
 
   <div class="modal-bg" id="editShopModal" onclick="closeModalOnBg(event, 'editShopModal')">
     <div class="modal-box">
@@ -544,7 +539,7 @@
     </div>
   </div>
       
-    <!-- ഫീഡ്‌ബാക്ക് മോഡൽ പേജ് -->
+  <!-- ഫീഡ്‌ബാക്ക് മോഡൽ പേജ് -->
   <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
     <div class="modal-box" style="border: 1px solid #f59e0b;">
       <h3 style="color:#f59e0b; margin-bottom:12px; font-size:16px;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
@@ -567,8 +562,6 @@
       </form>
     </div>
   </div>
-
-
 
   <script>
     let selectedCat = 'all';
@@ -664,7 +657,7 @@
           notices = noticeSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         } else {
           notices = [
-            { id: '1', shopName: "ഗ്രീൻ മാൾ", tag: "വമ്പൻ ഓഫർ", title: "10 കിലോ തക്കാളി എടുക്കുമ്പോൾ 2 കിലോ ഫ്രീ", desc: "ഇന്ന് ഏത് സാധനവും 10 കിലോ എടുത്താൽ 2 കിലോ ഫ്രീ ആയി ലഭിക്കുന്നതാണ്.", color: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)", date: "26/10/2026", imageUrl: "" }
+            { id: '1', shopName: "ഗ്രീൻ മാൾ", tag: "വമ്പൻ ഓഫർ", title: "10 കിലോ തക്കാളി എടുക്കുമ്പോൾ 2 കിലോ ഫ്രീ", desc: "ഇന്ന് ഏത് സാധനവും 10 കിലോ എടുത്താൽ 2 കിലോ ഫ്രീ ആയി ലഭിക്കുന്നതാണ്.", color: "blue", date: "26/10/2026", imageUrl: "" }
           ];
         }
 
@@ -683,32 +676,90 @@
       loadAppSettings();
     }
 
+    // ഗൂഗിൾ പേ സ്റ്റൈലിലുള്ള ഡാർക്ക് & ഗ്രേഡിയന്റ് കളർ തീം കോൺഫിഗറേഷൻ
+    const themeStyles = {
+      blue: {
+        cardBg: '#0f172a',
+        border: '#38bdf8',
+        headerBg: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+        headerText: '#FFFFFF',
+        badgeBg: 'rgba(0,0,0,0.4)',
+        badgeText: '#38bdf8',
+        btnBg: '#0284c7',
+        btnText: '#ffffff',
+        tag: '📢 പ്രധാന അറിയിപ്പ്'
+      },
+      gold: {
+        cardBg: '#0f172a',
+        border: '#f59e0b',
+        headerBg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
+        headerText: '#FFFFFF',
+        badgeBg: 'rgba(0,0,0,0.4)',
+        badgeText: '#fde047',
+        btnBg: '#d97706',
+        btnText: '#ffffff',
+        tag: '⭐ പ്രത്യേക ഓഫർ'
+      },
+      red: {
+        cardBg: '#0f172a',
+        border: '#ef4444',
+        headerBg: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+        headerText: '#FFFFFF',
+        badgeBg: 'rgba(0,0,0,0.4)',
+        badgeText: '#fca5a5',
+        btnBg: '#dc2626',
+        btnText: '#ffffff',
+        tag: '🚨 അടിയന്തര അറിയിപ്പ്'
+      },
+      green: {
+        cardBg: '#0f172a',
+        border: '#10b981',
+        headerBg: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+        headerText: '#FFFFFF',
+        badgeBg: 'rgba(0,0,0,0.4)',
+        badgeText: '#6ee7b7',
+        btnBg: '#059669',
+        btnText: '#ffffff',
+        tag: '🌿 പുതിയ സേവനം'
+      }
+    };
+
     function renderNotices() {
-      const container = document.getElementById('noticesSlider');
-      if(!container) return;
+      const container = document.getElementById('notificationListContainer'); 
+      if (!container) return;
       if (notices.length === 0) {
         container.innerHTML = `<p style="color: var(--text-sub); font-size: 12px; text-align: center; width:100%;">അറിയിപ്പുകൾ ഒന്നുമില്ല</p>`;
         return;
       }
-      container.innerHTML = notices.map(n => {
-        const bgStyle = n.color || 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
-        const noticeDate = n.date || '';
-        return `
-          <div class="bright-notice-card" style="background: ${bgStyle};">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span class="notice-tag">പ്രധാന അറിയിപ്പ്</span>
-              <span style="font-size: 11px; opacity: 0.9; color: #ffffff; font-weight: bold;">${noticeDate}</span>
+      
+      let html = '';
+      notices.forEach((data) => {
+        const themeKey = data.color || 'blue'; 
+        const st = themeStyles[themeKey] || themeStyles.blue;
+
+        let imageHtml = data.imageUrl ? `<div style="padding: 0 16px 12px 16px;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 12px; max-height: 200px; object-fit: cover; cursor: zoom-in;" onclick="openZoomModal('${data.imageUrl}')"></div>` : '';
+
+        html += `
+          <div style="background: ${st.cardBg}; border-radius: 20px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 2px solid ${st.border}; min-width: 260px;">
+            
+            <!-- 1. ഗ്രേഡിയന്റ് ഹെഡറും ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ടിലുള്ള വലിപ്പമുള്ള തീയതിയും -->
+            <div style="background: ${st.headerBg}; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; font-weight: 800; color: ${st.headerText}; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${st.tag}</span>
+              <span style="font-size: 12px; font-weight: 700; color: ${st.badgeText}; background: ${st.badgeBg}; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">📅 ${data.date || ''}</span>
             </div>
-            <div class="notice-title">${n.title || ''}</div>
-            <div class="notice-desc">${n.desc || ''}</div>
-            ${n.imageUrl ? `
-              <div class="notice-img-wrap" onclick="openZoomModal('${n.imageUrl}')">
-                <img src="${n.imageUrl}" alt="Notice Image" />
-              </div>
-            ` : ''}
+
+            <!-- 2. കൺടെന്റ് ഭാഗം -->
+            <div style="padding: 16px;">
+              <h4 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">${data.title || ''}</h4>
+              <p style="font-size: 13px; color: #cbd5e1; margin: 0; line-height: 1.6; font-weight: 500;">${data.desc || ''}</p>
+            </div>
+
+            ${imageHtml}
+
           </div>
         `;
-      }).join('');
+      });
+      container.innerHTML = html;
     }
 
     function openZoomModal(imgSrc) {
@@ -729,7 +780,7 @@
 
     function filterNotices() {
       const query = document.getElementById('noticeSearchInput').value.toLowerCase();
-      const noticeCards = document.querySelectorAll('.bright-notice-card');
+      const noticeCards = document.querySelectorAll('#notificationListContainer > div');
       
       noticeCards.forEach(card => {
         const text = card.innerText.toLowerCase();
@@ -741,25 +792,18 @@
       });
     }
 
-    function openEmergencyModal() {
-      toggleModal('emergencyModal');
-      history.pushState({ modalOpen: true }, '');
-    }
-
     function shareShop(name, loc, phone, desc) {
       const text = `🌴 *കോളയാട് കണക്ട് ഡയറക്ടറി* 🌴\n\n📌 *${name}*\n📍 സ്ഥലം: ${loc}\n📞 ഫോൺ: ${phone}\nℹ️ വിവരങ്ങൾ: ${desc}\n\nകൂടുതൽ പ്രാദേശിക വിവരങ്ങൾക്ക് വിസിറ്റ് ചെയ്യൂ: https://kolayadconnect.in`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     window.addEventListener('popstate', function(event) {
-      const modal = document.getElementById('viewNoticeModal');
       const editModal = document.getElementById('editShopModal');
-      const emModal = document.getElementById('emergencyModal');
       const zoomModal = document.getElementById('imageZoomModal');
-      if (modal && modal.style.display === 'flex') modal.style.display = 'none';
+      const feedbackModal = document.getElementById('feedbackModal');
       if (editModal && editModal.style.display === 'flex') editModal.style.display = 'none';
-      if (emModal && emModal.style.display === 'flex') emModal.style.display = 'none';
       if (zoomModal && zoomModal.style.display === 'flex') zoomModal.style.display = 'none';
+      if (feedbackModal && feedbackModal.style.display === 'flex') feedbackModal.style.display = 'none';
     });
 
     function toggleModal(id) {
@@ -816,7 +860,7 @@
             <div class="item-loc">📍 ${s.loc}</div>
             ${photosHtml}
             <div class="item-desc-highlight">${s.desc}</div>
-                        <div class="card-actions">
+            <div class="card-actions">
               <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
               <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
               <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">📲 ഷെയർ</button>
@@ -827,19 +871,15 @@
               ` : ''}
             </div>
 
-            <!-- 2-ാം നമ്പർ ഉണ്ടെങ്കിൽ അത് ആദ്യം വരും -->
+            <!-- 2-ാം നമ്പർ ഉണ്ടെങ്കിൽ അത് വരും -->
             ${phone2Html}
 
-            <!-- 👇 "കൂടുതൽ വിവരങ്ങൾ കാണുക" ബട്ടൺ ഏറ്റവും താഴെയായി ഇവിടെ വരണം -->
+            <!-- കൂടുതൽ വിവരങ്ങൾ കാണുക ബട്ടൺ -->
             <div style="margin-top: 10px;">
-    <a href="shop.html?id=${s.id}" style="display: block; text-align: center; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25);">
-        കൂടുതൽ വിവരങ്ങൾ കാണുക ➔
-    </a>
-</div>
-
-
-          
-
+              <a href="shop.html?id=${s.id}" style="display: block; text-align: center; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25);">
+                  കൂടുതൽ വിവരങ്ങൾ കാണുക ➔
+              </a>
+            </div>
           </div>
         `;
       }).join('');
@@ -943,7 +983,6 @@
       render();
     }
 
-    // നോട്ടിഫിക്കേഷൻ പെർമിഷൻ ചോദിക്കുകയും ബട്ടൺ മാറ്റുകയും ചെയ്യുന്ന ഫങ്ഷൻ
     async function requestNotificationPermissionManual() {
       try {
         const permission = await Notification.requestPermission();
@@ -983,157 +1022,8 @@
           checkNotificationStatus();
         }).catch((err) => {});
     }
-            // ഗൂഗിൾ പേ സ്റ്റൈലിലുള്ള ഡാർക്ക് & ഗ്രേഡിയന്റ് കളർ തീം കോൺഫിഗറേഷൻ
-  const themeStyles = {
-    blue: {
-      border: '#38bdf8',
-      headerBg: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#38bdf8',
-      btnBg: '#0284c7',
-      btnText: '#ffffff',
-      tag: '📢 പ്രധാന അറിയിപ്പ്'
-    },
-    gold: {
-      border: '#f59e0b',
-      headerBg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#fde047',
-      btnBg: '#d97706',
-      btnText: '#ffffff',
-      tag: '⭐ പ്രത്യേക ഓഫർ'
-    },
-    red: {
-      border: '#ef4444',
-      headerBg: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#fca5a5',
-      btnBg: '#dc2626',
-      btnText: '#ffffff',
-      tag: '🚨 അടിയന്തര അറിയിപ്പ്'
-    },
-    green: {
-      border: '#10b981',
-      headerBg: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#6ee7b7',
-      btnBg: '#059669',
-      btnText: '#ffffff',
-      tag: '🌿 പുതിയ സേവനം'
-    }
-  };
 
-  async function loadHomeNotifications() {
-    const container = document.getElementById('notificationListContainer'); 
-    if (!container) return;
-      
-  // ഗൂഗിൾ പേ സ്റ്റൈലിലുള്ള ഡാർക്ക് & ഗ്രേഡിയന്റ് കളർ തീം കോൺഫിഗറേഷൻ
-  const themeStyles = {
-    blue: {
-      cardBg: '#0f172a',
-      border: '#38bdf8',
-      headerBg: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#38bdf8',
-      btnBg: '#0284c7',
-      btnText: '#ffffff',
-      tag: '📢 പ്രധാന അറിയിപ്പ്'
-    },
-    gold: {
-      cardBg: '#0f172a',
-      border: '#f59e0b',
-      headerBg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#fde047',
-      btnBg: '#d97706',
-      btnText: '#ffffff',
-      tag: '⭐ പ്രത്യേക ഓഫർ'
-    },
-    red: {
-      cardBg: '#0f172a',
-      border: '#ef4444',
-      headerBg: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#fca5a5',
-      btnBg: '#dc2626',
-      btnText: '#ffffff',
-      tag: '🚨 അടിയന്തര അറിയിപ്പ്'
-    },
-    green: {
-      cardBg: '#0f172a',
-      border: '#10b981',
-      headerBg: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-      headerText: '#FFFFFF',
-      badgeBg: 'rgba(0,0,0,0.4)',
-      badgeText: '#6ee7b7',
-      btnBg: '#059669',
-      btnText: '#ffffff',
-      tag: '🌿 പുതിയ സേവനം'
-    }
-  };
-
-  async function loadHomeNotifications() {
-    const container = document.getElementById('notificationListContainer'); 
-    if (!container) return;
-    
-    try {
-      const querySnapshot = await window.getDocs(window.collection(window.db, "notices"));
-      if (querySnapshot.empty) {
-        container.innerHTML = `<p style="font-size:12px; color:var(--text-sub); text-align:center;">അറിയിപ്പുകൾ ഒന്നും ലഭ്യമല്ല.</p>`;
-        return;
-      }
-
-      let html = '';
-      querySnapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const themeKey = data.color || 'blue'; 
-        const st = themeStyles[themeKey] || themeStyles.blue;
-
-        let imageHtml = data.imageUrl ? `<div style="padding: 0 16px 12px 16px;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 12px; max-height: 200px; object-fit: cover;"></div>` : '';
-
-        html += `
-          <div style="background: ${st.cardBg}; border-radius: 20px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 2px solid ${st.border}; min-width: 260px;">
-            
-            <!-- 1. ഗ്രേഡിയന്റ് ഹെഡറും ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ടിലുള്ള വലിപ്പമുള്ള തീയതിയും -->
-            <div style="background: ${st.headerBg}; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 13px; font-weight: 800; color: ${st.headerText}; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${st.tag}</span>
-              <span style="font-size: 12px; font-weight: 700; color: ${st.badgeText}; background: ${st.badgeBg}; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">📅 ${data.date || ''}</span>
-            </div>
-
-            <!-- 2. കൺടെന്റ് ഭാഗം -->
-            <div style="padding: 16px;">
-              <h4 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">${data.title}</h4>
-              <p style="font-size: 13px; color: #cbd5e1; margin: 0; line-height: 1.6; font-weight: 500;">${data.desc}</p>
-            </div>
-
-            ${imageHtml}
-
-            <!-- 3. ബട്ടൺ ഭാഗം -->
-            <div style="padding: 12px 16px; display: flex; justify-content: flex-end; background: #131c31; border-top: 1px solid #1e293b;">
-              <button onclick="viewNotifDetails('${docSnap.id}')" style="background: ${st.btnBg}; color: ${st.btnText}; border: none; padding: 9px 18px; border-radius: 20px; font-weight: bold; font-size: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
-                കൂടുതൽ അറിയുക ›
-              </button>
-            </div>
-
-          </div>
-        `;
-      });
-      container.innerHTML = html;
-    } catch (err) {
-      console.error("Error loading notifications:", err);
-    }
-  }
-
-  loadHomeNotifications();
-
-          let currentRating = "5";
+    let currentRating = "5";
     function setRating(val, elem) {
       currentRating = val;
       document.getElementById('fbRating').value = val;
@@ -1147,7 +1037,6 @@
       elem.style.color = '#ffffff';
       elem.style.borderColor = '#fbbf24';
     }
-
 
     async function submitFeedback(e) {
       e.preventDefault();
