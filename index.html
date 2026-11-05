@@ -1030,6 +1030,57 @@
   async function loadHomeNotifications() {
     const container = document.getElementById('notificationListContainer'); 
     if (!container) return;
+      // ഗൂഗിൾ പേ സ്റ്റൈലിലുള്ള പെർഫെക്റ്റ് കളർ കോമ്പിനേഷൻ കോൺഫിഗറേഷൻ
+  const themeStyles = {
+    blue: {
+      cardBg: '#f0f9ff',      // ലൈറ്റ് ബ്ലൂ കാർഡ് ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#bae6fd',    // മുകളിലെ ഹെഡർ കളർ
+      textColor: '#0369a1',   // ഹെഡർ ടെക്സ്റ്റ് കളർ
+      titleColor: '#0f172a',  // മെയിൻ ഹെഡിങ്
+      descColor: '#334155',   // വിവരങ്ങൾ
+      badgeBg: '#0369a1',     // തീയതിയുടെ സ്വന്തം ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ട് കളർ
+      badgeText: '#ffffff',   // തീയതിയുടെ ടെക്സ്റ്റ് കളർ
+      btnBg: '#0284c7',       // ബട്ടൺ കളർ
+      tag: '📢 പ്രധാന അറിയിപ്പ്'
+    },
+    gold: {
+      cardBg: '#fffbeb',      // ലൈറ്റ് ഗോൾഡ് കാർഡ് ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#fde68a',    // മുകളിലെ ഹെഡർ കളർ
+      textColor: '#b45309',
+      titleColor: '#0f172a',
+      descColor: '#334155',
+      badgeBg: '#b45309',     // തീയതിയുടെ സ്വന്തം ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ട് കളർ
+      badgeText: '#ffffff',
+      btnBg: '#d97706',
+      tag: '⭐ പ്രത്യേക ഓഫർ'
+    },
+    red: {
+      cardBg: '#fff1f2',      // ലൈറ്റ് റെഡ് കാർഡ് ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#fecdd3',    // മുകളിലെ ഹെഡർ കളർ
+      textColor: '#be123c',
+      titleColor: '#0f172a',
+      descColor: '#334155',
+      badgeBg: '#be123c',     // തീയതിയുടെ സ്വന്തം ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ട് കളർ
+      badgeText: '#ffffff',
+      btnBg: '#e11d48',
+      tag: '🚨 അടിയന്തര അറിയിപ്പ്'
+    },
+    green: {
+      cardBg: '#f0fdf4',      // ലൈറ്റ് ഗ്രീൻ കാർഡ് ബാക്ക്ഗ്രൗണ്ട്
+      headerBg: '#bbf7d0',    // മുകളിലെ ഹെഡർ കളർ
+      textColor: '#15803d',
+      titleColor: '#0f172a',
+      descColor: '#334155',
+      badgeBg: '#15803d',     // തീയതിയുടെ സ്വന്തം ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ട് കളർ
+      badgeText: '#ffffff',
+      btnBg: '#16a34a',
+      tag: '🌿 പുതിയ സേവനം'
+    }
+  };
+
+  async function loadHomeNotifications() {
+    const container = document.getElementById('notificationListContainer'); 
+    if (!container) return;
     
     try {
       const querySnapshot = await window.getDocs(window.collection(window.db, "notices"));
@@ -1044,28 +1095,28 @@
         const themeKey = data.color || 'blue'; 
         const st = themeStyles[themeKey] || themeStyles.blue;
 
-        let imageHtml = data.imageUrl ? `<div style="padding: 0 14px 12px 14px;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 12px; max-height: 200px; object-fit: cover;"></div>` : '';
+        let imageHtml = data.imageUrl ? `<div style="padding: 0 16px 12px 16px;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 12px; max-height: 180px; object-fit: cover;"></div>` : '';
 
         html += `
-          <div style="background: #0f172a; border-radius: 20px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 2px solid ${st.border}; min-width: 260px;">
+          <div style="background: ${st.cardBg}; border-radius: 20px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 6px 15px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); min-width: 260px;">
             
-            <!-- 1. ഗ്രേഡിയന്റ് ഹെഡറും ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ടിലുള്ള വലിപ്പമുള്ള തീയതിയും -->
-            <div style="background: ${st.headerBg}; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 13px; font-weight: 800; color: ${st.headerText}; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${st.tag}</span>
-              <span style="font-size: 12px; font-weight: 700; color: ${st.badgeText}; background: ${st.badgeBg}; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">📅 ${data.date || ''}</span>
+            <!-- 1. ഗൂഗിൾ പേ സ്റ്റൈൽ മുകളിലെ ഹെഡർ ബാർ (ടാഗും കൂടുതൽ വലിപ്പമുള്ള തീയതിയും) -->
+            <div style="background: ${st.headerBg}; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; font-weight: 800; color: ${st.textColor};">${st.tag}</span>
+              <span style="font-size: 12px; font-weight: 800; color: ${st.badgeText}; background: ${st.badgeBg}; padding: 4px 12px; border-radius: 12px; letter-spacing: 0.5px;">📅 ${data.date || ''}</span>
             </div>
 
-            <!-- 2. കൺടെന്റ് ഭാഗം (വ്യക്തമായി വായിക്കാൻ കഴിയുന്ന ടെക്സ്റ്റ് കളർ) -->
+            <!-- 2. കൺടെന്റ് ഭാഗം -->
             <div style="padding: 16px;">
-              <h4 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">${data.title}</h4>
-              <p style="font-size: 13px; color: #cbd5e1; margin: 0; line-height: 1.6; font-weight: 500;">${data.desc}</p>
+              <h4 style="font-size: 16px; font-weight: 800; color: ${st.titleColor}; margin-bottom: 8px;">${data.title}</h4>
+              <p style="font-size: 13px; color: ${st.descColor}; margin: 0; line-height: 1.6; font-weight: 500;">${data.desc}</p>
             </div>
 
             ${imageHtml}
 
-            <!-- 3. ബട്ടൺ ഭാഗം -->
-            <div style="padding: 12px 16px; display: flex; justify-content: flex-end; background: #131c31; border-top: 1px solid #1e293b;">
-              <button onclick="viewNotifDetails('${docSnap.id}')" style="background: ${st.btnBg}; color: ${st.btnText}; border: none; padding: 9px 18px; border-radius: 20px; font-weight: bold; font-size: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+            <!-- 3. താഴെയുള്ള ബട്ടൺ ഭാഗം -->
+            <div style="padding: 12px 16px; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.02); border-top: 1px solid rgba(0,0,0,0.05);">
+              <button onclick="viewNotifDetails('${docSnap.id}')" style="background: ${st.btnBg}; color: #ffffff; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; font-size: 12px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.15);">
                 കൂടുതൽ അറിയുക ›
               </button>
             </div>
