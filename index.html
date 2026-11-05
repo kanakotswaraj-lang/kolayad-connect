@@ -140,7 +140,7 @@
     
     .hero-banner { 
       position: relative; 
-      height: 160px; 
+      height: 140px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
@@ -162,8 +162,8 @@
 
     .profile-avatar-wrap { position: relative; margin-top: -42px; display: flex; justify-content: center; z-index: 5; }
     .profile-avatar { 
-      width: 75px; 
-      height: 75px; 
+      width: 70px; 
+      height: 70px; 
       border-radius: 18px; 
       border: 3.5px solid #1e3a8a; 
       background: var(--bg-card) center/cover no-repeat; 
@@ -173,20 +173,20 @@
     body.dark-mode .profile-avatar { border-color: #3b82f6; }
     .profile-avatar:hover { transform: scale(1.05); }
 
-    .app-title-box { text-align: center; padding: 4px 10px 8px 10px; }
-    .main-app-name { font-size: 22px; font-weight: 800; color: #1e3a8a; text-shadow: 0 1px 4px rgba(30,58,138,0.1); margin-bottom: 4px; }
+    .app-title-box { text-align: center; padding: 2px 10px 6px 10px; }
+    .main-app-name { font-size: 20px; font-weight: 800; color: #1e3a8a; text-shadow: 0 1px 4px rgba(30,58,138,0.1); margin-bottom: 2px; }
     body.dark-mode .main-app-name { color: #facc15; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
 
     .user-welcome-bar { 
-      font-size: 13px; font-weight: 800; color: #ffffff; 
+      font-size: 12px; font-weight: 800; color: #ffffff; 
       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); 
-      padding: 6px 16px; border-radius: 22px; border: 1.5px solid #93c5fd; 
+      padding: 5px 14px; border-radius: 22px; border: 1.5px solid #93c5fd; 
       cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
       text-decoration: none; box-shadow: 0 4px 14px rgba(30,58,138,0.25);
     }
     body.dark-mode .user-welcome-bar { color: #ffffff; background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); border-color: #60a5fa; }
 
-    .filter-sticky-padding { padding: 8px 12px; background: var(--bg-app); }
+    .filter-sticky-padding { padding: 6px 12px 8px 12px; background: var(--bg-app); }
     .dark-input { 
       width: 100%; background: var(--bg-input); border: 2px solid var(--border-color); color: var(--text-main); 
       padding: 10px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; 
@@ -224,24 +224,22 @@
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     
     .cat-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
-        .cat-box-icon { 
+    .cat-box-icon { 
       font-size: 22px; 
       width: 48px; 
       height: 48px; 
-      border-radius: 16px; /* മനോഹരമായ സോഫ്റ്റ് ബോക്സ് ആകൃതി */
+      border-radius: 16px; 
       background: linear-gradient(145deg, #1e293b, #0f172a); 
       border: 1px solid rgba(59, 130, 246, 0.4); 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       color: #60a5fa;
-      /* 3D എഫക്റ്റും ഡെപ്ത് തോന്നിക്കുന്ന ഷാഡോയും */
       box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5), 
                   inset 0 1px 1px rgba(255, 255, 255, 0.1);
       transition: transform 0.2s ease;
     }
-
-      body.dark-mode .cat-box-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    body.dark-mode .cat-box-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
     
     .cat-box-title { font-size: 10px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
     body.dark-mode .cat-box-title { color: #ffffff; font-weight: 700; }
@@ -299,80 +297,63 @@
 
     #imageZoomModal { background: rgba(0,0,0,0.9); z-index: 100; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
-         /* 3D Glassmorphism Search Box Styles */
+
+    /* Clean Search Input Styles */
     .search-container {
       position: relative;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .search-input-box {
       width: 100%;
-      padding: 12px 16px 12px 42px;
-      background: rgba(30, 41, 59, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(96, 165, 250, 0.3);
+      padding: 11px 16px 11px 16px;
+      background: rgba(30, 41, 59, 0.65);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
       border-radius: 14px;
       color: #ffffff;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 
-                  0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
       outline: none;
       transition: all 0.3s ease;
     }
     body:not(.dark-mode) .search-input-box {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(248, 250, 252, 0.95);
       color: #0f172a;
-      border: 1px solid rgba(37, 99, 235, 0.25);
+      border: 1.5px solid rgba(37, 99, 235, 0.3);
     }
     .search-input-box:focus {
       border-color: #38bdf8;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 
-                  0 0 10px rgba(56, 189, 248, 0.4);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.4);
     }
-    .animated-placeholder {
-      position: absolute;
-      left: 42px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #93c5fd;
-      pointer-events: none;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: fadeInOut 3s infinite;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    .search-input-box::placeholder {
+      color: #94a3b8;
+      font-weight: 500;
+      transition: color 0.3s ease;
     }
-    body:not(.dark-mode) .animated-placeholder {
-      color: #1e40af;
-      text-shadow: none;
-    }
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: translateY(-20%); }
-      15% { opacity: 1; transform: translateY(-50%); }
-      85% { opacity: 1; transform: translateY(-50%); }
-      100% { opacity: 0; transform: translateY(-80%); }
+    body:not(.dark-mode) .search-input-box::placeholder {
+      color: #64748b;
     }
 
-    /* Ticker Notice Bar Styles - Fixed layout */
+    /* Ticker Notice Bar Styles */
     .ticker-wrapper {
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
-      padding: 6px 10px;
+      border-radius: 10px;
+      padding: 5px 10px;
       display: flex;
       align-items: center;
       overflow: hidden;
-      margin-bottom: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
     .ticker-badge {
       background: linear-gradient(135deg, #ef4444, #b91c1c);
       color: #fff;
       font-size: 10px;
       font-weight: bold;
-      padding: 3px 6px;
+      padding: 2px 6px;
       border-radius: 6px;
       margin-right: 8px;
       white-space: nowrap;
@@ -390,10 +371,7 @@
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-
-
   </style>
-    
 </head>
 <body>
 
@@ -426,12 +404,12 @@
       </div>
 
       <div style="text-align: center; padding: 0 12px;">
-        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 6px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
+        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
           🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
         </button>
       </div>
 
-            <div class="filter-sticky-padding">
+      <div class="filter-sticky-padding">
         <!-- ട്രെൻഡിങ് സെർച്ച് ടിക്കർ ബാർ -->
         <div class="ticker-wrapper">
           <span class="ticker-badge">🔥 ട്രെൻഡിങ്</span>
@@ -440,13 +418,12 @@
           </div>
         </div>
 
-        <!-- 3D Glassmorphism Search Bar & Animated Placeholder -->
+        <!-- Clean Search Box -->
         <div class="search-container">
-          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()">
-          <span class="animated-placeholder" id="searchPlaceholder">സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, സാധനങ്ങൾ തിരയൂ...</span>
+          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, സാധനങ്ങൾ തിരയുക...">
         </div>
       </div>
-
+    </div> <!-- sticky-header ക്ലോസിംഗ് ടാഗ് ലെവൽ ചെയ്തു -->
 
     <div class="scrollable-body" id="scrollBody">
       
@@ -507,7 +484,6 @@
       </footer>
     </div>
 
-
     <nav class="bottom-nav">
       <a href="index.html" class="nav-btn active"><span style="font-size: 16px;">🏪</span><span>ഡയറക്ടറി</span></a>
       <a href="profile.html" class="nav-btn"><span style="font-size: 16px;">👤</span><span>എന്റെ വിവരങ്ങൾ</span></a>
@@ -518,7 +494,6 @@
   <!-- ഹാംബർഗർ സൈഡ് മെനു (Sidebar Menu) -->
   <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: flex-start;">
     <div style="width: 280px; background: var(--bg-app); height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 15px rgba(0,0,0,0.3); overflow-y: auto;">
-      
       <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
         <a href="index.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">🏠 ഹോം / ഡയറക്ടറി</a>
         <a href="profile.html" style="color: var(--text-main); text-decoration: none; padding: 8px; border-radius: 8px; background: var(--bg-input);">👤 എന്റെ വിവരങ്ങൾ</a>
@@ -537,28 +512,26 @@
         <a href="#" onclick="toggleSidebar(); toggleModal('contactModal');" style="color: var(--text-sub); text-decoration: none;">➔ Contact Us</a>
         <a href="#" onclick="toggleSidebar(); toggleModal('termsModal');" style="color: var(--text-sub); text-decoration: none;">➔ Terms & Conditions</a>
       </div>
-
     </div>
   </div>
 
-  <!-- About Us മോഡൽ പേജ് -->
+  <!-- Modal Windows -->
   <div class="modal-bg" id="aboutModal" onclick="closeModalOnBg(event, 'aboutModal')">
     <div class="modal-box">
       <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">ℹ️ ഞങ്ങളെക്കുറിച്ച് (About Us)</h3>
       <p style="font-size:12px; line-height:1.6; color:var(--text-main); margin-bottom:12px;">
-        ⛱️കോളയാട് കണക്ട് (Kolayad Connect)🛍️ എന്നത് കോളയാട് പ്രദേശത്തെ മുഴുവൻ സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, തൊഴിലാളികൾ, അത്യാഹിത നമ്പറുകൾ എന്നിവ ഒരു കുടക്കീഴിൽ ലഭ്യമാക്കുന്ന ഡിജിറ്റൽ ഡയറക്ടറി ആപ്പാണ്. പ്രാദേശിക വ്യാപാരത്തെയും ജനങ്ങളുടെ ആവശ്യങ്ങളെയും എളുപ്പത്തിൽ ബന്ധിപ്പിക്കുക എന്നതാണ് ഇതിന്റെ ലക്ഷ്യം.
+        ⛱️കോളയാട് കണക്ട് (Kolayad Connect)🛍️ എന്നത് കോളയാട് പ്രദേശത്തെ മുഴുവൻ സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, തൊഴിലാളികൾ, അത്യാഹിത നമ്പറുകൾ എന്നിവ ഒരു കുടക്കീഴിൽ ലഭ്യമാക്കുന്ന ഡിജിറ്റൽ ഡയറക്ടറി ആപ്പാണ്.
       </p>
       <button onclick="toggleModal('aboutModal')" class="btn-pro-call" style="width:100%; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
-  <!-- Contact Us മോഡൽ പേജ് -->
   <div class="modal-bg" id="contactModal" onclick="closeModalOnBg(event, 'contactModal')">
     <div class="modal-box">
       <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">📞 ബന്ധപ്പെടാൻ (Contact Us)</h3>
       <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; margin-bottom:12px;">
         <div style="background:var(--highlight-bg); padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>ഫോൺ നമ്പർ:</strong> <a href="mob:9495315236" style="color:#2563eb; text-decoration:none; font-weight:bold;">6238020523</a>
+          <strong>ഫോൺ നമ്പർ:</strong> <a href="tel:6238020523" style="color:#2563eb; text-decoration:none; font-weight:bold;">6238020523</a>
         </div>
         <div style="background:var(--highlight-bg); padding:10px; border-radius:10px; border:1px solid var(--border-color);">
           <strong>സപ്പോർട്ട് വാട്സാപ്പ്:</strong> <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color:#22c55e; text-decoration:none; font-weight:bold;">💬 ചാറ്റ് ചെയ്യുക (6238020523)</a>
@@ -571,7 +544,6 @@
     </div>
   </div>
 
-  <!-- Terms & Conditions മോഡൽ പേജ് -->
   <div class="modal-bg" id="termsModal" onclick="closeModalOnBg(event, 'termsModal')">
     <div class="modal-box">
       <h3 style="color:#2563eb; margin-bottom:12px; font-size:16px;">📜 നിബന്ധനകളും വ്യവസ്ഥകളും</h3>
@@ -622,7 +594,6 @@
     </div>
   </div>
       
-  <!-- ഫീഡ്‌ബാക്ക് മോഡൽ പേജ് -->
   <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
     <div class="modal-box" style="border: 1px solid #f59e0b;">
       <h3 style="color:#f59e0b; margin-bottom:12px; font-size:16px;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
@@ -756,9 +727,31 @@
         document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
       }
       loadAppSettings();
+      startDynamicPlaceholder();
     }
 
-    // ഗൂഗിൾ പേ സ്റ്റൈലിലുള്ള ഡാർക്ക് & ഗ്രേഡിയന്റ് കളർ തീം കോൺഫിഗറേഷൻ
+    /* Dynamic Placeholder Change Function */
+    function startDynamicPlaceholder() {
+      const searchKeywords = [
+        "🔍 സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ തിരയുക...",
+        "🔍 ഓട്ടോ / ടാക്സി തിരയുക...",
+        "🔍 വർക്ക്‌ഷോപ്പുകൾ, മക്കാനിക്കുകൾ...",
+        "🔍 ഇലക്ട്രീഷ്യൻമാർ, പ്ലംബർമാർ...",
+        "🔍 പ്രധാന അത്യാഹിത നമ്പറുകൾ..."
+      ];
+      let keywordIndex = 0;
+      const searchInput = document.getElementById("searchInput");
+
+      if (searchInput) {
+        setInterval(() => {
+          if (!searchInput.value) { // ടൈപ്പ് ചെയ്യുന്നുണ്ടെങ്കിൽ ഡൈനാമിക് ചേഞ്ച് നിൽക്കും
+            keywordIndex = (keywordIndex + 1) % searchKeywords.length;
+            searchInput.placeholder = searchKeywords[keywordIndex];
+          }
+        }, 3000);
+      }
+    }
+
     const themeStyles = {
       blue: {
         cardBg: '#0f172a',
@@ -823,21 +816,15 @@
 
         html += `
           <div style="min-width: 90%; scroll-snap-align: start; background: ${st.cardBg}; border-radius: 20px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 2px solid ${st.border};">
-            
-            <!-- 1. ഗ്രേഡിയന്റ് ഹെഡറും ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ടിലുള്ള വലിപ്പമുള്ള തീയതിയും -->
             <div style="background: ${st.headerBg}; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
               <span style="font-size: 13px; font-weight: 800; color: ${st.headerText}; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${st.tag}</span>
               <span style="font-size: 12px; font-weight: 700; color: ${st.badgeText}; background: ${st.badgeBg}; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">📅 ${data.date || ''}</span>
             </div>
-
-            <!-- 2. കൺടെന്റ് ഭാഗം -->
             <div style="padding: 16px;">
               <h4 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">${data.title || ''}</h4>
               <p style="font-size: 13px; color: #cbd5e1; margin: 0; line-height: 1.6; font-weight: 500;">${data.desc || ''}</p>
             </div>
-
             ${imageHtml}
-
           </div>
         `;
       });
