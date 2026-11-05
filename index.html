@@ -983,45 +983,46 @@
           checkNotificationStatus();
         }).catch((err) => {});
     }
-        // നാല് കളർ തീമുകൾക്കുമുള്ള ഗൂഗിൾ പേ സ്റ്റൈൽ ഡിസൈൻ കോൺഫിഗറേഷൻ
-  const themeStyles = {
-    blue: { 
-      border: '#1e3a8a', 
-      headerBg: 'linear-gradient(135deg, #1d4ed8, #3b82f6)', 
-      headerText: '#ffffff', 
-      badgeBg: 'rgba(255,255,255,0.2)', 
-      btnBg: '#2563eb', 
-      btnText: '#ffffff', 
-      tag: '📢 പ്രധാന അറിയിപ്പ്' 
-    },
-    gold: { 
-      border: '#b45309', 
-      headerBg: 'linear-gradient(135deg, #b45309, #f59e0b)', 
-      headerText: '#ffffff', 
-      badgeBg: 'rgba(0,0,0,0.2)', 
-      btnBg: '#f59e0b', 
-      btnText: '#000000', 
-      tag: '⭐ പ്രത്യേക ഓഫർ' 
-    },
-    red:  { 
-      border: '#b91c1c', 
-      headerBg: 'linear-gradient(135deg, #b91c1c, #ef4444)', 
-      headerText: '#ffffff', 
-      badgeBg: 'rgba(0,0,0,0.2)', 
-      btnBg: '#ef4444', 
-      btnText: '#ffffff', 
-      tag: '🚨 അടിയന്തര അറിയിപ്പ്' 
-    },
-    green:{ 
-      border: '#047857', 
-      headerBg: 'linear-gradient(135deg, #047857, #10b981)', 
-      headerText: '#ffffff', 
-      badgeBg: 'rgba(0,0,0,0.2)', 
-      btnBg: '#10b981', 
-      btnText: '#ffffff', 
-      tag: '🌿 പുതിയ സേവനം' 
-    }
-  };
+        // നാല് കളർ തീമുകൾക്കുമുള്ള ഗൂഗിൾ പേ സ്റ്റൈൽ ഡിസൈൻ കോൺഫിഗറേഷൻ (ഗോൾഡ് തീമിൽ കറുത്ത അക്ഷരങ്ങൾ നൽകി)
+const themeStyles = {
+  blue: { 
+    border: '#1e3a8a', 
+    headerBg: 'linear-gradient(135deg, #1d4ed8, #3b82f6)', 
+    headerText: '#ffffff', 
+    badgeBg: 'rgba(255,255,255,0.2)', 
+    btnBg: '#2563eb', 
+    btnText: '#ffffff', 
+    tag: '📢 പ്രധാന അറിയിപ്പ്' 
+  },
+  gold: { 
+    border: '#b45309', 
+    headerBg: 'linear-gradient(135deg, #f59e0b, #d97706)', // കൂടുതൽ വ്യക്തതയുള്ള മഞ്ഞ/ഗോൾഡ് ഗ്രേഡിയൻ്റ്
+    headerText: '#000000', // മഞ്ഞ ബാക്ക്ഗ്രൗണ്ടിൽ വായിക്കാൻ എളുപ്പമുള്ള കറുത്ത അക്ഷരങ്ങൾ
+    badgeBg: 'rgba(0,0,0,0.15)', 
+    btnBg: '#f59e0b', 
+    btnText: '#000000', // ബട്ടണിലെ എഴുത്ത് കറുപ്പ്
+    tag: '⭐ പ്രത്യേക ഓഫർ' 
+  },
+  red:  { 
+    border: '#b91c1c', 
+    headerBg: 'linear-gradient(135deg, #b91c1c, #ef4444)', 
+    headerText: '#ffffff', 
+    badgeBg: 'rgba(0,0,0,0.2)', 
+    btnBg: '#ef4444', 
+    btnText: '#ffffff', 
+    tag: '🚨 അടിയന്തര അറിയിപ്പ്' 
+  },
+  green:{ 
+    border: '#047857', 
+    headerBg: 'linear-gradient(135deg, #047857, #10b981)', 
+    headerText: '#ffffff', 
+    badgeBg: 'rgba(0,0,0,0.2)', 
+    btnBg: '#10b981', 
+    btnText: '#ffffff', 
+    tag: '🌿 പുതിയ സേവനം' 
+  }
+};
+
 
   // ഹോം പേജിൽ അറിയിപ്പുകൾ ലോഡ് ചെയ്ത് ഗൂഗിൾ പേ ലേഔട്ടിൽ കാണിക്കുന്ന ഫങ്ഷൻ
   async function loadHomeNotifications() {
