@@ -224,8 +224,24 @@
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     
     .cat-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
-    .cat-box-icon { font-size: 18px; width: 34px; height: 34px; border-radius: 10px; background: rgba(30, 58, 138, 0.1); display: flex; align-items: center; justify-content: center; color: #1e3a8a; }
-    body.dark-mode .cat-box-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .cat-box-icon { 
+      font-size: 22px; 
+      width: 48px; 
+      height: 48px; 
+      border-radius: 16px; /* മനോഹരമായ സോഫ്റ്റ് ബോക്സ് ആകൃതി */
+      background: linear-gradient(145deg, #1e293b, #0f172a); 
+      border: 1px solid rgba(59, 130, 246, 0.4); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #60a5fa;
+      /* 3D എഫക്റ്റും ഡെപ്ത് തോന്നിക്കുന്ന ഷാഡോയും */
+      box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5), 
+                  inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+      body.dark-mode .cat-box-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
     
     .cat-box-title { font-size: 10px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
     body.dark-mode .cat-box-title { color: #ffffff; font-weight: 700; }
