@@ -449,9 +449,13 @@
     }
 
     async function postNotice() {
+    async function postNotice() {
       const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
-      const color = document.getElementById('noticeColorInput').value; // 'blue', 'gold', 'red', അല്ലെങ്കിൽ 'green'
+      
+      // ഇവിടെയാണ് മാറ്റം: hidden input-ൽ നിന്ന് സെലക്ട് ചെയ്ത കളർ തീം എടുക്കുന്നു
+      const color = document.getElementById('noticeColorInput').value || 'blue'; 
+      
       const file = document.getElementById('noticeImageFile').files[0];
 
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
@@ -463,8 +467,12 @@
           imageUrl = await compressImageToString(file);
         }
 
+        // ഫയർബേസിലേക്ക് color (theme) അടക്കം സേവ് ചെയ്യുന്നു
         await window.addDoc(window.collection(window.db, "notices"), { 
-          title, desc, color, imageUrl, 
+          title, 
+          desc, 
+          color, // 🔥 ഇത് വളരെ പ്രധാനമാണ് (blue, gold, red, green ഇതിൽ ഏതാണ് എന്ന് ഫയർബേസിലേക്ക് പോകും)
+          imageUrl, 
           date: new Date().toLocaleDateString('en-GB') 
         });
 
@@ -478,6 +486,7 @@
         alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
       }
     }
+
 
     async function loadAdminNotices() {
       const container = document.getElementById('adminNoticesListContainer');
