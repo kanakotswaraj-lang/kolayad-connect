@@ -104,9 +104,140 @@
   </div>
 
   <!-- 2. ലോഗ് ഔട്ട് ബട്ടൺ അടങ്ങിയ അഡ്മിൻ പാനൽ (ലോഗിൻ ചെയ്തു കഴിഞ്ഞാൽ മാത്രം കാണുന്നത്) -->
-  <div id="adminPanel" style="display: none;">
-    <!-- അഡ്മിൻ ഫീച്ചറുകൾ ഇവിടെ ഉണ്ടാകും -->
-    
+  <div id="adminPanel">
+    <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
+
+    <!-- സെക്ഷൻ 1 -->
+    <div class="admin-section">
+      <div class="section-header" onclick="toggleSection('sec1')">
+        <span>🎨 ആപ്പ് ലോഗോ & ബാനർ</span>
+        <span>▼</span>
+      </div>
+      <div id="sec1" class="section-content">
+        <div class="form-group">
+          <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ:</label>
+          <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+          <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label>ഹെറോ ബാനർ ഫോട്ടോ:</label>
+          <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+          <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകളും പുഷ് നോറ്റിഫിക്കേഷനും -->
+    <div class="admin-section">
+      <div class="section-header" onclick="toggleSection('sec2')">
+        <span>📢 പ്രധാന അറിയിപ്പുകൾ & പുഷ് നോറ്റിഫിക്കേഷൻ</span>
+        <span>▼</span>
+      </div>
+      <div id="sec2" class="section-content">
+        <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
+        <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
+        
+        <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ (ഓപ്ഷണൽ):</label>
+        <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
+
+        <!-- 4 കളർ തീം മോഡൽ ബട്ടണുകൾ -->
+        <label style="margin-top: 6px; font-size: 11px; color: var(--text-sub);">കളർ മോഡൽ തെരഞ്ഞെടുക്കുക:</label>
+        <div style="display: flex; gap: 6px; margin-top: 4px; margin-bottom: 10px;">
+          <button type="button" onclick="selectTheme('blue', this)" class="theme-btn active" style="flex:1; padding: 6px; background: #2563eb; color: white; border: 2px solid white; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ബ്ലൂ</button>
+          <button type="button" onclick="selectTheme('gold', this)" class="theme-btn" style="flex:1; padding: 6px; background: #f59e0b; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗോൾഡ്</button>
+          <button type="button" onclick="selectTheme('red', this)" class="theme-btn" style="flex:1; padding: 6px; background: #ef4444; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">റെഡ്</button>
+          <button type="button" onclick="selectTheme('green', this)" class="theme-btn" style="flex:1; padding: 6px; background: #10b981; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗ്രീൻ</button>
+        </div>
+        <input type="hidden" id="noticeColorInput" value="blue">
+
+        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക & Push Notification അയക്കുക</button>
+
+        <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
+          <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ:</label>
+          <div id="adminNoticesListContainer" style="max-height: 120px; overflow-y: auto;">
+            <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- സെക്ഷൻ 3: സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ് & സേർച്ച് -->
+    <div class="admin-section">
+      <div class="section-header" onclick="toggleSection('sec3')">
+        <span>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</span>
+        <span>▼</span>
+      </div>
+      <div id="sec3" class="section-content">
+        <!-- സ്ഥാപനങ്ങൾ തിരയാനുള്ള സേർച്ച് ബോക്സ് -->
+        <label>സ്ഥാപനം തിരയുക (Search Shop):</label>
+        <input type="text" id="shopSearchBox" class="dark-input" placeholder="🔍 സ്ഥാപനത്തിന്റെ പേര് ടൈപ്പ് ചെയ്യുക..." onkeyup="filterShopDropdown()">
+
+        <label style="margin-top: 6px;">സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
+        <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
+          <option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>
+        </select>
+
+        <div id="adminEditFormArea" style="display: none; margin-top: 10px; background: #0f172a; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
+          <input type="hidden" id="editDocId">
+          <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
+          <input type="text" id="admEditName" class="dark-input">
+
+          <label style="margin-top: 6px;">പുതിയ ഫോട്ടോകൾ ഒന്നിച്ച് തിരഞ്ഞെടുക്കാം (മാക്‌സിമം 4 എണ്ണം):</label>
+          <input type="file" id="admMultiplePhotos" accept="image/*" multiple class="dark-input" style="padding: 6px; font-size: 11px;">
+
+          <label style="margin-top: 8px; color: #38bdf8; font-weight: bold;">വ്യക്തിഗതമായി ഫോട്ടോകൾ ഒഴിവാക്കാൻ:</label>
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+          <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
+
+          <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- സെക്ഷൻ 4 -->
+    <div class="admin-section">
+      <div class="section-header" onclick="toggleSection('sec4')">
+        <span>👥 രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ</span>
+        <span>▼</span>
+      </div>
+      <div id="sec4" class="section-content">
+        <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
+          <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- സെക്ഷൻ 5 -->
+    <div class="admin-section">
+      <div class="section-header" onclick="toggleSection('sec5')">
+        <span>📂 കാറ്റഗറികൾ മാനേജ് ചെയ്യുക</span>
+        <span>▼</span>
+      </div>
+      <div id="sec5" class="section-content">
+        <label>പുതിയ കാറ്റഗറിയുടെ പേര് നൽകുക:</label>
+        <input type="text" id="newCategoryInput" class="dark-input" placeholder="ഉദാഹരണത്തിന്: സൂപ്പർമാർക്കറ്റ്">
+        <button onclick="addNewCategory()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">കാറ്റഗറി ചേർക്കുക</button>
+
+        <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
+          <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള കാറ്റഗറികൾ:</label>
+          <div id="adminCategoriesListContainer" style="max-height: 120px; overflow-y: auto;">
+            <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- അഡ്മിൻ പാനലിൽ ഫീഡ്‌ബാക്കുകൾ കാണാനുള്ള സെക്‌ഷൻ -->
+    <div style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 18px; padding: 14px; margin-top: 20px; margin-bottom: 20px;">
+      <h3 style="font-size: 15px; font-weight: 800; color: #f59e0b; margin-bottom: 10px;">⭐ ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
+      <div id="adminFeedbackList" style="display: flex; flex-direction: column; gap: 10px;">
+        <p style="font-size: 12px; color: var(--text-sub);">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+      </div>
+    </div>
+
     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #334155;">
       <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer; font-size: 12px;">
         ലോഗ് ഔട്ട് ചെയ്യുക
@@ -118,146 +249,6 @@
   </div>
 
 </div>
-
-
-    <div id="adminPanel">
-      <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
-
-      <!-- സെക്ഷൻ 1 -->
-      <div class="admin-section">
-        <div class="section-header" onclick="toggleSection('sec1')">
-          <span>🎨 ആപ്പ് ലോഗോ & ബാനർ</span>
-          <span>▼</span>
-        </div>
-        <div id="sec1" class="section-content">
-          <div class="form-group">
-            <label>പ്രൊഫൈൽ ലോഗോ ഫോട്ടോ:</label>
-            <input type="file" id="logoFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-            <button onclick="uploadAndSaveLogo()" class="btn-save" style="padding: 7px; font-size: 11px;">ലോഗോ അപ്ഡേറ്റ് ചെയ്യുക</button>
-          </div>
-
-          <div class="form-group" style="margin-top: 10px;">
-            <label>ഹെറോ ബാനർ ഫോട്ടോ:</label>
-            <input type="file" id="bannerFileInput" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-            <button onclick="uploadAndSaveBanner()" class="btn-save" style="padding: 7px; font-size: 11px;">ബാനർ അപ്ഡേറ്റ് ചെയ്യുക</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകളും പുഷ് നോറ്റിഫിക്കേഷനും -->
-      <div class="admin-section">
-        <div class="section-header" onclick="toggleSection('sec2')">
-          <span>📢 പ്രധാന അറിയിപ്പുകൾ & പുഷ് നോറ്റിഫിക്കേഷൻ</span>
-          <span>▼</span>
-        </div>
-        <div id="sec2" class="section-content">
-          <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
-          <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
-          
-          <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ (ഓപ്ഷണൽ):</label>
-          <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
-
-          <!-- 4 കളർ തീം മോഡൽ ബട്ടണുകൾ -->
-          <label style="margin-top: 6px; font-size: 11px; color: var(--text-sub);">കളർ മോഡൽ തെരഞ്ഞെടുക്കുക:</label>
-          <div style="display: flex; gap: 6px; margin-top: 4px; margin-bottom: 10px;">
-            <button type="button" onclick="selectTheme('blue', this)" class="theme-btn active" style="flex:1; padding: 6px; background: #2563eb; color: white; border: 2px solid white; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ബ്ലൂ</button>
-            <button type="button" onclick="selectTheme('gold', this)" class="theme-btn" style="flex:1; padding: 6px; background: #f59e0b; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗോൾഡ്</button>
-            <button type="button" onclick="selectTheme('red', this)" class="theme-btn" style="flex:1; padding: 6px; background: #ef4444; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">റെഡ്</button>
-            <button type="button" onclick="selectTheme('green', this)" class="theme-btn" style="flex:1; padding: 6px; background: #10b981; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗ്രീൻ</button>
-          </div>
-          <input type="hidden" id="noticeColorInput" value="blue">
-
-          <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക & Push Notification അയക്കുക</button>
-
-          <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
-            <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ:</label>
-            <div id="adminNoticesListContainer" style="max-height: 120px; overflow-y: auto;">
-              <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- സെക്ഷൻ 3: സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ് & സേർച്ച് -->
-      <div class="admin-section">
-        <div class="section-header" onclick="toggleSection('sec3')">
-          <span>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</span>
-          <span>▼</span>
-        </div>
-        <div id="sec3" class="section-content">
-          <!-- സ്ഥാപനങ്ങൾ തിരയാനുള്ള സേർച്ച് ബോക്സ് -->
-          <label>സ്ഥാപനം തിരയുക (Search Shop):</label>
-          <input type="text" id="shopSearchBox" class="dark-input" placeholder="🔍 സ്ഥാപനത്തിന്റെ പേര് ടൈപ്പ് ചെയ്യുക..." onkeyup="filterShopDropdown()">
-
-          <label style="margin-top: 6px;">സ്ഥാപനം തിരഞ്ഞെടുക്കുക:</label>
-          <select id="adminShopSelect" class="dark-input" onchange="loadShopDetailsForEdit()" style="padding: 8px;">
-            <option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>
-          </select>
-
-          <div id="adminEditFormArea" style="display: none; margin-top: 10px; background: #0f172a; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
-            <input type="hidden" id="editDocId">
-            <label>സ്ഥാപനത്തിന്റെ പേര്:</label>
-            <input type="text" id="admEditName" class="dark-input">
-
-            <label style="margin-top: 6px;">പുതിയ ഫോട്ടോകൾ ഒന്നിച്ച് തിരഞ്ഞെടുക്കാം (മാക്‌സിമം 4 എണ്ണം):</label>
-            <input type="file" id="admMultiplePhotos" accept="image/*" multiple class="dark-input" style="padding: 6px; font-size: 11px;">
-
-            <label style="margin-top: 8px; color: #38bdf8; font-weight: bold;">വ്യക്തിഗതമായി ഫോട്ടോകൾ ഒഴിവാക്കാൻ:</label>
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto1"> ❌ ഒന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto2"> ❌ രണ്ടാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto3"> ❌ മൂന്നാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-            <label class="checkbox-label"><input type="checkbox" id="removePhoto4"> ❌ നാലാമത്തെ ഫോട്ടോ ഒഴിവാക്കുക</label>
-
-            <button onclick="saveAdminPhotos()" class="btn-save" style="background: #38bdf8; color: #0f172a; margin-top: 6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- സെക്ഷൻ 4 -->
-      <div class="admin-section">
-        <div class="section-header" onclick="toggleSection('sec4')">
-          <span>👥 രജിസ്റ്റർ ചെയ്ത സ്ഥാപനങ്ങൾ</span>
-          <span>▼</span>
-        </div>
-        <div id="sec4" class="section-content">
-          <div id="membersListContainer" style="max-height: 150px; overflow-y: auto;">
-            <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- സെക്ഷൻ 5 -->
-      <div class="admin-section">
-        <div class="section-header" onclick="toggleSection('sec5')">
-          <span>📂 കാറ്റഗറികൾ മാനേജ് ചെയ്യുക</span>
-          <span>▼</span>
-        </div>
-        <div id="sec5" class="section-content">
-          <label>പുതിയ കാറ്റഗറിയുടെ പേര് നൽകുക:</label>
-          <input type="text" id="newCategoryInput" class="dark-input" placeholder="ഉദാഹരണത്തിന്: സൂപ്പർമാർക്കറ്റ്">
-          <button onclick="addNewCategory()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">കാറ്റഗറി ചേർക്കുക</button>
-
-          <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
-            <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള കാറ്റഗറികൾ:</label>
-            <div id="adminCategoriesListContainer" style="max-height: 120px; overflow-y: auto;">
-              <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-       <!-- അഡ്മിൻ പാനലിൽ ഫീഡ്‌ബാക്കുകൾ കാണാനുള്ള സെക്‌ഷൻ -->
-  <div style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 18px; padding: 14px; margin-top: 20px; margin-bottom: 20px;">
-    <h3 style="font-size: 15px; font-weight: 800; color: #f59e0b; margin-bottom: 10px;">⭐ ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
-    <div id="adminFeedbackList" style="display: flex; flex-direction: column; gap: 10px;">
-      <p style="font-size: 12px; color: var(--text-sub);">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
-    </div>
-  </div>
-
-
-      <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 12px;">ലോഗ് ഔട്ട് ചെയ്യുക</button>
-      <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
-    </div>
-  </div>
 
   <script>
     let allShopsData = [];
@@ -292,6 +283,7 @@
       loadAdminNotices();
       loadShopDropdown();
       loadAdminCategories();
+      loadAdminFeedbacks();
     }
 
     window.onload = function() {
@@ -468,13 +460,9 @@
     }
 
     async function postNotice() {
-    async function postNotice() {
       const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
-      
-      // ഇവിടെയാണ് മാറ്റം: hidden input-ൽ നിന്ന് സെലക്ട് ചെയ്ത കളർ തീം എടുക്കുന്നു
       const color = document.getElementById('noticeColorInput').value || 'blue'; 
-      
       const file = document.getElementById('noticeImageFile').files[0];
 
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
@@ -486,11 +474,10 @@
           imageUrl = await compressImageToString(file);
         }
 
-        // ഫയർബേസിലേക്ക് color (theme) അടക്കം സേവ് ചെയ്യുന്നു
         await window.addDoc(window.collection(window.db, "notices"), { 
           title, 
           desc, 
-          color, // 🔥 ഇത് വളരെ പ്രധാനമാണ് (blue, gold, red, green ഇതിൽ ഏതാണ് എന്ന് ഫയർബേസിലേക്ക് പോകും)
+          color, 
           imageUrl, 
           date: new Date().toLocaleDateString('en-GB') 
         });
@@ -505,7 +492,6 @@
         alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
       }
     }
-
 
     async function loadAdminNotices() {
       const container = document.getElementById('adminNoticesListContainer');
@@ -636,8 +622,6 @@
         console.error("Error loading feedbacks:", err);
       }
     }
-    
-    loadAdminFeedbacks();
   </script>
 </body>
 </html>
