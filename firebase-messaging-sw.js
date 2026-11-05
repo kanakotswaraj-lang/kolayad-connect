@@ -13,13 +13,17 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// ഉപയോക്താക്കൾ ആപ്പ് തുറക്കാതെ ഇരിക്കുമ്പോൾ വരുന്ന നോട്ടിഫിക്കേഷൻ കൈകാര്യം ചെയ്യാൻ
+// ബാക്ക്ഗ്രൗണ്ടിൽ നോട്ടിഫിക്കേഷൻ വരുമ്പോൾ ഒരേയൊരു നോട്ടിഫിക്കേഷൻ മാത്രം ലോഗോ സഹിതം കാണിക്കാൻ
 messaging.onBackgroundMessage((payload) => {
   console.log('Background Message received: ', payload);
-  const notificationTitle = payload.notification.title || 'കോളയാട് കണക്ട് അറിയിപ്പ്';
+  
+  // നോട്ടിഫിക്കേഷൻ ഡാറ്റയോ അല്ലെങ്കിൽ നോട്ടിഫിക്കേഷൻ ഒബ്‌ജക്ടോ എടുക്കുക
+  const notificationTitle = payload.notification?.title || payload.data?.title || 'കോളയാട് കണക്ട് അറിയിപ്പ്';
   const notificationOptions = {
-    body: payload.notification.body || '',
-    icon: 'https://kolayadconnect.in/logo.png'
+    body: payload.notification?.body || payload.data?.body || '',
+    icon: 'https://kolayadconnect.in/logo.png',
+    badge: 'https://kolayadconnect.in/logo.png',
+    tag: 'kolayad-connect-notification' // ഒരേപോലെയുള്ള നോട്ടിഫിക്കേഷനുകൾ ഡ്യൂപ്ലിക്കേറ്റ് വരാതിരിക്കാൻ
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
