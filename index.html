@@ -441,16 +441,22 @@
 
     <div class="scrollable-body" id="scrollBody">
       
-      <div class="notices-box-container">
-        <div style="font-size: 14px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-          🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
-        </div>
-        <input type="text" id="noticeSearchInput" class="dark-input" placeholder="🔍 അറിയിപ്പുകൾ പരതുക (ഉദാ: ഓഫർ, മീറ്റിംഗ്)..." onkeyup="filterNotices()" style="font-size: 12px; padding: 8px 12px; margin-bottom: 8px;">
-        
-        <!-- അറിയിപ്പുകൾ സ്ലൈഡർ രൂപത്തിൽ വരുന്ന കണ്ടെയ്നർ -->
-        <div class="banner-slider" id="noticesSlider"></div>
-      </div>
+      <a href="announcements.html" style="background: linear-gradient(135deg, #1e293b, #111827); border: 1px solid rgba(56, 189, 248, 0.6); border-radius: 16px; padding: 18px; margin-top: 16px; text-decoration: none; display: block; color: inherit; box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); animation: pulseGlow 2s infinite;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+    <span style="background: rgba(239, 68, 68, 0.25); color: #f87171; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">🔥 ഹോട്ട് അപ്ഡേറ്റ്</span>
+    <span style="font-size: 12px; color: #38bdf8; font-weight: bold;">എല്ലാ അറിയിപ്പുകളും കാണുക →</span>
+  </div>
+  <h3 style="margin: 8px 0 4px 0; font-size: 16px; color: #f1f5f9;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകളും ഓഫറുകളും</h3>
+  <p style="margin: 0; font-size: 13px; color: #94a3b8;">വ്യാപാര സ്ഥാപനങ്ങളുടെ ഓഫറുകൾ, മീറ്റിംഗുകൾ, മറ്റ് പ്രധാന വിവരങ്ങൾ ഇവിടെ അറിയാം.</p>
+</a>
 
+<style>
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
+  50% { box-shadow: 0 0 18px rgba(56, 189, 248, 0.6); border-color: rgba(56, 189, 248, 0.9); }
+  100% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
+}
+</style>
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
         <span style="font-size:12px; font-weight:800; color:var(--text-main); background:rgba(30,58,138,0.1); padding:2px 8px; border-radius:6px; border:1px solid var(--border-color);" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
