@@ -1141,8 +1141,8 @@
       }
     }
   
+      
     window.onload = function() {
-      // മാർക്കറ്റ് പേജിൽ സേവ് ചെയ്ത വിലകൾ ഹോം പേജിലെ ടിക്കറിലേക്ക് എടുക്കാൻ
       const gold = localStorage.getItem('p_gold') || '₹ 58,000';
       const silver = localStorage.getItem('p_silver') || '₹ 85';
       const rubber = localStorage.getItem('p_rubber') || '₹ 185';
@@ -1155,6 +1155,8 @@
         tickerElement.innerText = `സ്വർണ്ണം: ${gold} | വെള്ളി: ${silver} | റബർ: ${rubber} | കുരുമുളക്: ${pepper} | അടയ്ക്ക: ${arecanut} | തേങ്ങ: ${coconut} | കൂടുതൽ വിവരങ്ങൾക്ക് ക്ലിക്ക് ചെയ്യൂ...`;
       }
     };
+  
+
   
 
     initApp();
