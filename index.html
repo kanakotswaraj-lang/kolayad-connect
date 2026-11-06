@@ -412,19 +412,23 @@
       <div class="filter-sticky-padding">
         <!-- ട്രെൻഡിങ് സെർച്ച് ടിക്കർ ബാർ -->
                         
-        
-        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ ബാർ -->
+                <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ ബാർ -->
         <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 12px;">
           <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%;">
             
-                        <span style="background: linear-gradient(135deg, #34d399, #6ee7b7); color: #064e3b; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(52, 211, 153, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-
-            <div id="homeTickerText" style="color: #f1f5f9; font-size: 12px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 10px; width: 100%;">
-              വില വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...
+            <!-- ലൈറ്റ് ഗ്രീൻ കളർ ബാഡ്ജ് -->
+            <span style="background: linear-gradient(135deg, #34d399, #6ee7b7); color: #064e3b; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(52, 211, 153, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
+            
+            <!-- സ്ക്രോൾ ചെയ്ത് കാണിക്കുന്ന Marquee ഭാഗം -->
+            <div style="overflow: hidden; width: 100%; margin-left: 10px;">
+              <marquee scrollamount="4" scrolldelay="60" style="color: #f1f5f9; font-size: 12px; font-weight: 700; width: 100%;">
+                <span id="homeTickerText">വില വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</span>
+              </marquee>
             </div>
             
           </div>
         </a>
+
 
 
 
