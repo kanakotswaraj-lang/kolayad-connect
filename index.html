@@ -412,23 +412,32 @@
       <div class="filter-sticky-padding">
         <!-- ട്രെൻഡിങ് സെർച്ച് ടിക്കർ ബാർ -->
                         
-                <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ ബാർ -->
-        <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 12px;">
-          <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%;">
-            
-            <!-- ലൈറ്റ് ഗ്രീൻ കളർ ബാഡ്ജ് -->
-            <span style="background: linear-gradient(135deg, #34d399, #6ee7b7); color: #064e3b; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(52, 211, 153, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            
-            <!-- സ്ക്രോൾ ചെയ്ത് കാണിക്കുന്ന Marquee ഭാഗം -->
-            <div style="overflow: hidden; width: 100%; margin-left: 10px;">
-              <marquee scrollamount="4" scrolldelay="60" style="color: #f1f5f9; font-size: 12px; font-weight: 700; width: 100%;">
-               <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
-            
-              </marquee>
-            </div>
-            
-          </div>
-        </a>
+                
+        <!-- പുതിയ സാധനം ചേർക്കാൻ (യൂണിക് ഐഡി ബോക്സ് ഒഴിവാക്കി പേരിൽ നിന്ന് ഓട്ടോ ജനറേറ്റ് ചെയ്യുന്നു) -->
+        <div style="background: var(--bg-card); padding: 16px; border-radius: 16px; border: 1.5px solid var(--border-color); margin-top: 20px;">
+          <div style="font-size: 14px; font-weight: 800; color: #facc15; margin-bottom: 12px;">➕ പുതിയ സാധനം ചേർക്കുക:</div>
+          
+          <label>ഐക്കൺ ഇമോജി (ഉദാ: 🟡)</label>
+          <input type="text" id="newItemEmoji" class="dark-input" placeholder="🟡">
+
+          <label>സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)</label>
+          <input type="text" id="newItemName" class="dark-input" placeholder="മഞ്ഞൾ">
+
+          <label>അളവ് (ഉദാ: കിലോഗ്രാമിന്)</label>
+          <input type="text" id="newItemUnit" class="dark-input" placeholder="കിലോഗ്രാമിന്">
+
+          <label>വില (ഉദാ: ₹ 300)</label>
+          <input type="text" id="newItemPrice" class="dark-input" placeholder="₹ 300">
+
+          <label>ട്രെൻഡ്</label>
+          <select id="newItemTrend" class="dark-input">
+            <option value="▲ കൂടി">▲ കൂടി</option>
+            <option value="▼ കുറഞ്ഞു">▼ കുറഞ്ഞു</option>
+            <option value="■ മാറ്റമില്ല">■ മാറ്റമില്ല</option>
+          </select>
+
+          <button onclick="addNewMarketItem()" class="btn-submit" style="margin-top: 10px;">പുതിയ സാധനം ചേർക്കുക</button>
+        </div>
 
 
 
@@ -751,7 +760,7 @@
       const searchKeywords = [
         "🔍 സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ തിരയുക...",
         "🔍 ഓട്ടോ / ടാക്സി തിരയുക...",
-        "🔍 വർക്ക്‌ഷോപ്പുകൾ, മക്കാനിക്കുകൾ...",
+        "🔍 വർക്ക്‌ഷോപ്പുകൾ, മെക്കാനിക്കുകൾ...",
         "🔍 ഇലക്ട്രീഷ്യൻമാർ, പ്ലംബർമാർ...",
         "🔍 പ്രധാന അത്യാഹിത നമ്പറുകൾ..."
       ];
@@ -1146,18 +1155,23 @@
   
         
   
+      
     window.onload = function() {
-      // എല്ലാ സാദ്ധ്യമായ കീ നെയിമുകളും പരിശോധിക്കുന്നു (localStorage-ൽ നിന്ന്)
-      const gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '58,000';
-      const silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85';
-      const rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185';
-      const pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650';
+      // localStorage-ൽ നിന്ന് എല്ലാ വിലകളും എടുത്തു കാണിക്കുന്നു
+      const gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '107,580';
+      const silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85.00';
+      const rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185.00';
+      const pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650.00';
+      const arecanut = localStorage.getItem('arecanut') || localStorage.getItem('p_arecanut') || '260.00';
+      const coconut = localStorage.getItem('coconut') || localStorage.getItem('p_coconut') || '40.00';
 
       const tickerElement = document.getElementById('homeTickerText');
       if(tickerElement) {
-       tickerElement.innerText = `സ്വർണ്ണം: ${gold}  •  വെള്ളി: ${silver}  •  റബർ: ${rubber}  •  കുരുമുളക്: ${pepper}  •  അടയ്ക്ക: ${arecanut}  •  തേങ്ങ: ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+        tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
       }
     };
+
+
  
       
   
