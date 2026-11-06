@@ -412,21 +412,19 @@
       <div class="filter-sticky-padding">
         <!-- ട്രെൻഡിങ് സെർച്ച് ടിക്കർ ബാർ -->
                         
-        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
+        
+        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ ബാർ -->
         <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 12px;">
-          <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%; overflow: hidden;">
+          <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%;">
             
-            <!-- പച്ച കളർ പ്രൊഫഷണൽ ബാഡ്ജ് -->
-            <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            
-            <!-- സ്ക്രോൾ ചെയ്യുന്ന വിലവിവരങ്ങൾ -->
-            <marquee behavior="scroll" direction="left" scrollamount="4" style="color: #f1f5f9; font-size: 13px; font-weight: 700; width: 100%;">
-              <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
-            </marquee>
+                        <span style="background: linear-gradient(135deg, #34d399, #6ee7b7); color: #064e3b; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(52, 211, 153, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
+
+            <div id="homeTickerText" style="color: #f1f5f9; font-size: 12px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 10px; width: 100%;">
+              വില വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...
+            </div>
             
           </div>
         </a>
-
 
 
 
@@ -1142,17 +1140,17 @@
     }
   
         
+  
     window.onload = function() {
-      const gold = localStorage.getItem('p_gold') || '₹ 58,000';
-      const silver = localStorage.getItem('p_silver') || '₹ 85';
-      const rubber = localStorage.getItem('p_rubber') || '₹ 185';
-      const pepper = localStorage.getItem('p_pepper') || '₹ 650';
-      const arecanut = localStorage.getItem('p_arecanut') || '₹ 260';
-      const coconut = localStorage.getItem('p_coconut') || '₹ 40';
+      // എല്ലാ സാദ്ധ്യമായ കീ നെയിമുകളും പരിശോധിക്കുന്നു (localStorage-ൽ നിന്ന്)
+      const gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '58,000';
+      const silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85';
+      const rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185';
+      const pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650';
 
       const tickerElement = document.getElementById('homeTickerText');
       if(tickerElement) {
-        tickerElement.innerText = `സ്വർണ്ണം: ${gold}  •  വെള്ളി: ${silver}  •  റബർ: ${rubber}  •  കുരുമുളക്: ${pepper}  •  അടയ്ക്ക: ${arecanut}  •  തേങ്ങ: ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+        tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}`;
       }
     };
   
