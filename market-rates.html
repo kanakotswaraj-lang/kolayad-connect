@@ -280,37 +280,29 @@
           <p style="font-size: 11px; color: #60a5fa; margin-bottom: 6px; font-weight:700;">📌 നിലവിലെ വിലകൾ മാറ്റാൻ:</p>
           <div class="edit-row">
             <span>സ്വർണ്ണം:</span>
-            <input type="text" id="editGold" class="admin-input" style="margin-bottom:0;" value="₹ 58,000">
+            <input type="text" id="editGold" class="admin-input" style="margin-bottom:0;">
           </div>
           <div class="edit-row">
             <span>വെള്ളി:</span>
-            <input type="text" id="editSilver" class="admin-input" style="margin-bottom:0;" value="₹ 85.00">
+            <input type="text" id="editSilver" class="admin-input" style="margin-bottom:0;">
           </div>
           <div class="edit-row">
             <span>റബർ:</span>
-            <input type="text" id="editRubber" class="admin-input" style="margin-bottom:0;" value="₹ 185.00">
+            <input type="text" id="editRubber" class="admin-input" style="margin-bottom:0;">
           </div>
           <div class="edit-row">
             <span>കുരുമുളക്:</span>
-            <input type="text" id="editPepper" class="admin-input" style="margin-bottom:0;" value="₹ 650.00">
+            <input type="text" id="editPepper" class="admin-input" style="margin-bottom:0;">
           </div>
           <div class="edit-row">
             <span>അടയ്ക്ക:</span>
-            <input type="text" id="editArecanut" class="admin-input" style="margin-bottom:0;" value="₹ 260.00">
+            <input type="text" id="editArecanut" class="admin-input" style="margin-bottom:0;">
           </div>
           <div class="edit-row">
             <span>തേങ്ങ:</span>
-            <input type="text" id="editCoconut" class="admin-input" style="margin-bottom:0;" value="₹ 40.00">
+            <input type="text" id="editCoconut" class="admin-input" style="margin-bottom:0;">
           </div>
           <button class="btn-action" style="margin-top: 8px; width: 100%; margin-bottom: 15px;" onclick="updatePrices()">വിലകൾ അപ്ഡേറ്റ് ചെയ്യുക</button>
-
-          <!-- 2. പുതിയ സാധനം ചേർക്കാൻ -->
-          <p style="font-size: 11px; color: #34d399; margin-bottom: 6px; font-weight:700;">➕ പുതിയ സാധനം ചേർക്കാൻ:</p>
-          <input type="text" id="newEmoji" class="admin-input" placeholder="ഐക്കൺ ഇമോജി (ഉദാ: 🥭)">
-          <input type="text" id="newName" class="admin-input" placeholder="സാധനത്തിന്റെ പേര് (ഉദാ: മാങ്ങ)">
-          <input type="text" id="newSub" class="admin-input" placeholder="അളവ് (ഉദാ: കിലോഗ്രാമിന്)">
-          <input type="text" id="newPrice" class="admin-input" placeholder="വില (ഉദാ: ₹ 80)">
-          <button class="btn-action" style="background: #059669; width: 100%; margin-bottom: 10px;" onclick="addNewItem()">പുതിയ സാധനം ചേർക്കുക</button>
 
           <button class="btn-action" style="background:#475569; width: 100%;" onclick="logoutAdmin()">ലോഗ് ഔട്ട്</button>
         </div>
@@ -322,9 +314,30 @@
   <script>
     const adminSecretPassword = "admin123";
 
+    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ സേവ് ചെയ്ത വിലകൾ എടുത്ത് കാണിക്കാൻ
+    window.onload = function() {
+      if(localStorage.getItem('m_gold')) document.getElementById('p-gold').innerText = localStorage.getItem('m_gold');
+      if(localStorage.getItem('m_silver')) document.getElementById('p-silver').innerText = localStorage.getItem('m_silver');
+      if(localStorage.getItem('m_rubber')) document.getElementById('p-rubber').innerText = localStorage.getItem('m_rubber');
+      if(localStorage.getItem('m_pepper')) document.getElementById('p-pepper').innerText = localStorage.getItem('m_pepper');
+      if(localStorage.getItem('m_arecanut')) document.getElementById('p-arecanut').innerText = localStorage.getItem('m_arecanut');
+      if(localStorage.getItem('m_coconut')) document.getElementById('p-coconut').innerText = localStorage.getItem('m_coconut');
+    };
+
     function toggleAdminLogin() {
       const panel = document.getElementById('adminPanel');
-      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+      if(panel.style.display === 'block') {
+        panel.style.display = 'none';
+      } else {
+        panel.style.display = 'block';
+        // ലോഗിൻ ചെയ്യുമ്പോൾ നിലവിലുള്ള വിലകൾ ഇൻപുട്ട് ബോക്സിൽ കാണിക്കാൻ
+        document.getElementById('editGold').value = document.getElementById('p-gold').innerText;
+        document.getElementById('editSilver').value = document.getElementById('p-silver').innerText;
+        document.getElementById('editRubber').value = document.getElementById('p-rubber').innerText;
+        document.getElementById('editPepper').value = document.getElementById('p-pepper').innerText;
+        document.getElementById('editArecanut').value = document.getElementById('p-arecanut').innerText;
+        document.getElementById('editCoconut').value = document.getElementById('p-coconut').innerText;
+      }
     }
 
     function verifyAdminLogin() {
@@ -346,53 +359,31 @@
     }
 
     function updatePrices() {
-      document.getElementById('p-gold').innerText = document.getElementById('editGold').value;
-      document.getElementById('p-silver').innerText = document.getElementById('editSilver').value;
-      document.getElementById('p-rubber').innerText = document.getElementById('editRubber').value;
-      document.getElementById('p-pepper').innerText = document.getElementById('editPepper').value;
-      document.getElementById('p-arecanut').innerText = document.getElementById('editArecanut').value;
-      document.getElementById('p-coconut').innerText = document.getElementById('editCoconut').value;
+      const g = document.getElementById('editGold').value;
+      const s = document.getElementById('editSilver').value;
+      const r = document.getElementById('editRubber').value;
+      const p = document.getElementById('editPepper').value;
+      const a = document.getElementById('editArecanut').value;
+      const c = document.getElementById('editCoconut').value;
 
-      alert('വിപണി വിലകൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+      // സ്ക്രീനിൽ മാറ്റുക
+      document.getElementById('p-gold').innerText = g;
+      document.getElementById('p-silver').innerText = s;
+      document.getElementById('p-rubber').innerText = r;
+      document.getElementById('p-pepper').innerText = p;
+      document.getElementById('p-arecanut').innerText = a;
+      document.getElementById('p-coconut').innerText = c;
+
+      // ഫോണിൽ സ്ഥിരമായി സേവ് ചെയ്തു വെക്കാൻ (localStorage)
+      localStorage.setItem('m_gold', g);
+      localStorage.setItem('m_silver', s);
+      localStorage.setItem('m_rubber', r);
+      localStorage.setItem('m_pepper', p);
+      localStorage.setItem('m_arecanut', a);
+      localStorage.setItem('m_coconut', c);
+
+      alert('വിപണി വിലകൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
       toggleAdminLogin();
-    }
-
-    function addNewItem() {
-      const emoji = document.getElementById('newEmoji').value.trim() || '📦';
-      const name = document.getElementById('newName').value.trim();
-      const sub = document.getElementById('newSub').value.trim();
-      const price = document.getElementById('newPrice').value.trim();
-
-      if(!name || !price) {
-        alert('ദയവായി സാധനത്തിന്റെ പേരും വിലയും നൽകുക!');
-        return;
-      }
-
-      const container = document.getElementById('marketListContainer');
-      const newCard = document.createElement('div');
-      newCard.className = 'price-card';
-      newCard.innerHTML = `
-        <div class="item-info">
-          <div class="item-icon">${emoji}</div>
-          <div>
-            <div class="item-name">${name}</div>
-            <div class="item-sub">${sub}</div>
-          </div>
-        </div>
-        <div class="price-box">
-          <div class="item-price">${price}</div>
-          <div class="trend-tag trend-stable">■ പുതിയത്</div>
-        </div>
-      `;
-      container.appendChild(newCard);
-
-      // ഫീൽഡുകൾ ക്ലിയർ ചെയ്യുക
-      document.getElementById('newEmoji').value = '';
-      document.getElementById('newName').value = '';
-      document.getElementById('newSub').value = '';
-      document.getElementById('newPrice').value = '';
-
-      alert('പുതിയ സാധനം വിജയകരമായി ലിസ്റ്റിലേക്ക് ചേർത്തു!');
     }
   </script>
 
