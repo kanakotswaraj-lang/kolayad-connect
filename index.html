@@ -440,23 +440,59 @@
     </div> <!-- sticky-header ക്ലോസിംഗ് ടാഗ് ലെവൽ ചെയ്തു -->
 
     <div class="scrollable-body" id="scrollBody">
-      
-      <a href="announcements.html" style="background: linear-gradient(135deg, #1e293b, #111827); border: 1px solid rgba(56, 189, 248, 0.6); border-radius: 16px; padding: 18px; margin-top: 16px; text-decoration: none; display: block; color: inherit; box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); animation: pulseGlow 2s infinite;">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-    <span style="background: rgba(239, 68, 68, 0.25); color: #f87171; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">🔥 ഹോട്ട് അപ്ഡേറ്റ്</span>
-    <span style="font-size: 12px; color: #38bdf8; font-weight: bold;">എല്ലാ അറിയിപ്പുകളും കാണുക →</span>
+      <!-- ഗ്ലാസ്‌മോർഫിസം & 3D ഗ്ലോ എഫക്റ്റോടുകൂടിയ അനൗൺസ്മെന്റ് കാർഡ് -->
+<a href="announcements.html" class="glass-3d-card">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+    <span class="hot-badge">🔥 ഹോട്ട് അപ്ഡേറ്റ്</span>
+    <span style="font-size: 12px; color: #38bdf8; font-weight: bold; text-shadow: 0 0 8px rgba(56,189,248,0.5);">എല്ലാ അറിയിപ്പുകളും കാണുക →</span>
   </div>
-  <h3 style="margin: 8px 0 4px 0; font-size: 16px; color: #f1f5f9;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകളും ഓഫറുകളും</h3>
-  <p style="margin: 0; font-size: 13px; color: #94a3b8;">വ്യാപാര സ്ഥാപനങ്ങളുടെ ഓഫറുകൾ, മീറ്റിംഗുകൾ, മറ്റ് പ്രധാന വിവരങ്ങൾ ഇവിടെ അറിയാം.</p>
+  <h3 style="margin: 8px 0 6px 0; font-size: 17px; color: #ffffff; font-weight: 800; letter-spacing: 0.5px;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകളും ഓഫറുകളും</h3>
+  <p style="margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.5;">വ്യാപാര സ്ഥാപനങ്ങളുടെ ഓഫറുകൾ, മീറ്റിംഗുകൾ, മറ്റ് പ്രധാന വിവരങ്ങൾ ഇവിടെ അറിയാം.</p>
 </a>
 
 <style>
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
-  50% { box-shadow: 0 0 18px rgba(56, 189, 248, 0.6); border-color: rgba(56, 189, 248, 0.9); }
-  100% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
+.glass-3d-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.85));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 16px;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: perspective(1000px) rotateX(0deg);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: float3D 4s ease-in-out infinite;
+}
+
+.glass-3d-card:hover, .glass-3d-card:active {
+  transform: perspective(1000px) translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(56, 189, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.hot-badge {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.5));
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+@keyframes float3D {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
 }
 </style>
+
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
         <span style="font-size:12px; font-weight:800; color:var(--text-main); background:rgba(30,58,138,0.1); padding:2px 8px; border-radius:6px; border:1px solid var(--border-color);" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
