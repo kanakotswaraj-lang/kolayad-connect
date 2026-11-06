@@ -355,43 +355,34 @@
 
           <button class="btn-action" style="width: 100%; margin-bottom: 15px;" onclick="updatePrices()">വിലകളും ട്രെൻഡും അപ്ഡേറ്റ് ചെയ്യുക</button>
         
-                  <!-- പുതിയ സാധനം ചേർക്കുന്ന മോഡേൺ സെക്ഷൻ -->
+                       <!-- പുതിയ സാധനം ചേർക്കുന്ന മോഡേൺ സെക്ഷൻ -->
         <div style="background: var(--bg-card); padding: 18px; border-radius: 16px; border: 1.5px solid var(--border-color); margin-top: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
           <div style="font-size: 15px; font-weight: 800; color: #facc15; margin-bottom: 16px; display: flex; align-items: center; gap: 6px;">
             <span>➕</span> പുതിയ സാധനം ചേർക്കുക
           </div>
-          
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 4px;">ഐക്കൺ ഇമോജി (ഉദാ: 🟡)</label>
-            <input type="text" id="newItemEmoji" class="dark-input" placeholder="🟡" style="width: 100%; margin-bottom: 0;">
-          </div>
 
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 4px;">സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)</label>
-            <input type="text" id="newItemName" class="dark-input" placeholder="മഞ്ഞൾ" style="width: 100%; margin-bottom: 0;">
-          </div>
+          <label style="font-size: 12px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 6px;">ഐക്കൺ ഇമോജി (ഉദാ: 🟡)</label>
+          <input type="text" id="newItemEmoji" class="dark-input" placeholder="🟡">
 
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 4px;">അളവ് (ഉദാ: കിലോഗ്രാമിന്)</label>
-            <input type="text" id="newItemUnit" class="dark-input" placeholder="കിലോഗ്രാമിന്" style="width: 100%; margin-bottom: 0;">
-          </div>
+          <label style="font-size: 12px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 6px;">സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)</label>
+          <input type="text" id="newItemName" class="dark-input" placeholder="മഞ്ഞൾ">
 
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 4px;">വില (ഉദാ: ₹ 300)</label>
-            <input type="text" id="newItemPrice" class="dark-input" placeholder="₹ 300" style="width: 100%; margin-bottom: 0;">
-          </div>
+          <label style="font-size: 12px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 6px;">അളവ് (ഉദാ: കിലോഗ്രാമിന്)</label>
+          <input type="text" id="newItemUnit" class="dark-input" placeholder="കിലോഗ്രാമിന്">
 
-          <div style="margin-bottom: 16px;">
-            <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 4px;">ട്രെൻഡ്</label>
-            <select id="newItemTrend" class="dark-input" style="width: 100%; margin-bottom: 0;">
-              <option value="▲ കൂടി">▲ കൂടി</option>
-              <option value="▼ കുറഞ്ഞു">▼ കുറഞ്ഞു</option>
-              <option value="■ മാറ്റമില്ല">■ മാറ്റമില്ല</option>
-            </select>
-          </div>
+          <label style="font-size: 12px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 6px;">വില (ഉദാ: ₹ 300)</label>
+          <input type="text" id="newItemPrice" class="dark-input" placeholder="₹ 300">
 
-          <button onclick="addNewMarketItem()" class="btn-submit" style="width: 100%; padding: 12px; font-weight: 800; cursor: pointer;">പുതിയ സാധനം ചേർക്കുക</button>
+          <label style="font-size: 12px; color: var(--text-sub); font-weight: bold; display: block; margin-bottom: 6px;">ട്രെൻഡ്</label>
+          <select id="newItemTrend" class="dark-input">
+            <option value="▲ കൂടി">▲ കൂടി</option>
+            <option value="▼ കുറഞ്ഞു">▼ കുറഞ്ഞു</option>
+            <option value="■ മാറ്റമില്ല">■ മാറ്റമില്ല</option>
+          </select>
+
+          <button onclick="addNewMarketItem()" class="btn-submit" style="width: 100%; margin-top: 12px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; padding: 12px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">പുതിയ സാധനം ചേർക്കുക</button>
         </div>
+   
 
       </div>
 
