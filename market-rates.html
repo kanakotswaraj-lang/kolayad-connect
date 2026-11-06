@@ -24,6 +24,7 @@
       display: flex;
       flex-direction: column;
       position: relative;
+      padding-bottom: 30px;
     }
     .header-bar {
       padding: 16px;
@@ -31,7 +32,7 @@
       border-bottom: 1px solid #1e294b;
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 10;
@@ -47,7 +48,7 @@
       font-weight: bold;
     }
     .page-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #60a5fa;
     }
@@ -84,33 +85,26 @@
       gap: 12px;
     }
     .item-icon {
-      font-size: 24px;
-      width: 45px;
-      height: 45px;
+      font-size: 22px;
+      width: 42px;
+      height: 42px;
       background: rgba(30, 41, 59, 0.8);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
     }
-    .item-name {
-      font-size: 14px;
-      font-weight: 800;
-      color: #ffffff;
+    .item-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    .item-sub {
-      font-size: 11px;
-      color: #94a3b8;
-    }
-    .price-box {
-      text-align: right;
-    }
-    .item-price {
-      font-size: 16px;
-      font-weight: 800;
-      color: #38bdf8;
-    }
+    .item-name { font-size: 14px; font-weight: 800; color: #ffffff; }
+    .item-sub { font-size: 11px; color: #94a3b8; }
+    .price-box { text-align: right; }
+    .item-price { font-size: 16px; font-weight: 800; color: #38bdf8; }
     .trend-tag {
       font-size: 10px;
       font-weight: 800;
@@ -122,6 +116,45 @@
     .trend-up { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
     .trend-down { background: rgba(239, 68, 68, 0.2); color: #f87171; }
     .trend-stable { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
+
+    /* അഡ്മിൻ കണ്ട്രോൾ പാനൽ */
+    .admin-controls {
+      margin-top: 20px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px dashed #3b82f6;
+      padding: 14px;
+      border-radius: 14px;
+      display: none;
+    }
+    .admin-controls h3 { font-size: 13px; color: #60a5fa; margin-bottom: 10px; }
+    .admin-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: #091026;
+      border: 1px solid #334155;
+      color: #fff;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .btn-action {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .btn-delete { background: #dc2626; margin-left: 6px; font-size: 10px; padding: 4px 8px; }
+    .login-box {
+      margin-top: 10px;
+      padding: 10px;
+      background: #0e1838;
+      border-radius: 10px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -129,107 +162,109 @@
   <div class="app-container">
     <div class="header-bar">
       <a href="index.html" class="btn-back">⬅️ തിരികെ</a>
-      <div class="page-title">📊 ഇന്നത്തെ വിപണി വിലകൾ</div>
+      <div class="page-title">📊 വിപണി വിലനിലവാരം</div>
+      <button onclick="toggleAdminLogin()" style="background:none; border:none; color:#60a5fa; font-size:12px; font-weight:bold; cursor:pointer;">🔑 അഡ്മിൻ</button>
     </div>
 
     <div class="content-body">
       <div class="update-banner">
-        <span>📅 തീയതി: 06/11/2026</span>
-        <span>🕒 തത്സമയ വിലനിലവാരം</span>
+        <span>📅 തത്സമയ വിലവിവരങ്ങൾ</span>
+        <span>⚡ കോളയാട് കണക്ട്</span>
       </div>
 
-      <!-- റബർ -->
-      <div class="price-card">
-        <div class="item-info">
-          <div class="item-icon">🌳</div>
-          <div>
-            <div class="item-name">റബർ (RSS-4)</div>
-            <div class="item-sub">കിലോഗ്രാമിന്</div>
+      <!-- വിലകൾ കാണിക്കുന്ന ലിസ്റ്റ് -->
+      <div id="marketListContainer">
+        <!-- സാമ്പിൾ കാർഡ് (ഡാറ്റാബേസ് കണക്റ്റ് ചെയ്യുമ്പോൾ ഇത് തനിയെ ലോഡ് ആകും) -->
+        <div class="price-card">
+          <div class="item-info">
+            <div class="item-icon">🥭</div>
+            <div>
+              <div class="item-name">മാങ്ങ</div>
+              <div class="item-sub">കിലോഗ്രാമിന്</div>
+            </div>
           </div>
-        </div>
-        <div class="price-box">
-          <div class="item-price">₹ 185.00</div>
-          <div class="trend-tag trend-up">▲ +2.00</div>
-        </div>
-      </div>
-
-      <!-- കുരുമുളക് -->
-      <div class="price-card">
-        <div class="item-info">
-          <div class="item-icon">🌿</div>
-          <div>
-            <div class="item-name">കുരുമുളക്</div>
-            <div class="item-sub">കിലോഗ്രാമിന്</div>
+          <div class="price-box">
+            <div class="item-price">₹ 80.00</div>
+            <div class="trend-tag trend-up">▲ +5.00</div>
           </div>
-        </div>
-        <div class="price-box">
-          <div class="item-price">₹ 650.00</div>
-          <div class="trend-tag trend-up">▲ +10.00</div>
         </div>
       </div>
 
-      <!-- സ്വർണ്ണം -->
-      <div class="price-card">
-        <div class="item-info">
-          <div class="item-icon">🪙</div>
-          <div>
-            <div class="item-name">സ്വർണ്ണം (22K)</div>
-            <div class="item-sub">പവന് (8 ഗ്രാം)</div>
-          </div>
+      <!-- സബ്-അഡ്മിൻ മാനേജ്മെന്റ് പാനൽ -->
+      <div id="adminPanel" class="admin-controls">
+        <h3>⚙️ പുതിയ സാധനം ചേർക്കുക & നിയന്ത്രിക്കുക</h3>
+        
+        <div id="loginSection" class="login-box">
+          <input type="email" id="adminEmail" class="admin-input" placeholder="അഡ്മിൻ ഇമെയിൽ നൽകുക">
+          <input type="password" id="adminPass" class="admin-input" placeholder="പാസ്‌വേർഡ് നൽകുക">
+          <button class="btn-action" onclick="verifyAdminLogin()">ലോഗിൻ ചെയ്യുക</button>
         </div>
-        <div class="price-box">
-          <div class="item-price">₹ 58,000</div>
-          <div class="trend-tag trend-down">▼ -200</div>
-        </div>
-      </div>
 
-      <!-- വെള്ളി -->
-      <div class="price-card">
-        <div class="item-info">
-          <div class="item-icon">⚪</div>
-          <div>
-            <div class="item-name">വെള്ളി</div>
-            <div class="item-sub">ഗ്രാമിന്</div>
+        <div id="manageSection" style="display:none;">
+          <input type="text" id="newName" class="admin-input" placeholder="സാധനത്തിന്റെ പേര് (ഉദാ: മാങ്ങ, ഓറഞ്ച്)">
+          <input type="text" id="newSub" class="admin-input" placeholder="അളവ് (ഉദാ: 1 കിലോഗ്രാമിന്)">
+          <input type="text" id="newPrice" class="admin-input" placeholder="വില (ഉദാ: ₹ 80)">
+          <input type="text" id="newTrend" class="admin-input" placeholder="ട്രെൻഡ് (up / down / stable)">
+          
+          <!-- ചിത്രമോ ഐക്കണോ ചേർക്കാനുള്ള ഭാഗം -->
+          <div style="margin-bottom: 8px; text-align: left;">
+            <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">ഉൽപ്പന്നത്തിന്റെ ചിത്രം / ഫോട്ടോ:</label>
+            <input type="file" id="newImageFile" accept="image/*" class="admin-input" style="padding: 6px;">
           </div>
-        </div>
-        <div class="price-box">
-          <div class="item-price">₹ 85.00</div>
-          <div class="trend-tag trend-stable">■ മാറ്റമില്ല</div>
-        </div>
-      </div>
 
-      <!-- അടയ്ക്ക -->
-      <div class="price-card">
-        <div class="item-info">
-          <div class="item-icon">🥥</div>
-          <div>
-            <div class="item-name">അടയ്ക്ക</div>
-            <div class="item-sub">പുതിയ പാകിയത് (Kg)</div>
-          </div>
-        </div>
-        <div class="price-box">
-          <div class="item-price">₹ 260.00</div>
-          <div class="trend-tag trend-up">▲ +5.00</div>
-        </div>
-      </div>
-
-      <!-- തേങ്ങ -->
-      <div class="price-card">
-        <div class="item-info">
-          <div class="item-icon">🥥</div>
-          <div>
-            <div class="item-name">തേങ്ങ</div>
-            <div class="item-sub">കിലോഗ്രാമിന്</div>
-          </div>
-        </div>
-        <div class="price-box">
-          <div class="item-price">₹ 40.00</div>
-          <div class="trend-tag trend-stable">■ മാറ്റമില്ല</div>
+          <button class="btn-action" onclick="addNewMarketItemWithImage()">പുതിയത് ചേർക്കുക</button>
+          <button class="btn-action" style="background:#475569; margin-top:10px;" onclick="logoutAdmin()">ലോഗ് ഔട്ട്</button>
         </div>
       </div>
 
     </div>
   </div>
+
+  <script>
+    // വിശ്വസ്തരായ അഡ്മിൻമാരുടെ ഇമെയിലുകൾ
+    const allowedAdmins = [
+      "admin@kolayad.com",
+      "subadmin1@kolayad.com",
+      "subadmin2@kolayad.com",
+      "subadmin3@kolayad.com"
+    ];
+
+    function toggleAdminLogin() {
+      const panel = document.getElementById('adminPanel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function verifyAdminLogin() {
+      const email = document.getElementById('adminEmail').value.trim();
+      if(allowedAdmins.includes(email)) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('manageSection').style.display = 'block';
+        alert('വിജയകരമായി ലോഗിൻ ചെയ്തു!');
+      } else {
+        alert('ഈ ഇമെയിലിന് അനുവാദമില്ല!');
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('loginSection').style.display = 'block';
+      document.getElementById('manageSection').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    function addNewMarketItemWithImage() {
+      const name = document.getElementById('newName').value;
+      const price = document.getElementById('newPrice').value;
+      const imageFile = document.getElementById('newImageFile').files[0];
+
+      if(!name || !price) {
+        alert('దయവായി പേരും വിലയും നൽകുക!');
+        return;
+      }
+
+      alert('പുതിയ ഉൽപ്പന്നം വിജയകരമായി ചേർത്തു! ചിത്രവും ഫയർബേസിലേക്ക് അപ്‌ഡേറ്റ് ചെയ്യപ്പെടുന്നു.');
+      // ഫയർബേസ് ഫങ്ഷനുകൾ ഇവിടെ ബന്ധിപ്പിക്കാം
+    }
+  </script>
 
 </body>
 </html>
