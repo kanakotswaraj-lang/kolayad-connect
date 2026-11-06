@@ -412,15 +412,16 @@
       <div class="filter-sticky-padding">
         <!-- ട്രെൻഡിങ് സെർച്ച് ടിക്കർ ബാർ -->
                         
-        <!-- മാർക്കറ്റ് റേറ്റ് സ്ക്രോളിങ് ടിക്കർ ബാർ (Updated Blue Theme) -->
+                <!-- മാർക്കറ്റ് റേറ്റ് സ്ക്രോളിങ് ടിക്കർ ബാർ -->
         <a href="market-rates.html" style="text-decoration: none; display: block;">
           <div class="ticker-wrapper" style="background: rgba(14, 24, 56, 0.9); border: 1.5px solid rgba(59, 130, 246, 0.5); cursor: pointer;">
             <span class="ticker-badge" style="background: linear-gradient(135deg, #059669, #34d399); color: #ffffff; font-weight: 800; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);">📊 വിലനിലവാരം</span>
             <div style="overflow: hidden; width: 100%;">
-              <span class="ticker-text" style="color: #ffffff; font-weight: 700;">മാങ്ങ ₹ 80 | സ്വർണ്ണം (പവൻ) ₹ 58,000 | റബർ ₹ 185 | കുരുമുളക് ₹ 650 | കൂടുതൽ വിവരങ്ങൾക്ക് ക്ലിക്ക് ചെയ്യൂ...</span>
+              <span class="ticker-text" id="homeTickerText" style="color: #ffffff; font-weight: 700;">സ്വർണ്ണം: ₹ 58,000 | വെള്ളി: ₹ 85 | റബർ: ₹ 185 | കുരുമുളക്: ₹ 650 | അടയ്ക്ക: ₹ 260 | തേങ്ങ: ₹ 40 | കൂടുതൽ വിവരങ്ങൾക്ക് ക്ലിക്ക് ചെയ്യൂ...</span>
             </div>
           </div>
         </a>
+
 
 
 
@@ -1133,6 +1134,22 @@
         alert('ഫീഡ്‌ബാക്ക് അയക്കുന്നതിൽ പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.');
       }
     }
+  
+    window.onload = function() {
+      // മാർക്കറ്റ് പേജിൽ സേവ് ചെയ്ത വിലകൾ ഹോം പേജിലെ ടിക്കറിലേക്ക് എടുക്കാൻ
+      const gold = localStorage.getItem('p_gold') || '₹ 58,000';
+      const silver = localStorage.getItem('p_silver') || '₹ 85';
+      const rubber = localStorage.getItem('p_rubber') || '₹ 185';
+      const pepper = localStorage.getItem('p_pepper') || '₹ 650';
+      const arecanut = localStorage.getItem('p_arecanut') || '₹ 260';
+      const coconut = localStorage.getItem('p_coconut') || '₹ 40';
+
+      const tickerElement = document.getElementById('homeTickerText');
+      if(tickerElement) {
+        tickerElement.innerText = `സ്വർണ്ണം: ${gold} | വെള്ളി: ${silver} | റബർ: ${rubber} | കുരുമുളക്: ${pepper} | അടയ്ക്ക: ${arecanut} | തേങ്ങ: ${coconut} | കൂടുതൽ വിവരങ്ങൾക്ക് ക്ലിക്ക് ചെയ്യൂ...`;
+      }
+    };
+  
 
     initApp();
   </script>
