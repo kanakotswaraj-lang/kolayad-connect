@@ -354,26 +354,33 @@
           </div>
 
           <button class="btn-action" style="width: 100%; margin-bottom: 15px;" onclick="updatePrices()">വിലകളും ട്രെൻഡും അപ്ഡേറ്റ് ചെയ്യുക</button>
+        <!-- പുതിയ സാധനം ചേർക്കാൻ (യൂണിക് ഐഡി ബോക്സ് ഒഴിവാക്കി പേരിൽ നിന്ന് ഓട്ടോ ജനറേറ്റ് ചെയ്യുന്നു) -->
+        <div style="background: var(--bg-card); padding: 16px; border-radius: 16px; border: 1.5px solid var(--border-color); margin-top: 20px;">
+          <div style="font-size: 14px; font-weight: 800; color: #facc15; margin-bottom: 12px;">➕ പുതിയ സാധനം ചേർക്കുക:</div>
+          
+          <label>ഐക്കൺ ഇമോജി (ഉദാ: 🟡)</label>
+          <input type="text" id="newItemEmoji" class="dark-input" placeholder="🟡">
 
-          <!-- പുതിയതായി ചേർത്ത സാധനങ്ങൾ എഡിറ്റ്/ഡിലീറ്റ് ചെയ്യാൻ വരുന്ന ഭാഗം -->
-          <div id="extraItemsAdminSection" style="margin-bottom: 15px;"></div>
+          <label>സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)</label>
+          <input type="text" id="newItemName" class="dark-input" placeholder="മഞ്ഞൾ">
 
-          <!-- പുതിയ സാധനം ചേർക്കാൻ -->
-          <p style="font-size: 11px; color: #34d399; margin-bottom: 6px; font-weight:700;">➕ പുതിയ സാധനം ചേർക്കാൻ:</p>
-          <input type="text" id="newId" class="admin-input" placeholder="യുണീക്ക് ഐഡി ഇംഗ്ലീഷിൽ (ഉദാ: turmeric)">
-          <input type="text" id="newEmoji" class="admin-input" placeholder="ഐക്കൺ ഇമോജി (ഉദാ: 🟡)">
-          <input type="text" id="newName" class="admin-input" placeholder="സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)">
-          <input type="text" id="newSub" class="admin-input" placeholder="അളവ് (ഉദാ: കിലോഗ്രാമിന്)">
-          <input type="text" id="newPrice" class="admin-input" placeholder="വില (ഉദാ: ₹ 300)">
-          <select id="newTrend" class="admin-select" style="margin-bottom:8px;">
-            <option value="up">▲ കൂടി</option>
-            <option value="down">▼ കുറഞ്ഞു</option>
-            <option value="stable">■ മാറ്റമില്ല</option>
+          <label>അളവ് (ഉദാ: കിലോഗ്രാമിന്)</label>
+          <input type="text" id="newItemUnit" class="dark-input" placeholder="കിലോഗ്രാമിന്">
+
+          <label>വില (ഉദാ: ₹ 300)</label>
+          <input type="text" id="newItemPrice" class="dark-input" placeholder="₹ 300">
+
+          <label>ട്രെൻഡ്</label>
+          <select id="newItemTrend" class="dark-input">
+            <option value="▲ കൂടി">▲ കൂടി</option>
+            <option value="▼ കുറഞ്ഞു">▼ കുറഞ്ഞു</option>
+            <option value="■ മാറ്റമില്ല">■ മാറ്റമില്ല</option>
           </select>
-          <button class="btn-action" style="background: #059669; width: 100%; margin-bottom: 15px;" onclick="addNewItem()">പുതിയ സാധനം ചേർക്കുക</button>
 
-          <button class="btn-action" style="background:#475569; width: 100%;" onclick="logoutAdmin()">ലോഗ് ഔട്ട്</button>
+          <button onclick="addNewMarketItem()" class="btn-submit" style="margin-top: 10px;">പുതിയ സാധനം ചേർക്കുക</button>
         </div>
+
+          
       </div>
 
     </div>
