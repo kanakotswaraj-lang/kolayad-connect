@@ -144,6 +144,16 @@
       cursor: pointer;
       font-size: 12px;
     }
+    .btn-delete {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
     .login-box {
       margin-top: 5px;
       padding: 10px;
@@ -175,10 +185,10 @@
         <span>⚡ കോളയാട് കണക്ട്</span>
       </div>
 
-      <!-- സാധനങ്ങളുടെ ലിസ്റ്റ് -->
+      <!-- പ്രധാന സാധനങ്ങളുടെ ലിസ്റ്റ് -->
       <div id="marketListContainer">
         
-        <div class="price-card">
+        <div class="price-card" id="card-gold">
           <div class="item-info">
             <div class="item-icon">🟡</div>
             <div>
@@ -188,11 +198,11 @@
           </div>
           <div class="price-box">
             <div class="item-price" id="p-gold">₹ 58,000</div>
-            <div class="trend-tag trend-down" id="t-gold">▼ -200</div>
+            <div class="trend-tag trend-down" id="t-gold">▼ കുറഞ്ഞു</div>
           </div>
         </div>
 
-        <div class="price-card">
+        <div class="price-card" id="card-silver">
           <div class="item-info">
             <div class="item-icon">⚪</div>
             <div>
@@ -206,7 +216,7 @@
           </div>
         </div>
 
-        <div class="price-card">
+        <div class="price-card" id="card-rubber">
           <div class="item-info">
             <div class="item-icon">🌳</div>
             <div>
@@ -216,11 +226,11 @@
           </div>
           <div class="price-box">
             <div class="item-price" id="p-rubber">₹ 185.00</div>
-            <div class="trend-tag trend-up" id="t-rubber">▲ +2.00</div>
+            <div class="trend-tag trend-up" id="t-rubber">▲ കൂടി</div>
           </div>
         </div>
 
-        <div class="price-card">
+        <div class="price-card" id="card-pepper">
           <div class="item-info">
             <div class="item-icon">🌿</div>
             <div>
@@ -230,11 +240,11 @@
           </div>
           <div class="price-box">
             <div class="item-price" id="p-pepper">₹ 650.00</div>
-            <div class="trend-tag trend-up" id="t-pepper">▲ +10.00</div>
+            <div class="trend-tag trend-up" id="t-pepper">▲ കൂടി</div>
           </div>
         </div>
 
-        <div class="price-card">
+        <div class="price-card" id="card-arecanut">
           <div class="item-info">
             <div class="item-icon">🥥</div>
             <div>
@@ -244,11 +254,11 @@
           </div>
           <div class="price-box">
             <div class="item-price" id="p-arecanut">₹ 260.00</div>
-            <div class="trend-tag trend-up" id="t-arecanut">▲ +5.00</div>
+            <div class="trend-tag trend-up" id="t-arecanut">▲ കൂടി</div>
           </div>
         </div>
 
-        <div class="price-card">
+        <div class="price-card" id="card-coconut">
           <div class="item-info">
             <div class="item-icon">🥥</div>
             <div>
@@ -275,7 +285,7 @@
 
         <div id="manageSection" style="display:none;">
           
-          <p style="font-size: 11px; color: #60a5fa; margin-bottom: 8px; font-weight:700;">📌 വിലകളും ട്രെൻഡുകളും (ഉയർച്ച/താഴ്ച) മാറ്റാൻ:</p>
+          <p style="font-size: 11px; color: #60a5fa; margin-bottom: 8px; font-weight:700;">📌 പ്രധാന വിലകളും ട്രെൻഡുകളും മാറ്റാൻ:</p>
           
           <!-- സ്വർണ്ണം -->
           <div class="edit-row"><span>സ്വർണ്ണം:</span></div>
@@ -343,14 +353,23 @@
             </select>
           </div>
 
-          <button class="btn-action" style="width: 100%; margin-bottom: 12px;" onclick="updatePrices()">വിലകളും ട്രെൻഡും അപ്ഡേറ്റ് ചെയ്യുക</button>
+          <button class="btn-action" style="width: 100%; margin-bottom: 15px;" onclick="updatePrices()">വിലകളും ട്രെൻഡും അപ്ഡേറ്റ് ചെയ്യുക</button>
+
+          <!-- പുതിയതായി ചേർത്ത സാധനങ്ങൾ എഡിറ്റ്/ഡിലീറ്റ് ചെയ്യാൻ വരുന്ന ഭാഗം -->
+          <div id="extraItemsAdminSection" style="margin-bottom: 15px;"></div>
 
           <!-- പുതിയ സാധനം ചേർക്കാൻ -->
           <p style="font-size: 11px; color: #34d399; margin-bottom: 6px; font-weight:700;">➕ പുതിയ സാധനം ചേർക്കാൻ:</p>
-          <input type="text" id="newEmoji" class="admin-input" placeholder="ഐക്കൺ ഇമോജി (ഉദാ: 🥭)">
-          <input type="text" id="newName" class="admin-input" placeholder="സാധനത്തിന്റെ പേര് (ഉദാ: മാങ്ങ)">
+          <input type="text" id="newId" class="admin-input" placeholder="യുണീക്ക് ഐഡി ഇംഗ്ലീഷിൽ (ഉദാ: turmeric)">
+          <input type="text" id="newEmoji" class="admin-input" placeholder="ഐക്കൺ ഇമോജി (ഉദാ: 🟡)">
+          <input type="text" id="newName" class="admin-input" placeholder="സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)">
           <input type="text" id="newSub" class="admin-input" placeholder="അളവ് (ഉദാ: കിലോഗ്രാമിന്)">
-          <input type="text" id="newPrice" class="admin-input" placeholder="വില (ഉദാ: ₹ 80)">
+          <input type="text" id="newPrice" class="admin-input" placeholder="വില (ഉദാ: ₹ 300)">
+          <select id="newTrend" class="admin-select" style="margin-bottom:8px;">
+            <option value="up">▲ കൂടി</option>
+            <option value="down">▼ കുറഞ്ഞു</option>
+            <option value="stable">■ മാറ്റമില്ല</option>
+          </select>
           <button class="btn-action" style="background: #059669; width: 100%; margin-bottom: 15px;" onclick="addNewItem()">പുതിയ സാധനം ചേർക്കുക</button>
 
           <button class="btn-action" style="background:#475569; width: 100%;" onclick="logoutAdmin()">ലോഗ് ഔട്ട്</button>
@@ -371,9 +390,7 @@
       loadSavedData('arecanut');
       loadSavedData('coconut');
 
-      if(localStorage.getItem('extra_items')) {
-        document.getElementById('marketListContainer').innerHTML += localStorage.getItem('extra_items');
-      }
+      loadExtraItems();
     };
 
     function loadSavedData(item) {
@@ -387,13 +404,14 @@
 
     function setTrendDisplay(item, trendVal) {
       const el = document.getElementById('t-' + item);
+      if(!el) return;
       el.className = 'trend-tag';
       if(trendVal === 'up') {
         el.classList.add('trend-up');
-        el.innerText = '▲ വില കൂടി';
+        el.innerText = '▲ കൂടി';
       } else if(trendVal === 'down') {
         el.classList.add('trend-down');
-        el.innerText = '▼ വില കുറഞ്ഞു';
+        el.innerText = '▼ കുറഞ്ഞു';
       } else {
         el.classList.add('trend-stable');
         el.innerText = '■ മാറ്റമില്ല';
@@ -412,13 +430,17 @@
         fillInputValues('pepper');
         fillInputValues('arecanut');
         fillInputValues('coconut');
+        renderExtraItemsAdmin();
       }
     }
 
     function fillInputValues(item) {
-      document.getElementById('edit' + capitalize(item)).value = document.getElementById('p-' + item).innerText;
+      const el = document.getElementById('edit' + capitalize(item));
+      const pEl = document.getElementById('p-' + item);
+      if(el && pEl) el.value = pEl.innerText;
       if(localStorage.getItem('t_' + item)) {
-        document.getElementById('trend' + capitalize(item)).value = localStorage.getItem('t_' + item);
+        const tEl = document.getElementById('trend' + capitalize(item));
+        if(tEl) tEl.value = localStorage.getItem('t_' + item);
       }
     }
 
@@ -431,6 +453,7 @@
       if(enteredPass === adminSecretPassword) {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('manageSection').style.display = 'block';
+        renderExtraItemsAdmin();
         alert('വിജയകരമായി ലോഗിൻ ചെയ്തു!');
       } else {
         alert('നൽകിയ പാസ്‌വേർഡ് തെറ്റാണ്!');
@@ -452,13 +475,21 @@
       saveAndUpdate('arecanut');
       saveAndUpdate('coconut');
 
+      // അധികമായി ചേർത്തവയുടെ അപ്ഡേറ്റ് സേവ് ചെയ്യാൻ
+      saveAllExtraItemsFromAdmin();
+
       alert('വിലകളും ട്രെൻഡുകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
       toggleAdminLogin();
+      location.reload();
     }
 
     function saveAndUpdate(item) {
-      const priceVal = document.getElementById('edit' + capitalize(item)).value;
-      const trendVal = document.getElementById('trend' + capitalize(item)).value;
+      const priceInput = document.getElementById('edit' + capitalize(item));
+      const trendSelect = document.getElementById('trend' + capitalize(item));
+      if(!priceInput || !trendSelect) return;
+
+      const priceVal = priceInput.value;
+      const trendVal = trendSelect.value;
 
       document.getElementById('p-' + item).innerText = priceVal;
       setTrendDisplay(item, trendVal);
@@ -467,44 +498,114 @@
       localStorage.setItem('t_' + item, trendVal);
     }
 
-    function addNewItem() {
-      const emoji = document.getElementById('newEmoji').value.trim() || '📦';
-      const name = document.getElementById('newName').value.trim();
-      const sub = document.getElementById('newSub').value.trim();
-      const price = document.getElementById('newPrice').value.trim();
+    // പുതിയ സാധനങ്ങൾ മാനേജ് ചെയ്യാൻ
+    function getExtrasArray() {
+      let extras = localStorage.getItem('extras_array');
+      return extras ? JSON.parse(extras) : [];
+    }
 
-      if(!name || !price) {
-        alert('ദയവായി സാധനത്തിന്റെ പേരും വിലയും നൽകുക!');
-        return;
-      }
+    function loadExtraItems() {
+      let extras = getExtrasArray();
+      let container = document.getElementById('marketListContainer');
+      extras.forEach(item => {
+        let cardHtml = createCardHtml(item);
+        container.insertAdjacentHTML('beforeend', cardHtml);
+      });
+    }
 
-      const cardHtml = `
-        <div class="price-card">
+    function createCardHtml(item) {
+      let trendClass = 'trend-stable';
+      let trendText = '■ മാറ്റമില്ല';
+      if(item.trend === 'up') { trendClass = 'trend-up'; trendText = '▲ കൂടി'; }
+      else if(item.trend === 'down') { trendClass = 'trend-down'; trendText = '▼ കുറഞ്ഞു'; }
+
+      return `
+        <div class="price-card" id="card-${item.id}">
           <div class="item-info">
-            <div class="item-icon">${emoji}</div>
+            <div class="item-icon">${item.emoji}</div>
             <div>
-              <div class="item-name">${name}</div>
-              <div class="item-sub">${sub}</div>
+              <div class="item-name">${item.name}</div>
+              <div class="item-sub">${item.sub}</div>
             </div>
           </div>
           <div class="price-box">
-            <div class="item-price">${price}</div>
-            <div class="trend-tag trend-stable">■ പുതിയത്</div>
+            <div class="item-price" id="p-${item.id}">${item.price}</div>
+            <div class="trend-tag ${trendClass}" id="t-${item.id}">${trendText}</div>
           </div>
         </div>
       `;
+    }
 
-      document.getElementById('marketListContainer').innerHTML += cardHtml;
-      let existingExtras = localStorage.getItem('extra_items') || '';
-      localStorage.setItem('extra_items', existingExtras + cardHtml);
+    function addNewItem() {
+      let id = document.getElementById('newId').value.trim().toLowerCase();
+      let emoji = document.getElementById('newEmoji').value.trim() || '📦';
+      let name = document.getElementById('newName').value.trim();
+      let sub = document.getElementById('newSub').value.trim();
+      let price = document.getElementById('newPrice').value.trim();
+      let trend = document.getElementById('newTrend').value;
 
-      document.getElementById('newEmoji').value = '';
-      document.getElementById('newName').value = '';
-      document.getElementById('newSub').value = '';
-      document.getElementById('newPrice').value = '';
+      if(!id || !name || !price) {
+        alert('ദയവായി ഐഡിയും പേരും വിലയും നൽകുക!');
+        return;
+      }
 
-      alert('പുതിയ സാധനം വിജയകരമായി ലിസ്റ്റിലേക്ക് ചേർത്തു!');
-      toggleAdminLogin();
+      let extras = getExtrasArray();
+      extras.push({ id, emoji, name, sub, price, trend });
+      localStorage.setItem('extras_array', JSON.stringify(extras));
+
+      alert('പുതിയ സാധനം വിജയകരമായി ചേർത്തു!');
+      location.reload();
+    }
+
+    function renderExtraItemsAdmin() {
+      let extras = getExtrasArray();
+      let adminSec = document.getElementById('extraItemsAdminSection');
+      if(!extras.length) {
+        adminSec.innerHTML = '';
+        return;
+      }
+
+      let html = '<p style="font-size: 11px; color: #f59e0b; margin-bottom: 6px; font-weight:700;">✏️ പുതിയ സാധനങ്ങൾ മാറ്റാൻ / നീക്കം ചെയ്യാൻ:</p>';
+      extras.forEach((item, index) => {
+        html += `
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 8px; border-radius: 8px; margin-bottom: 6px; border: 1px solid #334155;">
+            <div style="font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 4px;">${item.emoji} ${item.name} (${item.sub})</div>
+            <div style="display: flex; gap: 6px; margin-bottom: 4px;">
+              <input type="text" id="extra_p_${index}" class="admin-input" value="${item.price}" style="margin-bottom:0;" placeholder="വില">
+              <select id="extra_t_${index}" class="admin-select" style="margin-bottom:0; width:110px;">
+                <option value="up" ${item.trend==='up'?'selected':''}>▲ കൂടി</option>
+                <option value="down" ${item.trend==='down'?'selected':''}>▼ കുറഞ്ഞു</option>
+                <option value="stable" ${item.trend==='stable'?'selected':''}>■ മാറ്റമില്ല</option>
+              </select>
+            </div>
+            <button class="btn-delete" onclick="deleteExtraItem(${index})">ഇത് നീക്കം ചെയ്യുക (Delete)</button>
+          </div>
+        `;
+      });
+      adminSec.innerHTML = html;
+    }
+
+    function saveAllExtraItemsFromAdmin() {
+      let extras = getExtrasArray();
+      extras.forEach((item, index) => {
+        let pInput = document.getElementById('extra_p_' + index);
+        let tSelect = document.getElementById('extra_t_' + index);
+        if(pInput && tSelect) {
+          item.price = pInput.value;
+          item.trend = tSelect.value;
+        }
+      });
+      localStorage.setItem('extras_array', JSON.stringify(extras));
+    }
+
+    function deleteExtraItem(index) {
+      if(confirm('ഈ സാധനം ലിസ്റ്റിൽ നിന്നും ഒഴിവാക്കണമെന്നുറപ്പാണോ?')) {
+        let extras = getExtrasArray();
+        extras.splice(index, 1);
+        localStorage.setItem('extras_array', JSON.stringify(extras));
+        alert('വിജയകരമായി നീക്കം ചെയ്തു!');
+        location.reload();
+      }
     }
   </script>
 
