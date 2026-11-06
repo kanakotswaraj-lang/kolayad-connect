@@ -662,7 +662,7 @@
       }
     }
     // പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ലിസ്റ്റിലേക്ക് വരുത്താൻ
-// പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ലിസ്റ്റിലേക്ക് ഒറിജിനൽ സ്റ്റൈലിൽ വരുത്താൻ
+// പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ഒറിജിനൽ ഡിസൈൻ സ്റ്റൈലിൽ വരുത്താൻ
 window.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('marketListContainer');
   let customItems = JSON.parse(localStorage.getItem('custom_market_items') || '[]');
@@ -674,7 +674,18 @@ window.addEventListener('DOMContentLoaded', () => {
     
     const unit = localStorage.getItem(key + '_unit') || '';
     const emoji = localStorage.getItem(key + '_emoji') || '📦';
-    const trend = localStorage.getItem(key + '_trend') || '■ മാറ്റമില്ലി';
+    const trend = localStorage.getItem(key + '_trend') || '▲ കൂടി';
+
+    // ട്രെൻഡിനനുസരിച്ചുള്ള കളർ സെറ്റ് ചെയ്യാൻ
+    let trendBg = 'rgba(16, 185, 129, 0.15)'; // ഡിഫോൾട്ട് പച്ച (കൂടി)
+    let trendColor = '#34d399';
+    if(trend.includes('കുറഞ്ഞു')) {
+      trendBg = 'rgba(239, 68, 68, 0.15)';
+      trendColor = '#f87171';
+    } else if(trend.includes('മാറ്റം')) {
+      trendBg = 'rgba(255, 255, 255, 0.08)';
+      trendColor = '#cbd5e1';
+    }
 
     if(container) {
       const cardDiv = document.createElement('div');
@@ -687,15 +698,16 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="item-sub">${unit}</div>
           </div>
         </div>
-        <div class="price-box">
-          <span style="font-size: 15px; font-weight: 800; color: #38bdf8;">₹ ${price}</span>
-          <span style="font-size: 11px; color: #94a3b8; background: rgba(255, 255, 255, 0.05); padding: 3px 8px; border-radius: 6px; margin-top: 4px; display: inline-block;">${trend}</span>
+        <div class="price-box" style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+          <span style="font-size: 16px; font-weight: 800; color: #38bdf8;">₹ ${price}</span>
+          <span style="font-size: 11px; font-weight: bold; color: ${trendColor}; background: ${trendBg}; padding: 3px 10px; border-radius: 6px; display: inline-block;">${trend}</span>
         </div>
       `;
       container.appendChild(cardDiv);
     }
   });
 });
+
 
 
   </script>
