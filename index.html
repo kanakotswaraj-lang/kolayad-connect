@@ -441,56 +441,60 @@
 
     <div class="scrollable-body" id="scrollBody">
 
-        <!-- മനോഹരമായ വലിയ ഗ്ലാസ് 3D അനൗൺസ്മെന്റ് കാർഡ് -->
-<a href="announcements.html" class="glass-3d-card">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; flex-wrap: wrap;">
-    <span class="hot-badge">🔥 ഹോട്ട് അപ്ഡേറ്റ്</span>
-    <span style="font-size: 13px; color: #38bdf8; font-weight: bold; text-shadow: 0 0 10px rgba(56,189,248,0.6);">എല്ലാ അറിയിപ്പുകളും കാണുക →</span>
+      <!-- ഒതുക്കമുള്ള 3D ഗ്ലാസ്‌മോർഫിസം സ്ലിം ബാർ -->
+<a href="announcements.html" class="slim-glass-bar">
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <span class="hot-tag">🔥 അപ്ഡേറ്റ്</span>
+    <span style="font-size: 13px; color: #f1f5f9; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+      ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
+    </span>
   </div>
-  <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #ffffff; font-weight: 800; letter-spacing: 0.5px;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകളും ഓഫറുകളും</h3>
-  <p style="margin: 0; font-size: 14px; color: #94a3b8; line-height: 1.6;">വ്യാപാര സ്ഥാപനങ്ങളുടെ ഓഫറുകൾ, മീറ്റിംഗുകൾ, മറ്റ് പ്രധാന വിവരങ്ങൾ ഇവിടെ അറിയാം.</p>
+  <span style="font-size: 12px; color: #38bdf8; font-weight: bold; white-space: nowrap; text-shadow: 0 0 8px rgba(56,189,248,0.5);">
+    കാണുക →
+  </span>
 </a>
 
 <style>
-.glass-3d-card {
+.slim-glass-bar {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(56, 189, 248, 0.4);
-  border-top: 1px solid rgba(56, 189, 248, 0.7);
-  border-radius: 22px;
-  padding: 22px;
-  margin-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin: 12px 0;
   text-decoration: none;
-  display: block;
-  color: inherit;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
-  transition: all 0.4s ease;
-  animation: pulseGlowBox 3s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: pulseSlim 2.5s infinite;
+  transition: all 0.3s ease;
 }
 
-.glass-3d-card:active {
+.slim-glass-bar:active {
   transform: scale(0.98);
 }
 
-.hot-badge {
+.hot-tag {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: #ffffff;
-  padding: 6px 14px;
-  border-radius: 10px;
-  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  font-size: 11px;
   font-weight: bold;
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-  display: inline-block;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
 }
 
-@keyframes pulseGlowBox {
-  0% { box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
-  50% { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.6); border-color: rgba(56, 189, 248, 0.9); }
-  100% { box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
+@keyframes pulseSlim {
+  0% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 6px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
+  50% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.6); border-color: rgba(56, 189, 248, 0.8); }
+  100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 6px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); }
 }
 </style>
+
 
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
