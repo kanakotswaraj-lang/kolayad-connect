@@ -386,7 +386,7 @@
             <select id="newItemTrend" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 14px; outline: none;">
               <option value="▲ കൂടി" style="background: #16244f; color: #ffffff;">▲ കൂടി</option>
               <option value="▼ കുറഞ്ഞു" style="background: #16244f; color: #ffffff;">▼ കുറഞ്ഞു</option>
-              <option value="■ മാറ്റമില്ലി" style="background: #16244f; color: #ffffff;">■ മാറ്റമില്ലി</option>
+              <option value="■ മാറ്റമില്ല" style="background: #16244f; color: #ffffff;">■ മാറ്റമില്ല</option>
             </select>
           </div>
 
@@ -577,6 +577,39 @@
       alert('പുതിയ സാധനം വിജയകരമായി ചേർത്തു!');
       location.reload();
     }
+    function addNewMarketItem() {
+  const emoji = document.getElementById('newItemEmoji').value.trim();
+  const name = document.getElementById('newItemName').value.trim();
+  const unit = document.getElementById('newItemUnit').value.trim();
+  const price = document.getElementById('newItemPrice').value.trim();
+  const trend = document.getElementById('newItemTrend').value;
+
+  if (!name || !price) {
+    alert('ദയവായി സാധനത്തിന്റെ പേരും വിലയും നൽകുക!');
+    return;
+  }
+
+  // കീ നാമം ഇംഗ്ലീഷിലേക്ക് മാറ്റുന്നു (localStorage-ൽ സേവ് ചെയ്യാൻ)
+  const uniqueKey = name.toLowerCase().replace(/\s+/g, '_');
+
+  // localStorage-ൽ വിലയും മറ്റ് വിവരങ്ങളും സേവ് ചെയ്യുന്നു
+  localStorage.setItem(uniqueKey, price);
+  localStorage.setItem('p_' + uniqueKey, price);
+  localStorage.setItem(uniqueKey + '_unit', unit);
+  localStorage.setItem(uniqueKey + '_emoji', emoji);
+  localStorage.setItem(uniqueKey + '_trend', trend);
+
+  // സേവ് ചെയ്ത ലിസ്റ്റിലേക്ക് പുതിയ കീ കൂടി ചേർക്കുന്നു
+  let customItems = JSON.parse(localStorage.getItem('custom_market_items') || '[]');
+  if (!customItems.includes(uniqueKey)) {
+    customItems.push(uniqueKey);
+    localStorage.setItem('custom_market_items', JSON.stringify(customItems));
+  }
+
+  alert('പുതിയ സാധനം വിജയകരമായി ചേർത്തു!');
+  location.reload(); // പേജ് റിഫ്രഷ് ചെയ്ത് മാറ്റങ്ങൾ വരുത്താൻ
+}
+
 
     function renderExtraItemsAdmin() {
       let extras = getExtrasArray();
