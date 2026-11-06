@@ -662,18 +662,20 @@
       }
     }
     // പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ലിസ്റ്റിലേക്ക് വരുത്താൻ
+// പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ലിസ്റ്റിലേക്ക് ഒറിജിനൽ സ്റ്റൈലിൽ വരുത്താൻ
 window.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('marketListContainer'); // അല്ലെങ്കിൽ ലിസ്റ്റ് കാണിക്കുന്ന കണ്ടെയ്നർ ഐഡി
+  const container = document.getElementById('marketListContainer');
   let customItems = JSON.parse(localStorage.getItem('custom_market_items') || '[]');
   
   customItems.forEach(key => {
     const name = key.replace(/_/g, ' ');
-    const price = localStorage.getItem(key) || '';
+    let price = localStorage.getItem(key) || '';
+    price = price.replace(/₹/g, '').trim(); // ഇരട്ട ചിഹ്നം ഒഴിവാക്കാൻ
+    
     const unit = localStorage.getItem(key + '_unit') || '';
     const emoji = localStorage.getItem(key + '_emoji') || '📦';
     const trend = localStorage.getItem(key + '_trend') || '■ മാറ്റമില്ലി';
 
-    // പുതിയ കാർഡ് ഡിസൈൻ പേജിലേക്ക് ഡൈനാമിക് ആയി ചേർക്കുന്നു
     if(container) {
       const cardDiv = document.createElement('div');
       cardDiv.className = 'price-card';
@@ -686,14 +688,15 @@ window.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
         <div class="price-box">
-          <span style="font-size: 15px; font-weight: 800; color: #f1f5f9;">₹ ${price}</span>
-          <span style="font-size: 11px; color: #94a3b8;">${trend}</span>
+          <span style="font-size: 15px; font-weight: 800; color: #38bdf8;">₹ ${price}</span>
+          <span style="font-size: 11px; color: #94a3b8; background: rgba(255, 255, 255, 0.05); padding: 3px 8px; border-radius: 6px; margin-top: 4px; display: inline-block;">${trend}</span>
         </div>
       `;
       container.appendChild(cardDiv);
     }
   });
 });
+
 
   </script>
 
