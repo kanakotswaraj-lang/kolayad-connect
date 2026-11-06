@@ -1142,21 +1142,28 @@
       }
     }
   
-        
-    window.onload = function() {
-      // localStorage-ൽ നിന്ന് എല്ലാ വിലകളും എടുത്തു കാണിക്കുന്നു
-      const gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '107,580';
-      const silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85.00';
-      const rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185.00';
-      const pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650.00';
-      const arecanut = localStorage.getItem('arecanut') || localStorage.getItem('p_arecanut') || '260.00';
-      const coconut = localStorage.getItem('coconut') || localStorage.getItem('p_coconut') || '40.00';
+        window.onload = function() {
+  // localStorage-ൽ നിന്ന് വിലകൾ എടുക്കുന്നു
+  let gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '107,580';
+  let silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85.00';
+  let rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185.00';
+  let pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650.00';
+  let arecanut = localStorage.getItem('arecanut') || localStorage.getItem('p_arecanut') || '260.00';
+  let coconut = localStorage.getItem('coconut') || localStorage.getItem('p_coconut') || '40.00';
 
-      const tickerElement = document.getElementById('homeTickerText');
-      if(tickerElement) {
-        tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-      }
-    };
+  // ഒന്നിലധികം തവണ '₹' ചിഹ്നം വരുന്നത് ഒഴിവാക്കാൻ അത് നീക്കം ചെയ്യുന്നു
+  gold = gold.replace(/₹/g, '').trim();
+  silver = silver.replace(/₹/g, '').trim();
+  rubber = rubber.replace(/₹/g, '').trim();
+  pepper = pepper.replace(/₹/g, '').trim();
+  arecanut = arecanut.replace(/₹/g, '').trim();
+  coconut = coconut.replace(/₹/g, '').trim();
+
+  const tickerElement = document.getElementById('homeTickerText');
+  if(tickerElement) {
+    tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+  }
+};
 
   
 
