@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>വിപണി വിലനിലവാരം - കോളയാട് കണക്ട്</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', sans-serif; }
+    
+    body {
+      background-color: #050811;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: #091026;
+      border: 1px solid #1e3a8a;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .header-bar {
+      padding: 16px;
+      background: #0e1838;
+      border-bottom: 1px solid #1e294b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .btn-back {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid #3b82f6;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .page-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #60a5fa;
+    }
+    .content-body {
+      padding: 16px;
+      flex: 1;
+    }
+    .update-banner {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid #10b981;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #6ee7b7;
+    }
+    .price-card {
+      background: linear-gradient(135deg, #0e1838 0%, #131f42 100%);
+      border: 1.5px solid #1e294b;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .item-icon {
+      font-size: 24px;
+      width: 45px;
+      height: 45px;
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .item-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .item-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .price-box {
+      text-align: right;
+    }
+    .item-price {
+      font-size: 16px;
+      font-weight: 800;
+      color: #38bdf8;
+    }
+    .trend-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 2px;
+    }
+    .trend-up { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+    .trend-down { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .trend-stable { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="header-bar">
+      <a href="index.html" class="btn-back">⬅️ തിരികെ</a>
+      <div class="page-title">📊 ഇന്നത്തെ വിപണി വിലകൾ</div>
+    </div>
+
+    <div class="content-body">
+      <div class="update-banner">
+        <span>📅 തീയതി: 06/11/2026</span>
+        <span>🕒 തത്സമയ വിലനിലവാരം</span>
+      </div>
+
+      <!-- റബർ -->
+      <div class="price-card">
+        <div class="item-info">
+          <div class="item-icon">🌳</div>
+          <div>
+            <div class="item-name">റബർ (RSS-4)</div>
+            <div class="item-sub">കിലോഗ്രാമിന്</div>
+          </div>
+        </div>
+        <div class="price-box">
+          <div class="item-price">₹ 185.00</div>
+          <div class="trend-tag trend-up">▲ +2.00</div>
+        </div>
+      </div>
+
+      <!-- കുരുമുളക് -->
+      <div class="price-card">
+        <div class="item-info">
+          <div class="item-icon">🌿</div>
+          <div>
+            <div class="item-name">കുരുമുളക്</div>
+            <div class="item-sub">കിലോഗ്രാമിന്</div>
+          </div>
+        </div>
+        <div class="price-box">
+          <div class="item-price">₹ 650.00</div>
+          <div class="trend-tag trend-up">▲ +10.00</div>
+        </div>
+      </div>
+
+      <!-- സ്വർണ്ണം -->
+      <div class="price-card">
+        <div class="item-info">
+          <div class="item-icon">🪙</div>
+          <div>
+            <div class="item-name">സ്വർണ്ണം (22K)</div>
+            <div class="item-sub">പവന് (8 ഗ്രാം)</div>
+          </div>
+        </div>
+        <div class="price-box">
+          <div class="item-price">₹ 58,000</div>
+          <div class="trend-tag trend-down">▼ -200</div>
+        </div>
+      </div>
+
+      <!-- വെള്ളി -->
+      <div class="price-card">
+        <div class="item-info">
+          <div class="item-icon">⚪</div>
+          <div>
+            <div class="item-name">വെള്ളി</div>
+            <div class="item-sub">ഗ്രാമിന്</div>
+          </div>
+        </div>
+        <div class="price-box">
+          <div class="item-price">₹ 85.00</div>
+          <div class="trend-tag trend-stable">■ മാറ്റമില്ല</div>
+        </div>
+      </div>
+
+      <!-- അടയ്ക്ക -->
+      <div class="price-card">
+        <div class="item-info">
+          <div class="item-icon">🥥</div>
+          <div>
+            <div class="item-name">അടയ്ക്ക</div>
+            <div class="item-sub">പുതിയ പാകിയത് (Kg)</div>
+          </div>
+        </div>
+        <div class="price-box">
+          <div class="item-price">₹ 260.00</div>
+          <div class="trend-tag trend-up">▲ +5.00</div>
+        </div>
+      </div>
+
+      <!-- തേങ്ങ -->
+      <div class="price-card">
+        <div class="item-info">
+          <div class="item-icon">🥥</div>
+          <div>
+            <div class="item-name">തേങ്ങ</div>
+            <div class="item-sub">കിലോഗ്രാമിന്</div>
+          </div>
+        </div>
+        <div class="price-box">
+          <div class="item-price">₹ 40.00</div>
+          <div class="trend-tag trend-stable">■ മാറ്റമില്ല</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
