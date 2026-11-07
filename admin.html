@@ -463,7 +463,6 @@
       } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
     }
 
-    // അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുകയോ എഡിറ്റ് ചെയ്ത് സേവ് ചെയ്യുകയോ ചെയ്യാം
     async function postNotice() {
       const editId = document.getElementById('editNoticeId').value;
       const title = document.getElementById('noticeTitleInput').value.trim();
@@ -481,7 +480,6 @@
         }
 
         if (editId) {
-          // എഡിറ്റ് ചെയ്യുന്നതാണെങ്കിൽ
           let updateData = { title, desc, color };
           if (imageUrl) {
             updateData.imageUrl = imageUrl;
@@ -490,7 +488,6 @@
           alert('അറിയിപ്പ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
           cancelNoticeEdit();
         } else {
-          // പുതിയത് പോസ്റ്റ് ചെയ്യുന്നതാണെങ്കിൽ
           await window.addDoc(window.collection(window.db, "notices"), { 
             title, 
             desc, 
@@ -545,7 +542,6 @@
         document.getElementById('noticeSubmitBtn').style.color = '#0f172a';
         document.getElementById('noticeCancelEditBtn').style.display = 'block';
         
-        // സെക്ഷൻ 2 ഓപ്പൺ ചെയ്തു കാണിക്കാൻ
         document.getElementById('sec2').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -598,43 +594,38 @@
       }
     }
 
-    async function addNewCategory(e) {
-  e.preventDefault();
-  const catNameInput = document.getElementById('newCatName');
-  const catEmojiInput = document.getElementById('newCatEmoji');
-  
-  if (!catNameInput) return;
-  const catName = catNameInput.value.trim();
-  const catEmoji = catEmojiInput ? catEmojiInput.value.trim() : '🏷️';
-  
-  if (!catName) {
-    alert('ദയവായി കാറ്റഗറിയുടെ പേര് നൽകുക.');
-    return;
-  }
+    async function addNewCategory() {
+      const catNameInput = document.getElementById('newCategoryInput');
+      const catEmojiInput = document.getElementById('newCategoryEmoji');
+      
+      if (!catNameInput) return;
+      const catName = catNameInput.value.trim();
+      const catEmoji = catEmojiInput ? catEmojiInput.value.trim() : '🏷️';
+      
+      if (!catName) {
+        alert('ദയവായി കാറ്റഗറിയുടെ പേര് നൽകുക.');
+        return;
+      }
 
-  try {
-    // ഫയർബേസ് ഡോക്യുമെന്റ് ഐഡിയായി സ്ലാഷ് വരുന്ന പ്രശ്നം ഒഴിവാക്കാൻ സുരക്ഷിതമായ ഐഡി ഉണ്ടാക്കുന്നു
-    const docId = catName.replace(/[\/\#\$\.\[\]]/g, '_');
+      try {
+        const docId = catName.replace(/[\/\#\$\.\[\]]/g, '_');
 
-    await window.setDoc(window.doc(window.db, "categories", docId), { 
-      name: catName, 
-      emoji: catEmoji || '🏷️',
-      createdAt: new Date().toISOString()
-    });
-    
-    alert('കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
-    catNameInput.value = '';
-    if (catEmojiInput) catEmojiInput.value = '';
-    
-    if (typeof loadAdminCategories === 'function') {
-      loadAdminCategories();
+        await window.setDoc(window.doc(window.db, "categories", docId), { 
+          name: catName, 
+          emoji: catEmoji || '🏷️',
+          createdAt: new Date().toISOString()
+        });
+        
+        alert('കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
+        catNameInput.value = '';
+        if (catEmojiInput) catEmojiInput.value = '';
+        
+        loadAdminCategories();
+      } catch(err) {
+        console.error("Error adding category: ", err);
+        alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+      }
     }
-  } catch(err) {
-    console.error("Error adding category: ", err);
-    alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-  }
-}
-
 
     async function loadAdminCategories() {
       const container = document.getElementById('adminCategoriesListContainer');
