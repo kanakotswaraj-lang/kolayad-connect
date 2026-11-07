@@ -701,6 +701,23 @@
             });
           }
         } catch(err) {}
+        
+    // ഫയർസ്റ്റോറിൽ നിന്ന് തത്സമയ വിലകൾ ലോഡ് ചെയ്യാൻ
+    try {
+      const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
+      if (rateDoc.exists()) {
+        let data = rateDoc.data();
+        let gold = data.gold || '58,000';
+        let silver = data.silver || '85';
+
+        const tickerElement = document.getElementById('homeTickerText');
+        if(tickerElement) {
+          tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+        }
+      }
+    } catch(err) {
+      console.log("Error loading market rates: ", err);
+    }
 
         const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
         if (!shopSnap.empty) {
