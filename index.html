@@ -1171,6 +1171,34 @@
     tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
   }
 };
+// അഡ്മിൻ പാനലിൽ നിന്നുള്ള അറിയിപ്പുകളും ഫോട്ടോകളും സ്ലൈഡറായി ലോഡ് ചെയ്യുന്ന കോഡ്
+document.addEventListener("DOMContentLoaded", function() {
+  const sliderContainer = document.getElementById("noticeSlider");
+  if (!sliderContainer) return;
+
+  // ലോക്കൽ സ്റ്റോറേജിൽ നിന്നോ ഡാറ്റാബേസിൽ നിന്നോ അറിയിപ്പുകൾ എടുക്കുന്നു
+  let notices = JSON.parse(localStorage.getItem("appNotices")) || [];
+
+  if (notices.length > 0) {
+    let latestNotice = notices[notices.length - 1]; // ഏറ്റവും പുതിയ അറിയിപ്പ്
+    sliderContainer.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="background: #0284c7; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">📢 പുതിയ അറിയിപ്പ്</span>
+        <span style="font-size: 11px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
+      </div>
+      <h4 style="color: #f8fafc; font-size: 15px; margin: 6px 0; font-weight: bold;">${latestNotice.title || 'പ്രധാന വിവരം'}</h4>
+      <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 10px; line-height: 1.4;">${latestNotice.desc || ''}</p>
+      ${latestNotice.image ? `<div style="border-radius: 10px; overflow: hidden; margin-top: 8px;"><img src="${latestNotice.image}" style="width: 100%; max-height: 200px; object-fit: cover; display: block;"></div>` : ''}
+    `;
+  } else {
+    // ഡാറ്റ ഇല്ലെങ്കിൽ കാണിക്കുന്ന ഡിഫോൾട്ട് ലുക്ക്
+    sliderContainer.innerHTML = `
+      <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 10px;">
+        ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...
+      </div>
+    `;
+  }
+});
 
   
 
