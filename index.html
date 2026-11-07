@@ -145,16 +145,16 @@
     
     .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 1.5px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
     
-    /* Hero Banner Redesign */
+    /* Hero Banner Redesign - Clear & Visible Background */
     .hero-banner { 
       position: relative; 
-      height: 150px; 
+      height: 170px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      background: linear-gradient(180deg, rgba(5, 8, 17, 0.6) 0%, rgba(9, 16, 38, 0.92) 80%, var(--bg-app) 100%); 
+      background: linear-gradient(180deg, rgba(5, 8, 17, 0.4) 0%, rgba(9, 16, 38, 0.85) 90%, var(--bg-app) 100%); 
     }
 
     .top-action-bar { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
@@ -184,26 +184,6 @@
       margin-top: 2px;
     }
 
-  /* മാർക്കറ്റ് റേറ്റ് & തൊഴിൽ വാർത്തകളുടെ ടിക്കർ കൃത്യമായി ഒതുങ്ങാൻ */
-  .filter-sticky-padding a > div {
-    overflow: hidden !important;
-    position: relative !important;
-  }
-  
-  marquee {
-    width: 100% !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    color: #f1f5f9 !important;
-  }
-
-  /* ലൈറ്റ് മോഡിൽ ടെക്സ്റ്റുകൾക്ക് മികച്ച തെളിമ നൽകാൻ */
-  body.light-mode #homeTickerText,
-  body.light-mode marquee {
-    color: #0f172a !important;
-    font-weight: 700 !important;
-  }
-
     /* Quick Feature Shortcuts */
     .quick-access-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px 12px 4px 12px; }
     .quick-chip {
@@ -218,6 +198,30 @@
 
     .filter-sticky-padding { padding: 6px 12px 8px 12px; background: var(--bg-app); }
     
+    /* Ticker Box & Readability Fix */
+    .ticker-box-wrapper {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      overflow: hidden !important;
+      padding: 8px 12px !important;
+      width: 100% !important;
+      border-radius: 12px !important;
+    }
+
+    marquee {
+      width: 100% !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      font-size: 12px !important;
+    }
+
+    body.light-mode marquee {
+      color: #0f172a !important;
+    }
+
     /* Dynamic Search Box */
     .search-container { position: relative; width: 100%; margin-top: 4px; }
     .search-input-box {
@@ -291,9 +295,6 @@
 
     #imageZoomModal { background: rgba(0,0,0,0.92); z-index: 100; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
-
-    /* Fix for Ticker Marquee text wrapping inside boxes */
-    marquee { width: 100% !important; overflow: hidden !important; white-space: nowrap !important; }
   </style>
 </head>
 <body>
@@ -351,9 +352,9 @@
       <div class="filter-sticky-padding">
         <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
         <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%; overflow: hidden;">
+          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
             <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4" style="color: #f1f5f9; font-size: 12px; font-weight: 700; width: 100%;">
+            <marquee behavior="scroll" direction="left" scrollamount="4">
               <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
             </marquee>
           </div>
@@ -361,9 +362,9 @@
 
         <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
         <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(124,58,237,0.3); cursor: pointer; width: 100%; overflow: hidden;">
+          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
             <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4" style="color: #f1f5f9; font-size: 12px; font-weight: 700; width: 100%;">
+            <marquee behavior="scroll" direction="left" scrollamount="4">
               <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
             </marquee>
           </div>
