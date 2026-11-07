@@ -57,23 +57,52 @@
     }
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
 
+    /* ഹെഡിംഗിന് മനോഹരമായ ബാക്ക്ഗ്രൗണ്ടും ഗ്ലാസ്മോർഫിസം ലുക്കും നൽകിയിരിക്കുന്നു */
     .header-bar {
-      padding: 14px 16px; background: var(--bg-app); border-bottom: 2px solid var(--border-color);
+      padding: 12px 16px; 
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.95), rgba(15, 23, 42, 0.95)); 
+      border-bottom: 2px solid #3b82f6;
       display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .header-title {
+      font-size: 15px; 
+      font-weight: 800; 
+      color: #ffffff;
+      background: rgba(59, 130, 246, 0.25);
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
     .back-btn {
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; border: none;
-      padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: none;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: 1.5px solid #93c5fd;
+      padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: none;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
     }
+
     .scrollable-body { flex: 1; overflow-y: auto; padding: 14px; background-color: var(--bg-body); }
     
     .notice-card {
       background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px;
-      padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .notice-title { font-size: 15px; font-weight: bold; color: var(--text-main); margin: 6px 0; }
-    .notice-desc { font-size: 12.5px; color: var(--text-sub); line-height: 1.5; margin-bottom: 10px; }
-    .notice-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; cursor: zoom-in; border: 1px solid var(--border-color); }
+    
+    /* എഴുത്തുകളുടെ വലിപ്പം കൂട്ടിയിരിക്കുന്നു */
+    .notice-title { 
+      font-size: 17px; 
+      font-weight: 800; 
+      color: var(--text-main); 
+      margin: 8px 0 6px 0; 
+    }
+    .notice-desc { 
+      font-size: 14px; 
+      color: var(--text-sub); 
+      line-height: 1.6; 
+      margin-bottom: 12px; 
+      font-weight: 600;
+    }
+    .notice-img { width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; cursor: zoom-in; border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     
     #imageZoomModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
@@ -83,8 +112,8 @@
 
   <div class="app-container">
     <div class="header-bar">
-      <h3 style="font-size: 16px; color: var(--text-main);">📢 എല്ലാ പ്രധാന അറിയിപ്പുകളും</h3>
-      <a href="index.html" class="back-btn">← തിരികെ ഹോമിലേക്ക്</a>
+      <div class="header-title">📢 പ്രധാന അറിയിപ്പുകൾ</div>
+      <a href="index.html" class="back-btn">🏠 ഹോം പേജിലേക്ക്</a>
     </div>
 
     <div class="scrollable-body" id="announcementsList">
@@ -124,9 +153,9 @@
 
         container.innerHTML = notices.reverse().map(n => `
           <div class="notice-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <span style="background: #0284c7; color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: bold;">പ്രധാന അറിയിപ്പ്</span>
-              <span style="font-size: 11px; color: var(--text-sub);">📅 ${n.date || ''}</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="background: #0284c7; color: white; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: bold;">പ്രധാന അറിയിപ്പ്</span>
+              <span style="font-size: 11.5px; color: var(--text-sub); font-weight: 700;">📅 ${n.date || ''}</span>
             </div>
             <div class="notice-title">${n.title || ''}</div>
             <div class="notice-desc">${n.desc || ''}</div>
