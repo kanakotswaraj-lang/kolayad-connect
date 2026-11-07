@@ -184,6 +184,26 @@
       margin-top: 2px;
     }
 
+  /* മാർക്കറ്റ് റേറ്റ് & തൊഴിൽ വാർത്തകളുടെ ടിക്കർ കൃത്യമായി ഒതുങ്ങാൻ */
+  .filter-sticky-padding a > div {
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  
+  marquee {
+    width: 100% !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    color: #f1f5f9 !important;
+  }
+
+  /* ലൈറ്റ് മോഡിൽ ടെക്സ്റ്റുകൾക്ക് മികച്ച തെളിമ നൽകാൻ */
+  body.light-mode #homeTickerText,
+  body.light-mode marquee {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+  }
+
     /* Quick Feature Shortcuts */
     .quick-access-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px 12px 4px 12px; }
     .quick-chip {
