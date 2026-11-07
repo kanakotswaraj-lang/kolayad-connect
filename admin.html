@@ -598,25 +598,32 @@
       }
     }
 
-    async function addNewCategory() {
-      const catName = document.getElementById('newCategoryInput').value.trim();
-      const catEmoji = document.getElementById('newCategoryEmoji').value.trim() || '🏷️';
-      if (!catName) { alert('കാറ്റഗറിയുടെ പേര് നൽകുക!'); return; }
-      try {
-        await window.setDoc(window.doc(window.db, "categories", catName), { 
-          name: catName, 
-          emoji: catEmoji,
-          createdAt: new Date().toISOString()
-        });
-        alert('പുതിയ കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
-        document.getElementById('newCategoryInput').value = '';
-        document.getElementById('newCategoryEmoji').value = '';
-        loadAdminCategories();
-      } catch(e) {
-        console.error(e);
-        alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-      }
-    }
+    async function addNewCategory(e) {
+  e.preventDefault();
+  const catName = document.getElementById('newCatName').value.trim();
+  const catEmoji = document.getElementById('newCatEmoji').value.trim() || '🏷️';
+  
+  if (!catName) {
+    alert('ദയവായി കാറ്റഗറിയുടെ പേര് നൽകുക.');
+    return;
+  }
+
+  try {
+    await window.setDoc(window.doc(window.db, "categories", catName), { 
+      name: catName, 
+      emoji: catEmoji,
+      createdAt: new Date().toISOString()
+    });
+    alert('കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
+    document.getElementById('newCatName').value = '';
+    if(document.getElementById('newCatEmoji')) document.getElementById('newCatEmoji').value = '';
+    loadAdminCategories(); // ലിസ്റ്റ് റിഫ്രഷ് ചെയ്യാൻ
+  } catch(err) {
+    console.error("Error adding category: ", err);
+    alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+  }
+}
+
 
     async function loadAdminCategories() {
       const container = document.getElementById('adminCategoriesListContainer');
