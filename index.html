@@ -335,42 +335,6 @@
     body:not(.dark-mode) .search-input-box::placeholder {
       color: #64748b;
     }
-
-    /* Ticker Notice Bar Styles */
-    .ticker-wrapper {
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 10px;
-      padding: 5px 10px;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      margin-bottom: 6px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    }
-    .ticker-badge {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 6px;
-      margin-right: 8px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .ticker-text {
-      display: inline-block;
-      white-space: nowrap;
-      color: #e2e8f0;
-      font-size: 12px;
-      font-weight: 600;
-      animation: ticker 18s linear infinite;
-    }
-    @keyframes ticker {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
   </style>
 </head>
 <body>
@@ -410,18 +374,12 @@
       </div>
 
       <div class="filter-sticky-padding">
-        <!-- ട്രെൻഡിങ് സെർച്ച് ടിക്കർ ബാർ -->
-                        
-                
-        
         <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
         <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 12px;">
           <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%; overflow: hidden;">
             
-            <!-- പച്ച കളർ പ്രൊഫഷണൽ ബാഡ്ജ് -->
             <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
             
-            <!-- സ്ക്രോൾ ചെയ്യുന്ന വിലവിവരങ്ങൾ -->
             <marquee behavior="scroll" direction="left" scrollamount="4" style="color: #f1f5f9; font-size: 13px; font-weight: 700; width: 100%;">
               <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
             </marquee>
@@ -429,73 +387,28 @@
           </div>
         </a>
 
-
-
-
         <!-- Clean Search Box -->
         <div class="search-container">
           <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, സാധനങ്ങൾ തിരയുക...">
         </div>
       </div>
-    </div> <!-- sticky-header ക്ലോസിംഗ് ടാഗ് ലെവൽ ചെയ്തു -->
+    </div>
 
     <div class="scrollable-body" id="scrollBody">
 
-      
-<!-- മനോഹരമായ അനൗൺസ്മെന്റ് ബോക്സും നോട്ടിഫിക്കേഷൻ പേജിലേക്കുള്ള ലിങ്കും -->
-<div class="announcement-card-container" style="margin-top: 16px;">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-    <span style="font-size: 15px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 6px;">
-      🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
-    </span>
-  </div>
+      <!-- അനൗൺസ്മെന്റ് ബോക്സും ഫോട്ടോയും നോട്ടിഫിക്കേഷൻ പേജ് ലിങ്കും -->
+      <div class="announcement-card-container" style="margin-top: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 15px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 6px;">
+            🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
+          </span>
+        </div>
 
-  <!-- മെയിൻ ബോക്സ് -->
-  <div id="noticeSlider" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)); border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 18px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-    <!-- ഡാറ്റ ഡൈനാമിക് ആയി ഇവിടെ ലോഡ് ആകും -->
-  </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const sliderContainer = document.getElementById("noticeSlider");
-  if (!sliderContainer) return;
-
-  let notices = JSON.parse(localStorage.getItem("appNotices")) || [];
-
-  if (notices.length > 0) {
-    let latestNotice = notices[notices.length - 1]; 
-    sliderContainer.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span style="background: #0284c7; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">📢 പ്രധാന അറിയിപ്പ്</span>
-        <span style="font-size: 11px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
+        <!-- മെയിൻ ബോക്സ് -->
+        <div id="noticeSlider" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)); border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 18px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+          <!-- ഡാറ്റ ഡൈനാമിക് ആയി ഇവിടെ ലോഡ് ആകും -->
+        </div>
       </div>
-      <h4 style="color: #f8fafc; font-size: 15px; margin: 6px 0; font-weight: bold;">${latestNotice.title || ''}</h4>
-      <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">${latestNotice.desc || ''}</p>
-      
-      ${latestNotice.image ? `<div style="border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.15);"><img src="${latestNotice.image}" style="width: 100%; max-height: 200px; object-fit: cover; display: block;"></div>` : ''}
-
-      <!-- കൂടുതൽ ഫോട്ടോകൾ കാണാനുള്ള ലിങ്ക് ബട്ടൺ -->
-      <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.1); pt: 8px; margin-top: 8px; padding-top: 8px;">
-        <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-          കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
-        </a>
-      </div>
-    `;
-  } else {
-    sliderContainer.innerHTML = `
-      <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 15px 0;">
-        <p style="margin: 0 0 10px 0;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
-        <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: bold; text-decoration: none;">
-          കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
-        </a>
-      </div>
-    `;
-  }
-});
-</script>
-
-
 
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
@@ -536,7 +449,6 @@ document.addEventListener("DOMContentLoaded", function() {
       <div class="section-label"><span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span></div>
       <div id="listings"></div>
 
-      <!-- ഫൂട്ടർ (Footer) ഭാഗം -->
       <footer>
         <div style="text-align: center; padding: 14px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff; border-radius: 14px; font-size: 11px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 500;">
           © 2026 Kolayad Connect. All Rights Reserved.
@@ -551,7 +463,7 @@ document.addEventListener("DOMContentLoaded", function() {
     </nav>
   </div>
 
-  <!-- ഹാംബർഗർ സൈഡ് മെനു (Sidebar Menu) -->
+  <!-- ഹാംബർഗർ സൈഡ് മെനു -->
   <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: flex-start;">
     <div style="width: 280px; background: var(--bg-app); height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 15px rgba(0,0,0,0.3); overflow-y: auto;">
       <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
@@ -768,13 +680,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
         if (!noticeSnap.empty) {
           notices = noticeSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          // ലോക്കൽ സ്റ്റോറേജിലേക്കുംകൂടി സേവ് ചെയ്യുന്നു
+          localStorage.setItem("appNotices", JSON.stringify(notices));
         } else {
-          notices = [
-            { id: '1', shopName: "ഗ്രീൻ മാൾ", tag: "വമ്പൻ ഓഫർ", title: "10 കിലോ തക്കാളി എടുക്കുമ്പോൾ 2 കിലോ ഫ്രീ", desc: "ഇന്ന് ഏത് സാധനവും 10 കിലോ എടുത്താൽ 2 കിലോ ഫ്രീ ആയി ലഭിക്കുന്നതാണ്.", color: "blue", date: "26/10/2026", imageUrl: "" }
-          ];
+          notices = JSON.parse(localStorage.getItem("appNotices")) || [];
         }
 
-        renderNotices();
+        renderNoticesBox();
         render();
       } catch (e) {
         console.error("Firebase load error: ", e);
@@ -790,7 +702,6 @@ document.addEventListener("DOMContentLoaded", function() {
       startDynamicPlaceholder();
     }
 
-    /* Dynamic Placeholder Change Function */
     function startDynamicPlaceholder() {
       const searchKeywords = [
         "🔍 സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ തിരയുക...",
@@ -804,7 +715,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       if (searchInput) {
         setInterval(() => {
-          if (!searchInput.value) { // ടൈപ്പ് ചെയ്യുന്നുണ്ടെങ്കിൽ ഡൈനാമിക് ചേഞ്ച് നിൽക്കും
+          if (!searchInput.value) {
             keywordIndex = (keywordIndex + 1) % searchKeywords.length;
             searchInput.placeholder = searchKeywords[keywordIndex];
           }
@@ -812,83 +723,40 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
 
-    const themeStyles = {
-      blue: {
-        cardBg: '#0f172a',
-        border: '#38bdf8',
-        headerBg: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
-        headerText: '#FFFFFF',
-        badgeBg: 'rgba(0,0,0,0.4)',
-        badgeText: '#38bdf8',
-        btnBg: '#0284c7',
-        btnText: '#ffffff',
-        tag: '📢 പ്രധാന അറിയിപ്പ്'
-      },
-      gold: {
-        cardBg: '#0f172a',
-        border: '#f59e0b',
-        headerBg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
-        headerText: '#FFFFFF',
-        badgeBg: 'rgba(0,0,0,0.4)',
-        badgeText: '#fde047',
-        btnBg: '#d97706',
-        btnText: '#ffffff',
-        tag: '⭐ പ്രത്യേക ഓഫർ'
-      },
-      red: {
-        cardBg: '#0f172a',
-        border: '#ef4444',
-        headerBg: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-        headerText: '#FFFFFF',
-        badgeBg: 'rgba(0,0,0,0.4)',
-        badgeText: '#fca5a5',
-        btnBg: '#dc2626',
-        btnText: '#ffffff',
-        tag: '🚨 അടിയന്തര അറിയിപ്പ്'
-      },
-      green: {
-        cardBg: '#0f172a',
-        border: '#10b981',
-        headerBg: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-        headerText: '#FFFFFF',
-        badgeBg: 'rgba(0,0,0,0.4)',
-        badgeText: '#6ee7b7',
-        btnBg: '#059669',
-        btnText: '#ffffff',
-        tag: '🌿 പുതിയ സേവനം'
-      }
-    };
+    // ഇൻഡക്സ് പേജിലെ അറിയിപ്പുകളും ഫോട്ടോകളും റെൻഡർ ചെയ്യുന്ന ഫങ്ഷൻ
+    function renderNoticesBox() {
+      const sliderContainer = document.getElementById("noticeSlider");
+      if (!sliderContainer) return;
 
-    function renderNotices() {
-      const container = document.getElementById('noticesSlider'); 
-      if (!container) return;
-      if (notices.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-sub); font-size: 12px; text-align: center; width:100%;">അറിയിപ്പുകൾ ഒന്നുമില്ല</p>`;
-        return;
-      }
-      
-      let html = '';
-      notices.forEach((data) => {
-        const themeKey = data.color || 'blue'; 
-        const st = themeStyles[themeKey] || themeStyles.blue;
+      if (notices.length > 0) {
+        let latestNotice = notices[notices.length - 1]; 
+        sliderContainer.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="background: #0284c7; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">📢 പ്രധാന അറിയിപ്പ്</span>
+            <span style="font-size: 11px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
+          </div>
+          <h4 style="color: #f8fafc; font-size: 15px; margin: 6px 0; font-weight: bold;">${latestNotice.title || ''}</h4>
+          <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">${latestNotice.desc || ''}</p>
+          
+          ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.15);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 200px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
 
-        let imageHtml = data.imageUrl ? `<div style="padding: 0 16px 12px 16px;"><img src="${data.imageUrl}" style="width: 100%; border-radius: 12px; max-height: 250px; object-fit: cover; cursor: zoom-in;" onclick="openZoomModal('${data.imageUrl}')"></div>` : '';
-
-        html += `
-          <div style="min-width: 90%; scroll-snap-align: start; background: ${st.cardBg}; border-radius: 20px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 2px solid ${st.border};">
-            <div style="background: ${st.headerBg}; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 13px; font-weight: 800; color: ${st.headerText}; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${st.tag}</span>
-              <span style="font-size: 12px; font-weight: 700; color: ${st.badgeText}; background: ${st.badgeBg}; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">📅 ${data.date || ''}</span>
-            </div>
-            <div style="padding: 16px;">
-              <h4 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">${data.title || ''}</h4>
-              <p style="font-size: 13px; color: #cbd5e1; margin: 0; line-height: 1.6; font-weight: 500;">${data.desc || ''}</p>
-            </div>
-            ${imageHtml}
+          <!-- കൂടുതൽ ഫോട്ടോകൾ കാണാനുള്ള ലിങ്ക് ബട്ടൺ -->
+          <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 8px; padding-top: 8px;">
+            <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+              കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
+            </a>
           </div>
         `;
-      });
-      container.innerHTML = html;
+      } else {
+        sliderContainer.innerHTML = `
+          <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 15px 0;">
+            <p style="margin: 0 0 10px 0;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
+            <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: bold; text-decoration: none;">
+              കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
+            </a>
+          </div>
+        `;
+      }
     }
 
     function openZoomModal(imgSrc) {
@@ -905,20 +773,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function closeZoomModalDirect() {
       document.getElementById('imageZoomModal').style.display = 'none';
-    }
-
-    function filterNotices() {
-      const query = document.getElementById('noticeSearchInput').value.toLowerCase();
-      const noticeCards = document.querySelectorAll('#noticesSlider > div');
-      
-      noticeCards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        if (text.includes(query)) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
-      });
     }
 
     function shareShop(name, loc, phone, desc) {
@@ -1188,58 +1042,26 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   
-        window.onload = function() {
-  // localStorage-ൽ നിന്ന് വിലകൾ എടുക്കുന്നു
-  let gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '107,580';
-  let silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85.00';
-  let rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185.00';
-  let pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650.00';
-  let arecanut = localStorage.getItem('arecanut') || localStorage.getItem('p_arecanut') || '260.00';
-  let coconut = localStorage.getItem('coconut') || localStorage.getItem('p_coconut') || '40.00';
+    window.onload = function() {
+      let gold = localStorage.getItem('gold') || localStorage.getItem('p_gold') || '107,580';
+      let silver = localStorage.getItem('silver') || localStorage.getItem('p_silver') || '85.00';
+      let rubber = localStorage.getItem('rubber') || localStorage.getItem('p_rubber') || '185.00';
+      let pepper = localStorage.getItem('pepper') || localStorage.getItem('p_pepper') || '650.00';
+      let arecanut = localStorage.getItem('arecanut') || localStorage.getItem('p_arecanut') || '260.00';
+      let coconut = localStorage.getItem('coconut') || localStorage.getItem('p_coconut') || '40.00';
 
-  // ഒന്നിലധികം തവണ '₹' ചിഹ്നം വരുന്നത് ഒഴിവാക്കാൻ അത് നീക്കം ചെയ്യുന്നു
-  gold = gold.replace(/₹/g, '').trim();
-  silver = silver.replace(/₹/g, '').trim();
-  rubber = rubber.replace(/₹/g, '').trim();
-  pepper = pepper.replace(/₹/g, '').trim();
-  arecanut = arecanut.replace(/₹/g, '').trim();
-  coconut = coconut.replace(/₹/g, '').trim();
+      gold = gold.replace(/₹/g, '').trim();
+      silver = silver.replace(/₹/g, '').trim();
+      rubber = rubber.replace(/₹/g, '').trim();
+      pepper = pepper.replace(/₹/g, '').trim();
+      arecanut = arecanut.replace(/₹/g, '').trim();
+      coconut = coconut.replace(/₹/g, '').trim();
 
-  const tickerElement = document.getElementById('homeTickerText');
-  if(tickerElement) {
-    tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-  }
-};
-// അഡ്മിൻ പാനലിൽ നിന്നുള്ള അറിയിപ്പുകളും ഫോട്ടോകളും സ്ലൈഡറായി ലോഡ് ചെയ്യുന്ന കോഡ്
-document.addEventListener("DOMContentLoaded", function() {
-  const sliderContainer = document.getElementById("noticeSlider");
-  if (!sliderContainer) return;
-
-  // ലോക്കൽ സ്റ്റോറേജിൽ നിന്നോ ഡാറ്റാബേസിൽ നിന്നോ അറിയിപ്പുകൾ എടുക്കുന്നു
-  let notices = JSON.parse(localStorage.getItem("appNotices")) || [];
-
-  if (notices.length > 0) {
-    let latestNotice = notices[notices.length - 1]; // ഏറ്റവും പുതിയ അറിയിപ്പ്
-    sliderContainer.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span style="background: #0284c7; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">📢 പുതിയ അറിയിപ്പ്</span>
-        <span style="font-size: 11px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
-      </div>
-      <h4 style="color: #f8fafc; font-size: 15px; margin: 6px 0; font-weight: bold;">${latestNotice.title || 'പ്രധാന വിവരം'}</h4>
-      <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 10px; line-height: 1.4;">${latestNotice.desc || ''}</p>
-      ${latestNotice.image ? `<div style="border-radius: 10px; overflow: hidden; margin-top: 8px;"><img src="${latestNotice.image}" style="width: 100%; max-height: 200px; object-fit: cover; display: block;"></div>` : ''}
-    `;
-  } else {
-    // ഡാറ്റ ഇല്ലെങ്കിൽ കാണിക്കുന്ന ഡിഫോൾട്ട് ലുക്ക്
-    sliderContainer.innerHTML = `
-      <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 10px;">
-        ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...
-      </div>
-    `;
-  }
-});
-
-  
+      const tickerElement = document.getElementById('homeTickerText');
+      if(tickerElement) {
+        tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+      }
+    };
 
     initApp();
   </script>
