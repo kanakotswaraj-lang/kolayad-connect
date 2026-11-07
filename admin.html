@@ -94,7 +94,7 @@
 
 <div class="container">
   
-  <!-- 1. അഡ്മിൻ ലോഗിൻ ബോക്സ് (ലോഗിൻ ചെയ്യാത്തപ്പോൾ മാത്രം കാണുന്നത്) -->
+  <!-- 1. അഡ്മിൻ ലോഗിൻ ബോക്സ് -->
   <div id="loginBox">
     <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
     <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
@@ -103,7 +103,7 @@
     <a href="index.html" class="back-link">🏠 ഹോം പേജിലേക്ക് തിരിച്ചുപോവുക</a>
   </div>
 
-  <!-- 2. ലോഗ് ഔട്ട് ബട്ടൺ അടങ്ങിയ അഡ്മിൻ പാനൽ (ലോഗിൻ ചെയ്തു കഴിഞ്ഞാൽ മാത്രം കാണുന്നത്) -->
+  <!-- 2. അഡ്മിൻ പാനൽ -->
   <div id="adminPanel">
     <h2>⚙️ അഡ്മിൻ ക്രമീകരണങ്ങൾ</h2>
 
@@ -128,21 +128,21 @@
       </div>
     </div>
 
-    <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകളും പുഷ് നോറ്റിഫിക്കേഷനും -->
+    <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകളും പുഷ് നോറ്റിഫിക്കേഷനും & എഡിറ്റ് ഫീച്ചർ -->
     <div class="admin-section">
       <div class="section-header" onclick="toggleSection('sec2')">
-        <span>📢 പ്രധാന അറിയിപ്പുകൾ & പുഷ് നോറ്റിഫിക്കേഷൻ</span>
+        <span>📢 പ്രധാന അറിയിപ്പുകൾ & എഡിറ്റ് സൗകര്യം</span>
         <span>▼</span>
       </div>
       <div id="sec2" class="section-content">
+        <input type="hidden" id="editNoticeId">
         <input type="text" id="noticeTitleInput" class="dark-input" placeholder="അറിയിപ്പിന്റെ തലക്കെട്ട്">
         <textarea id="noticeDescInput" class="dark-input" placeholder="വിശദാംശങ്ങൾ..." rows="2" style="resize: none;"></textarea>
         
         <label style="margin-top: 6px;">അറിയിപ്പിന്റെ ഫോട്ടോ (ഓപ്ഷണൽ):</label>
         <input type="file" id="noticeImageFile" accept="image/*" class="dark-input" style="padding: 6px; font-size: 11px;">
 
-        <!-- 4 കളർ തീം മോഡൽ ബട്ടണുകൾ -->
-        <label style="margin-top: 6px; font-size: 11px; color: var(--text-sub);">കളർ മോഡൽ തെരഞ്ഞെടുക്കുക:</label>
+        <label style="margin-top: 6px; font-size: 11px; color: #94a3b8;">കളർ മോഡൽ തെരഞ്ഞെടുക്കുക:</label>
         <div style="display: flex; gap: 6px; margin-top: 4px; margin-bottom: 10px;">
           <button type="button" onclick="selectTheme('blue', this)" class="theme-btn active" style="flex:1; padding: 6px; background: #2563eb; color: white; border: 2px solid white; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ബ്ലൂ</button>
           <button type="button" onclick="selectTheme('gold', this)" class="theme-btn" style="flex:1; padding: 6px; background: #f59e0b; color: white; border: 1.5px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">ഗോൾഡ്</button>
@@ -151,11 +151,12 @@
         </div>
         <input type="hidden" id="noticeColorInput" value="blue">
 
-        <button onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക & Push Notification അയക്കുക</button>
+        <button id="noticeSubmitBtn" onclick="postNotice()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക</button>
+        <button id="noticeCancelEditBtn" onclick="cancelNoticeEdit()" class="btn-save" style="background: #64748b; color: white; padding: 6px; font-size: 11px; margin-top: 4px; display: none;">എഡിറ്റിംഗ് കാൻസൽ ചെയ്യുക</button>
 
         <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
-          <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ:</label>
-          <div id="adminNoticesListContainer" style="max-height: 120px; overflow-y: auto;">
+          <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള അറിയിപ്പുകൾ (Edit / Delete):</label>
+          <div id="adminNoticesListContainer" style="max-height: 140px; overflow-y: auto;">
             <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
           </div>
         </div>
@@ -169,7 +170,6 @@
         <span>▼</span>
       </div>
       <div id="sec3" class="section-content">
-        <!-- സ്ഥാപനങ്ങൾ തിരയാനുള്ള സേർച്ച് ബോക്സ് -->
         <label>സ്ഥാപനം തിരയുക (Search Shop):</label>
         <input type="text" id="shopSearchBox" class="dark-input" placeholder="🔍 സ്ഥാപനത്തിന്റെ പേര് ടൈപ്പ് ചെയ്യുക..." onkeyup="filterShopDropdown()">
 
@@ -210,15 +210,19 @@
       </div>
     </div>
 
-    <!-- സെക്ഷൻ 5 -->
+    <!-- സെക്ഷൻ 5: കാറ്റഗറികൾ മാനേജ് ചെയ്യുക & ഇമോജി ഫീൽഡ് -->
     <div class="admin-section">
       <div class="section-header" onclick="toggleSection('sec5')">
         <span>📂 കാറ്റഗറികൾ മാനേജ് ചെയ്യുക</span>
         <span>▼</span>
       </div>
       <div id="sec5" class="section-content">
-        <label>പുതിയ കാറ്റഗറിയുടെ പേര് നൽകുക:</label>
+        <label>കാറ്റഗറിയുടെ പേര്:</label>
         <input type="text" id="newCategoryInput" class="dark-input" placeholder="ഉദാഹരണത്തിന്: സൂപ്പർമാർക്കറ്റ്">
+        
+        <label style="margin-top: 4px;">കാറ്റഗറി ഇമോജി (Emoji):</label>
+        <input type="text" id="newCategoryEmoji" class="dark-input" placeholder="ഉദാഹരണത്തിന്: 🛒" maxlength="5">
+
         <button onclick="addNewCategory()" class="btn-save" style="background: #10b981; color: white; padding: 8px; font-size: 12px; margin-top: 6px;">കാറ്റഗറി ചേർക്കുക</button>
 
         <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
@@ -230,11 +234,11 @@
       </div>
     </div>
 
-    <!-- അഡ്മിൻ പാനലിൽ ഫീഡ്‌ബാക്കുകൾ കാണാനുള്ള സെക്‌ഷൻ -->
-    <div style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 18px; padding: 14px; margin-top: 20px; margin-bottom: 20px;">
-      <h3 style="font-size: 15px; font-weight: 800; color: #f59e0b; margin-bottom: 10px;">⭐ ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
+    <!-- ഫീഡ്‌ബാക്കുകൾ -->
+    <div style="background: #131c31; border: 1px solid #334155; border-radius: 14px; padding: 14px; margin-top: 12px; margin-bottom: 12px;">
+      <h3 style="font-size: 14px; font-weight: 800; color: #f59e0b; margin-bottom: 10px;">⭐ ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
       <div id="adminFeedbackList" style="display: flex; flex-direction: column; gap: 10px;">
-        <p style="font-size: 12px; color: var(--text-sub);">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+        <p style="font-size: 11px; color: #94a3b8;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
       </div>
     </div>
 
@@ -252,8 +256,8 @@
 
   <script>
     let allShopsData = [];
+    let allNoticesCache = [];
 
-    // തീം സെലക്ട് ചെയ്യാനുള്ള ഫങ്ഷൻ
     function selectTheme(theme, btn) {
       document.getElementById('noticeColorInput').value = theme;
       document.querySelectorAll('.theme-btn').forEach(b => b.style.border = '1.5px solid transparent');
@@ -459,7 +463,9 @@
       } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
     }
 
+    // അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുകയോ എഡിറ്റ് ചെയ്ത് സേവ് ചെയ്യുകയോ ചെയ്യാം
     async function postNotice() {
+      const editId = document.getElementById('editNoticeId').value;
       const title = document.getElementById('noticeTitleInput').value.trim();
       const desc = document.getElementById('noticeDescInput').value.trim();
       const color = document.getElementById('noticeColorInput').value || 'blue'; 
@@ -468,28 +474,39 @@
       if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
 
       try {
-        alert('അറിയിപ്പും ഫോട്ടോയും പ്രോസസ്സ് ചെയ്യുന്നു...');
+        alert('പ്രോസസ്സ് ചെയ്യുന്നു...');
         let imageUrl = "";
         if (file) {
           imageUrl = await compressImageToString(file);
         }
 
-        await window.addDoc(window.collection(window.db, "notices"), { 
-          title, 
-          desc, 
-          color, 
-          imageUrl, 
-          date: new Date().toLocaleDateString('en-GB') 
-        });
-
-        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്യുകയും പുഷ് നോറ്റിഫിക്കേഷൻ സെൻഡ് ചെയ്യുകയും ചെയ്തു!');
-        document.getElementById('noticeTitleInput').value = '';
-        document.getElementById('noticeDescInput').value = '';
-        document.getElementById('noticeImageFile').value = '';
+        if (editId) {
+          // എഡിറ്റ് ചെയ്യുന്നതാണെങ്കിൽ
+          let updateData = { title, desc, color };
+          if (imageUrl) {
+            updateData.imageUrl = imageUrl;
+          }
+          await window.updateDoc(window.doc(window.db, "notices", editId), updateData);
+          alert('അറിയിപ്പ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+          cancelNoticeEdit();
+        } else {
+          // പുതിയത് പോസ്റ്റ് ചെയ്യുന്നതാണെങ്കിൽ
+          await window.addDoc(window.collection(window.db, "notices"), { 
+            title, 
+            desc, 
+            color, 
+            imageUrl, 
+            date: new Date().toLocaleDateString('en-GB') 
+          });
+          alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
+          document.getElementById('noticeTitleInput').value = '';
+          document.getElementById('noticeDescInput').value = '';
+          document.getElementById('noticeImageFile').value = '';
+        }
         loadAdminNotices();
       } catch(e) {
         console.error(e);
-        alert('അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+        alert('നടപടിക്രമത്തിൽ പിഴവ് സംഭവിച്ചു.');
       }
     }
 
@@ -498,18 +515,51 @@
       try {
         const snap = await window.getDocs(window.collection(window.db, "notices"));
         if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അറിയിപ്പുകൾ ഒന്നുമില്ല.</p>`; return; }
+        allNoticesCache = [];
         let html = '';
         snap.forEach(docSnap => {
           const data = docSnap.data();
+          allNoticesCache.push({ id: docSnap.id, ...data });
           html += `
             <div class="member-card">
               <div><strong>${data.title || ''}</strong></div>
-              <button onclick="deleteNotice('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+              <div style="display: flex; gap: 4px;">
+                <button onclick="editNotice('${docSnap.id}')" style="background: #38bdf8; color: #0f172a; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: bold;">എഡിറ്റ്</button>
+                <button onclick="deleteNotice('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+              </div>
             </div>
           `;
         });
         container.innerHTML = html;
       } catch(e) {}
+    }
+
+    function editNotice(id) {
+      const notice = allNoticesCache.find(n => n.id === id);
+      if (notice) {
+        document.getElementById('editNoticeId').value = notice.id;
+        document.getElementById('noticeTitleInput').value = notice.title || '';
+        document.getElementById('noticeDescInput').value = notice.desc || '';
+        document.getElementById('noticeSubmitBtn').innerText = 'മാറ്റങ്ങൾ സേവ് ചെയ്യുക (Update)';
+        document.getElementById('noticeSubmitBtn').style.background = '#38bdf8';
+        document.getElementById('noticeSubmitBtn').style.color = '#0f172a';
+        document.getElementById('noticeCancelEditBtn').style.display = 'block';
+        
+        // സെക്ഷൻ 2 ഓപ്പൺ ചെയ്തു കാണിക്കാൻ
+        document.getElementById('sec2').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function cancelNoticeEdit() {
+      document.getElementById('editNoticeId').value = '';
+      document.getElementById('noticeTitleInput').value = '';
+      document.getElementById('noticeDescInput').value = '';
+      document.getElementById('noticeImageFile').value = '';
+      document.getElementById('noticeSubmitBtn').innerText = 'അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക';
+      document.getElementById('noticeSubmitBtn').style.background = '#10b981';
+      document.getElementById('noticeSubmitBtn').style.color = 'white';
+      document.getElementById('noticeCancelEditBtn').style.display = 'none';
     }
 
     async function deleteNotice(id) {
@@ -550,11 +600,17 @@
 
     async function addNewCategory() {
       const catName = document.getElementById('newCategoryInput').value.trim();
+      const catEmoji = document.getElementById('newCategoryEmoji').value.trim() || '🏷️';
       if (!catName) { alert('കാറ്റഗറിയുടെ പേര് നൽകുക!'); return; }
       try {
-        await window.addDoc(window.collection(window.db, "categories"), { name: catName });
+        await window.setDoc(window.doc(window.db, "categories", catName), { 
+          name: catName, 
+          emoji: catEmoji,
+          createdAt: new Date().toISOString()
+        });
         alert('പുതിയ കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
         document.getElementById('newCategoryInput').value = '';
+        document.getElementById('newCategoryEmoji').value = '';
         loadAdminCategories();
       } catch(e) {
         console.error(e);
@@ -572,7 +628,7 @@
           const data = docSnap.data();
           html += `
             <div class="member-card">
-              <div><strong>${data.name || ''}</strong></div>
+              <div><strong>${data.emoji || '🏷️'} ${data.name || docSnap.id}</strong></div>
               <button onclick="deleteCategory('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
             </div>
           `;
@@ -597,7 +653,7 @@
         const querySnapshot = await window.getDocs(window.collection(window.db, "feedbacks"));
         const container = document.getElementById('adminFeedbackList');
         if (querySnapshot.empty) {
-          container.innerHTML = `<p style="font-size: 12px; color: var(--text-sub);">ഫീഡ്‌ബാക്കുകൾ ഒന്നും ലഭ്യമല്ല.</p>`;
+          container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">ഫീഡ്‌ബാക്കുകൾ ഒന്നും ലഭ്യമല്ല.</p>`;
           return;
         }
         
@@ -607,13 +663,13 @@
           let stars = '⭐'.repeat(Number(data.rating) || 5);
           let dateStr = data.createdAt ? new Date(data.createdAt).toLocaleString() : '';
           html += `
-            <div style="background: var(--bg-input); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);">
-              <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; color: var(--text-main);">
+            <div style="background: #1e293b; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
+              <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 11px; color: #f1f5f9;">
                 <span>👤 ${data.name || 'അജ്ഞാതൻ'}</span>
                 <span>${stars}</span>
               </div>
-              <p style="font-size: 12px; color: var(--text-main); margin-top: 4px;">💬 ${data.comment || ''}</p>
-              <span style="font-size: 10px; color: var(--text-sub); display: block; margin-top: 4px;">📅 ${dateStr}</span>
+              <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">💬 ${data.comment || ''}</p>
+              <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 4px;">📅 ${dateStr}</span>
             </div>
           `;
         });
