@@ -145,7 +145,7 @@
     
     .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 1.5px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
     
-    /* Hero Banner Redesign - Clear & Visible Background */
+    /* Hero Banner Redesign */
     .hero-banner { 
       position: relative; 
       height: 170px; 
@@ -198,7 +198,7 @@
 
     .filter-sticky-padding { padding: 6px 12px 8px 12px; background: var(--bg-app); }
     
-    /* Ticker Box & Readability Fix */
+    /* Ticker Box & Light/Dark Mode Readability Fix */
     .ticker-box-wrapper {
       display: flex !important;
       align-items: center !important;
@@ -454,7 +454,7 @@
         <a href="index.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">🏠 ഹോം / ഡയറക്ടറി</a>
         <a href="jobs.html" style="color: #38bdf8; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b; font-weight: bold;">💼 തൊഴിലവസരങ്ങൾ (Jobs)</a>
         <a href="profile.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">👤 എന്റെ വിവരങ്ങൾ</a>
-        <a href="admin.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">⚙️ അഡ്മിൻ പാനൽ</a>
+        <a href="admin.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;⚙️ അഡ്മിൻ പാനൽ</a>
         
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 0;">
 
@@ -1037,6 +1037,7 @@
     }
   
     window.onload = function() {
+      // വിലനിലവാരം ലോക്കൽ സ്റ്റോറേജിൽ നിന്നോ അല്ലെങ്കിൽ ഡിഫോൾട്ടായോ കൃത്യമായി എടുക്കാൻ (Fix applied here)
       let gold = localStorage.getItem('p_gold') || localStorage.getItem('gold') || '58,000';
       let silver = localStorage.getItem('p_silver') || localStorage.getItem('silver') || '85.00';
       let rubber = localStorage.getItem('p_rubber') || localStorage.getItem('rubber') || '185.00';
