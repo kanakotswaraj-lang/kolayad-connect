@@ -708,6 +708,40 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+async function saveMarketRates() {
+  let gold = document.getElementById('adminGold').value;
+  let silver = document.getElementById('adminSilver').value;
+  let rubber = document.getElementById('adminRubber').value;
+  let pepper = document.getElementById('adminPepper').value;
+  let arecanut = document.getElementById('adminArecanut').value;
+  let coconut = document.getElementById('adminCoconut').value;
+
+  try {
+    // 1. ഫയർസ്റ്റോറിലേക്ക് (Cloud Database) ഡാറ്റ സേവ് ചെയ്യുന്നു
+    await window.setDoc(window.doc(window.db, "settings", "market_rates"), {
+      gold: gold,
+      silver: silver,
+      rubber: rubber,
+      pepper: pepper,
+      arecanut: arecanut,
+      coconut: coconut,
+      updatedAt: new Date().toISOString()
+    });
+
+    // 2. ലോക്കൽ സ്റ്റോറേജിലും സേവ് ചെയ്യുന്നു
+    localStorage.setItem('p_gold', gold);
+    localStorage.setItem('p_silver', silver);
+    localStorage.setItem('p_rubber', rubber);
+    localStorage.setItem('p_pepper', pepper);
+    localStorage.setItem('p_arecanut', arecanut);
+    localStorage.setItem('p_coconut', coconut);
+
+    alert('വിലനിലവാരം വിജയകരമായി ഫയർസ്റ്റോറിലേക്ക് അപ്ഡേറ്റ് ചെയ്തു!');
+  } catch (err) {
+    console.error("Error saving market rates: ", err);
+    alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+  }
+}
 
 
   </script>
