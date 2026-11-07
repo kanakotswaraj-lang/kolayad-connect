@@ -61,8 +61,8 @@
 
     /* Modern Glass Header */
     .header-bar {
-      padding: 16px;
-      background: rgba(15, 23, 42, 0.85);
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(59, 130, 246, 0.3);
       display: flex;
@@ -74,25 +74,28 @@
     }
 
     .btn-back {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.9);
       border: 1.5px solid #3b82f6;
       color: #60a5fa;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 4px;
+      box-shadow: 0 2px 10px rgba(59,130,246,0.2);
+      white-space: nowrap;
     }
 
     .page-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      white-space: nowrap;
     }
 
     /* Floating Action / Post Button (2027 Styling) */
@@ -207,10 +210,10 @@
 <body>
 
   <div class="app-container">
+    <!-- Modern Glass Header -->
     <div class="header-bar">
-      <a href="index.html" class="btn-back">⬅️ തിരികെ</a>
-      <div class="page-title">💼 തൊഴിലവസരങ്ങൾ (JOBS)</div>
-      <div style="width: 50px;"></div>
+      <div class="page-title">💼 തൊഴിലവസരങ്ങൾ</div>
+      <a href="index.html" class="btn-back">🏠 ഹോം / തിരികെ</a>
     </div>
 
     <!-- 2027 Neon Style Add Job Button -->
@@ -283,6 +286,9 @@
               <a href="tel:${j.phone}" class="btn-call">📞 കോൾ ചെയ്യുക</a>
               <a href="https://wa.me/91${j.phone}?text=${encodeURIComponent('ഹലോ, കോളയാട് കണക്ട് വഴി കണ്ട തൊഴിൽ പരസ്യത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.')}" target="_blank" class="btn-wa">💬 വാട്സാപ്പ്</a>
             </div>
+            <button onclick="deleteJob('${j.id}')" style="width: 100%; margin-top: 8px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 6px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">
+              🗑️ ഈ പരസ്യം ഒഴിവാക്കുക (Delete)
+            </button>
           </div>
         `).join('');
 
@@ -312,6 +318,19 @@
         loadJobs();
       } catch(err) {
         alert('സേവ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.');
+      }
+    }
+
+    async function deleteJob(id) {
+      if (confirm('ഈ തൊഴിൽ പരസ്യം ഒഴിവാക്കണമെന്നുറപ്പാണോ?')) {
+        try {
+          await window.deleteDoc(window.doc(window.db, "jobs", id));
+          alert('പരസ്യം വിജയകരമായി ഒഴിവാക്കി!');
+          loadJobs();
+        } catch (err) {
+          console.error(err);
+          alert('ഒഴിവാക്കുന്നതിൽ തടസ്സം നേരിട്ടു.');
+        }
       }
     }
 
