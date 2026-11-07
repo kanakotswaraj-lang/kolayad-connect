@@ -608,18 +608,18 @@
           if (!catSnap.empty && gridContainer) {
             catSnap.forEach(docSnap => {
               const cData = docSnap.data();
-              if (cData.name) {
-                const exists = Array.from(gridContainer.querySelectorAll('.cat-box-title')).some(el => el.innerText === cData.name);
+              const catName = cData.name || docSnap.id;
+              if (catName) {
+                const exists = Array.from(gridContainer.querySelectorAll('.cat-box-title')).some(el => el.innerText === catName);
                 if (!exists) {
-                                    const newBox = document.createElement('div');
+                  const newBox = document.createElement('div');
                   newBox.className = 'cat-box';
-                  newBox.setAttribute('onclick', `setCat('${cData.name}', this)`);
+                  newBox.setAttribute('onclick', `setCat('${catName}', this)`);
                   newBox.innerHTML = `
                     <div class="cat-box-icon">${cData.emoji || '🏷️'}</div>
-                    <div class="cat-box-title">${cData.name}</div>
+                    <div class="cat-box-title">${catName}</div>
                   `;
                   gridContainer.appendChild(newBox);
-
                 }
               }
             });
@@ -686,9 +686,7 @@
       }
     }
 
-    // തീമിന് അനുസൃതമായി നിറങ്ങൾ മാറുന്ന അറിയിപ്പ് ബോക്സ്
-   
-    // തീമിന് അനുസൃതമായി നിറങ്ങളും വലിപ്പവും മാറുന്ന അറിയിപ്പ് ബോക്സ്
+    // തീമിന് അനുസൃതമായി നിറങ്ങളും വലിപ്പവും മാറുന്ന അറിയിപ്പ് ബോക്സ് (കൂടുതൽ ഫോട്ടോകൾ ഒറ്റ വരിയിൽ ആക്കിയിരിക്കുന്നു)
     function renderNoticesBox() {
       const sliderContainer = document.getElementById("noticeSlider");
       if (!sliderContainer) return;
@@ -706,7 +704,7 @@
           ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; border: 1.5px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 220px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
 
           <div style="text-align: right; border-top: 1.5px solid var(--border-color); margin-top: 10px; padding-top: 10px;">
-            <a href="announcements.html" style="font-size: 13.5px; color: #38bdf8; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+            <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: 800; text-decoration: none; display: inline-block; white-space: nowrap;">
               കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
             </a>
           </div>
@@ -715,7 +713,7 @@
         sliderContainer.innerHTML = `
           <div style="text-align: center; color: var(--text-sub); font-size: 13px; padding: 15px 0;">
             <p style="margin: 0 0 8px 0; font-weight: 600;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
-            <a href="announcements.html" style="font-size: 13.5px; color: #38bdf8; font-weight: 800; text-decoration: none;">
+            <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: 800; text-decoration: none; white-space: nowrap;">
               കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക 🔘
             </a>
           </div>
