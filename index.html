@@ -199,28 +199,35 @@
     .filter-sticky-padding { padding: 6px 12px 8px 12px; background: var(--bg-app); }
     
     /* Ticker Box & Light/Dark Mode Readability Fix */
-    .ticker-box-wrapper {
-      display: flex !important;
-      align-items: center !important;
-      gap: 8px !important;
-      overflow: hidden !important;
-      padding: 8px 12px !important;
-      width: 100% !important;
-      border-radius: 12px !important;
-    }
+      /* വിലനിലവാരം & തൊഴിൽ വാർത്തകളുടെ ടിക്കർ ബോക്സ് വലുപ്പവും ഭംഗിയും കൂട്ടാൻ */
+  .ticker-box-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+    border-radius: 14px !important;
+  }
 
-    marquee {
-      width: 100% !important;
-      overflow: hidden !important;
-      white-space: nowrap !important;
-      color: #ffffff !important;
-      font-weight: 700 !important;
-      font-size: 12px !important;
-    }
+  /* സ്ക്രോൾ ചെയ്യുന്ന അക്ഷരങ്ങളുടെ വലിപ്പവും വ്യക്തതയും കൂട്ടാൻ */
+  marquee {
+    width: 100% !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  }
 
-    body.light-mode marquee {
-      color: #0f172a !important;
-    }
+  /* ലൈറ്റ് മോഡിലും ഡാർക്ക് മോഡിലും അക്ഷരങ്ങൾ വെളുത്ത നിറത്തിൽ വ്യക്തമായി കാണാൻ */
+  body.light-mode .ticker-box-wrapper marquee,
+  body.light-mode .ticker-box-wrapper marquee span,
+  .ticker-box-wrapper marquee span {
+    color: #ffffff !important;
+  }
+
 
     /* Dynamic Search Box */
     .search-container { position: relative; width: 100%; margin-top: 4px; }
