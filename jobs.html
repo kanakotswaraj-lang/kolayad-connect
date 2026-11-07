@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>തൊഴിൽ അവസരങ്ങൾ - കോളയാട് കണക്ട്</title>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      getDocs, 
+      addDoc, 
+      deleteDoc, 
+      doc 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
+      authDomain: "kolayad-connect.firebaseapp.com",
+      projectId: "kolayad-connect",
+      storageBucket: "kolayad-connect.firebasestorage.app",
+      messagingSenderId: "400179608074",
+      appId: "1:400179608074:web:b6f5c269d60662efcdfdf3",
+      measurementId: "G-EYK4SLBXBB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.collection = collection;
+    window.getDocs = getDocs;
+    window.addDoc = addDoc;
+    window.deleteDoc = deleteDoc;
+    window.doc = doc;
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; }
+    
+    body {
+      background-color: #050811;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%; max-width: 480px; min-height: 100dvh; background: #091026;
+      border: 2px solid #1e3a8a; display: flex; flex-direction: column; position: relative;
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+    }
+
+    @media (min-width: 481px) { .app-container { border-radius: 28px; min-height: 95vh; margin-top: 2.5vh; } }
+
+    /* Modern Glass Header */
+    .header-bar {
+      padding: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .btn-back {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1.5px solid #3b82f6;
+      color: #60a5fa;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Floating Action / Post Button (2027 Styling) */
+    .btn-post-job {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: #ffffff;
+      border: 2px solid #93c5fd;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: calc(100% - 24px);
+      margin: 12px auto;
+      transition: all 0.3s ease;
+    }
+    .btn-post-job:active { transform: scale(0.97); }
+
+    /* Job Card Design (3D Modern Glassware) */
+    .job-card {
+      background: linear-gradient(145deg, rgba(14, 24, 56, 0.9), rgba(19, 31, 66, 0.6));
+      border: 1.5px solid rgba(59, 130, 246, 0.3);
+      border-radius: 20px;
+      padding: 16px;
+      margin: 12px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .job-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .job-title { font-size: 17px; font-weight: 800; color: #ffffff; margin-bottom: 4px; }
+    .job-shop { font-size: 12px; font-weight: 700; color: #facc15; margin-bottom: 6px; }
+    .job-loc { font-size: 11px; color: #94a3b8; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+    
+    .job-desc {
+      font-size: 12px;
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .job-actions { display: flex; gap: 8px; }
+
+    .btn-call {
+      flex: 1;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-wa {
+      flex: 1;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    /* Modal Form Styling */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px); display: none; align-items: center;
+      justify-content: center; z-index: 100; padding: 16px;
+    }
+
+    .modal-box {
+      background: #0f172a; border: 1.5px solid #3b82f6;
+      border-radius: 24px; width: 100%; max-width: 400px;
+      padding: 20px; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .dark-input {
+      width: 100%; background: #1e293b; border: 1.5px solid #334155;
+      color: #ffffff; padding: 11px 14px; border-radius: 12px;
+      font-size: 13px; outline: none; margin-top: 4px; margin-bottom: 10px;
+    }
+    .dark-input:focus { border-color: #38bdf8; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="header-bar">
+      <a href="index.html" class="btn-back">⬅️ തിരികെ</a>
+      <div class="page-title">💼 തൊഴിലവസരങ്ങൾ (JOBS)</div>
+      <div style="width: 50px;"></div>
+    </div>
+
+    <!-- 2027 Neon Style Add Job Button -->
+    <button class="btn-post-job" onclick="openJobModal()">
+      <span>✨ പുതിയ തൊഴിൽ പരസ്യം നൽകാം</span>
+    </button>
+
+    <div id="jobsList" style="padding-bottom: 40px;">
+      <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 30px;">
+        ലോഡ് ചെയ്യുന്നു...
+      </div>
+    </div>
+  </div>
+
+  <!-- Job Add Modal -->
+  <div class="modal-bg" id="jobModal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="color: #facc15; font-size: 16px;">💼 തൊഴിൽ വിവരങ്ങൾ ചേർക്കുക</h3>
+        <button onclick="closeJobModal()" style="background: none; border: none; color: #ef4444; font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <form onsubmit="submitJob(event)">
+        <label style="font-size: 11px; color: #94a3b8;">ആവശ്യമുള്ള ജോലിയുടെ പേര്:</label>
+        <input type="text" id="jobRole" class="dark-input" placeholder="ഉദാഹരണത്തിന്: സെയിൽസ്മാൻ, ഡ്രൈവർ" required>
+
+        <label style="font-size: 11px; color: #94a3b8;">സ്ഥാപനത്തിന്റെ പേര് / വ്യക്തി:</label>
+        <input type="text" id="jobShop" class="dark-input" placeholder="ഉദാഹരണത്തിന്: റോയൽ സൂപ്പർമാർക്കറ്റ്" required>
+
+        <label style="font-size: 11px; color: #94a3b8;">സ്ഥലം:</label>
+        <input type="text" id="jobLoc" class="dark-input" placeholder="ഉദാഹരണത്തിന്: കോളയാട് ജംഗ്ഷൻ" required>
+
+        <label style="font-size: 11px; color: #94a3b8;">ബന്ധപ്പെടേണ്ട ഫോൺ നമ്പർ:</label>
+        <input type="tel" id="jobPhone" class="dark-input" placeholder="10 അക്ക നമ്പർ" required>
+
+        <label style="font-size: 11px; color: #94a3b8;">ശമ്പളം & കൂടുതൽ വിവരങ്ങൾ:</label>
+        <textarea id="jobDesc" class="dark-input" rows="3" placeholder="ഉദാ: സമയം, ശമ്പളം, യോഗ്യത..." required></textarea>
+
+        <button type="submit" style="width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 6px;">
+          സൗജന്യമായി പോസ്റ്റ് ചെയ്യുക 🚀
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function loadJobs() {
+      const container = document.getElementById('jobsList');
+      try {
+        if (!window.db) { setTimeout(loadJobs, 200); return; }
+        
+        const snap = await window.getDocs(window.collection(window.db, "jobs"));
+        if (snap.empty) {
+          container.innerHTML = `
+            <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 40px 20px;">
+              🎈 തൽക്കാലം പുതിയ തൊഴിലവസരങ്ങൾ ഒന്നുമില്ല.<br>മുകളിൽ കാണുന്ന ബട്ടൺ വഴി സൗജന്യമായി പരസ്യം നൽകാം!
+            </div>`;
+          return;
+        }
+
+        let jobs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        container.innerHTML = jobs.map(j => `
+          <div class="job-card">
+            <span class="job-tag">✨ പുതിയ അവസരം</span>
+            <div class="job-title">${j.role || ''}</div>
+            <div class="job-shop">🏪 ${j.shop || ''}</div>
+            <div class="job-loc">📍 ${j.loc || 'കോളയാട്'}</div>
+            <div class="job-desc">${j.desc || ''}</div>
+            <div class="job-actions">
+              <a href="tel:${j.phone}" class="btn-call">📞 കോൾ ചെയ്യുക</a>
+              <a href="https://wa.me/91${j.phone}?text=${encodeURIComponent('ഹലോ, കോളയാട് കണക്ട് വഴി കണ്ട തൊഴിൽ പരസ്യത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.')}" target="_blank" class="btn-wa">💬 വാട്സാപ്പ്</a>
+            </div>
+          </div>
+        `).join('');
+
+      } catch(e) {
+        console.error(e);
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444; font-size:12px;">ഡാറ്റ ലോഡ് ചെയ്യുന്നതിൽ ചെറിയൊരു തടസ്സം.</div>`;
+      }
+    }
+
+    function openJobModal() { document.getElementById('jobModal').style.display = 'flex'; }
+    function closeJobModal() { document.getElementById('jobModal').style.display = 'none'; }
+
+    async function submitJob(e) {
+      e.preventDefault();
+      const role = document.getElementById('jobRole').value.trim();
+      const shop = document.getElementById('jobShop').value.trim();
+      const loc = document.getElementById('jobLoc').value.trim();
+      const phone = document.getElementById('jobPhone').value.trim();
+      const desc = document.getElementById('jobDesc').value.trim();
+
+      try {
+        await window.addDoc(window.collection(window.db, "jobs"), {
+          role, shop, loc, phone, desc, createdAt: new Date().toISOString()
+        });
+        alert('താങ്കളുടെ തൊഴിൽ പരസ്യം വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
+        closeJobModal();
+        loadJobs();
+      } catch(err) {
+        alert('സേവ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.');
+      }
+    }
+
+    window.onload = loadJobs;
+  </script>
+</body>
+</html>
