@@ -14,14 +14,14 @@
   <meta property="og:type" content="website">
 
   <!-- PWA & App Icon Settings -->
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
-<meta name="theme-color" content="#1e3a8a">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="കോളയാട് കണക്ട്">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="കോളയാട് കണക്ട്">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -200,26 +200,6 @@
     .section-label { font-size: 13px; font-weight: 800; color: #1e3a8a; margin: 10px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
     body.dark-mode .section-label { color: #60a5fa; }
     
-    .notices-box-container {
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      border-radius: 18px;
-      padding: 12px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    body.dark-mode .notices-box-container { border-color: #1e294b; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
-
-    .banner-slider { 
-      display: flex; 
-      gap: 12px; 
-      overflow-x: auto; 
-      scroll-snap-type: x mandatory; 
-      padding-bottom: 6px; 
-      scrollbar-width: none; 
-    }
-    .banner-slider::-webkit-scrollbar { display: none; }
-    
     .category-grid-container { max-height: 200px; overflow-y: auto; margin-bottom: 14px; padding-right: 4px; }
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     
@@ -298,43 +278,16 @@
     #imageZoomModal { background: rgba(0,0,0,0.9); z-index: 100; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
 
-    /* Clean Search Input Styles */
-    .search-container {
-      position: relative;
-      width: 100%;
-      margin-bottom: 4px;
-    }
+    .search-container { position: relative; width: 100%; margin-bottom: 4px; }
     .search-input-box {
-      width: 100%;
-      padding: 11px 16px 11px 16px;
-      background: rgba(30, 41, 59, 0.65);
-      backdrop-filter: blur(10px);
-      border: 1.5px solid rgba(59, 130, 246, 0.4);
-      border-radius: 14px;
-      color: #ffffff;
-      font-size: 13.5px;
-      font-weight: 600;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
-      outline: none;
-      transition: all 0.3s ease;
+      width: 100%; padding: 11px 16px; background: rgba(30, 41, 59, 0.65); backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(59, 130, 246, 0.4); border-radius: 14px; color: #ffffff; font-size: 13.5px; font-weight: 600;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15); outline: none; transition: all 0.3s ease;
     }
-    body:not(.dark-mode) .search-input-box {
-      background: rgba(248, 250, 252, 0.95);
-      color: #0f172a;
-      border: 1.5px solid rgba(37, 99, 235, 0.3);
-    }
-    .search-input-box:focus {
-      border-color: #38bdf8;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.4);
-    }
-    .search-input-box::placeholder {
-      color: #94a3b8;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    body:not(.dark-mode) .search-input-box::placeholder {
-      color: #64748b;
-    }
+    body:not(.dark-mode) .search-input-box { background: rgba(248, 250, 252, 0.95); color: #0f172a; border: 1.5px solid rgba(37, 99, 235, 0.3); }
+    .search-input-box:focus { border-color: #38bdf8; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.4); }
+    .search-input-box::placeholder { color: #94a3b8; font-weight: 500; }
+    body:not(.dark-mode) .search-input-box::placeholder { color: #64748b; }
   </style>
 </head>
 <body>
@@ -377,13 +330,10 @@
         <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
         <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 12px;">
           <div style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer; width: 100%; overflow: hidden;">
-            
             <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            
             <marquee behavior="scroll" direction="left" scrollamount="4" style="color: #f1f5f9; font-size: 13px; font-weight: 700; width: 100%;">
               <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
             </marquee>
-            
           </div>
         </a>
 
@@ -396,59 +346,17 @@
 
     <div class="scrollable-body" id="scrollBody">
 
-      <!-- ഒതുക്കമുള്ള ഒരൊറ്റ അനൗൺസ്മെന്റ് കാർഡ് ബോക്സ് -->
-<div class="announcement-card-container" style="margin: 14px 12px;">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-    <span style="font-size: 14px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 6px;">
-      🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
-    </span>
-  </div>
-
-  <!-- ഡാറ്റ ലോഡ് ആവുന്ന മെയിൻ ബോക്സ് -->
-  <div id="noticeSlider" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)); border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 16px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
-    <!-- ഡാറ്റ ഇവിടെ ലോഡ് ആയിക്കോളും -->
-  </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const sliderContainer = document.getElementById("noticeSlider");
-  if (!sliderContainer) return;
-
-  let notices = JSON.parse(localStorage.getItem("appNotices")) || [];
-
-  if (notices.length > 0) {
-    let latestNotice = notices[notices.length - 1]; 
-    sliderContainer.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <span style="background: #0284c7; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: bold;">📢 പ്രധാന അറിയിപ്പ്</span>
-        <span style="font-size: 10px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
+      <!-- ഒരൊറ്റ അനൗൺസ്മെന്റ് ബോക്സ് -->
+      <div class="announcement-card-container" style="margin: 14px 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 14px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 6px;">
+            🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
+          </span>
+        </div>
+        <div id="noticeSlider" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)); border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 16px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
+          <!-- ഡാറ്റ ഇവിടെ ലോഡ് ആയിക്കോളും -->
+        </div>
       </div>
-      <h4 style="color: #f8fafc; font-size: 14px; margin: 4px 0; font-weight: bold; word-break: break-word;">${latestNotice.title || ''}</h4>
-      <p style="color: #cbd5e1; font-size: 12px; margin-bottom: 8px; line-height: 1.4; word-break: break-word;">${latestNotice.desc || ''}</p>
-      
-      ${latestNotice.image ? `<div style="border-radius: 10px; overflow: hidden; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"><img src="${latestNotice.image}" style="width: 100%; max-height: 160px; object-fit: cover; display: block;"></div>` : ''}
-
-      <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 6px; padding-top: 6px;">
-        <a href="announcements.html" style="font-size: 12px; color: #38bdf8; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-          കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
-        </a>
-      </div>
-    `;
-  } else {
-    sliderContainer.innerHTML = `
-      <div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 10px 0;">
-        <p style="margin: 0 0 6px 0;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
-        <a href="announcements.html" style="font-size: 12px; color: #38bdf8; font-weight: bold; text-decoration: none;">
-          കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
-        </a>
-      </div>
-    `;
-  }
-});
-</script>
-
-
 
       <div class="section-label">
         <span>കാറ്റഗറികൾ (CATEGORIES)</span>
@@ -720,7 +628,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
         if (!noticeSnap.empty) {
           notices = noticeSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          // ലോക്കൽ സ്റ്റോറേജിലേക്കുംകൂടി സേവ് ചെയ്യുന്നു
           localStorage.setItem("appNotices", JSON.stringify(notices));
         } else {
           notices = JSON.parse(localStorage.getItem("appNotices")) || [];
@@ -763,7 +670,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
 
-    // ഇൻഡക്സ് പേജിലെ അറിയിപ്പുകളും ഫോട്ടോകളും റെൻഡർ ചെയ്യുന്ന ഫങ്ഷൻ
+    // ഒറ്റ ബോക്സിൽ അറിയിപ്പും ഫോട്ടോയും കാണിക്കുന്ന ഫങ്ഷൻ
     function renderNoticesBox() {
       const sliderContainer = document.getElementById("noticeSlider");
       if (!sliderContainer) return;
@@ -771,27 +678,26 @@ document.addEventListener("DOMContentLoaded", function() {
       if (notices.length > 0) {
         let latestNotice = notices[notices.length - 1]; 
         sliderContainer.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="background: #0284c7; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">📢 പ്രധാന അറിയിപ്പ്</span>
-            <span style="font-size: 11px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="background: #0284c7; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: bold;">📢 പ്രധാന അറിയിപ്പ്</span>
+            <span style="font-size: 10px; color: #94a3b8;">📅 ${latestNotice.date || ''}</span>
           </div>
-          <h4 style="color: #f8fafc; font-size: 15px; margin: 6px 0; font-weight: bold;">${latestNotice.title || ''}</h4>
-          <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">${latestNotice.desc || ''}</p>
+          <h4 style="color: #f8fafc; font-size: 14px; margin: 4px 0; font-weight: bold; word-break: break-word;">${latestNotice.title || ''}</h4>
+          <p style="color: #cbd5e1; font-size: 12px; margin-bottom: 8px; line-height: 1.4; word-break: break-word;">${latestNotice.desc || ''}</p>
           
-          ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.15);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 200px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
+          ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 10px; overflow: hidden; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 160px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
 
-          <!-- കൂടുതൽ ഫോട്ടോകൾ കാണാനുള്ള ലിങ്ക് ബട്ടൺ -->
-          <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 8px; padding-top: 8px;">
-            <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+          <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 6px; padding-top: 6px;">
+            <a href="announcements.html" style="font-size: 12px; color: #38bdf8; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
               കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
             </a>
           </div>
         `;
       } else {
         sliderContainer.innerHTML = `
-          <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 15px 0;">
-            <p style="margin: 0 0 10px 0;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
-            <a href="announcements.html" style="font-size: 13px; color: #38bdf8; font-weight: bold; text-decoration: none;">
+          <div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 10px 0;">
+            <p style="margin: 0 0 6px 0;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
+            <a href="announcements.html" style="font-size: 12px; color: #38bdf8; font-weight: bold; text-decoration: none;">
               കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക →
             </a>
           </div>
@@ -1020,8 +926,6 @@ document.addEventListener("DOMContentLoaded", function() {
               createdAt: new Date().toISOString()
             });
           }
-        } else if (permission === 'denied') {
-          alert('നോട്ടിഫിക്കേഷൻ ബ്ലോക്ക് ചെയ്തിരിക്കുകയാണ്. ബ്രൗസർ സെറ്റിങ്സിൽ പോയി അനുവാദം നൽകുക.');
         }
       } catch (err) {
         console.error('Error getting permission:', err);
@@ -1078,7 +982,6 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('fbComment').value = '';
       } catch (err) {
         console.error("Error saving feedback: ", err);
-        alert('ഫീഡ്‌ബാക്ക് അയക്കുന്നതിൽ പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.');
       }
     }
   
