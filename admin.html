@@ -600,8 +600,12 @@
 
     async function addNewCategory(e) {
   e.preventDefault();
-  const catName = document.getElementById('newCatName').value.trim();
-  const catEmoji = document.getElementById('newCatEmoji').value.trim() || '🏷️';
+  const catNameInput = document.getElementById('newCatName');
+  const catEmojiInput = document.getElementById('newCatEmoji');
+  
+  if (!catNameInput) return;
+  const catName = catNameInput.value.trim();
+  const catEmoji = catEmojiInput ? catEmojiInput.value.trim() : '🏷️';
   
   if (!catName) {
     alert('ദയവായി കാറ്റഗറിയുടെ പേര് നൽകുക.');
@@ -609,15 +613,22 @@
   }
 
   try {
-    await window.setDoc(window.doc(window.db, "categories", catName), { 
+    // ഫയർബേസ് ഡോക്യുമെന്റ് ഐഡിയായി സ്ലാഷ് വരുന്ന പ്രശ്നം ഒഴിവാക്കാൻ സുരക്ഷിതമായ ഐഡി ഉണ്ടാക്കുന്നു
+    const docId = catName.replace(/[\/\#\$\.\[\]]/g, '_');
+
+    await window.setDoc(window.doc(window.db, "categories", docId), { 
       name: catName, 
-      emoji: catEmoji,
+      emoji: catEmoji || '🏷️',
       createdAt: new Date().toISOString()
     });
+    
     alert('കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
-    document.getElementById('newCatName').value = '';
-    if(document.getElementById('newCatEmoji')) document.getElementById('newCatEmoji').value = '';
-    loadAdminCategories(); // ലിസ്റ്റ് റിഫ്രഷ് ചെയ്യാൻ
+    catNameInput.value = '';
+    if (catEmojiInput) catEmojiInput.value = '';
+    
+    if (typeof loadAdminCategories === 'function') {
+      loadAdminCategories();
+    }
   } catch(err) {
     console.error("Error adding category: ", err);
     alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
