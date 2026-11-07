@@ -742,6 +742,39 @@ async function saveMarketRates() {
     alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
   }
 }
+    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ ഫയർസ്റ്റോറിൽ നിന്ന് ഏറ്റവും പുതിയ വിലകൾ എടുക്കാൻ
+async function loadMarketRates() {
+  try {
+    const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
+    if (rateDoc.exists()) {
+      let data = rateDoc.data();
+      
+      // ഇൻപുട്ട് ഫീൽഡുകളിൽ വിലകൾ സെറ്റ് ചെയ്യുന്നു
+      if(document.getElementById('adminGold')) document.getElementById('adminGold').value = data.gold || '';
+      if(document.getElementById('adminSilver')) document.getElementById('adminSilver').value = data.silver || '';
+      if(document.getElementById('adminRubber')) document.getElementById('adminRubber').value = data.rubber || '';
+      if(document.getElementById('adminPepper')) document.getElementById('adminPepper').value = data.pepper || '';
+      if(document.getElementById('adminArecanut')) document.getElementById('adminArecanut').value = data.arecanut || '';
+      if(document.getElementById('adminCoconut')) document.getElementById('adminCoconut').value = data.coconut || '';
+      
+      // ലോക്കൽ സ്റ്റോറേജും അപ്ഡേറ്റ് ചെയ്യുന്നു
+      if(data.gold) localStorage.setItem('p_gold', data.gold);
+      if(data.silver) localStorage.setItem('p_silver', data.silver);
+      if(data.rubber) localStorage.setItem('p_rubber', data.rubber);
+      if(data.pepper) localStorage.setItem('p_pepper', data.pepper);
+      if(data.arecanut) localStorage.setItem('p_arecanut', data.arecanut);
+      if(data.coconut) localStorage.setItem('p_coconut', data.coconut);
+    }
+  } catch (err) {
+    console.error("Error loading market rates: ", err);
+  }
+}
+
+// പേജ് ഓപ്പൺ ആകുമ്പോൾ ഈ ഫങ്ഷൻ പ്രവർത്തിക്കും
+window.addEventListener('DOMContentLoaded', () => {
+  loadMarketRates();
+});
+
 
 
   </script>
