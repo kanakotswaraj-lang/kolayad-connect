@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="ml"> 
 <head>
-    <!-- Google Search SEO & Meta Tags -->
+  <!-- Google Search SEO & Meta Tags -->
   <meta name="description" content="കോളയാട് കണക്ട് - കോളയാട് പ്രദേശത്തെ സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, തൊഴിലാളികൾ, അത്യാഹിത നമ്പറുകൾ എന്നിവ കണ്ടെത്താനുള്ള ഡിജിറ്റൽ ഡയറക്ടറി.">
   <meta name="keywords" content="Kolayad Connect, Kolayad Directory, കോളയാട് കണക്ട്, Peravoor, Kannur, Kolayad Shops, Services">
   <meta name="author" content="Kolayad Connect">
 
-  <!-- Open Graph / Social Media Sharing Tags (WhatsApp, Facebook എന്നിവയിൽ ഷെയർ ചെയ്യുമ്പോൾ കാണാൻ) -->
   <meta property="og:title" content="കോളയാട് കണക്ട് - Kolayad Connect">
   <meta property="og:description" content="കോളയാട് പ്രദേശത്തെ സ്ഥാപനങ്ങളും സേവനങ്ങളും ഒരു കുടക്കീഴിൽ.">
   <meta property="og:image" content="logo.png">
   <meta property="og:url" content="https://kolayadconnect.in">
   <meta property="og:type" content="website">
 
-  <!-- PWA & App Icon Settings -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
@@ -346,7 +344,7 @@
 
     <div class="scrollable-body" id="scrollBody">
 
-      <!-- ഒരൊറ്റ അനൗൺസ്മെന്റ് ബോക്സ് -->
+      <!-- ഒറ്റ അനൗൺസ്മെന്റ് ബോക്സ് (ഒരു പ്രാവശ്യം മാത്രം കാണാൻ) -->
       <div class="announcement-card-container" style="margin: 14px 12px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
           <span style="font-size: 14px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 6px;">
@@ -622,31 +620,31 @@
         if (!shopSnap.empty) {
           shops = shopSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         } else {
-          shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", phone2: "", mapLink: "", imageUrl: "" }];
+          shops = [
+            { id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", phone2: "", mapLink: "", imageUrl: "" },
+            { id: '2', name: "പോലീസ് സ്റ്റേഷൻ പെരാവൂർ", cat: "emergency", catLabel: "പ്രധാന നമ്പറുകൾ", loc: "പെരാവൂർ", desc: "പെരാവൂർ പോലീസ് സ്റ്റേഷൻ ഔദ്യോഗിക കോൺടാക്റ്റ്.", phone: "04902435222", phone2: "", mapLink: "", imageUrl: "" }
+          ];
         }
 
         const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
         if (!noticeSnap.empty) {
           notices = noticeSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          localStorage.setItem("appNotices", JSON.stringify(notices));
         } else {
-          notices = JSON.parse(localStorage.getItem("appNotices")) || [];
+          notices = [
+            { id: '1', title: "വമ്പിച്ച വിലക്കുറവ്", desc: "ദീപാവലി പ്രമാണിച്ച് 1000 രൂപയുടെ പർച്ചേസിന് മുകളിൽ നടത്തുമ്പോൾ 30 ശതമാനം ഡിസ്കൗണ്ട്", date: "07/11/2026", imageUrl: "" }
+          ];
         }
 
         renderNoticesBox();
         render();
       } catch (e) {
         console.error("Firebase load error: ", e);
+        // ഫയർബേസ് കണക്ഷൻ കിട്ടിയില്ലെങ്കിലും ഡാറ്റ ലോഡ് ആകാൻ
+        shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ് പണികൾ.", phone: "9876543210", phone2: "", mapLink: "", imageUrl: "" }];
+        notices = [{ id: '1', title: "പ്രധാന അറിയിപ്പ്", desc: "കോളയാട് കണക്ടിലേക്ക് സ്വാഗതം!", date: "07/11/2026", imageUrl: "" }];
+        renderNoticesBox();
+        render();
       }
-    }
-
-    function initApp() {
-      let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
-      if (currentUser && currentUser.name) {
-        document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ, ${currentUser.name}!</span>`;
-      }
-      loadAppSettings();
-      startDynamicPlaceholder();
     }
 
     function startDynamicPlaceholder() {
@@ -1004,9 +1002,10 @@
       if(tickerElement) {
         tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
       }
-    };
 
-    initApp();
+      // ആപ്പ് ലോഡ് ചെയ്യുമ്പോൾ ഫങ്ഷൻ വിളിക്കുന്നു
+      initApp();
+    };
   </script>
 </body>
 </html>
