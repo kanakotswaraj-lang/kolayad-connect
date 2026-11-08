@@ -202,8 +202,14 @@
     .quick-chip-icon { font-size: 18px; margin-bottom: 2px; }
     .quick-chip-title { font-size: 10px; font-weight: 700; color: #f8fafc; }
 
-    .filter-sticky-padding { padding: 6px 12px 8px 12px; background: var(--bg-app); }
-    
+        .filter-sticky-padding { 
+      padding: 6px 12px 8px 12px; 
+      background: var(--bg-app); 
+      position: sticky; 
+      top: 0; 
+      z-index: 45; 
+    }
+
     .ticker-box-wrapper {
       display: flex !important;
       align-items: center !important;
@@ -383,16 +389,23 @@
           <span class="quick-chip-title">സേവനങ്ങൾ</span>
         </div>
       </div>
+
+      <!-- Clean Search Box (സെർച്ച് ബോക്സ് മുകളിൽ തന്നെ സ്റ്റിക്ക് ചെയ്ത് നിൽക്കും) -->
+      <div class="filter-sticky-padding" style="padding-top: 4px;">
+        <div class="search-container">
+          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
+        </div>
+      </div>
     </div> <!-- /.sticky-header ഇവിടെ അവസാനിക്കുന്നു -->
 
-    <div style="text-align: center; padding: 0 12px;">
-      <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
-        🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-      </button>
-    </div>
+    <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
+    <div style="padding: 4px 12px 0 12px; background: var(--bg-app);">
+      <div style="text-align: center; padding: 0 12px;">
+        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
+          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
+        </button>
+      </div>
 
-    <!-- ഇനി പറയുന്ന ഭാഗങ്ങൾ sticky-header-ന് പുറത്തായതിനാൽ സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് പോകും -->
-    <div class="filter-sticky-padding">
       <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
       <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
         <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
@@ -412,11 +425,6 @@
           </marquee>
         </div>
       </a>
-
-      <!-- Clean Search Box -->
-      <div class="search-container">
-        <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
-      </div>
     </div>
 
     <div class="scrollable-body" id="scrollBody">
