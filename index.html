@@ -133,7 +133,7 @@
       --notice-desc: #334155;
     }
 
- body { background-color: var(--bg-body); color: var(--text-main); display: flex; justify-content: center; height: 100dvh; overflow: hidden; }
+    body { background-color: var(--bg-body); color: var(--text-main); display: flex; justify-content: center; height: 100dvh; overflow: hidden; }
 
     .app-container {
       width: 100%; max-width: 480px; height: 100dvh; background: var(--bg-app);
@@ -143,7 +143,7 @@
 
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
     
-        .sticky-header { 
+    .sticky-header { 
       flex-shrink: 0; 
       background: var(--bg-app); 
       border-bottom: 1.5px solid var(--border-color); 
@@ -201,14 +201,6 @@
     .quick-chip:active { transform: scale(0.95); }
     .quick-chip-icon { font-size: 18px; margin-bottom: 2px; }
     .quick-chip-title { font-size: 10px; font-weight: 700; color: #f8fafc; }
-
-        .filter-sticky-padding { 
-      padding: 6px 12px 8px 12px; 
-      background: var(--bg-app); 
-      position: sticky; 
-      top: 0; 
-      z-index: 45; 
-    }
 
     .ticker-box-wrapper {
       display: flex !important;
@@ -346,7 +338,7 @@
   </style>
 </head>
 <body>
-<div class="app-container">
+  <div class="app-container">
     <div class="sticky-header">
       <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
@@ -398,90 +390,35 @@
       </div>
     </div>
 
-    <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
-    <div style="padding: 4px 12px 0 12px; background: var(--bg-app);">
-      <div style="text-align: center; padding: 0 12px;">
-        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
-          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-        </button>
-      </div>
-
-      <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
-      <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-        <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-          <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-          <marquee behavior="scroll" direction="left" scrollamount="4">
-            <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
-          </marquee>
-        </div>
-      </a>
-
-      <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
-      <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-        <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
-          <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
-          <marquee behavior="scroll" direction="left" scrollamount="4">
-            <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
-          </marquee>
-        </div>
-      </a>
-    </div>
-
     <div class="scrollable-body" id="scrollBody">
+      <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
+      <div style="padding: 4px 0 0 0; background: var(--bg-app);">
+        <div style="text-align: center; padding: 0 0;">
+          <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
+            🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
+          </button>
+        </div>
 
-          
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-            <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
+        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
+        <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
+          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
+            <marquee behavior="scroll" direction="left" scrollamount="4">
+              <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
+            </marquee>
           </div>
-        </div>
+        </a>
 
-        <div class="hero-branding-content">
-          <div class="profile-avatar-wrap">
-            <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
+        <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
+        <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
+          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
+            <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
+            <marquee behavior="scroll" direction="left" scrollamount="4">
+              <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
+            </marquee>
           </div>
-          <div class="main-app-name">കോളയാട് കണക്ട്</div>
-        </div>
+        </a>
       </div>
-
-      <!-- Quick Action Shortcuts -->
-      <div class="quick-access-grid">
-        <div class="quick-chip" onclick="setCat('worker', document.querySelector('.cat-box:nth-child(5)'))">
-          <span class="quick-chip-icon">👷</span>
-          <span class="quick-chip-title">തൊഴിലാളികൾ</span>
-        </div>
-        <div class="quick-chip" onclick="setCat('emergency', document.querySelector('.cat-box:nth-child(24)'))">
-          <span class="quick-chip-icon">🏠</span>
-          <span class="quick-chip-title">നാട്ടുകാർ</span>
-        </div>
-        <div class="quick-chip" onclick="setCat('supermarket', document.querySelector('.cat-box:nth-child(7)'))">
-          <span class="quick-chip-icon">🏪</span>
-          <span class="quick-chip-title">കച്ചവടക്കാർ</span>
-        </div>
-        <div class="quick-chip" onclick="setCat('all', document.querySelector('.cat-box:nth-child(1)'))">
-          <span class="quick-chip-icon">🛠️</span>
-          <span class="quick-chip-title">സേവനങ്ങൾ</span>
-        </div>
-      </div>
-
-      <!-- Clean Search Box (സെർച്ച് ബോക്സ് മുകളിൽ തന്നെ സ്റ്റിക്ക് ചെയ്ത് നിൽക്കും) -->
-      <div class="filter-sticky-padding" style="padding-top: 4px;">
-        <div class="search-container">
-          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
-        </div>
-      </div>
-    </div> <!-- /.sticky-header ഇവിടെ അവസാനിക്കുന്നു -->
-
-    <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
-    <div style="padding: 4px 12px 0 12px; background: var(--bg-app);">
-      <div style="text-align: center; padding: 0 12px;">
-        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
-          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-        </button>
-      </div>
-
-    
- 
 
       <!-- ഒറ്റ അനൗൺസ്മെന്റ് ബോക്സ് -->
       <div class="announcement-card-container" style="margin: 8px 0 14px 0;">
@@ -763,7 +700,6 @@
           }
         } catch(err) {}
         
-        // ഫയർസ്റ്റോറിൽ നിന്ന് തത്സമയ വിലകൾ ലോഡ് ചെയ്യാൻ
         try {
           const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
           if (rateDoc.exists()) {
@@ -1169,7 +1105,7 @@
       }
     }
   
-          window.onload = function() {
+    window.onload = function() {
       async function loadLiveTickerRates() {
         try {
           if (window.db) {
@@ -1217,10 +1153,6 @@
       loadLiveTickerRates();
       initApp();
     };
-      
-
-
-
   </script>
 </body>
 </html>
