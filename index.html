@@ -390,47 +390,16 @@
         </div>
       </div>
 
-      <!-- Clean Search Box (സെർച്ച് ബോക്സ് മുകളിൽ തന്നെ സ്റ്റിക്ക് ചെയ്ത് നിൽക്കും) -->
-      <div class="filter-sticky-padding" style="padding-top: 4px;">
+      <!-- സെർച്ച് ബോക്സ് മാത്രം മുകളിൽ സ്റ്റിക്ക് ചെയ്ത് നിൽക്കും -->
+      <div style="padding: 6px 12px 8px 12px; background: var(--bg-app); position: sticky; top: 0; z-index: 45;">
         <div class="search-container">
           <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
         </div>
       </div>
-    </div> <!-- /.sticky-header ഇവിടെ അവസാനിക്കുന്നു -->
+    </div>
 
     <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
     <div style="padding: 4px 12px 0 12px; background: var(--bg-app);">
-      <div style="text-align: center; padding: 0 12px;">
-        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
-          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-        </button>
-      </div>
-
-    
-    <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
- div class="app-container">
- 
-      <div class="sticky-header">
-      <div class="hero-banner" id="heroBannerBg">
-        <!-- ബാനർ ഉള്ളടക്കങ്ങൾ -->
-        <div class="hero-overlay"></div>
-        <div class="top-action-bar">...</div>
-        <div class="hero-branding-content">...</div>
-      </div>
-
-      <!-- Quick Action Shortcuts -->
-      <div class="quick-access-grid">...</div>
-
-      <!-- സെർച്ച് ബോക്സ് മാത്രം ഇവിടെ sticky ആയി നിൽക്കും -->
-      <div class="search-sticky-box" style="padding: 6px 12px 8px 12px; background: var(--bg-app); position: sticky; top: 0; z-index: 45;">
-        <div class="search-container">
-          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
-        </div>
-      </div>
-    </div> <!-- /.sticky-header ഇവിടെ അവസാനിക്കുന്നു -->
-
-    <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
-    <div class="filter-sticky-padding" style="padding: 4px 12px 0 12px; background: var(--bg-app);">
       <div style="text-align: center; padding: 0 12px;">
         <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
           🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
@@ -459,6 +428,60 @@
     </div>
 
     <div class="scrollable-body" id="scrollBody">
+
+          
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
+          </div>
+        </div>
+
+        <div class="hero-branding-content">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
+          </div>
+          <div class="main-app-name">കോളയാട് കണക്ട്</div>
+        </div>
+      </div>
+
+      <!-- Quick Action Shortcuts -->
+      <div class="quick-access-grid">
+        <div class="quick-chip" onclick="setCat('worker', document.querySelector('.cat-box:nth-child(5)'))">
+          <span class="quick-chip-icon">👷</span>
+          <span class="quick-chip-title">തൊഴിലാളികൾ</span>
+        </div>
+        <div class="quick-chip" onclick="setCat('emergency', document.querySelector('.cat-box:nth-child(24)'))">
+          <span class="quick-chip-icon">🏠</span>
+          <span class="quick-chip-title">നാട്ടുകാർ</span>
+        </div>
+        <div class="quick-chip" onclick="setCat('supermarket', document.querySelector('.cat-box:nth-child(7)'))">
+          <span class="quick-chip-icon">🏪</span>
+          <span class="quick-chip-title">കച്ചവടക്കാർ</span>
+        </div>
+        <div class="quick-chip" onclick="setCat('all', document.querySelector('.cat-box:nth-child(1)'))">
+          <span class="quick-chip-icon">🛠️</span>
+          <span class="quick-chip-title">സേവനങ്ങൾ</span>
+        </div>
+      </div>
+
+      <!-- Clean Search Box (സെർച്ച് ബോക്സ് മുകളിൽ തന്നെ സ്റ്റിക്ക് ചെയ്ത് നിൽക്കും) -->
+      <div class="filter-sticky-padding" style="padding-top: 4px;">
+        <div class="search-container">
+          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
+        </div>
+      </div>
+    </div> <!-- /.sticky-header ഇവിടെ അവസാനിക്കുന്നു -->
+
+    <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
+    <div style="padding: 4px 12px 0 12px; background: var(--bg-app);">
+      <div style="text-align: center; padding: 0 12px;">
+        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
+          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
+        </button>
+      </div>
+
+    
+ 
 
       <!-- ഒറ്റ അനൗൺസ്മെന്റ് ബോക്സ് -->
       <div class="announcement-card-container" style="margin: 8px 0 14px 0;">
