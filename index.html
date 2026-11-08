@@ -12,7 +12,10 @@
   <meta property="og:url" content="https://kolayadconnect.in">
   <meta property="og:type" content="website">
 
-  <link rel="manifest" href="manifest.json">
+ <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#eab308">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
   <meta name="theme-color" content="#091026">
@@ -338,6 +341,12 @@
   </style>
 </head>
 <body>
+  <!-- ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്യാനുള്ള ബാനർ -->
+<div id="installAppBanner" style="display: none; background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; padding: 12px 16px; margin: 10px; border-radius: 12px; justify-content: space-between; align-items: center; font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);">
+  <span>📱 കോളയാട് കണക്ട് ആപ്പ് ഫോണിൽ ഇൻസ്റ്റാൾ ചെയ്യൂ!</span>
+  <button onclick="installAppToPhone()" style="background: #0f172a; color: #fde047; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">ഇൻസ്റ്റാൾ</button>
+</div>
+
   <div class="app-container">
     <div class="sticky-header">
       <div class="hero-banner" id="heroBannerBg">
@@ -1181,6 +1190,37 @@
       loadLiveTickerRates();
       initApp();
     };
+    let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  const installBanner = document.getElementById('installAppBanner');
+  if (installBanner) {
+    installBanner.style.display = 'flex';
+  }
+});
+
+async function installAppToPhone() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    deferredPrompt = null;
+    const installBanner = document.getElementById('installAppBanner');
+    if (installBanner) {
+      installBanner.style.display = 'none';
+    }
+  }
+}
+
+window.addEventListener('appinstalled', (evt) => {
+  console.log('Kolayad Connect was installed successfully');
+});
+
   </script>
 </body>
 </html>
