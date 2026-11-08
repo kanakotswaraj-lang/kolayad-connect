@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>നാട്ടുകൂട്ടം ഗെയിംസ് - കോളയാട് കണക്ട്</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background: #1e293b;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .back-btn {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .game-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .play-btn {
+      background: #eab308;
+      color: #0f172a;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ഹെഡർ ഭാഗം -->
+  <div class="header">
+    <a href="index.html" class="back-btn">← തിരികെ</a>
+    <h2 style="margin: 0; font-size: 18px; color: #eab308;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
+  </div>
+
+  <div class="container" id="mainMenu">
+    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">ഒഴിവുസമയങ്ങളിൽ സുഹൃത്തുക്കൾക്കൊപ്പം ഒരേ ഫോണിൽ കളിക്കാൻ ലളിതമായ ഗെയിമുകൾ!</p>
+    
+    <!-- ടിക്ക് ടാക്ക് ടോ ഗെയിം കാർഡ് -->
+    <div class="game-card">
+      <div>
+        <h3 style="margin: 0 0 5px 0; color: #38bdf8; font-size: 16px;">❌ ടിക്ക് ടാക്ക് ടോ (Tic-Tac-Toe) ⭕</h3>
+        <p style="margin: 0; font-size: 12px; color: #94a3b8;">രണ്ടുപേർക്ക് മാറിമാറി കളിക്കാം</p>
+      </div>
+      <button class="play-btn" onclick="openGame('tictactoe')">കളിക്കുക</button>
+    </div>
+
+    <!-- ഏണിയും പാമ്പും ഗെയിം കാർഡ് -->
+    <div class="game-card">
+      <div>
+        <h3 style="margin: 0 0 5px 0; color: #4ade80; font-size: 16px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
+        <p style="margin: 0; font-size: 12px; color: #94a3b8;">ഉടൻ ലഭ്യമാകുന്നതാണ്</p>
+      </div>
+      <button class="play-btn" onclick="openGame('snakes')" style="background: #334155; color: #94a3b8; cursor: not-allowed;">വരുന്നു...</button>
+    </div>
+  </div>
+
+  <!-- ഗെയിം കളിക്കുന്ന ഏരിയ -->
+  <div class="container" id="gameArea" style="display: none;">
+    <button onclick="backToMenu()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; float: left;">← ഗെയിം ലിസ്റ്റിലേക്ക്</button>
+    <div style="clear: both;"></div>
+    
+    <div id="gameContainer" style="background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; display: inline-block;">
+      <!-- Tic-Tac-Toe UI -->
+      <div id="tttSection">
+        <p id="tttStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 15px; font-weight: bold;">കളിക്കാരൻ X-ന്റെ ടേൺ</p>
+        <div style="display: grid; grid-template-columns: repeat(3, 80px); gap: 8px; justify-content: center; margin-bottom: 15px;">
+          <button onclick="makeTTTMove(0)" id="t-0" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(1)" id="t-1" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(2)" id="t-2" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(3)" id="t-3" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(4)" id="t-4" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(5)" id="t-5" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(6)" id="t-6" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(7)" id="t-7" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+          <button onclick="makeTTTMove(8)" id="t-8" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
+        </div>
+        <button onclick="resetTTTGame()" style="background: #eab308; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">പുതിയ കളി (Reset)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openGame(type) {
+      if(type === 'tictactoe') {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('gameArea').style.display = 'block';
+        resetTTTGame();
+      }
+    }
+
+    function backToMenu() {
+      document.getElementById('gameArea').style.display = 'none';
+      document.getElementById('mainMenu').style.display = 'block';
+    }
+
+    // Tic-Tac-Toe Logic
+    let tttGrid = ['', '', '', '', '', '', '', '', ''];
+    let tttTurn = 'X';
+    let tttActive = true;
+    const tttWins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+    function makeTTTMove(idx) {
+      if (tttGrid[idx] !== '' || !tttActive) return;
+      tttGrid[idx] = tttTurn;
+      let btn = document.getElementById(`t-${idx}`);
+      btn.innerText = tttTurn;
+      btn.style.color = tttTurn === 'X' ? '#38bdf8' : '#f43f5e';
+
+      let won = false;
+      for (let w of tttWins) {
+        if (tttGrid[w[0]] && tttGrid[w[0]] === tttGrid[w[1]] && tttGrid[w[0]] === tttGrid[w[2]]) {
+          won = true;
+          break;
+        }
+      }
+
+      if (won) {
+        document.getElementById('tttStatus').innerText = `🎉 കളിക്കാരൻ ${tttTurn} വിജയിച്ചു!`;
+        tttActive = false;
+        return;
+      }
+
+      if (!tttGrid.includes('')) {
+        document.getElementById('tttStatus').innerText = `🤝 കളി സമനിലയിൽ ആയി!`;
+        tttActive = false;
+        return;
+      }
+
+      tttTurn = tttTurn === 'X' ? 'O' : 'X';
+      document.getElementById('tttStatus').innerText = `കളിക്കാരൻ ${tttTurn}-ന്റെ ടേൺ`;
+    }
+
+    function resetTTTGame() {
+      tttGrid = ['', '', '', '', '', '', '', '', ''];
+      tttTurn = 'X';
+      tttActive = true;
+      let status = document.getElementById('tttStatus');
+      if(status) status.innerText = `കളിക്കാരൻ X-ന്റെ ടേൺ`;
+      for (let i = 0; i < 9; i++) {
+        let b = document.getElementById(`t-${i}`);
+        if(b) { b.innerText = ''; b.style.color = '#fff'; }
+      }
+    }
+  </script>
+</body>
+</html>
