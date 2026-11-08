@@ -92,7 +92,7 @@
     <div class="game-card">
       <div>
         <h3 style="margin: 0 0 5px 0; color: #4ade80; font-size: 16px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
-        <p style="margin: 0; font-size: 12px; color: #94a3b8;">ഡൈസ് ഉരുട്ടി കളിക്കാം</p>
+        <p style="margin: 0; font-size: 12px; color: #94a3b8;">ബോർഡും ഡൈസും ഉപയോഗിച്ച് കളിക്കാം</p>
       </div>
       <button class="play-btn" onclick="openGame('snakes')">കളിക്കുക</button>
     </div>
@@ -149,18 +149,24 @@
             <button onclick="resetRPS()" style="background: #eab308; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; display: none;" id="rpsResetBtn">വീണ്ടും കളിക്കുക</button>
           </div>
         `;
+        resetRPS();
       }
       else if(type === 'snakes') {
         container.innerHTML = `
-          <div style="text-align: center; padding: 15px;">
-            <h3 style="color: #4ade80; margin-bottom: 15px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
-            <p id="snakeStatus" style="font-size: 16px; color: #eab308; margin-bottom: 15px;">കളിക്കാരൻ 1-ന്റെ പൊസിഷൻ: 1</p>
-            <div style="font-size: 48px; margin: 20px;" id="diceBox">🎲</div>
-            <button onclick="rollDice()" style="background: #4ade80; color: #0f172a; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px;">ഡൈസ് ഉരുട്ടുക</button>
-            <button onclick="resetSnakes()" style="background: #334155; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; margin-top: 15px; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">റീസെറ്റ്</button>
+          <div style="text-align: center; padding: 10px;">
+            <h3 style="color: #4ade80; margin-bottom: 10px;">🐍 ഏണിയും പാമ്പും ബോർഡ്</h3>
+            <p id="snakeStatus" style="font-size: 14px; color: #eab308; margin-bottom: 10px;">കളിക്കാരൻ 1: ബോക്സ് 1</p>
+            
+            <div id="boardGrid" style="display: grid; grid-template-columns: repeat(6, 45px); gap: 4px; justify-content: center; margin-bottom: 15px; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
+              <!-- ബോർഡ് ബോക്സുകൾ -->
+            </div>
+
+            <div style="font-size: 36px; margin: 10px;" id="diceBox">🎲</div>
+            <button onclick="rollSnakeDice()" style="background: #4ade80; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="resetSnakeBoard()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; margin-top: 10px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; font-size: 12px;">പുതിയ കളി</button>
           </div>
         `;
-        resetSnakes();
+        initSnakeBoard();
       }
     }
 
@@ -251,31 +257,65 @@
       document.getElementById('rpsResetBtn').style.display = 'none';
     }
 
-    // Snakes and Ladders Dice Logic
-    let playerPos = 1;
-    function rollDice() {
+    // Snakes and Ladders Board Logic
+    let snakePlayerPos = 1;
+
+    function initSnakeBoard() {
+      snakePlayerPos = 1;
+      document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1: ബോക്സ് 1`;
+      document.getElementById('diceBox').innerText = '🎲';
+      renderBoard();
+    }
+
+    function renderBoard() {
+      let gridHtml = '';
+      for (let i = 30; i >= 1; i--) {
+        let isPlayerHere = (i === snakePlayerPos);
+        let bg = isPlayerHere ? '#eab308' : '#1e293b';
+        let fg = isPlayerHere ? '#0f172a' : '#fff';
+        let extraText = '';
+        if(i === 4) extraText = '🪜(എണി)';
+        if(i === 14) extraText = '⭐(ടോപ്പ്)';
+        if(i === 17) extraText = '🐍(പാമ്പ്)';
+        if(i === 7) extraText = '🔻';
+
+        gridHtml += `<div id="sq-${i}" style="width: 45px; height: 45px; background: ${bg}; color: ${fg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; border-radius: 4px; border: 1px solid #475569;">
+          <span>${i}</span>
+          <span style="font-size: 8px;">${extraText}</span>
+        </div>`;
+      }
+      document.getElementById('boardGrid').innerHTML = gridHtml;
+    }
+
+    function rollSnakeDice() {
       let dice = Math.floor(Math.random() * 6) + 1;
       let diceIcons = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
       document.getElementById('diceBox').innerText = diceIcons[dice - 1];
       
-      playerPos += dice;
-      if(playerPos === 4) { playerPos = 14; alert('എണി കയറി! 🪜 (4 ൽ നിന്ന് 14 ലേക്ക്)'); }
-      if(playerPos === 9) { playerPos = 31; alert('ഭയങ്കര എണി! 🪜 (9 ൽ നിന്ന് 31 ലേക്ക്)'); }
-      if(playerPos === 17) { playerPos = 7; alert('പാമ്പ് കടിച്ചു! 🐍 (17 ൽ നിന്ന് 7 ലേക്ക്)'); }
+      snakePlayerPos += dice;
       
-      if(playerPos >= 30) {
-        playerPos = 30;
+      if(snakePlayerPos === 4) { 
+        snakePlayerPos = 14; 
+        alert('ഹേയ്! എണി കയറി 4 ൽ നിന്ന് 14 ലേക്ക് എത്തി! 🪜'); 
+      } else if(snakePlayerPos === 17) { 
+        snakePlayerPos = 7; 
+        alert('അയ്യോ! പാമ്പ് കടിച്ചു 17 ൽ നിന്ന് 7 ലേക്ക് വീണു! 🐍'); 
+      }
+      
+      if(snakePlayerPos >= 30) {
+        snakePlayerPos = 30;
+        renderBoard();
         document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ വിജയിച്ചു!`;
         alert('കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
-      } else {
-        document.getElementById('snakeStatus').innerText = `കളിക്കാരന്റെ പൊസിഷൻ: ${playerPos} (വീണ ഡൈസ്: ${dice})`;
+        return;
       }
+      
+      renderBoard();
+      document.getElementById('snakeStatus').innerText = `പോസിഷൻ: ${snakePlayerPos} (വീണ ഡൈസ്: ${dice})`;
     }
 
-    function resetSnakes() {
-      playerPos = 1;
-      document.getElementById('snakeStatus').innerText = `കളിക്കാരന്റെ പൊസിഷൻ: 1`;
-      document.getElementById('diceBox').innerText = '🎲';
+    function resetSnakeBoard() {
+      initSnakeBoard();
     }
   </script>
 </body>
