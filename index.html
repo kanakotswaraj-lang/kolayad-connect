@@ -340,8 +340,7 @@
   </style>
 </head>
 <body>
-
-  <div class="app-container">
+<div class="app-container">
     <div class="sticky-header">
       <div class="hero-banner" id="heroBannerBg">
         <div class="hero-overlay"></div>
@@ -384,38 +383,39 @@
           <span class="quick-chip-title">സേവനങ്ങൾ</span>
         </div>
       </div>
+    </div> <!-- /.sticky-header ഇവിടെ അവസാനിക്കുന്നു -->
 
-      <div style="text-align: center; padding: 0 12px;">
-        <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
-          🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-        </button>
-      </div>
+    <div style="text-align: center; padding: 0 12px;">
+      <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
+        🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
+      </button>
+    </div>
 
-      <div class="filter-sticky-padding">
-        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
-        <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-            <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4">
-              <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
-            </marquee>
-          </div>
-        </a>
-
-        <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
-        <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
-            <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4">
-              <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
-            </marquee>
-          </div>
-        </a>
-
-        <!-- Clean Search Box -->
-        <div class="search-container">
-          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
+    <!-- ഇനി പറയുന്ന ഭാഗങ്ങൾ sticky-header-ന് പുറത്തായതിനാൽ സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് പോകും -->
+    <div class="filter-sticky-padding">
+      <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
+      <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
+        <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+          <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
+          <marquee behavior="scroll" direction="left" scrollamount="4">
+            <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
+          </marquee>
         </div>
+      </a>
+
+      <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
+      <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
+        <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
+          <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
+          <marquee behavior="scroll" direction="left" scrollamount="4">
+            <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
+          </marquee>
+        </div>
+      </a>
+
+      <!-- Clean Search Box -->
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
       </div>
     </div>
 
