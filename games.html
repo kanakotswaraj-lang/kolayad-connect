@@ -151,13 +151,12 @@
         `;
         resetRPS();
       }
-            else if(type === 'snakes') {
+      else if(type === 'snakes') {
         container.innerHTML = `
           <div style="text-align: center; padding: 10px;">
             <h3 style="color: #4ade80; margin-bottom: 5px;">🐍 ഏണിയും പാമ്പും (2-Player)</h3>
             <p id="snakeStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 10px; font-weight: bold;">കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: 1 | P2: 1)</p>
             
-            <!-- 30 ബോക്സുകളുള്ള ബോർഡ് ഗ്രീഡ് -->
             <div id="boardGrid" style="display: grid; grid-template-columns: repeat(6, 45px); gap: 4px; justify-content: center; margin-bottom: 15px; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
               <!-- ബോർഡ് ബോക്സുകൾ -->
             </div>
@@ -169,7 +168,7 @@
         `;
         initMultiSnakeBoard();
       }
-
+    }
 
     function backToMenu() {
       document.getElementById('gameArea').style.display = 'none';
@@ -258,11 +257,10 @@
       document.getElementById('rpsResetBtn').style.display = 'none';
     }
 
-    // Snakes and Ladders Board Logic
-        // Two-Player Snakes and Ladders Logic
+    // Two-Player Snakes and Ladders Logic
     let p1Pos = 1;
     let p2Pos = 1;
-    let currentTurn = 1; // 1 എന്നാൽ കളിക്കാരൻ 1, 2 എന്നാൽ കളിക്കാരൻ 2
+    let currentTurn = 1;
 
     function initMultiSnakeBoard() {
       p1Pos = 1;
@@ -282,13 +280,13 @@
         let bg = '#1e293b';
         let badge = '';
         if (isP1Here && isP2Here) {
-          bg = '#a855f7'; // രണ്ടുപേരും ഒരേ കള്ളിയിൽ വന്നാൽ പർപ്പിൾ നിറം
+          bg = '#a855f7';
           badge = 'P1&P2';
         } else if (isP1Here) {
-          bg = '#38bdf8'; // കളിക്കാരൻ 1 നീല നിറം
+          bg = '#38bdf8';
           badge = 'P1';
         } else if (isP2Here) {
-          bg = '#f43f5e'; // കളിക്കാരൻ 2 ചുവപ്പ് നിറം
+          bg = '#f43f5e';
           badge = 'P2';
         }
 
@@ -324,7 +322,7 @@
           alert('കളിക്കാരൻ 1 കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
           return;
         }
-        currentTurn = 2; // അടുത്തത് കളിക്കാരൻ 2-ന്റെ ടേൺ
+        currentTurn = 2;
         document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 2-ന്റെ ടേൺ (P1: ${p1Pos} | P2: ${p2Pos})`;
       } else {
         p2Pos += dice;
@@ -338,7 +336,7 @@
           alert('കളിക്കാരൻ 2 കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
           return;
         }
-        currentTurn = 1; // അടുത്തത് കളിക്കാരൻ 1-ന്റെ ടേൺ
+        currentTurn = 1;
         document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: ${p1Pos} | P2: ${p2Pos})`;
       }
 
@@ -348,7 +346,6 @@
     function resetMultiSnakeBoard() {
       initMultiSnakeBoard();
     }
-
   </script>
 </body>
 </html>
