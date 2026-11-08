@@ -198,36 +198,31 @@
 
     .filter-sticky-padding { padding: 6px 12px 8px 12px; background: var(--bg-app); }
     
-    /* Ticker Box & Light/Dark Mode Readability Fix */
-      /* വിലനിലവാരം & തൊഴിൽ വാർത്തകളുടെ ടിക്കർ ബോക്സ് വലുപ്പവും ഭംഗിയും കൂട്ടാൻ */
-  .ticker-box-wrapper {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    overflow: hidden !important;
-    padding: 12px 14px !important;
-    width: 100% !important;
-    border-radius: 14px !important;
-  }
+    .ticker-box-wrapper {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      overflow: hidden !important;
+      padding: 12px 14px !important;
+      width: 100% !important;
+      border-radius: 14px !important;
+    }
 
-  /* സ്ക്രോൾ ചെയ്യുന്ന അക്ഷരങ്ങളുടെ വലിപ്പവും വ്യക്തതയും കൂട്ടാൻ */
-  marquee {
-    width: 100% !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    color: #ffffff !important;
-    font-weight: 800 !important;
-    font-size: 14px !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-  }
+    marquee {
+      width: 100% !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      font-size: 14px !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+    }
 
-  /* ലൈറ്റ് മോഡിലും ഡാർക്ക് മോഡിലും അക്ഷരങ്ങൾ വെളുത്ത നിറത്തിൽ വ്യക്തമായി കാണാൻ */
-  body.light-mode .ticker-box-wrapper marquee,
-  body.light-mode .ticker-box-wrapper marquee span,
-  .ticker-box-wrapper marquee span {
-    color: #ffffff !important;
-  }
-
+    body.light-mode .ticker-box-wrapper marquee,
+    body.light-mode .ticker-box-wrapper marquee span,
+    .ticker-box-wrapper marquee span {
+      color: #ffffff !important;
+    }
 
     /* Dynamic Search Box */
     .search-container { position: relative; width: 100%; margin-top: 4px; }
@@ -269,7 +264,7 @@
     .item-name { font-size: 16.5px; font-weight: 800; color: #ffffff; margin-top: 6px; margin-bottom: 2px; }
     .item-loc { font-size: 11.5px; color: #facc15; margin-bottom: 8px; font-weight: 700; }
     
-    .item-desc-highlight { font-size: 12px; color: #cbd5e1; background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.05); line-height: 1.5; }
+    .item-desc-highlight { font-size: 14px; color: #e2e8f0; background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.05); line-height: 1.5; font-weight: 500; }
     
     .shop-images-slider { 
       display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px; 
@@ -278,12 +273,12 @@
     .shop-images-slider::-webkit-scrollbar { display: none; }
     .shop-thumb-img { min-width: 85%; height: 220px; border-radius: 10px; object-fit: cover; scroll-snap-align: center; border: 1px solid var(--border-color); cursor: zoom-in; }
 
-    .card-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
-    .btn-pro-call { flex: 1; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; padding: 9px; border-radius: 10px; font-size: 11.5px; font-weight: 800; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    .card-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
+    .btn-pro-call { flex: 1; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
 
-    .btn-pro-wa { width: 36px; height: 36px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
-    .btn-pro-share { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-    .btn-pro-map { background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.4); color: #facc15; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-pro-wa { width: 40px; height: 40px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); flex-shrink: 0; }
+    .btn-pro-share { flex: 1; background: #2563eb; color: #ffffff; padding: 10px; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 2px 8px rgba(37,99,235,0.4); display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .btn-pro-map { background: #0d9488; color: #ffffff; padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .btn-admin-edit { background: #2563eb; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; }
     .btn-admin-del { background: #dc2626; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; }
     
@@ -301,43 +296,41 @@
     .modal-box { background: #0f172a; border: 1.5px solid #3b82f6; border-radius: 24px; width: 100%; max-width: 380px; padding: 20px; color: #ffffff; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
 
     #imageZoomModal { background: rgba(0,0,0,0.92); z-index: 100; }
-  
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
-   /* വിവരങ്ങൾ ലഭ്യമല്ല എന്ന മെസ്സേജ് ബോക്സ് ലൈറ്റ്/ഡാർക്ക് മോഡുകളിൽ വ്യക്തമായി കാണാൻ */
-  #listings > div {
-    background: rgba(14, 24, 56, 0.85) !important;
-    color: #ffffff !important;
-    border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
-  }
 
-  body.light-mode #listings > div {
-    background: #0f172a !important;
-    color: #ffffff !important;
-  }
-  /* പ്രധാന അറിയിപ്പുകൾ ബോക്സ് ലൈറ്റ്/ഡാർക്ക് മോഡുകളിൽ വ്യക്തമായി കാണാൻ */
-  #noticeSlider {
-    background: #0e1838 !important;
-    color: #ffffff !important;
-    border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
-  }
+    #listings > div {
+      background: rgba(14, 24, 56, 0.85) !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
+    }
 
-  #noticeSlider h4, 
-  #noticeSlider p, 
-  #noticeSlider span {
-    color: #ffffff !important;
-  }
+    body.light-mode #listings > div {
+      background: #0f172a !important;
+      color: #ffffff !important;
+    }
 
-  body.light-mode #noticeSlider {
-    background: #0f172a !important;
-    color: #ffffff !important;
-  }
+    #noticeSlider {
+      background: #0e1838 !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
+    }
 
-  body.light-mode #noticeSlider h4, 
-  body.light-mode #noticeSlider p, 
-  body.light-mode #noticeSlider span {
-    color: #ffffff !important;
-  }
+    #noticeSlider h4, 
+    #noticeSlider p, 
+    #noticeSlider span {
+      color: #ffffff !important;
+    }
 
+    body.light-mode #noticeSlider {
+      background: #0f172a !important;
+      color: #ffffff !important;
+    }
+
+    body.light-mode #noticeSlider h4, 
+    body.light-mode #noticeSlider p, 
+    body.light-mode #noticeSlider span {
+      color: #ffffff !important;
+    }
   </style>
 </head>
 <body>
@@ -497,7 +490,7 @@
         <a href="index.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">🏠 ഹോം / ഡയറക്ടറി</a>
         <a href="jobs.html" style="color: #38bdf8; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b; font-weight: bold;">💼 തൊഴിലവസരങ്ങൾ (Jobs)</a>
         <a href="profile.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">👤 എന്റെ വിവരങ്ങൾ</a>
-        <a href="admin.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;⚙️ അഡ്മിൻ പാനൽ</a>
+        <a href="admin.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">⚙️ അഡ്മിൻ പാനൽ</a>
         
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 0;">
 
@@ -702,22 +695,26 @@
           }
         } catch(err) {}
         
-    // ഫയർസ്റ്റോറിൽ നിന്ന് തത്സമയ വിലകൾ ലോഡ് ചെയ്യാൻ
-    try {
-      const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
-      if (rateDoc.exists()) {
-        let data = rateDoc.data();
-        let gold = data.gold || '58,000';
-        let silver = data.silver || '85';
+        // ഫയർസ്റ്റോറിൽ നിന്ന് തത്സമയ വിലകൾ ലോഡ് ചെയ്യാൻ
+        try {
+          const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
+          if (rateDoc.exists()) {
+            let data = rateDoc.data();
+            let gold = data.gold || '58,000';
+            let silver = data.silver || '85';
+            let rubber = data.rubber || '185';
+            let pepper = data.pepper || '650';
+            let arecanut = data.arecanut || '260';
+            let coconut = data.coconut || '40';
 
-        const tickerElement = document.getElementById('homeTickerText');
-        if(tickerElement) {
-          tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+            const tickerElement = document.getElementById('homeTickerText');
+            if(tickerElement) {
+              tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
+            }
+          }
+        } catch(err) {
+          console.log("Error loading market rates: ", err);
         }
-      }
-    } catch(err) {
-      console.log("Error loading market rates: ", err);
-    }
 
         const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
         if (!shopSnap.empty) {
@@ -901,20 +898,26 @@
             <div class="item-loc">📍 ${s.loc}</div>
             ${photosHtml}
             <div class="item-desc-highlight">${s.desc}</div>
+            
             <div class="card-actions">
               <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
               <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-              <button style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
-  <i class="fas fa-share-alt"></i> ഷെയർ
+              
+              <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">
+                🔗 ഷെയർ
+              </button>
 
-               ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
-              ${isAdmin ? `
-                <button onclick="openEditShop('${s.id}')" class="btn-admin-edit">എഡിറ്റ്</button>
-                <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
-              ` : ''}
+              ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
             </div>
 
             ${phone2Html}
+
+            ${isAdmin ? `
+              <div style="display:flex; gap:6px; margin-top:8px;">
+                <button onclick="openEditShop('${s.id}')" class="btn-admin-edit">എഡിറ്റ്</button>
+                <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
+              </div>
+            ` : ''}
 
             <div style="margin-top: 10px;">
               <a href="shop.html?id=${s.id}" style="display: block; text-align: center; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
@@ -1099,7 +1102,6 @@
     }
   
     window.onload = function() {
-      // വിലനിലവാരം ലോക്കൽ സ്റ്റോറേജിൽ നിന്നോ അല്ലെങ്കിൽ ഡിഫോൾട്ടായോ കൃത്യമായി എടുക്കാൻ (Fix applied here)
       let gold = localStorage.getItem('p_gold') || localStorage.getItem('gold') || '58,000';
       let silver = localStorage.getItem('p_silver') || localStorage.getItem('silver') || '85.00';
       let rubber = localStorage.getItem('p_rubber') || localStorage.getItem('rubber') || '185.00';
