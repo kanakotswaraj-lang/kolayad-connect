@@ -567,54 +567,82 @@
   </div>
 
   <div class="modal-bg" id="editShopModal" onclick="closeModalOnBg(event, 'editShopModal')">
-    <div class="modal-box">
-      <h3 style="color:#eab308; margin-bottom:12px; font-size:15px;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
-      <form onsubmit="updateShopData(event)">
+    <div class="modal-box" style="border: 1.5px solid #eab308; width: 92%; max-width: 400px; padding: 18px; border-radius: 20px;">
+      <h3 style="color:#eab308; margin-bottom:12px; font-size:15px; font-weight:800; text-align:center;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
+      <form onsubmit="updateShopData(event)" style="display: flex; flex-direction: column; gap: 10px;">
         <input type="hidden" id="editShopId">
-        <label style="font-size:11px; color:#94a3b8;">സ്ഥാപനത്തിന്റെ പേര്:</label>
-        <input type="text" id="editShopName" class="dark-input" required>
-        <label style="font-size:11px; color:#94a3b8;">സ്ഥലം / വിലാസം:</label>
-        <input type="text" id="editShopLoc" class="dark-input" required>
-        <label style="font-size:11px; color:#94a3b8;">ഒന്നാമത്തെ ഫോൺ നമ്പർ:</label>
-        <input type="text" id="editShopPhone" class="dark-input" required>
-        <label style="font-size:11px; color:#94a3b8;">രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ):</label>
-        <input type="text" id="editShopPhone2" class="dark-input">
-        <label style="font-size:11px; color:#94a3b8;">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക്:</label>
-        <input type="url" id="editShopMap" class="dark-input" placeholder="https://maps.app.goo.gl/...">
-        <label style="font-size:11px; color:#94a3b8;">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
-        <textarea id="editShopDesc" class="dark-input" rows="3" required></textarea>
         
-        <label style="font-size:11px; color:#94a3b8;">സ്ഥാപനത്തിന്റെ ഫോട്ടോ മാറ്റാൻ:</label>
-        <input type="file" id="editShopImageFile" class="dark-input" accept="image/*" style="padding: 6px;">
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ പേര്:</label>
+          <input type="text" id="editShopName" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
+        </div>
 
-        <button type="submit" class="btn-pro-call" style="margin-top:6px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥലം / വിലാസം:</label>
+          <input type="text" id="editShopLoc" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
+        </div>
+
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">ഒന്നാമത്തെ ഫോൺ നമ്പർ:</label>
+          <input type="text" id="editShopPhone" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
+        </div>
+
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ):</label>
+          <input type="text" id="editShopPhone2" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;">
+        </div>
+
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക്:</label>
+          <input type="url" id="editShopMap" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" placeholder="https://maps.app.goo.gl/...">
+        </div>
+
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
+          <textarea id="editShopDesc" class="search-input-box" rows="3" style="padding: 10px 12px; font-size: 12.5px; resize: none;" required></textarea>
+        </div>
+        
+        <div>
+          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോ മാറ്റാൻ:</label>
+          <input type="file" id="editShopImageFile" class="search-input-box" accept="image/*" style="padding: 6px; font-size: 11px;">
+        </div>
+
+        <button type="submit" class="btn-pro-call" style="margin-top: 6px; width: 100%; padding: 12px; font-size: 13px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
       </form>
     </div>
   </div>
-      
-  <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
-    <div class="modal-box" style="border: 1.5px solid #f59e0b;">
-      <h3 style="color:#f59e0b; margin-bottom:12px; font-size:16px;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
-      <form onsubmit="submitFeedback(event)">
-        <label style="font-size:11px; color:#94a3b8;">പേര് (ഓപ്ഷണൽ):</label>
-        <input type="text" id="fbName" class="dark-input" placeholder="നിങ്ങളുടെ പേര്">
+
+       <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
+    <div class="modal-box" style="border: 1.5px solid #f59e0b; width: 92%; max-width: 400px; padding: 20px; border-radius: 20px;">
+      <h3 style="color:#f59e0b; margin-bottom:14px; font-size:16px; font-weight:800; text-align:center;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
+      <form onsubmit="submitFeedback(event)" style="display: flex; flex-direction: column; gap: 12px;">
         
-        <label style="font-size:11px; color:#94a3b8;">റേറ്റിംഗ്:</label>
-        <div style="display: flex; gap: 6px; margin-bottom: 8px;" id="starRatingGroup">
-          <button type="button" onclick="setRating(5, this)" class="star-btn active" style="flex:1; padding:8px; background:linear-gradient(135deg, #d97706, #f59e0b); border:1.5px solid #fbbf24; border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px;">⭐⭐⭐⭐⭐</button>
-          <button type="button" onclick="setRating(4, this)" class="star-btn" style="flex:1; padding:8px; background:#1e293b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px;">⭐⭐⭐⭐</button>
-          <button type="button" onclick="setRating(3, this)" class="star-btn" style="flex:1; padding:8px; background:#1e293b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px;">⭐⭐⭐</button>
+        <div>
+          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">പേര് (ഓപ്ഷണൽ):</label>
+          <input type="text" id="fbName" class="search-input-box" style="padding: 10px 14px; font-size: 12.5px;" placeholder="നിങ്ങളുടെ പേര്">
+        </div>
+        
+        <div>
+          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">റേറ്റിംഗ്:</label>
+          <div style="display: flex; gap: 6px;" id="starRatingGroup">
+            <button type="button" onclick="setRating(5, this)" class="star-btn active" style="flex:1; padding:8px 2px; background:linear-gradient(135deg, #d97706, #f59e0b); border:1.5px solid #fbbf24; border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐⭐</button>
+            <button type="button" onclick="setRating(4, this)" class="star-btn" style="flex:1; padding:8px 2px; background:#1e293b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐</button>
+            <button type="button" onclick="setRating(3, this)" class="star-btn" style="flex:1; padding:8px 2px; background:#1e293b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐</button>
+          </div>
         </div>
         <input type="hidden" id="fbRating" value="5">
 
-        <label style="font-size:11px; color:#94a3b8;">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
-        <textarea id="fbComment" class="dark-input" rows="3" placeholder="ആപ്പിനെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങൾ ഇവിടെ എഴുതുക..." required></textarea>
+        <div>
+          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
+          <textarea id="fbComment" class="search-input-box" rows="3" style="padding: 10px 14px; font-size: 12.5px; resize: none;" placeholder="ആപ്പിനെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങൾ ഇവിടെ എഴുതുക..." required></textarea>
+        </div>
 
-        <button type="submit" style="margin-top:6px; width:100%; background:linear-gradient(135deg, #d97706, #f59e0b); color:#ffffff; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">ഫീഡ്‌ബാക്ക് അയക്കുക</button>
+        <button type="submit" style="width:100%; background:linear-gradient(135deg, #d97706, #f59e0b); color:#ffffff; border:none; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer; font-size:13px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">ഫീഡ്‌ബാക്ക് അയക്കുക</button>
       </form>
     </div>
   </div>
-
+ 
+  
   <script>
     let selectedCat = 'all';
     let notices = [];
