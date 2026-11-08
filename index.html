@@ -1101,21 +1101,20 @@
       }
     }
   
-            window.onload = function() {
+          window.onload = function() {
       async function loadLiveTickerRates() {
         try {
           if (window.db) {
             const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
             if (rateDoc.exists()) {
               let data = rateDoc.data();
-              let gold = data.gold || '58,000';
-              let silver = data.silver || '85.00';
-              let rubber = data.rubber || '185.00';
-              let pepper = data.pepper || '650.00';
-              let arecanut = data.arecanut || '260.00';
-              let coconut = data.coconut || '40.00';
+              let gold = data.gold || data.adminGold || '58,000';
+              let silver = data.silver || data.adminSilver || '85.00';
+              let rubber = data.rubber || data.adminRubber || '185.00';
+              let pepper = data.pepper || data.adminPepper || '650.00';
+              let arecanut = data.arecanut || data.adminArecanut || '260.00';
+              let coconut = data.coconut || data.adminCoconut || '40.00';
 
-              // ചിഹ്നങ്ങളും മറ്റും ഒഴിവാക്കി ക്ലീൻ ആയി വാല്യൂ എടുക്കാൻ
               gold = String(gold).replace(/₹/g, '').trim();
               silver = String(silver).replace(/₹/g, '').trim();
               rubber = String(rubber).replace(/₹/g, '').trim();
@@ -1134,20 +1133,12 @@
           console.log("Error fetching live rates: ", err);
         }
 
-        // ഫയർസ്റ്റോറിൽ നിന്ന് കിട്ടിയില്ലെങ്കിൽ മാത്രം ലോക്കൽ സ്റ്റോറേജ് എടുക്കുക
-        let gold = localStorage.getItem('p_gold') || localStorage.getItem('gold') || '58,000';
-        let silver = localStorage.getItem('p_silver') || localStorage.getItem('silver') || '85.00';
-        let rubber = localStorage.getItem('p_rubber') || localStorage.getItem('rubber') || '185.00';
-        let pepper = localStorage.getItem('p_pepper') || localStorage.getItem('pepper') || '650.00';
-        let arecanut = localStorage.getItem('p_arecanut') || localStorage.getItem('arecanut') || '260.00';
-        let coconut = localStorage.getItem('p_coconut') || localStorage.getItem('coconut') || '40.00';
-
-        gold = String(gold).replace(/₹/g, '').trim();
-        silver = String(silver).replace(/₹/g, '').trim();
-        rubber = String(rubber).replace(/₹/g, '').trim();
-        pepper = String(pepper).replace(/₹/g, '').trim();
-        arecanut = String(arecanut).replace(/₹/g, '').trim();
-        coconut = String(coconut).replace(/₹/g, '').trim();
+        let gold = localStorage.getItem('p_gold') || '58,000';
+        let silver = localStorage.getItem('p_silver') || '85.00';
+        let rubber = localStorage.getItem('p_rubber') || '185.00';
+        let pepper = localStorage.getItem('p_pepper') || '650.00';
+        let arecanut = localStorage.getItem('p_arecanut') || '260.00';
+        let coconut = localStorage.getItem('p_coconut') || '40.00';
 
         const tickerElement = document.getElementById('homeTickerText');
         if(tickerElement) {
@@ -1158,6 +1149,7 @@
       loadLiveTickerRates();
       initApp();
     };
+      
 
 
 
