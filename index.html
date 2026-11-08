@@ -1101,8 +1101,7 @@
       }
     }
   
-        window.onload = function() {
-      // ഫയർസ്റ്റോറിൽ നിന്ന് നേരിട്ട് തത്സമയ വിലകൾ ലോഡ് ചെയ്യാൻ
+            window.onload = function() {
       async function loadLiveTickerRates() {
         try {
           if (window.db) {
@@ -1116,6 +1115,14 @@
               let arecanut = data.arecanut || '260.00';
               let coconut = data.coconut || '40.00';
 
+              // ചിഹ്നങ്ങളും മറ്റും ഒഴിവാക്കി ക്ലീൻ ആയി വാല്യൂ എടുക്കാൻ
+              gold = String(gold).replace(/₹/g, '').trim();
+              silver = String(silver).replace(/₹/g, '').trim();
+              rubber = String(rubber).replace(/₹/g, '').trim();
+              pepper = String(pepper).replace(/₹/g, '').trim();
+              arecanut = String(arecanut).replace(/₹/g, '').trim();
+              coconut = String(coconut).replace(/₹/g, '').trim();
+
               const tickerElement = document.getElementById('homeTickerText');
               if(tickerElement) {
                 tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
@@ -1128,12 +1135,19 @@
         }
 
         // ഫയർസ്റ്റോറിൽ നിന്ന് കിട്ടിയില്ലെങ്കിൽ മാത്രം ലോക്കൽ സ്റ്റോറേജ് എടുക്കുക
-        let gold = localStorage.getItem('p_gold') || '58,000';
-        let silver = localStorage.getItem('p_silver') || '85.00';
-        let rubber = localStorage.getItem('p_rubber') || '185.00';
-        let pepper = localStorage.getItem('p_pepper') || '650.00';
-        let arecanut = localStorage.getItem('p_arecanut') || '260.00';
-        let coconut = localStorage.getItem('p_coconut') || '40.00';
+        let gold = localStorage.getItem('p_gold') || localStorage.getItem('gold') || '58,000';
+        let silver = localStorage.getItem('p_silver') || localStorage.getItem('silver') || '85.00';
+        let rubber = localStorage.getItem('p_rubber') || localStorage.getItem('rubber') || '185.00';
+        let pepper = localStorage.getItem('p_pepper') || localStorage.getItem('pepper') || '650.00';
+        let arecanut = localStorage.getItem('p_arecanut') || localStorage.getItem('arecanut') || '260.00';
+        let coconut = localStorage.getItem('p_coconut') || localStorage.getItem('coconut') || '40.00';
+
+        gold = String(gold).replace(/₹/g, '').trim();
+        silver = String(silver).replace(/₹/g, '').trim();
+        rubber = String(rubber).replace(/₹/g, '').trim();
+        pepper = String(pepper).replace(/₹/g, '').trim();
+        arecanut = String(arecanut).replace(/₹/g, '').trim();
+        coconut = String(coconut).replace(/₹/g, '').trim();
 
         const tickerElement = document.getElementById('homeTickerText');
         if(tickerElement) {
@@ -1144,6 +1158,8 @@
       loadLiveTickerRates();
       initApp();
     };
+
+
 
   </script>
 </body>
