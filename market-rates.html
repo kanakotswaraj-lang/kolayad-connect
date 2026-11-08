@@ -743,6 +743,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. അഡ്മിൻ വില മാറ്റി സേവ് ചെയ്യുമ്പോൾ ഫയർസ്റ്റോറിലേക്ക് അയക്കാൻ
+
 async function saveMarketRates() {
   let gold = document.getElementById('adminGold').value;
   let silver = document.getElementById('adminSilver').value;
@@ -752,7 +753,7 @@ async function saveMarketRates() {
   let coconut = document.getElementById('adminCoconut').value;
 
   try {
-    // ഫയർസ്റ്റോറിലേക്ക് (Cloud Database) ഡാറ്റ സേവ് ചെയ്യുന്നു
+    // ഫയർസ്റ്റോറിലേക്ക് കൃത്യമായ കീ നെയിമുകളിൽ ഡാറ്റ സേവ് ചെയ്യുന്നു
     await window.setDoc(window.doc(window.db, "settings", "market_rates"), {
       gold: gold,
       silver: silver,
@@ -771,14 +772,12 @@ async function saveMarketRates() {
     localStorage.setItem('p_arecanut', arecanut);
     localStorage.setItem('p_coconut', coconut);
 
-    alert('വിലകളും ട്രെൻഡുകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
+    alert('വിലകൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
   } catch (err) {
     console.error("Error saving market rates: ", err);
     alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
   }
 }
-
-
 
   </script>
 
