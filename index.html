@@ -904,8 +904,10 @@
             <div class="card-actions">
               <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
               <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-              <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">📲 ഷെയർ</button>
-              ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
+              <button style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
+  <i class="fas fa-share-alt"></i> ഷെയർ
+
+               ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
               ${isAdmin ? `
                 <button onclick="openEditShop('${s.id}')" class="btn-admin-edit">എഡിറ്റ്</button>
                 <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
