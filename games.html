@@ -66,6 +66,7 @@
     <h2 style="margin: 0; font-size: 18px; color: #eab308;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
   </div>
 
+  <!-- പ്രധാന ഗെയിംസ് മെനു -->
   <div class="container" id="mainMenu">
     <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">ഒഴിവുസമയങ്ങളിൽ സുഹൃത്തുക്കൾക്കൊപ്പം ഒരേ ഫോണിൽ കളിക്കാൻ ലളിതമായ ഗെയിമുകൾ!</p>
     
@@ -78,13 +79,22 @@
       <button class="play-btn" onclick="openGame('tictactoe')">കളിക്കുക</button>
     </div>
 
+    <!-- കത്രിക-പേപ്പർ-കല്ല് ഗെയിം കാർഡ് -->
+    <div class="game-card">
+      <div>
+        <h3 style="margin: 0 0 5px 0; color: #f43f5e; font-size: 16px;">✂️ കത്രിക-പേപ്പർ-കല്ല് (RPS)</h3>
+        <p style="margin: 0; font-size: 12px; color: #94a3b8;">രണ്ടുപേർക്ക് രഹസ്യമായി കളിക്കാം</p>
+      </div>
+      <button class="play-btn" onclick="openGame('rps')">കളിക്കുക</button>
+    </div>
+
     <!-- ഏണിയും പാമ്പും ഗെയിം കാർഡ് -->
     <div class="game-card">
       <div>
         <h3 style="margin: 0 0 5px 0; color: #4ade80; font-size: 16px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
-        <p style="margin: 0; font-size: 12px; color: #94a3b8;">ഉടൻ ലഭ്യമാകുന്നതാണ്</p>
+        <p style="margin: 0; font-size: 12px; color: #94a3b8;">ഡൈസ് ഉരുട്ടി കളിക്കാം</p>
       </div>
-      <button class="play-btn" onclick="openGame('snakes')" style="background: #334155; color: #94a3b8; cursor: not-allowed;">വരുന്നു...</button>
+      <button class="play-btn" onclick="openGame('snakes')">കളിക്കുക</button>
     </div>
   </div>
 
@@ -93,32 +103,64 @@
     <button onclick="backToMenu()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; float: left;">← ഗെയിം ലിസ്റ്റിലേക്ക്</button>
     <div style="clear: both;"></div>
     
-    <div id="gameContainer" style="background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; display: inline-block;">
-      <!-- Tic-Tac-Toe UI -->
-      <div id="tttSection">
-        <p id="tttStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 15px; font-weight: bold;">കളിക്കാരൻ X-ന്റെ ടേൺ</p>
-        <div style="display: grid; grid-template-columns: repeat(3, 80px); gap: 8px; justify-content: center; margin-bottom: 15px;">
-          <button onclick="makeTTTMove(0)" id="t-0" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(1)" id="t-1" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(2)" id="t-2" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(3)" id="t-3" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(4)" id="t-4" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(5)" id="t-5" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(6)" id="t-6" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(7)" id="t-7" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-          <button onclick="makeTTTMove(8)" id="t-8" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 8px; cursor: pointer;"></button>
-        </div>
-        <button onclick="resetTTTGame()" style="background: #eab308; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">പുതിയ കളി (Reset)</button>
-      </div>
+    <div id="gameContainer" style="background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; display: inline-block; width: 100%; box-sizing: border-box;">
+      <!-- ഡൈനാമിക് ഗെയിം കണ്ടന്റ് ഇവിടെ ലോഡ് ആകും -->
     </div>
   </div>
 
+  <!-- ജാവാസ്ക്രിപ്റ്റ് ലോജിക് -->
   <script>
     function openGame(type) {
+      document.getElementById('mainMenu').style.display = 'none';
+      document.getElementById('gameArea').style.display = 'block';
+      
+      const container = document.getElementById('gameContainer');
+      
       if(type === 'tictactoe') {
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('gameArea').style.display = 'block';
+        container.innerHTML = `
+          <div id="tttSection" style="text-align: center;">
+            <p id="tttStatus" style="font-size: 16px; color: #38bdf8; margin-bottom: 15px; font-weight: bold;">കളിക്കാരൻ X-ന്റെ ടേൺ</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 90px); gap: 8px; justify-content: center; margin-bottom: 20px;">
+              <button onclick="makeTTTMove(0)" id="t-0" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(1)" id="t-1" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(2)" id="t-2" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(3)" id="t-3" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(4)" id="t-4" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(5)" id="t-5" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(6)" id="t-6" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(7)" id="t-7" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+              <button onclick="makeTTTMove(8)" id="t-8" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+            </div>
+            <button onclick="resetTTTGame()" style="background: #eab308; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">പുതിയ കളി (Reset)</button>
+          </div>
+        `;
         resetTTTGame();
+      } 
+      else if(type === 'rps') {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 10px;">
+            <h3 style="color: #f43f5e; margin-bottom: 10px;">✂️ കത്രിക-പേപ്പർ-കല്ല്</h3>
+            <p id="rpsStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 20px;">കളിക്കാരൻ 1 നീക്കം തിരഞ്ഞെടുക്കുക</p>
+            <div id="rpsButtons" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+              <button onclick="playRPS('കല്ല്')" style="background: #1e293b; color: #fff; border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 10px; font-size: 16px; cursor: pointer;">🪨 കല്ല്</button>
+              <button onclick="playRPS('പേപ്പർ')" style="background: #1e293b; color: #fff; border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 10px; font-size: 16px; cursor: pointer;">📄 പേപ്പർ</button>
+              <button onclick="playRPS('കത്രിക')" style="background: #1e293b; color: #fff; border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 10px; font-size: 16px; cursor: pointer;">✂️ കത്രിക</button>
+            </div>
+            <button onclick="resetRPS()" style="background: #eab308; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; display: none;" id="rpsResetBtn">വീണ്ടും കളിക്കുക</button>
+          </div>
+        `;
+      }
+      else if(type === 'snakes') {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 15px;">
+            <h3 style="color: #4ade80; margin-bottom: 15px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
+            <p id="snakeStatus" style="font-size: 16px; color: #eab308; margin-bottom: 15px;">കളിക്കാരൻ 1-ന്റെ പൊസിഷൻ: 1</p>
+            <div style="font-size: 48px; margin: 20px;" id="diceBox">🎲</div>
+            <button onclick="rollDice()" style="background: #4ade80; color: #0f172a; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px;">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="resetSnakes()" style="background: #334155; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; margin-top: 15px; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">റീസെറ്റ്</button>
+          </div>
+        `;
+        resetSnakes();
       }
     }
 
@@ -174,6 +216,66 @@
         let b = document.getElementById(`t-${i}`);
         if(b) { b.innerText = ''; b.style.color = '#fff'; }
       }
+    }
+
+    // Rock, Paper, Scissors Logic
+    let rpsPlayer1 = '';
+    function playRPS(choice) {
+      if(!rpsPlayer1) {
+        rpsPlayer1 = choice;
+        document.getElementById('rpsStatus').innerText = `കളിക്കാരൻ 1 തിരഞ്ഞെടുത്തു! ഇനി കളിക്കാരൻ 2 ഫോൺ എടുക്കുക.`;
+      } else {
+        let player2 = choice;
+        let result = '';
+        if(rpsPlayer1 === player2) {
+          result = `🤝 സമനില! (രണ്ടുപേരും ${rpsPlayer1} എടുത്തു)`;
+        } else if(
+          (rpsPlayer1 === 'കല്ല്' && player2 === 'കത്രിക') ||
+          (rpsPlayer1 === 'പേപ്പർ' && player2 === 'കല്ല്') ||
+          (rpsPlayer1 === 'കത്രിക' && player2 === 'പേപ്പർ')
+        ) {
+          result = `🎉 കളിക്കാരൻ 1 വിജയിച്ചു! (${rpsPlayer1} > ${player2})`;
+        } else {
+          result = `🎉 കളിക്കാരൻ 2 വിജയിച്ചു! (${player2} > ${rpsPlayer1})`;
+        }
+        document.getElementById('rpsStatus').innerText = result;
+        document.getElementById('rpsButtons').style.display = 'none';
+        document.getElementById('rpsResetBtn').style.display = 'inline-block';
+      }
+    }
+
+    function resetRPS() {
+      rpsPlayer1 = '';
+      document.getElementById('rpsStatus').innerText = `കളിക്കാരൻ 1 നീക്കം തിരഞ്ഞെടുക്കുക`;
+      document.getElementById('rpsButtons').style.display = 'flex';
+      document.getElementById('rpsResetBtn').style.display = 'none';
+    }
+
+    // Snakes and Ladders Dice Logic
+    let playerPos = 1;
+    function rollDice() {
+      let dice = Math.floor(Math.random() * 6) + 1;
+      let diceIcons = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+      document.getElementById('diceBox').innerText = diceIcons[dice - 1];
+      
+      playerPos += dice;
+      if(playerPos === 4) { playerPos = 14; alert('എണി കയറി! 🪜 (4 ൽ നിന്ന് 14 ലേക്ക്)'); }
+      if(playerPos === 9) { playerPos = 31; alert('ഭയങ്കര എണി! 🪜 (9 ൽ നിന്ന് 31 ലേക്ക്)'); }
+      if(playerPos === 17) { playerPos = 7; alert('പാമ്പ് കടിച്ചു! 🐍 (17 ൽ നിന്ന് 7 ലേക്ക്)'); }
+      
+      if(playerPos >= 30) {
+        playerPos = 30;
+        document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ വിജയിച്ചു!`;
+        alert('കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
+      } else {
+        document.getElementById('snakeStatus').innerText = `കളിക്കാരന്റെ പൊസിഷൻ: ${playerPos} (വീണ ഡൈസ്: ${dice})`;
+      }
+    }
+
+    function resetSnakes() {
+      playerPos = 1;
+      document.getElementById('snakeStatus').innerText = `കളിക്കാരന്റെ പൊസിഷൻ: 1`;
+      document.getElementById('diceBox').innerText = '🎲';
     }
   </script>
 </body>
