@@ -143,8 +143,14 @@
 
     @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
     
-    .sticky-header { flex-shrink: 0; background: var(--bg-app); border-bottom: 1.5px solid var(--border-color); z-index: 40; position: sticky; top: 0; }
-    
+        .sticky-header { 
+      flex-shrink: 0; 
+      background: var(--bg-app); 
+      border-bottom: 1.5px solid var(--border-color); 
+      z-index: 40; 
+      position: relative; 
+    }
+
     /* Hero Banner Redesign */
     .hero-banner { 
       position: relative; 
