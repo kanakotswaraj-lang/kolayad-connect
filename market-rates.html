@@ -4,6 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>വിപണി വിലനിലവാരം - കോളയാട് കണക്ട്</title>
+
+  <!-- Firebase SDK ഇമ്പോർട്ട് ചെയ്യുന്നു -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      doc,
+      setDoc,
+      getDoc 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
+      authDomain: "kolayad-connect.firebaseapp.com",
+      projectId: "kolayad-connect",
+      storageBucket: "kolayad-connect.firebasestorage.app",
+      messagingSenderId: "400179608074",
+      appId: "1:400179608074:web:b6f5c269d60662efcdfdf3",
+      measurementId: "G-EYK4SLBXBB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.doc = doc;
+    window.setDoc = setDoc;
+    window.getDoc = getDoc;
+  </script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', sans-serif; }
@@ -290,7 +320,7 @@
           <!-- സ്വർണ്ണം -->
           <div class="edit-row"><span>സ്വർണ്ണം:</span></div>
           <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="editGold" class="admin-input" placeholder="വില" style="margin-bottom:0;">
+            <input type="text" id="adminGold" class="admin-input" placeholder="വില" style="margin-bottom:0;">
             <select id="trendGold" class="admin-select" style="margin-bottom:0; width:110px;">
               <option value="up">▲ കൂടി</option>
               <option value="down">▼ കുറഞ്ഞു</option>
@@ -301,7 +331,7 @@
           <!-- വെള്ളി -->
           <div class="edit-row"><span>വെള്ളി:</span></div>
           <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="editSilver" class="admin-input" placeholder="വില" style="margin-bottom:0;">
+            <input type="text" id="adminSilver" class="admin-input" placeholder="വില" style="margin-bottom:0;">
             <select id="trendSilver" class="admin-select" style="margin-bottom:0; width:110px;">
               <option value="up">▲ കൂടി</option>
               <option value="down">▼ കുറഞ്ഞു</option>
@@ -312,7 +342,7 @@
           <!-- റബർ -->
           <div class="edit-row"><span>റബർ:</span></div>
           <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="editRubber" class="admin-input" placeholder="വില" style="margin-bottom:0;">
+            <input type="text" id="adminRubber" class="admin-input" placeholder="വില" style="margin-bottom:0;">
             <select id="trendRubber" class="admin-select" style="margin-bottom:0; width:110px;">
               <option value="up">▲ കൂടി</option>
               <option value="down">▼ കുറഞ്ഞു</option>
@@ -323,7 +353,7 @@
           <!-- കുരുമുളക് -->
           <div class="edit-row"><span>കുരുമുളക്:</span></div>
           <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="editPepper" class="admin-input" placeholder="വില" style="margin-bottom:0;">
+            <input type="text" id="adminPepper" class="admin-input" placeholder="വില" style="margin-bottom:0;">
             <select id="trendPepper" class="admin-select" style="margin-bottom:0; width:110px;">
               <option value="up">▲ കൂടി</option>
               <option value="down">▼ കുറഞ്ഞു</option>
@@ -334,7 +364,7 @@
           <!-- അടയ്ക്ക -->
           <div class="edit-row"><span>അടയ്ക്ക:</span></div>
           <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="editArecanut" class="admin-input" placeholder="വില" style="margin-bottom:0;">
+            <input type="text" id="adminArecanut" class="admin-input" placeholder="വില" style="margin-bottom:0;">
             <select id="trendArecanut" class="admin-select" style="margin-bottom:0; width:110px;">
               <option value="up">▲ കൂടി</option>
               <option value="down">▼ കുറഞ്ഞു</option>
@@ -345,7 +375,7 @@
           <!-- തേങ്ങ -->
           <div class="edit-row"><span>തേങ്ങ:</span></div>
           <div style="display:flex; gap:6px; margin-bottom:12px;">
-            <input type="text" id="editCoconut" class="admin-input" placeholder="വില" style="margin-bottom:0;">
+            <input type="text" id="adminCoconut" class="admin-input" placeholder="വില" style="margin-bottom:0;">
             <select id="trendCoconut" class="admin-select" style="margin-bottom:0; width:110px;">
               <option value="up">▲ കൂടി</option>
               <option value="down">▼ കുറഞ്ഞു</option>
@@ -354,90 +384,49 @@
           </div>
 
           <button class="btn-action" style="width: 100%; margin-bottom: 15px;" onclick="updatePrices()">വിലകളും ട്രെൻഡും അപ്ഡേറ്റ് ചെയ്യുക</button>
-        
-                           <!-- പുതിയ സാധനം ചേർക്കുന്ന മോഡേൺ സെക്ഷൻ -->
-        <div style="background: var(--bg-card); padding: 18px; border-radius: 16px; border: 1.5px solid var(--border-color); margin-top: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-          <div style="font-size: 15px; font-weight: 800; color: #facc15; margin-bottom: 16px; display: flex; align-items: center; gap: 6px;">
-            <span>➕</span> പുതിയ സാധനം ചേർക്കുക
-          </div>
-
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 12px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 6px;">ഐക്കൺ ഇമോജി (ഉദാ: 🟡)</label>
-            <input type="text" id="newItemEmoji" placeholder="🟡" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 14px; outline: none;">
-          </div>
-
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 12px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 6px;">സാധനത്തിന്റെ പേര് (ഉദാ: മഞ്ഞൾ)</label>
-            <input type="text" id="newItemName" placeholder="മഞ്ഞൾ" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 14px; outline: none;">
-          </div>
-
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 12px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 6px;">അളവ് (ഉദാ: കിലോഗ്രാമിന്)</label>
-            <input type="text" id="newItemUnit" placeholder="കിലോഗ്രാമിന്" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 14px; outline: none;">
-          </div>
-
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 12px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 6px;">വില (ഉദാ: ₹ 300)</label>
-            <input type="text" id="newItemPrice" placeholder="₹ 300" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 14px; outline: none;">
-          </div>
-
-          <div style="margin-bottom: 16px;">
-            <label style="font-size: 12px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 6px;">ട്രെൻഡ്</label>
-            <select id="newItemTrend" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 14px; outline: none;">
-              <option value="▲ കൂടി" style="background: #16244f; color: #ffffff;">▲ കൂടി</option>
-              <option value="▼ കുറഞ്ഞു" style="background: #16244f; color: #ffffff;">▼ കുറഞ്ഞു</option>
-              <option value="■ മാറ്റമില്ല" style="background: #16244f; color: #ffffff;">■ മാറ്റമില്ല</option>
-            </select>
-          </div>
-
-          <button onclick="addNewMarketItem()" style="width: 100%; margin-top: 4px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; padding: 14px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); font-size: 14px;">പുതിയ സാധനം ചേർക്കുക</button>
         </div>
-    
-   
-
       </div>
-
     </div>
   </div>
 
   <script>
     const adminSecretPassword = "admin123";
 
+    // ഫയർസ്റ്റോറിൽ നിന്ന് ഡാറ്റ ലോഡ് ചെയ്യുന്ന ഫങ്ഷൻ
+    async function loadMarketRates() {
+      try {
+        if (!window.db) {
+          setTimeout(loadMarketRates, 200);
+          return;
+        }
+        const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
+        if (rateDoc.exists()) {
+          let data = rateDoc.data();
+          
+          // UI-ൽ വിലകൾ സെറ്റ് ചെയ്യുന്നു
+          if(data.gold) { document.getElementById('p-gold').innerText = "₹ " + data.gold; if(document.getElementById('adminGold')) document.getElementById('adminGold').value = data.gold; }
+          if(data.silver) { document.getElementById('p-silver').innerText = "₹ " + data.silver; if(document.getElementById('adminSilver')) document.getElementById('adminSilver').value = data.silver; }
+          if(data.rubber) { document.getElementById('p-rubber').innerText = "₹ " + data.rubber; if(document.getElementById('adminRubber')) document.getElementById('adminRubber').value = data.rubber; }
+          if(data.pepper) { document.getElementById('p-pepper').innerText = "₹ " + data.pepper; if(document.getElementById('adminPepper')) document.getElementById('adminPepper').value = data.pepper; }
+          if(data.arecanut) { document.getElementById('p-arecanut').innerText = "₹ " + data.arecanut; if(document.getElementById('adminArecanut')) document.getElementById('adminArecanut').value = data.arecanut; }
+          if(data.coconut) { document.getElementById('p-coconut').innerText = "₹ " + data.coconut; if(document.getElementById('adminCoconut')) document.getElementById('adminCoconut').value = data.coconut; }
+
+          // ലോക്കൽ സ്റ്റോറേജും സിങ്ക് ചെയ്യുന്നു
+          if(data.gold) localStorage.setItem('p_gold', data.gold);
+          if(data.silver) localStorage.setItem('p_silver', data.silver);
+          if(data.rubber) localStorage.setItem('p_rubber', data.rubber);
+          if(data.pepper) localStorage.setItem('p_pepper', data.pepper);
+          if(data.arecanut) localStorage.setItem('p_arecanut', data.arecanut);
+          if(data.coconut) localStorage.setItem('p_coconut', data.coconut);
+        }
+      } catch (err) {
+        console.error("Error loading market rates: ", err);
+      }
+    }
+
     window.onload = function() {
-      loadSavedData('gold');
-      loadSavedData('silver');
-      loadSavedData('rubber');
-      loadSavedData('pepper');
-      loadSavedData('arecanut');
-      loadSavedData('coconut');
-
-      loadExtraItems();
+      loadMarketRates();
     };
-
-    function loadSavedData(item) {
-      if(localStorage.getItem('p_' + item)) {
-        document.getElementById('p-' + item).innerText = localStorage.getItem('p_' + item);
-      }
-      if(localStorage.getItem('t_' + item)) {
-        setTrendDisplay(item, localStorage.getItem('t_' + item));
-      }
-    }
-
-    function setTrendDisplay(item, trendVal) {
-      const el = document.getElementById('t-' + item);
-      if(!el) return;
-      el.className = 'trend-tag';
-      if(trendVal === 'up') {
-        el.classList.add('trend-up');
-        el.innerText = '▲ കൂടി';
-      } else if(trendVal === 'down') {
-        el.classList.add('trend-down');
-        el.innerText = '▼ കുറഞ്ഞു';
-      } else {
-        el.classList.add('trend-stable');
-        el.innerText = '■ മാറ്റമില്ല';
-      }
-    }
 
     function toggleAdminLogin() {
       const panel = document.getElementById('adminPanel');
@@ -445,28 +434,7 @@
         panel.style.display = 'none';
       } else {
         panel.style.display = 'block';
-        fillInputValues('gold');
-        fillInputValues('silver');
-        fillInputValues('rubber');
-        fillInputValues('pepper');
-        fillInputValues('arecanut');
-        fillInputValues('coconut');
-        renderExtraItemsAdmin();
       }
-    }
-
-    function fillInputValues(item) {
-      const el = document.getElementById('edit' + capitalize(item));
-      const pEl = document.getElementById('p-' + item);
-      if(el && pEl) el.value = pEl.innerText;
-      if(localStorage.getItem('t_' + item)) {
-        const tEl = document.getElementById('trend' + capitalize(item));
-        if(tEl) tEl.value = localStorage.getItem('t_' + item);
-      }
-    }
-
-    function capitalize(s) {
-      return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
     function verifyAdminLogin() {
@@ -474,312 +442,49 @@
       if(enteredPass === adminSecretPassword) {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('manageSection').style.display = 'block';
-        renderExtraItemsAdmin();
         alert('വിജയകരമായി ലോഗിൻ ചെയ്തു!');
       } else {
         alert('നൽകിയ പാസ്‌വേർഡ് തെറ്റാണ്!');
       }
     }
 
-    function logoutAdmin() {
-      document.getElementById('adminPass').value = '';
-      document.getElementById('loginSection').style.display = 'block';
-      document.getElementById('manageSection').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'none';
-    }
+    // ഫയർസ്റ്റോറിലേക്ക് വിലകൾ സേവ് ചെയ്യുന്ന പ്രധാന ഫങ്ഷൻ
+    async function updatePrices() {
+      let gold = document.getElementById('adminGold').value.replace(/₹/g, '').trim();
+      let silver = document.getElementById('adminSilver').value.replace(/₹/g, '').trim();
+      let rubber = document.getElementById('adminRubber').value.replace(/₹/g, '').trim();
+      let pepper = document.getElementById('adminPepper').value.replace(/₹/g, '').trim();
+      let arecanut = document.getElementById('adminArecanut').value.replace(/₹/g, '').trim();
+      let coconut = document.getElementById('adminCoconut').value.replace(/₹/g, '').trim();
 
-    function updatePrices() {
-      saveAndUpdate('gold');
-      saveAndUpdate('silver');
-      saveAndUpdate('rubber');
-      saveAndUpdate('pepper');
-      saveAndUpdate('arecanut');
-      saveAndUpdate('coconut');
+      try {
+        // ഫയർസ്റ്റോറിലേക്ക് ഡാറ്റ സേവ് ചെയ്യുന്നു
+        await window.setDoc(window.doc(window.db, "settings", "market_rates"), {
+          gold: gold,
+          silver: silver,
+          rubber: rubber,
+          pepper: pepper,
+          arecanut: arecanut,
+          coconut: coconut,
+          updatedAt: new Date().toISOString()
+        });
 
-      // അധികമായി ചേർത്തവയുടെ അപ്ഡേറ്റ് സേവ് ചെയ്യാൻ
-      saveAllExtraItemsFromAdmin();
+        // ലോക്കൽ സ്റ്റോറേജിലും അപ്ഡേറ്റ് ചെയ്യുന്നു
+        localStorage.setItem('p_gold', gold);
+        localStorage.setItem('p_silver', silver);
+        localStorage.setItem('p_rubber', rubber);
+        localStorage.setItem('p_pepper', pepper);
+        localStorage.setItem('p_arecanut', arecanut);
+        localStorage.setItem('p_coconut', coconut);
 
-      alert('വിലകളും ട്രെൻഡുകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
-      toggleAdminLogin();
-      location.reload();
-    }
-
-    function saveAndUpdate(item) {
-      const priceInput = document.getElementById('edit' + capitalize(item));
-      const trendSelect = document.getElementById('trend' + capitalize(item));
-      if(!priceInput || !trendSelect) return;
-
-      const priceVal = priceInput.value;
-      const trendVal = trendSelect.value;
-
-      document.getElementById('p-' + item).innerText = priceVal;
-      setTrendDisplay(item, trendVal);
-
-      localStorage.setItem('p_' + item, priceVal);
-      localStorage.setItem('t_' + item, trendVal);
-    }
-
-    // പുതിയ സാധനങ്ങൾ മാനേജ് ചെയ്യാൻ
-    function getExtrasArray() {
-      let extras = localStorage.getItem('extras_array');
-      return extras ? JSON.parse(extras) : [];
-    }
-
-    function loadExtraItems() {
-      let extras = getExtrasArray();
-      let container = document.getElementById('marketListContainer');
-      extras.forEach(item => {
-        let cardHtml = createCardHtml(item);
-        container.insertAdjacentHTML('beforeend', cardHtml);
-      });
-    }
-
-    function createCardHtml(item) {
-      let trendClass = 'trend-stable';
-      let trendText = '■ മാറ്റമില്ല';
-      if(item.trend === 'up') { trendClass = 'trend-up'; trendText = '▲ കൂടി'; }
-      else if(item.trend === 'down') { trendClass = 'trend-down'; trendText = '▼ കുറഞ്ഞു'; }
-
-      return `
-        <div class="price-card" id="card-${item.id}">
-          <div class="item-info">
-            <div class="item-icon">${item.emoji}</div>
-            <div>
-              <div class="item-name">${item.name}</div>
-              <div class="item-sub">${item.sub}</div>
-            </div>
-          </div>
-          <div class="price-box">
-            <div class="item-price" id="p-${item.id}">${item.price}</div>
-            <div class="trend-tag ${trendClass}" id="t-${item.id}">${trendText}</div>
-          </div>
-        </div>
-      `;
-    }
-
-    function addNewItem() {
-      let id = document.getElementById('newId').value.trim().toLowerCase();
-      let emoji = document.getElementById('newEmoji').value.trim() || '📦';
-      let name = document.getElementById('newName').value.trim();
-      let sub = document.getElementById('newSub').value.trim();
-      let price = document.getElementById('newPrice').value.trim();
-      let trend = document.getElementById('newTrend').value;
-
-      if(!id || !name || !price) {
-        alert('ദയവായി ഐഡിയും പേരും വിലയും നൽകുക!');
-        return;
-      }
-
-      let extras = getExtrasArray();
-      extras.push({ id, emoji, name, sub, price, trend });
-      localStorage.setItem('extras_array', JSON.stringify(extras));
-
-      alert('പുതിയ സാധനം വിജയകരമായി ചേർത്തു!');
-      location.reload();
-    }
-    function addNewMarketItem() {
-  const emoji = document.getElementById('newItemEmoji').value.trim();
-  const name = document.getElementById('newItemName').value.trim();
-  const unit = document.getElementById('newItemUnit').value.trim();
-  const price = document.getElementById('newItemPrice').value.trim();
-  const trend = document.getElementById('newItemTrend').value;
-
-  if (!name || !price) {
-    alert('ദയവായി സാധനത്തിന്റെ പേരും വിലയും നൽകുക!');
-    return;
-  }
-
-  // കീ നാമം ഇംഗ്ലീഷിലേക്ക് മാറ്റുന്നു (localStorage-ൽ സേവ് ചെയ്യാൻ)
-  const uniqueKey = name.toLowerCase().replace(/\s+/g, '_');
-
-  // localStorage-ൽ വിലയും മറ്റ് വിവരങ്ങളും സേവ് ചെയ്യുന്നു
-  localStorage.setItem(uniqueKey, price);
-  localStorage.setItem('p_' + uniqueKey, price);
-  localStorage.setItem(uniqueKey + '_unit', unit);
-  localStorage.setItem(uniqueKey + '_emoji', emoji);
-  localStorage.setItem(uniqueKey + '_trend', trend);
-
-  // സേവ് ചെയ്ത ലിസ്റ്റിലേക്ക് പുതിയ കീ കൂടി ചേർക്കുന്നു
-  let customItems = JSON.parse(localStorage.getItem('custom_market_items') || '[]');
-  if (!customItems.includes(uniqueKey)) {
-    customItems.push(uniqueKey);
-    localStorage.setItem('custom_market_items', JSON.stringify(customItems));
-  }
-
-  alert('പുതിയ സാധനം വിജയകരമായി ചേർത്തു!');
-  location.reload(); // പേജ് റിഫ്രഷ് ചെയ്ത് മാറ്റങ്ങൾ വരുത്താൻ
-}
-
-
-    function renderExtraItemsAdmin() {
-      let extras = getExtrasArray();
-      let adminSec = document.getElementById('extraItemsAdminSection');
-      if(!extras.length) {
-        adminSec.innerHTML = '';
-        return;
-      }
-
-      let html = '<p style="font-size: 11px; color: #f59e0b; margin-bottom: 6px; font-weight:700;">✏️ പുതിയ സാധനങ്ങൾ മാറ്റാൻ / നീക്കം ചെയ്യാൻ:</p>';
-      extras.forEach((item, index) => {
-        html += `
-          <div style="background: rgba(15, 23, 42, 0.6); padding: 8px; border-radius: 8px; margin-bottom: 6px; border: 1px solid #334155;">
-            <div style="font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 4px;">${item.emoji} ${item.name} (${item.sub})</div>
-            <div style="display: flex; gap: 6px; margin-bottom: 4px;">
-              <input type="text" id="extra_p_${index}" class="admin-input" value="${item.price}" style="margin-bottom:0;" placeholder="വില">
-              <select id="extra_t_${index}" class="admin-select" style="margin-bottom:0; width:110px;">
-                <option value="up" ${item.trend==='up'?'selected':''}>▲ കൂടി</option>
-                <option value="down" ${item.trend==='down'?'selected':''}>▼ കുറഞ്ഞു</option>
-                <option value="stable" ${item.trend==='stable'?'selected':''}>■ മാറ്റമില്ല</option>
-              </select>
-            </div>
-            <button class="btn-delete" onclick="deleteExtraItem(${index})">ഇത് നീക്കം ചെയ്യുക (Delete)</button>
-          </div>
-        `;
-      });
-      adminSec.innerHTML = html;
-    }
-
-    function saveAllExtraItemsFromAdmin() {
-      let extras = getExtrasArray();
-      extras.forEach((item, index) => {
-        let pInput = document.getElementById('extra_p_' + index);
-        let tSelect = document.getElementById('extra_t_' + index);
-        if(pInput && tSelect) {
-          item.price = pInput.value;
-          item.trend = tSelect.value;
-        }
-      });
-      localStorage.setItem('extras_array', JSON.stringify(extras));
-    }
-
-    function deleteExtraItem(index) {
-      if(confirm('ഈ സാധനം ലിസ്റ്റിൽ നിന്നും ഒഴിവാക്കണമെന്നുറപ്പാണോ?')) {
-        let extras = getExtrasArray();
-        extras.splice(index, 1);
-        localStorage.setItem('extras_array', JSON.stringify(extras));
-        alert('വിജയകരമായി നീക്കം ചെയ്തു!');
+        alert('വിലകളും ട്രെൻഡുകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
+        toggleAdminLogin();
         location.reload();
+      } catch (err) {
+        console.error("Error saving market rates: ", err);
+        alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
       }
     }
-    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ലിസ്റ്റിലേക്ക് വരുത്താൻ
-// പേജ് ലോഡ് ചെയ്യുമ്പോൾ കസ്റ്റം ഐറ്റങ്ങൾ ഒറിജിനൽ ഡിസൈൻ സ്റ്റൈലിൽ വരുത്താൻ
-window.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('marketListContainer');
-  let customItems = JSON.parse(localStorage.getItem('custom_market_items') || '[]');
-  
-  customItems.forEach(key => {
-    const name = key.replace(/_/g, ' ');
-    let price = localStorage.getItem(key) || '';
-    price = price.replace(/₹/g, '').trim(); // ഇരട്ട ചിഹ്നം ഒഴിവാക്കാൻ
-    
-    const unit = localStorage.getItem(key + '_unit') || '';
-    const emoji = localStorage.getItem(key + '_emoji') || '📦';
-    const trend = localStorage.getItem(key + '_trend') || '▲ കൂടി';
-
-    // ട്രെൻഡിനനുസരിച്ചുള്ള കളർ സെറ്റ് ചെയ്യാൻ
-    let trendBg = 'rgba(16, 185, 129, 0.15)'; // ഡിഫോൾട്ട് പച്ച (കൂടി)
-    let trendColor = '#34d399';
-    if(trend.includes('കുറഞ്ഞു')) {
-      trendBg = 'rgba(239, 68, 68, 0.15)';
-      trendColor = '#f87171';
-    } else if(trend.includes('മാറ്റം')) {
-      trendBg = 'rgba(255, 255, 255, 0.08)';
-      trendColor = '#cbd5e1';
-    }
-
-    if(container) {
-      const cardDiv = document.createElement('div');
-      cardDiv.className = 'price-card';
-      cardDiv.innerHTML = `
-        <div class="item-info">
-          <div class="item-icon">${emoji}</div>
-          <div>
-            <div class="item-name">${name}</div>
-            <div class="item-sub">${unit}</div>
-          </div>
-        </div>
-        <div class="price-box" style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-          <span style="font-size: 16px; font-weight: 800; color: #38bdf8;">₹ ${price}</span>
-          <span style="font-size: 11px; font-weight: bold; color: ${trendColor}; background: ${trendBg}; padding: 3px 10px; border-radius: 6px; display: inline-block;">${trend}</span>
-        </div>
-      `;
-      container.appendChild(cardDiv);
-    }
-  });
-});
-
-
-// 1. പേജ് ലോഡ് ചെയ്യുമ്പോൾ ഫയർസ്റ്റോറിൽ നിന്ന് ഏറ്റവും പുതിയ വിലകൾ എടുക്കാൻ
-async function loadMarketRates() {
-  try {
-    const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
-    if (rateDoc.exists()) {
-      let data = rateDoc.data();
-      
-      // ഇൻപുട്ട് ഫീൽഡുകളിൽ വിലകൾ സെറ്റ് ചെയ്യുന്നു
-      if(document.getElementById('adminGold')) document.getElementById('adminGold').value = data.gold || '';
-      if(document.getElementById('adminSilver')) document.getElementById('adminSilver').value = data.silver || '';
-      if(document.getElementById('adminRubber')) document.getElementById('adminRubber').value = data.rubber || '';
-      if(document.getElementById('adminPepper')) document.getElementById('adminPepper').value = data.pepper || '';
-      if(document.getElementById('adminArecanut')) document.getElementById('adminArecanut').value = data.arecanut || '';
-      if(document.getElementById('adminCoconut')) document.getElementById('adminCoconut').value = data.coconut || '';
-      
-      // ലോക്കൽ സ്റ്റോറേജും അപ്ഡേറ്റ് ചെയ്യുന്നു
-      if(data.gold) localStorage.setItem('p_gold', data.gold);
-      if(data.silver) localStorage.setItem('p_silver', data.silver);
-      if(data.rubber) localStorage.setItem('p_rubber', data.rubber);
-      if(data.pepper) localStorage.setItem('p_pepper', data.pepper);
-      if(data.arecanut) localStorage.setItem('p_arecanut', data.arecanut);
-      if(data.coconut) localStorage.setItem('p_coconut', data.coconut);
-    }
-  } catch (err) {
-    console.error("Error loading market rates: ", err);
-  }
-}
-
-// പേജ് ഓപ്പൺ ആകുമ്പോൾ ഈ ലോഡിംഗ് ഫങ്ഷൻ പ്രവർത്തിക്കും
-window.addEventListener('DOMContentLoaded', () => {
-  loadMarketRates();
-});
-
-// 2. അഡ്മിൻ വില മാറ്റി സേവ് ചെയ്യുമ്പോൾ ഫയർസ്റ്റോറിലേക്ക് അയക്കാൻ
-
-async function saveMarketRates() {
-  let gold = document.getElementById('adminGold').value;
-  let silver = document.getElementById('adminSilver').value;
-  let rubber = document.getElementById('adminRubber').value;
-  let pepper = document.getElementById('adminPepper').value;
-  let arecanut = document.getElementById('adminArecanut').value;
-  let coconut = document.getElementById('adminCoconut').value;
-
-  try {
-    // ഫയർസ്റ്റോറിലേക്ക് കൃത്യമായ കീ നെയിമുകളിൽ ഡാറ്റ സേവ് ചെയ്യുന്നു
-    await window.setDoc(window.doc(window.db, "settings", "market_rates"), {
-      gold: gold,
-      silver: silver,
-      rubber: rubber,
-      pepper: pepper,
-      arecanut: arecanut,
-      coconut: coconut,
-      updatedAt: new Date().toISOString()
-    });
-
-    // ലോക്കൽ സ്റ്റോറേജിലും സേവ് ചെയ്യുന്നു
-    localStorage.setItem('p_gold', gold);
-    localStorage.setItem('p_silver', silver);
-    localStorage.setItem('p_rubber', rubber);
-    localStorage.setItem('p_pepper', pepper);
-    localStorage.setItem('p_arecanut', arecanut);
-    localStorage.setItem('p_coconut', coconut);
-
-    alert('വിലകൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്ത് സേവ് ചെയ്തു!');
-  } catch (err) {
-    console.error("Error saving market rates: ", err);
-    alert('സേവ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-  }
-}
-
   </script>
-
 </body>
 </html>
