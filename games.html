@@ -151,24 +151,25 @@
         `;
         resetRPS();
       }
-      else if(type === 'snakes') {
+            else if(type === 'snakes') {
         container.innerHTML = `
           <div style="text-align: center; padding: 10px;">
-            <h3 style="color: #4ade80; margin-bottom: 10px;">🐍 ഏണിയും പാമ്പും ബോർഡ്</h3>
-            <p id="snakeStatus" style="font-size: 14px; color: #eab308; margin-bottom: 10px;">കളിക്കാരൻ 1: ബോക്സ് 1</p>
+            <h3 style="color: #4ade80; margin-bottom: 5px;">🐍 ഏണിയും പാമ്പും (2-Player)</h3>
+            <p id="snakeStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 10px; font-weight: bold;">കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: 1 | P2: 1)</p>
             
+            <!-- 30 ബോക്സുകളുള്ള ബോർഡ് ഗ്രീഡ് -->
             <div id="boardGrid" style="display: grid; grid-template-columns: repeat(6, 45px); gap: 4px; justify-content: center; margin-bottom: 15px; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
               <!-- ബോർഡ് ബോക്സുകൾ -->
             </div>
 
             <div style="font-size: 36px; margin: 10px;" id="diceBox">🎲</div>
-            <button onclick="rollSnakeDice()" style="background: #4ade80; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">ഡൈസ് ഉരുട്ടുക</button>
-            <button onclick="resetSnakeBoard()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; margin-top: 10px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; font-size: 12px;">പുതിയ കളി</button>
+            <button onclick="rollMultiSnakeDice()" style="background: #4ade80; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="resetMultiSnakeBoard()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; margin-top: 10px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; font-size: 12px;">പുതിയ കളി</button>
           </div>
         `;
-        initSnakeBoard();
+        initMultiSnakeBoard();
       }
-    }
+
 
     function backToMenu() {
       document.getElementById('gameArea').style.display = 'none';
@@ -258,65 +259,96 @@
     }
 
     // Snakes and Ladders Board Logic
-    let snakePlayerPos = 1;
+        // Two-Player Snakes and Ladders Logic
+    let p1Pos = 1;
+    let p2Pos = 1;
+    let currentTurn = 1; // 1 എന്നാൽ കളിക്കാരൻ 1, 2 എന്നാൽ കളിക്കാരൻ 2
 
-    function initSnakeBoard() {
-      snakePlayerPos = 1;
-      document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1: ബോക്സ് 1`;
+    function initMultiSnakeBoard() {
+      p1Pos = 1;
+      p2Pos = 1;
+      currentTurn = 1;
+      document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: 1 | P2: 1)`;
       document.getElementById('diceBox').innerText = '🎲';
-      renderBoard();
+      renderMultiBoard();
     }
 
-    function renderBoard() {
+    function renderMultiBoard() {
       let gridHtml = '';
       for (let i = 30; i >= 1; i--) {
-        let isPlayerHere = (i === snakePlayerPos);
-        let bg = isPlayerHere ? '#eab308' : '#1e293b';
-        let fg = isPlayerHere ? '#0f172a' : '#fff';
+        let isP1Here = (i === p1Pos);
+        let isP2Here = (i === p2Pos);
+        
+        let bg = '#1e293b';
+        let badge = '';
+        if (isP1Here && isP2Here) {
+          bg = '#a855f7'; // രണ്ടുപേരും ഒരേ കള്ളിയിൽ വന്നാൽ പർപ്പിൾ നിറം
+          badge = 'P1&P2';
+        } else if (isP1Here) {
+          bg = '#38bdf8'; // കളിക്കാരൻ 1 നീല നിറം
+          badge = 'P1';
+        } else if (isP2Here) {
+          bg = '#f43f5e'; // കളിക്കാരൻ 2 ചുവപ്പ് നിറം
+          badge = 'P2';
+        }
+
+        let fg = (isP1Here || isP2Here) ? '#0f172a' : '#fff';
         let extraText = '';
         if(i === 4) extraText = '🪜(എണി)';
         if(i === 14) extraText = '⭐(ടോപ്പ്)';
         if(i === 17) extraText = '🐍(പാമ്പ്)';
         if(i === 7) extraText = '🔻';
 
-        gridHtml += `<div id="sq-${i}" style="width: 45px; height: 45px; background: ${bg}; color: ${fg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; border-radius: 4px; border: 1px solid #475569;">
-          <span>${i}</span>
-          <span style="font-size: 8px;">${extraText}</span>
+        gridHtml += `<div style="width: 45px; height: 45px; background: ${bg}; color: ${fg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; border-radius: 4px; border: 1px solid #475569;">
+          <span>${badge ? badge + ' (' + i + ')' : i}</span>
+          <span style="font-size: 7px;">${extraText}</span>
         </div>`;
       }
       document.getElementById('boardGrid').innerHTML = gridHtml;
     }
 
-    function rollSnakeDice() {
+    function rollMultiSnakeDice() {
       let dice = Math.floor(Math.random() * 6) + 1;
       let diceIcons = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
       document.getElementById('diceBox').innerText = diceIcons[dice - 1];
       
-      snakePlayerPos += dice;
-      
-      if(snakePlayerPos === 4) { 
-        snakePlayerPos = 14; 
-        alert('ഹേയ്! എണി കയറി 4 ൽ നിന്ന് 14 ലേക്ക് എത്തി! 🪜'); 
-      } else if(snakePlayerPos === 17) { 
-        snakePlayerPos = 7; 
-        alert('അയ്യോ! പാമ്പ് കടിച്ചു 17 ൽ നിന്ന് 7 ലേക്ക് വീണു! 🐍'); 
+      if (currentTurn === 1) {
+        p1Pos += dice;
+        if(p1Pos === 4) { p1Pos = 14; alert('കളിക്കാരൻ 1: എണി കയറി 4 ൽ നിന്ന് 14 ലേക്ക് എത്തി! 🪜'); }
+        else if(p1Pos === 17) { p1Pos = 7; alert('കളിക്കാരൻ 1: പാമ്പ് കടിച്ചു 17 ൽ നിന്ന് 7 ലേക്ക് വീണു! 🐍'); }
+
+        if(p1Pos >= 30) {
+          p1Pos = 30;
+          renderMultiBoard();
+          document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! കളിക്കാരൻ 1 വിജയിച്ചു!`;
+          alert('കളിക്കാരൻ 1 കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
+          return;
+        }
+        currentTurn = 2; // അടുത്തത് കളിക്കാരൻ 2-ന്റെ ടേൺ
+        document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 2-ന്റെ ടേൺ (P1: ${p1Pos} | P2: ${p2Pos})`;
+      } else {
+        p2Pos += dice;
+        if(p2Pos === 4) { p2Pos = 14; alert('കളിക്കാരൻ 2: എണി കയറി 4 ൽ നിന്ന് 14 ലേക്ക് എത്തി! 🪜'); }
+        else if(p2Pos === 17) { p2Pos = 7; alert('കളിക്കാരൻ 2: പാമ്പ് കടിച്ചു 17 ൽ നിന്ന് 7 ലേക്ക് വീണു! 🐍'); }
+
+        if(p2Pos >= 30) {
+          p2Pos = 30;
+          renderMultiBoard();
+          document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! കളിക്കാരൻ 2 വിജയിച്ചു!`;
+          alert('കളിക്കാരൻ 2 കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
+          return;
+        }
+        currentTurn = 1; // അടുത്തത് കളിക്കാരൻ 1-ന്റെ ടേൺ
+        document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: ${p1Pos} | P2: ${p2Pos})`;
       }
-      
-      if(snakePlayerPos >= 30) {
-        snakePlayerPos = 30;
-        renderBoard();
-        document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ വിജയിച്ചു!`;
-        alert('കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
-        return;
-      }
-      
-      renderBoard();
-      document.getElementById('snakeStatus').innerText = `പോസിഷൻ: ${snakePlayerPos} (വീണ ഡൈസ്: ${dice})`;
+
+      renderMultiBoard();
     }
 
-    function resetSnakeBoard() {
-      initSnakeBoard();
+    function resetMultiSnakeBoard() {
+      initMultiSnakeBoard();
     }
+
   </script>
 </body>
 </html>
