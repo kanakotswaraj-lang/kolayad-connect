@@ -241,6 +241,14 @@
         <p style="font-size: 11px; color: #94a3b8;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
       </div>
     </div>
+    <!-- അഡ്മിൻ പാനൽ ഫീഡ്‌ബാക്ക് സെക്ഷൻ -->
+<div class="admin-card" style="margin-top: 20px; background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 18px; padding: 16px;">
+  <h3 style="color: #f59e0b; font-size: 16px; margin-bottom: 12px; font-weight: 800;">💬 ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
+  <div id="adminFeedbacksList" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
+    <p style="color: #94a3b8; font-size: 12px; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+  </div>
+</div>
+
 
     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #334155;">
       <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer; font-size: 12px;">
@@ -653,40 +661,75 @@
       }
     }
     
-    async function loadAdminFeedbacks() {
-      try {
-        if (!window.db) {
-          setTimeout(loadAdminFeedbacks, 200);
-          return;
-        }
-        const querySnapshot = await window.getDocs(window.collection(window.db, "feedbacks"));
-        const container = document.getElementById('adminFeedbackList');
-        if (querySnapshot.empty) {
-          container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">ഫീഡ്‌ബാക്കുകൾ ഒന്നും ലഭ്യമല്ല.</p>`;
-          return;
-        }
+    <!-- അഡ്മിൻ പാനൽ ഫീഡ്‌ബാക്ക് സെക്ഷൻ -->
+<div class="admin-card" style="margin-top: 20px; background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 18px; padding: 16px;">
+  <h3 style="color: #f59e0b; font-size: 16px; margin-bottom: 12px; font-weight: 800;">💬 ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
+  <div id="adminFeedbacksList" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
+    <p style="color: #94a3b8; font-size: 12px; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+  </div>
+</div>
+
+<script>
+  // അഡ്മിൻ പേജിൽ ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യാനും ഡിലീറ്റ് ചെയ്യാനുമുള്ള ജാവാസ്ക്രിപ്റ്റ് ഫങ്ഷനുകൾ
+  async function loadAdminFeedbacks() {
+    const container = document.getElementById('adminFeedbacksList');
+    if (!container) return;
+
+    try {
+      const querySnapshot = await window.getDocs(window.collection(window.db, "feedbacks"));
+      if (querySnapshot.empty) {
+        container.innerHTML = `<p style="color: #94a3b8; font-size: 12px; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ഒന്നും ലഭ്യമല്ല.</p>`;
+        return;
+      }
+
+      let html = '';
+      querySnapshot.forEach((docSnap) => {
+        const fb = docSnap.data();
+        const fbId = docSnap.id;
+        const stars = '⭐'.repeat(Number(fb.rating) || 5);
         
-        let html = '';
-        querySnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
-          let stars = '⭐'.repeat(Number(data.rating) || 5);
-          let dateStr = data.createdAt ? new Date(data.createdAt).toLocaleString() : '';
-          html += `
-            <div style="background: #1e293b; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
-              <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 11px; color: #f1f5f9;">
-                <span>👤 ${data.name || 'അജ്ഞാതൻ'}</span>
-                <span>${stars}</span>
-              </div>
-              <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">💬 ${data.comment || ''}</p>
-              <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 4px;">📅 ${dateStr}</span>
+        html += `
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <strong style="color: #ffffff; font-size: 13px;">${fb.name || 'അജ്ഞാതൻ'}</strong>
+              <span style="font-size: 11px; color: #facc15;">${stars}</span>
             </div>
-          `;
-        });
-        container.innerHTML = html;
+            <p style="color: #cbd5e1; font-size: 12.5px; line-height: 1.4; word-break: break-word;">${fb.comment || ''}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <span style="font-size: 10px; color: #64748b;">${fb.createdAt ? new Date(fb.createdAt).toLocaleDateString() : ''}</span>
+              <button onclick="deleteFeedback('${fbId}')" style="background: #dc2626; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">ഡിലീറ്റ്</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    } catch (err) {
+      console.error("Error loading feedbacks:", err);
+      container.innerHTML = `<p style="color: #ef4444; font-size: 12px; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നതിൽ പിഴവ്.</p>`;
+    }
+  }
+
+  async function deleteFeedback(id) {
+    if (confirm('ഈ ഫീഡ്‌ബാക്ക് ഡിലീറ്റ് ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
+      try {
+        await window.deleteDoc(window.doc(window.db, "feedbacks", id));
+        alert('ഫീഡ്‌ബാക്ക് വിജയകരമായി നീക്കം ചെയ്തു!');
+        loadAdminFeedbacks();
       } catch (err) {
-        console.error("Error loading feedbacks:", err);
+        console.error("Error deleting feedback:", err);
+        alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
       }
     }
+  }
+
+  // അഡ്മിൻ പേജ് ലോഡ് ചെയ്യുമ്പോൾ ഫീഡ്‌ബാക്കുകളും വിളിക്കുക
+  window.addEventListener('DOMContentLoaded', () => {
+    if (typeof loadAdminFeedbacks === 'function') {
+      setTimeout(loadAdminFeedbacks, 500);
+    }
+  });
+
+    
   </script>
 </body>
 </html>
