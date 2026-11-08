@@ -128,7 +128,7 @@
       </div>
     </div>
 
-    <!-- സെക്ഷൻ 2: പ്രധാന അറിയിപ്പുകളും പുഷ് നോറ്റിഫിക്കേഷനും & എഡിറ്റ് ഫീച്ചർ -->
+    <!-- സെക്ഷൻ 2 -->
     <div class="admin-section">
       <div class="section-header" onclick="toggleSection('sec2')">
         <span>📢 പ്രധാന അറിയിപ്പുകൾ & എഡിറ്റ് സൗകര്യം</span>
@@ -163,7 +163,7 @@
       </div>
     </div>
 
-    <!-- സെക്ഷൻ 3: സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ് & സേർച്ച് -->
+    <!-- സെക്ഷൻ 3 -->
     <div class="admin-section">
       <div class="section-header" onclick="toggleSection('sec3')">
         <span>✏️ സ്ഥാപനങ്ങളുടെ ഫോട്ടോ മാനേജ്മെന്റ്</span>
@@ -210,7 +210,7 @@
       </div>
     </div>
 
-    <!-- സെക്ഷൻ 5: കാറ്റഗറികൾ മാനേജ് ചെയ്യുക & ഇമോജി ഫീൽഡ് -->
+    <!-- സെക്ഷൻ 5 -->
     <div class="admin-section">
       <div class="section-header" onclick="toggleSection('sec5')">
         <span>📂 കാറ്റഗറികൾ മാനേജ് ചെയ്യുക</span>
@@ -228,27 +228,24 @@
         <div style="margin-top: 12px; border-top: 1px solid #1e293b; padding-top: 8px;">
           <label style="margin-bottom: 6px;">🗑️ നിലവിലുള്ള കാറ്റഗറികൾ:</label>
           <div id="adminCategoriesListContainer" style="max-height: 120px; overflow-y: auto;">
-            <p style="font-size: 11px; color: #94a3b8;">ലോഡ് ചെയ്യുന്നു...</p>
+            <p style="font-size: 11px; color: #94a3b8;">കാറ്റഗറികൾ ലോഡ് ചെയ്യുന്നു...</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ഫീഡ്‌ബാക്കുകൾ -->
-    <div style="background: #131c31; border: 1px solid #334155; border-radius: 14px; padding: 14px; margin-top: 12px; margin-bottom: 12px;">
-      <h3 style="font-size: 14px; font-weight: 800; color: #f59e0b; margin-bottom: 10px;">⭐ ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
-      <div id="adminFeedbackList" style="display: flex; flex-direction: column; gap: 10px;">
-        <p style="font-size: 11px; color: #94a3b8;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+    <!-- ഫീഡ്‌ബാക്ക് സെക്ഷൻ -->
+    <div class="admin-section">
+      <div class="section-header" onclick="toggleSection('secFeedback')">
+        <span>💬 ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</span>
+        <span>▼</span>
+      </div>
+      <div id="secFeedback" class="section-content">
+        <div id="adminFeedbacksList" style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto;">
+          <p style="font-size: 11px; color: #94a3b8; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
       </div>
     </div>
-    <!-- അഡ്മിൻ പാനൽ ഫീഡ്‌ബാക്ക് സെക്ഷൻ -->
-<div class="admin-card" style="margin-top: 20px; background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 18px; padding: 16px;">
-  <h3 style="color: #f59e0b; font-size: 16px; margin-bottom: 12px; font-weight: 800;">💬 ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
-  <div id="adminFeedbacksList" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
-    <p style="color: #94a3b8; font-size: 12px; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
-  </div>
-</div>
-
 
     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #334155;">
       <button onclick="adminLogout()" style="background: #ef4444; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer; font-size: 12px;">
@@ -262,415 +259,406 @@
 
 </div>
 
-  <script>
-    let allShopsData = [];
-    let allNoticesCache = [];
-
-    function selectTheme(theme, btn) {
-      document.getElementById('noticeColorInput').value = theme;
-      document.querySelectorAll('.theme-btn').forEach(b => b.style.border = '1.5px solid transparent');
-      btn.style.border = '2px solid white';
-    }
-
-    function checkAdminLogin() {
-      const pass = document.getElementById('adminPassInput').value;
-      if (pass === "admin123") {
-        localStorage.setItem('kolayad_admin', 'true');
-        showPanel();
-      } else {
-        alert('പാസ്‌വേഡ് തെറ്റാണ്!');
-      }
-    }
-
-    function adminLogout() {
-      localStorage.removeItem('kolayad_admin');
-      document.getElementById('adminPanel').style.display = 'none';
-      document.getElementById('loginBox').style.display = 'block';
-    }
-
-    function showPanel() {
-      document.getElementById('loginBox').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
-      loadMembers();
-      loadAdminNotices();
-      loadShopDropdown();
-      loadAdminCategories();
-      loadAdminFeedbacks();
-    }
-
-    window.onload = function() {
-      if (localStorage.getItem('kolayad_admin') === 'true') {
-        showPanel();
-      }
-    };
-
-    function toggleSection(sectionId) {
-      const sec = document.getElementById(sectionId);
-      sec.style.display = (sec.style.display === 'block') ? 'none' : 'block';
-    }
-
-    async function compressImageToString(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          const img = new Image();
-          img.src = event.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 500; 
-            const scaleSize = MAX_WIDTH / img.width;
-            
-            if (scaleSize < 1) {
-              canvas.width = MAX_WIDTH;
-              canvas.height = img.height * scaleSize;
-            } else {
-              canvas.width = img.width;
-              canvas.height = img.height;
-            }
-
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL('image/jpeg', 0.6));
-          };
-          img.onerror = (err) => reject(err);
-        };
-        reader.onerror = (error) => reject(error);
-      });
-    }
-
-    async function loadShopDropdown(filterText = '') {
-      const select = document.getElementById('adminShopSelect');
-      try {
-        if (allShopsData.length === 0) {
-          const snap = await window.getDocs(window.collection(window.db, "shops"));
-          allShopsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        }
-        
-        let html = '<option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>';
-        const query = filterText.toLowerCase();
-        
-        allShopsData.forEach(s => {
-          const nameLoc = `${s.name || ''} (${s.loc || ''})`.toLowerCase();
-          if (!query || nameLoc.includes(query)) {
-            html += `<option value="${s.id}">${s.name} (${s.loc || ''})</option>`;
-          }
-        });
-        select.innerHTML = html;
-      } catch(e) { console.error(e); }
-    }
-
-    function filterShopDropdown() {
-      const query = document.getElementById('shopSearchBox').value;
-      loadShopDropdown(query);
-    }
-
-    function loadShopDetailsForEdit() {
-      const id = document.getElementById('adminShopSelect').value;
-      const formArea = document.getElementById('adminEditFormArea');
-      if (!id) {
-        formArea.style.display = 'none';
-        return;
-      }
-      const shop = allShopsData.find(x => x.id === id);
-      if (shop) {
-        document.getElementById('editDocId').value = shop.id;
-        document.getElementById('admEditName').value = shop.name || '';
-        document.getElementById('admMultiplePhotos').value = '';
-        document.getElementById('removePhoto1').checked = false;
-        document.getElementById('removePhoto2').checked = false;
-        document.getElementById('removePhoto3').checked = false;
-        document.getElementById('removePhoto4').checked = false;
-        formArea.style.display = 'block';
-      }
-    }
-
-    async function saveAdminPhotos() {
-      const id = document.getElementById('editDocId').value;
-      const name = document.getElementById('admEditName').value;
-      const photoFiles = document.getElementById('admMultiplePhotos').files;
-
-      const remove1 = document.getElementById('removePhoto1').checked;
-      const remove2 = document.getElementById('removePhoto2').checked;
-      const remove3 = document.getElementById('removePhoto3').checked;
-      const remove4 = document.getElementById('removePhoto4').checked;
-
-      try {
-        alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
-        const shop = allShopsData.find(x => x.id === id) || {};
-        let updateData = { name };
-
-        let compressedImages = [];
-        for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
-          let compressed = await compressImageToString(photoFiles[i]);
-          compressedImages.push(compressed);
-        }
-
-        if (remove1) {
-          updateData.imageUrl = "";
-        } else if (compressedImages.length > 0) {
-          updateData.imageUrl = compressedImages.shift();
-        } else {
-          updateData.imageUrl = shop.imageUrl || "";
-        }
-
-        if (remove2) {
-          updateData.imageUrl2 = "";
-        } else if (compressedImages.length > 0) {
-          updateData.imageUrl2 = compressedImages.shift();
-        } else {
-          updateData.imageUrl2 = shop.imageUrl2 || "";
-        }
-
-        if (remove3) {
-          updateData.imageUrl3 = "";
-        } else if (compressedImages.length > 0) {
-          updateData.imageUrl3 = compressedImages.shift();
-        } else {
-          updateData.imageUrl3 = shop.imageUrl3 || "";
-        }
-
-        if (remove4) {
-          updateData.imageUrl4 = "";
-        } else if (compressedImages.length > 0) {
-          updateData.imageUrl4 = compressedImages.shift();
-        } else {
-          updateData.imageUrl4 = shop.imageUrl4 || "";
-        }
-
-        await window.updateDoc(window.doc(window.db, "shops", id), updateData);
-        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        allShopsData = [];
-        loadShopDropdown();
-        document.getElementById('adminEditFormArea').style.display = 'none';
-      } catch(e) {
-        console.error(e);
-        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-      }
-    }
-
-    async function uploadAndSaveLogo() {
-      const file = document.getElementById('logoFileInput').files[0];
-      if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
-      try {
-        alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്തു സേവ് ചെയ്യുന്നു...');
-        const compressed = await compressImageToString(file);
-        await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: compressed });
-        alert('ലോഗോ അപ്ഡേറ്റ് ചെയ്തു!');
-      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
-    }
-
-    async function uploadAndSaveBanner() {
-      const file = document.getElementById('bannerFileInput').files[0];
-      if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
-      try {
-        alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്തു സേവ് ചെയ്യുന്നു...');
-        const compressed = await compressImageToString(file);
-        await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: compressed });
-        alert('ബാനർ അപ്ഡേറ്റ് ചെയ്തു!');
-      } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
-    }
-
-    async function postNotice() {
-      const editId = document.getElementById('editNoticeId').value;
-      const title = document.getElementById('noticeTitleInput').value.trim();
-      const desc = document.getElementById('noticeDescInput').value.trim();
-      const color = document.getElementById('noticeColorInput').value || 'blue'; 
-      const file = document.getElementById('noticeImageFile').files[0];
-
-      if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
-
-      try {
-        alert('പ്രോസസ്സ് ചെയ്യുന്നു...');
-        let imageUrl = "";
-        if (file) {
-          imageUrl = await compressImageToString(file);
-        }
-
-        if (editId) {
-          let updateData = { title, desc, color };
-          if (imageUrl) {
-            updateData.imageUrl = imageUrl;
-          }
-          await window.updateDoc(window.doc(window.db, "notices", editId), updateData);
-          alert('അറിയിപ്പ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-          cancelNoticeEdit();
-        } else {
-          await window.addDoc(window.collection(window.db, "notices"), { 
-            title, 
-            desc, 
-            color, 
-            imageUrl, 
-            date: new Date().toLocaleDateString('en-GB') 
-          });
-          alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
-          document.getElementById('noticeTitleInput').value = '';
-          document.getElementById('noticeDescInput').value = '';
-          document.getElementById('noticeImageFile').value = '';
-        }
-        loadAdminNotices();
-      } catch(e) {
-        console.error(e);
-        alert('നടപടിക്രമത്തിൽ പിഴവ് സംഭവിച്ചു.');
-      }
-    }
-
-    async function loadAdminNotices() {
-      const container = document.getElementById('adminNoticesListContainer');
-      try {
-        const snap = await window.getDocs(window.collection(window.db, "notices"));
-        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അറിയിപ്പുകൾ ഒന്നുമില്ല.</p>`; return; }
-        allNoticesCache = [];
-        let html = '';
-        snap.forEach(docSnap => {
-          const data = docSnap.data();
-          allNoticesCache.push({ id: docSnap.id, ...data });
-          html += `
-            <div class="member-card">
-              <div><strong>${data.title || ''}</strong></div>
-              <div style="display: flex; gap: 4px;">
-                <button onclick="editNotice('${docSnap.id}')" style="background: #38bdf8; color: #0f172a; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: bold;">എഡിറ്റ്</button>
-                <button onclick="deleteNotice('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
-              </div>
-            </div>
-          `;
-        });
-        container.innerHTML = html;
-      } catch(e) {}
-    }
-
-    function editNotice(id) {
-      const notice = allNoticesCache.find(n => n.id === id);
-      if (notice) {
-        document.getElementById('editNoticeId').value = notice.id;
-        document.getElementById('noticeTitleInput').value = notice.title || '';
-        document.getElementById('noticeDescInput').value = notice.desc || '';
-        document.getElementById('noticeSubmitBtn').innerText = 'മാറ്റങ്ങൾ സേവ് ചെയ്യുക (Update)';
-        document.getElementById('noticeSubmitBtn').style.background = '#38bdf8';
-        document.getElementById('noticeSubmitBtn').style.color = '#0f172a';
-        document.getElementById('noticeCancelEditBtn').style.display = 'block';
-        
-        document.getElementById('sec2').style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-
-    function cancelNoticeEdit() {
-      document.getElementById('editNoticeId').value = '';
-      document.getElementById('noticeTitleInput').value = '';
-      document.getElementById('noticeDescInput').value = '';
-      document.getElementById('noticeImageFile').value = '';
-      document.getElementById('noticeSubmitBtn').innerText = 'അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക';
-      document.getElementById('noticeSubmitBtn').style.background = '#10b981';
-      document.getElementById('noticeSubmitBtn').style.color = 'white';
-      document.getElementById('noticeCancelEditBtn').style.display = 'none';
-    }
-
-    async function deleteNotice(id) {
-      if(confirm('ഈ അറിയിപ്പ് നീക്കം ചെയ്യണോ?')) {
-        await window.deleteDoc(window.doc(window.db, "notices", id));
-        loadAdminNotices();
-      }
-    }
-
-    async function loadMembers() {
-      const container = document.getElementById('membersListContainer');
-      try {
-        const snap = await window.getDocs(window.collection(window.db, "shops"));
-        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">സ്ഥാപനങ്ങളൊന്നുമില്ല.</p>`; return; }
-        let html = '';
-        snap.forEach(docSnap => {
-          const data = docSnap.data();
-          const phone2Text = data.phone2 ? `<br><span style="color: #94a3b8;">📞 2: ${data.phone2}</span>` : '';
-          html += `
-            <div class="member-card">
-              <div><strong>${data.name || ''}</strong><br><span style="color: #94a3b8;">📞 1: ${data.phone || ''}</span>${phone2Text}</div>
-              <button onclick="deleteMember('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
-            </div>
-          `;
-        });
-        container.innerHTML = html;
-      } catch(e) {}
-    }
-
-    async function deleteMember(id) {
-      if(confirm('ഈ സ്ഥാപനം നീക്കം ചെയ്യണോ?')) {
-        await window.deleteDoc(window.doc(window.db, "shops", id));
-        loadMembers();
-        allShopsData = [];
-        loadShopDropdown();
-      }
-    }
-
-    async function addNewCategory() {
-      const catNameInput = document.getElementById('newCategoryInput');
-      const catEmojiInput = document.getElementById('newCategoryEmoji');
-      
-      if (!catNameInput) return;
-      const catName = catNameInput.value.trim();
-      const catEmoji = catEmojiInput ? catEmojiInput.value.trim() : '🏷️';
-      
-      if (!catName) {
-        alert('ദയവായി കാറ്റഗറിയുടെ പേര് നൽകുക.');
-        return;
-      }
-
-      try {
-        const docId = catName.replace(/[\/\#\$\.\[\]]/g, '_');
-
-        await window.setDoc(window.doc(window.db, "categories", docId), { 
-          name: catName, 
-          emoji: catEmoji || '🏷️',
-          createdAt: new Date().toISOString()
-        });
-        
-        alert('കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
-        catNameInput.value = '';
-        if (catEmojiInput) catEmojiInput.value = '';
-        
-        loadAdminCategories();
-      } catch(err) {
-        console.error("Error adding category: ", err);
-        alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-      }
-    }
-
-    async function loadAdminCategories() {
-      const container = document.getElementById('adminCategoriesListContainer');
-      try {
-        const snap = await window.getDocs(window.collection(window.db, "categories"));
-        if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">കാറ്റഗറികൾ ഒന്നുമില്ല.</p>`; return; }
-        let html = '';
-        snap.forEach(docSnap => {
-          const data = docSnap.data();
-          html += `
-            <div class="member-card">
-              <div><strong>${data.emoji || '🏷️'} ${data.name || docSnap.id}</strong></div>
-              <button onclick="deleteCategory('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
-            </div>
-          `;
-        });
-        container.innerHTML = html;
-      } catch(e) {}
-    }
-
-    async function deleteCategory(id) {
-      if(confirm('ഈ കാറ്റഗറി നീക്കം ചെയ്യണോ?')) {
-        await window.deleteDoc(window.doc(window.db, "categories", id));
-        loadAdminCategories();
-      }
-    }
-    
-    <!-- അഡ്മിൻ പാനൽ ഫീഡ്‌ബാക്ക് സെക്ഷൻ -->
-<div class="admin-card" style="margin-top: 20px; background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 18px; padding: 16px;">
-  <h3 style="color: #f59e0b; font-size: 16px; margin-bottom: 12px; font-weight: 800;">💬 ഉപയോക്താക്കളുടെ ഫീഡ്‌ബാക്കുകൾ</h3>
-  <div id="adminFeedbacksList" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
-    <p style="color: #94a3b8; font-size: 12px; text-align: center;">ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യുന്നു...</p>
-  </div>
-</div>
-
 <script>
-  // അഡ്മിൻ പേജിൽ ഫീഡ്‌ബാക്കുകൾ ലോഡ് ചെയ്യാനും ഡിലീറ്റ് ചെയ്യാനുമുള്ള ജാവാസ്ക്രിപ്റ്റ് ഫങ്ഷനുകൾ
+  let allShopsData = [];
+  let allNoticesCache = [];
+
+  function selectTheme(theme, btn) {
+    document.getElementById('noticeColorInput').value = theme;
+    document.querySelectorAll('.theme-btn').forEach(b => b.style.border = '1.5px solid transparent');
+    btn.style.border = '2px solid white';
+  }
+
+  function checkAdminLogin() {
+    const pass = document.getElementById('adminPassInput').value;
+    if (pass === "admin123") {
+      localStorage.setItem('kolayad_admin', 'true');
+      showPanel();
+    } else {
+      alert('പാസ്‌വേഡ് തെറ്റാണ്!');
+    }
+  }
+
+  function adminLogout() {
+    localStorage.removeItem('kolayad_admin');
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+  }
+
+  function showPanel() {
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    loadMembers();
+    loadAdminNotices();
+    loadShopDropdown();
+    loadAdminCategories();
+    loadAdminFeedbacks();
+  }
+
+  window.onload = function() {
+    if (localStorage.getItem('kolayad_admin') === 'true') {
+      showPanel();
+    }
+  };
+
+  function toggleSection(sectionId) {
+    const sec = document.getElementById(sectionId);
+    sec.style.display = (sec.style.display === 'block') ? 'none' : 'block';
+  }
+
+  async function compressImageToString(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 500; 
+          const scaleSize = MAX_WIDTH / img.width;
+          
+          if (scaleSize < 1) {
+            canvas.width = MAX_WIDTH;
+            canvas.height = img.height * scaleSize;
+          } else {
+            canvas.width = img.width;
+            canvas.height = img.height;
+          }
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.6));
+        };
+        img.onerror = (err) => reject(err);
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  async function loadShopDropdown(filterText = '') {
+    const select = document.getElementById('adminShopSelect');
+    try {
+      if (allShopsData.length === 0) {
+        const snap = await window.getDocs(window.collection(window.db, "shops"));
+        allShopsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      }
+      
+      let html = '<option value="">സ്ഥാപനം തിരഞ്ഞെടുക്കുക</option>';
+      const query = filterText.toLowerCase();
+      
+      allShopsData.forEach(s => {
+        const nameLoc = `${s.name || ''} (${s.loc || ''})`.toLowerCase();
+        if (!query || nameLoc.includes(query)) {
+          html += `<option value="${s.id}">${s.name} (${s.loc || ''})</option>`;
+        }
+      });
+      select.innerHTML = html;
+    } catch(e) { console.error(e); }
+  }
+
+  function filterShopDropdown() {
+    const query = document.getElementById('shopSearchBox').value;
+    loadShopDropdown(query);
+  }
+
+  function loadShopDetailsForEdit() {
+    const id = document.getElementById('adminShopSelect').value;
+    const formArea = document.getElementById('adminEditFormArea');
+    if (!id) {
+      formArea.style.display = 'none';
+      return;
+    }
+    const shop = allShopsData.find(x => x.id === id);
+    if (shop) {
+      document.getElementById('editDocId').value = shop.id;
+      document.getElementById('admEditName').value = shop.name || '';
+      document.getElementById('admMultiplePhotos').value = '';
+      document.getElementById('removePhoto1').checked = false;
+      document.getElementById('removePhoto2').checked = false;
+      document.getElementById('removePhoto3').checked = false;
+      document.getElementById('removePhoto4').checked = false;
+      formArea.style.display = 'block';
+    }
+  }
+
+  async function saveAdminPhotos() {
+    const id = document.getElementById('editDocId').value;
+    const name = document.getElementById('admEditName').value;
+    const photoFiles = document.getElementById('admMultiplePhotos').files;
+
+    const remove1 = document.getElementById('removePhoto1').checked;
+    const remove2 = document.getElementById('removePhoto2').checked;
+    const remove3 = document.getElementById('removePhoto3').checked;
+    const remove4 = document.getElementById('removePhoto4').checked;
+
+    try {
+      alert('ഫോട്ടോകൾ കംപ്രസ്സ് ചെയ്ത് അപ്ഡേറ്റ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
+      const shop = allShopsData.find(x => x.id === id) || {};
+      let updateData = { name };
+
+      let compressedImages = [];
+      for (let i = 0; i < Math.min(photoFiles.length, 4); i++) {
+        let compressed = await compressImageToString(photoFiles[i]);
+        compressedImages.push(compressed);
+      }
+
+      if (remove1) {
+        updateData.imageUrl = "";
+      } else if (compressedImages.length > 0) {
+        updateData.imageUrl = compressedImages.shift();
+      } else {
+        updateData.imageUrl = shop.imageUrl || "";
+      }
+
+      if (remove2) {
+        updateData.imageUrl2 = "";
+      } else if (compressedImages.length > 0) {
+        updateData.imageUrl2 = compressedImages.shift();
+      } else {
+        updateData.imageUrl2 = shop.imageUrl2 || "";
+      }
+
+      if (remove3) {
+        updateData.imageUrl3 = "";
+      } else if (compressedImages.length > 0) {
+        updateData.imageUrl3 = compressedImages.shift();
+      } else {
+        updateData.imageUrl3 = shop.imageUrl3 || "";
+      }
+
+      if (remove4) {
+        updateData.imageUrl4 = "";
+      } else if (compressedImages.length > 0) {
+        updateData.imageUrl4 = compressedImages.shift();
+      } else {
+        updateData.imageUrl4 = shop.imageUrl4 || "";
+      }
+
+      await window.updateDoc(window.doc(window.db, "shops", id), updateData);
+      alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ഫോട്ടോകളും വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+      allShopsData = [];
+      loadShopDropdown();
+      document.getElementById('adminEditFormArea').style.display = 'none';
+    } catch(e) {
+      console.error(e);
+      alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+    }
+  }
+
+  async function uploadAndSaveLogo() {
+    const file = document.getElementById('logoFileInput').files[0];
+    if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+    try {
+      alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്തു സേവ് ചെയ്യുന്നു...');
+      const compressed = await compressImageToString(file);
+      await window.setDoc(window.doc(window.db, "settings", "app_logo"), { url: compressed });
+      alert('ലോഗോ അപ്ഡേറ്റ് ചെയ്തു!');
+    } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
+  }
+
+  async function uploadAndSaveBanner() {
+    const file = document.getElementById('bannerFileInput').files[0];
+    if (!file) { alert('ഫോട്ടോ തിരഞ്ഞെടുക്കുക!'); return; }
+    try {
+      alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്തു സേവ് ചെയ്യുന്നു...');
+      const compressed = await compressImageToString(file);
+      await window.setDoc(window.doc(window.db, "settings", "hero_banner"), { url: compressed });
+      alert('ബാനർ അപ്ഡേറ്റ് ചെയ്തു!');
+    } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
+  }
+
+  async function postNotice() {
+    const editId = document.getElementById('editNoticeId').value;
+    const title = document.getElementById('noticeTitleInput').value.trim();
+    const desc = document.getElementById('noticeDescInput').value.trim();
+    const color = document.getElementById('noticeColorInput').value || 'blue'; 
+    const file = document.getElementById('noticeImageFile').files[0];
+
+    if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
+
+    try {
+      alert('പ്രോസസ്സ് ചെയ്യുന്നു...');
+      let imageUrl = "";
+      if (file) {
+        imageUrl = await compressImageToString(file);
+      }
+
+      if (editId) {
+        let updateData = { title, desc, color };
+        if (imageUrl) {
+          updateData.imageUrl = imageUrl;
+        }
+        await window.updateDoc(window.doc(window.db, "notices", editId), updateData);
+        alert('അറിയിപ്പ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+        cancelNoticeEdit();
+      } else {
+        await window.addDoc(window.collection(window.db, "notices"), { 
+          title, 
+          desc, 
+          color, 
+          imageUrl, 
+          date: new Date().toLocaleDateString('en-GB') 
+        });
+        alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
+        document.getElementById('noticeTitleInput').value = '';
+        document.getElementById('noticeDescInput').value = '';
+        document.getElementById('noticeImageFile').value = '';
+      }
+      loadAdminNotices();
+    } catch(e) {
+      console.error(e);
+      alert('നടപടിക്രമത്തിൽ പിഴവ് സംഭവിച്ചു.');
+    }
+  }
+
+  async function loadAdminNotices() {
+    const container = document.getElementById('adminNoticesListContainer');
+    try {
+      const snap = await window.getDocs(window.collection(window.db, "notices"));
+      if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">അറിയിപ്പുകൾ ഒന്നുമില്ല.</p>`; return; }
+      allNoticesCache = [];
+      let html = '';
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        allNoticesCache.push({ id: docSnap.id, ...data });
+        html += `
+          <div class="member-card">
+            <div><strong>${data.title || ''}</strong></div>
+            <div style="display: flex; gap: 4px;">
+              <button onclick="editNotice('${docSnap.id}')" style="background: #38bdf8; color: #0f172a; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: bold;">എഡിറ്റ്</button>
+              <button onclick="deleteNotice('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    } catch(e) {}
+  }
+
+  function editNotice(id) {
+    const notice = allNoticesCache.find(n => n.id === id);
+    if (notice) {
+      document.getElementById('editNoticeId').value = notice.id;
+      document.getElementById('noticeTitleInput').value = notice.title || '';
+      document.getElementById('noticeDescInput').value = notice.desc || '';
+      document.getElementById('noticeSubmitBtn').innerText = 'മാറ്റങ്ങൾ സേവ് ചെയ്യുക (Update)';
+      document.getElementById('noticeSubmitBtn').style.background = '#38bdf8';
+      document.getElementById('noticeSubmitBtn').style.color = '#0f172a';
+      document.getElementById('noticeCancelEditBtn').style.display = 'block';
+      
+      document.getElementById('sec2').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function cancelNoticeEdit() {
+    document.getElementById('editNoticeId').value = '';
+    document.getElementById('noticeTitleInput').value = '';
+    document.getElementById('noticeDescInput').value = '';
+    document.getElementById('noticeImageFile').value = '';
+    document.getElementById('noticeSubmitBtn').innerText = 'അറിയിപ്പ് പോസ്റ്റ് ചെയ്യുക';
+    document.getElementById('noticeSubmitBtn').style.background = '#10b981';
+    document.getElementById('noticeSubmitBtn').style.color = 'white';
+    document.getElementById('noticeCancelEditBtn').style.display = 'none';
+  }
+
+  async function deleteNotice(id) {
+    if(confirm('ഈ അറിയിപ്പ് നീക്കം ചെയ്യണോ?')) {
+      await window.deleteDoc(window.doc(window.db, "notices", id));
+      loadAdminNotices();
+    }
+  }
+
+  async function loadMembers() {
+    const container = document.getElementById('membersListContainer');
+    try {
+      const snap = await window.getDocs(window.collection(window.db, "shops"));
+      if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">സ്ഥാപനങ്ങളൊന്നുമില്ല.</p>`; return; }
+      let html = '';
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        const phone2Text = data.phone2 ? `<br><span style="color: #94a3b8;">📞 2: ${data.phone2}</span>` : '';
+        html += `
+          <div class="member-card">
+            <div><strong>${data.name || ''}</strong><br><span style="color: #94a3b8;">📞 1: ${data.phone || ''}</span>${phone2Text}</div>
+            <button onclick="deleteMember('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    } catch(e) {}
+  }
+
+  async function deleteMember(id) {
+    if(confirm('ഈ സ്ഥാപനം നീക്കം ചെയ്യണോ?')) {
+      await window.deleteDoc(window.doc(window.db, "shops", id));
+      loadMembers();
+      allShopsData = [];
+      loadShopDropdown();
+    }
+  }
+
+  async function addNewCategory() {
+    const catNameInput = document.getElementById('newCategoryInput');
+    const catEmojiInput = document.getElementById('newCategoryEmoji');
+    
+    if (!catNameInput) return;
+    const catName = catNameInput.value.trim();
+    const catEmoji = catEmojiInput ? catEmojiInput.value.trim() : '🏷️';
+    
+    if (!catName) {
+      alert('ദയവായി കാറ്റഗറിയുടെ പേര് നൽകുക.');
+      return;
+    }
+
+    try {
+      const docId = catName.replace(/[\/\#\$\.\[\]]/g, '_');
+
+      await window.setDoc(window.doc(window.db, "categories", docId), { 
+        name: catName, 
+        emoji: catEmoji || '🏷️',
+        createdAt: new Date().toISOString()
+      });
+      
+      alert('കാറ്റഗറി വിജയകരമായി ചേർത്തു!');
+      catNameInput.value = '';
+      if (catEmojiInput) catEmojiInput.value = '';
+      
+      loadAdminCategories();
+    } catch(err) {
+      console.error("Error adding category: ", err);
+      alert('കാറ്റഗറി ചേർക്കുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
+    }
+  }
+
+  async function loadAdminCategories() {
+    const container = document.getElementById('adminCategoriesListContainer');
+    try {
+      const snap = await window.getDocs(window.collection(window.db, "categories"));
+      if (snap.empty) { container.innerHTML = `<p style="font-size: 11px; color: #94a3b8;">കാറ്റഗറികൾ ഒന്നുമില്ല.</p>`; return; }
+      let html = '';
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        html += `
+          <div class="member-card">
+            <div><strong>${data.emoji || '🏷️'} ${data.name || docSnap.id}</strong></div>
+            <button onclick="deleteCategory('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer;">നീക്കം ചെയ്യുക</button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    } catch(e) {}
+  }
+
+  async function deleteCategory(id) {
+    if(confirm('ഈ കാറ്റഗറി നീക്കം ചെയ്യണോ?')) {
+      await window.deleteDoc(window.doc(window.db, "categories", id));
+      loadAdminCategories();
+    }
+  }
+
+  // ഫീഡ്‌ബാക്ക് ലോഡ് ചെയ്യാനും ഡിലീറ്റ് ചെയ്യാനുമുള്ള ഫങ്ഷനുകൾ
   async function loadAdminFeedbacks() {
     const container = document.getElementById('adminFeedbacksList');
     if (!container) return;
@@ -689,12 +677,12 @@
         const stars = '⭐'.repeat(Number(fb.rating) || 5);
         
         html += `
-          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid #334155; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong style="color: #ffffff; font-size: 13px;">${fb.name || 'അജ്ഞാതൻ'}</strong>
+              <strong style="color: #ffffff; font-size: 12.5px;">${fb.name || 'അജ്ഞാതൻ'}</strong>
               <span style="font-size: 11px; color: #facc15;">${stars}</span>
             </div>
-            <p style="color: #cbd5e1; font-size: 12.5px; line-height: 1.4; word-break: break-word;">${fb.comment || ''}</p>
+            <p style="color: #cbd5e1; font-size: 12px; line-height: 1.4; word-break: break-word;">${fb.comment || ''}</p>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
               <span style="font-size: 10px; color: #64748b;">${fb.createdAt ? new Date(fb.createdAt).toLocaleDateString() : ''}</span>
               <button onclick="deleteFeedback('${fbId}')" style="background: #dc2626; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">ഡിലീറ്റ്</button>
@@ -721,15 +709,6 @@
       }
     }
   }
-
-  // അഡ്മിൻ പേജ് ലോഡ് ചെയ്യുമ്പോൾ ഫീഡ്‌ബാക്കുകളും വിളിക്കുക
-  window.addEventListener('DOMContentLoaded', () => {
-    if (typeof loadAdminFeedbacks === 'function') {
-      setTimeout(loadAdminFeedbacks, 500);
-    }
-  });
-
-    
-  </script>
+</script>
 </body>
 </html>
