@@ -469,19 +469,32 @@
   }
 
   async function postNotice() {
+  
+  async function postNotice() {
     const editId = document.getElementById('editNoticeId').value;
     const title = document.getElementById('noticeTitleInput').value.trim();
     const desc = document.getElementById('noticeDescInput').value.trim();
     const color = document.getElementById('noticeColorInput').value || 'blue'; 
-    const file = document.getElementById('noticeImageFile').files[0];
+    const fileInput = document.getElementById('noticeImageFile');
+    const file = fileInput ? fileInput.files[0] : null;
 
-    if(!title || !desc) { alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); return; }
+    if(!title || !desc) { 
+      alert('തലക്കെട്ടും വിശദാംശങ്ങളും നൽകുക!'); 
+      return; 
+    }
 
     try {
       alert('പ്രോസസ്സ് ചെയ്യുന്നു...');
       let imageUrl = "";
+      
       if (file) {
-        imageUrl = await compressImageToString(file);
+        try {
+          imageUrl = await compressImageToString(file);
+        } catch (imgErr) {
+          console.error("Image compression error:", imgErr);
+          alert('ഫോട്ടോ കംപ്രസ്സ് ചെയ്യുന്നതിൽ പിഴവ്. ഫോട്ടോ ഇല്ലാതെ ശ്രമിക്കുകയോ മറ്റൊന്ന് തിരഞ്ഞെടുക്കുകയോ ചെയ്യുക.');
+          return;
+        }
       }
 
       if (editId) {
@@ -503,12 +516,12 @@
         alert('അറിയിപ്പ് വിജയകരമായി പോസ്റ്റ് ചെയ്തു!');
         document.getElementById('noticeTitleInput').value = '';
         document.getElementById('noticeDescInput').value = '';
-        document.getElementById('noticeImageFile').value = '';
+        if(fileInput) fileInput.value = '';
       }
       loadAdminNotices();
     } catch(e) {
-      console.error(e);
-      alert('നടപടിക്രമത്തിൽ പിഴവ് സംഭവിച്ചു.');
+      console.error("Notice post error details:", e);
+      alert('നടപടിക്രമത്തിൽ പിഴവ് സംഭവിച്ചു: ' + (e.message || e));
     }
   }
 
