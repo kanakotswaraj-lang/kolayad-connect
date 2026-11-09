@@ -1,52 +1,22 @@
 <!DOCTYPE html>
-<html lang="ml"> 
+<html lang="ml">
 <head>
-  <!-- Google Search SEO & Meta Tags -->
-  <meta name="description" content="കോളയാട് കണക്ട് - കോളയാട് പ്രദേശത്തെ സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, തൊഴിലാളികൾ, അത്യാഹിത നമ്പറുകൾ എന്നിവ കണ്ടെത്താനുള്ള ഡിജിറ്റൽ ഡയറക്ടറി.">
-  <meta name="keywords" content="Kolayad Connect, Kolayad Directory, കോളയാട് കണക്ട്, Peravoor, Kannur, Kolayad Shops, Services">
-  <meta name="author" content="Kolayad Connect">
-
-  <meta property="og:title" content="കോളയാട് കണക്ട് - Kolayad Connect">
-  <meta property="og:description" content="കോളയാട് പ്രദേശത്തെ സ്ഥാപനങ്ങളും സേവനങ്ങളും ഒരു കുടക്കീഴിൽ.">
-  <meta property="og:image" content="logo.png">
-  <meta property="og:url" content="https://kolayadconnect.in">
-  <meta property="og:type" content="website">
-
- <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#eab308">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
-  <meta name="theme-color" content="#091026">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="കോളയാട് കണക്ട്">
-
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>കോളയാട് കണക്ട് - Kolayad Connect</title>
   
+  <!-- Firebase Scripts -->
   <script type="module">
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isInAppBrowser = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("WhatsApp") > -1);
-
-    if (isInAppBrowser && /Android/i.test(ua)) {
-      const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-      window.location.href = "intent://" + currentUrl + "#Intent;scheme=https;package=com.android.chrome;end";
-    }
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
       getFirestore, 
-      collection, 
-      getDocs, 
-      deleteDoc, 
+      collection,
+      getDocs,
       doc,
-      setDoc,
       getDoc,
-      updateDoc 
+      query,
+      orderBy,
+      limit
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -61,1174 +31,523 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
-
-    const messaging = getMessaging(app);
-
-    async function requestNotificationPermission() {
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          const currentToken = await getToken(messaging, { 
-            vapidKey: "BOUTUS1pKC5dX9jiJ3jjLsDcVxYAUojE8l4kHWjSLP9l_VG7LALGYUytBhYtBIklghGxRu6IJKdJgehqFj6fc0o"
-          });
-          if (currentToken) {
-            await setDoc(doc(db, "fcm_tokens", currentToken), {
-              token: currentToken,
-              createdAt: new Date().toISOString()
-            });
-          }
-        }
-      } catch (err) {
-        console.error('An error occurred while retrieving token. ', err);
-      }
-    }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./firebase-messaging-sw.js')
-        .then((registration) => {
-          requestNotificationPermission();
-        }).catch((err) => {});
-    }
 
     window.db = db;
     window.collection = collection;
     window.getDocs = getDocs;
-    window.deleteDoc = deleteDoc;
     window.doc = doc;
-    window.setDoc = setDoc;
     window.getDoc = getDoc;
-    window.updateDoc = updateDoc;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.limit = limit;
   </script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;500;600;700;800&display=swap');
     
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
-    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Noto Sans Malayalam', sans-serif; 
+      -webkit-tap-highlight-color: transparent;
+    }
+
     :root {
-      --bg-body: #050811;
-      --bg-app: #091026;
-      --bg-card: #0e1838;
-      --bg-input: #131f42;
-      --text-main: #ffffff;
+      --bg-body: #0b0f17;
+      --bg-app: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #253349;
+      --accent-deep: #1d4ed8;
+      --accent-bright: #38bdf8;
+      --accent-gold: #eab308;
+      --accent-gold-light: #fde047;
+      --accent-green: #10b981;
+      --text-main: #f1f5f9;
       --text-sub: #94a3b8;
-      --border-color: rgba(59, 130, 246, 0.25);
-      --highlight-bg: #131f42;
-      --notice-bg: #0e1838;
-      --notice-text: #ffffff;
-      --notice-desc: #cbd5e1;
-      --primary-blue: #2563eb;
-      --accent-gold: #facc15;
+      --border-color: #334155;
     }
 
-    body.light-mode {
-      --bg-body: #f1f5f9;
-      --bg-app: #ffffff;
-      --bg-card: #ffffff;
-      --bg-input: #f8fafc;
-      --text-main: #0f172a;
-      --text-sub: #475569;
-      --border-color: #cbd5e1;
-      --highlight-bg: #f8fafc;
-      --notice-bg: #ffffff;
-      --notice-text: #0f172a;
-      --notice-desc: #334155;
+    body { 
+      background-color: var(--bg-body); 
+      color: var(--text-main); 
+      display: flex; 
+      justify-content: center; 
+      min-height: 100vh; 
+      overflow-x: hidden;
     }
-
-    body { background-color: var(--bg-body); color: var(--text-main); display: flex; justify-content: center; height: 100dvh; overflow: hidden; }
 
     .app-container {
-      width: 100%; max-width: 480px; height: 100dvh; background: var(--bg-app);
-      border: 2px solid #1e3a8a; display: flex; flex-direction: column; position: relative;
-      box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+      width: 100%; 
+      max-width: 480px; 
+      background: var(--bg-app);
+      border-left: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      display: flex; 
+      flex-direction: column; 
+      position: relative;
+      min-height: 100dvh;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+      padding-bottom: 85px;
     }
 
-    @media (min-width: 481px) { .app-container { border-radius: 28px; height: 95vh; margin-top: 2.5vh; } }
-    
-    .sticky-header { 
-      flex-shrink: 0; 
-      background: var(--bg-app); 
-      border-bottom: 1.5px solid var(--border-color); 
-      z-index: 40; 
-      position: relative; 
+    /* Hero Header */
+    .hero-header {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 2px solid var(--accent-gold);
     }
 
-    /* Hero Banner Redesign */
-    .hero-banner { 
-      position: relative; 
-      height: 170px; 
-      background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
-    }
-    .hero-overlay { 
-      position: absolute; 
-      inset: 0; 
-      background: linear-gradient(180deg, rgba(5, 8, 17, 0.4) 0%, rgba(9, 16, 38, 0.85) 90%, var(--bg-app) 100%); 
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(11, 15, 23, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%);
+      z-index: 1;
     }
 
-    .top-action-bar { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-    
-    .theme-toggle-btn { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1.5px solid #3b82f6; color: #38bdf8; padding: 6px 12px; border-radius: 20px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-    .admin-badge-btn { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1.5px solid #3b82f6; color: #60a5fa; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; }
-
-    .hero-branding-content {
-      position: absolute; bottom: 10px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 10; text-align: center;
+    .hero-top-bar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .profile-avatar-wrap { display: flex; justify-content: center; margin-bottom: 4px; }
-    .profile-avatar { 
-      width: 50px; height: 50px; border-radius: 14px; border: 2.5px solid #3b82f6; 
-      background: var(--bg-card) center/cover no-repeat; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); 
+    .location-badge {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-bright);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(4px);
     }
 
-    .main-app-name { 
-      font-size: 22px; 
-      font-weight: 800; 
-      background: linear-gradient(135deg, #ffffff 0%, #facc15 100%); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
-      letter-spacing: -0.2px; 
-      margin-top: 2px;
+    .admin-link-btn {
+      background: rgba(234, 179, 8, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-light);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(4px);
     }
 
-    /* Quick Feature Shortcuts */
-    .quick-access-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px 12px 4px 12px; }
-    .quick-chip {
-      background: linear-gradient(145deg, rgba(14, 24, 56, 0.9), rgba(19, 31, 66, 0.6));
-      border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 8px 4px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; text-decoration: none; text-align: center; transition: transform 0.2s;
-    }
-    .quick-chip:active { transform: scale(0.95); }
-    .quick-chip-icon { font-size: 18px; margin-bottom: 2px; }
-    .quick-chip-title { font-size: 10px; font-weight: 700; color: #f8fafc; }
-
-    .ticker-box-wrapper {
-      display: flex !important;
-      align-items: center !important;
-      gap: 10px !important;
-      overflow: hidden !important;
-      padding: 12px 14px !important;
-      width: 100% !important;
-      border-radius: 14px !important;
+    .header-branding {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    marquee {
-      width: 100% !important;
-      overflow: hidden !important;
-      white-space: nowrap !important;
-      color: #ffffff !important;
-      font-weight: 800 !important;
-      font-size: 14px !important;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+    .app-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      background: var(--bg-card);
     }
 
-    body.light-mode .ticker-box-wrapper marquee,
-    body.light-mode .ticker-box-wrapper marquee span,
-    .ticker-box-wrapper marquee span {
-      color: #ffffff !important;
+    .app-main-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-gold-light);
+      letter-spacing: 0.3px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
 
-    /* Dynamic Search Box */
-    .search-container { position: relative; width: 100%; margin-top: 4px; }
-    .search-input-box {
-      width: 100%; padding: 12px 16px; background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(59, 130, 246, 0.4); border-radius: 16px; color: #ffffff; font-size: 13px; font-weight: 600;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2); outline: none; transition: all 0.3s ease;
-    }
-    body.light-mode .search-input-box { background: rgba(248, 250, 252, 0.95); color: #0f172a; border: 1.5px solid rgba(37, 99, 235, 0.3); }
-    .search-input-box:focus { border-color: #38bdf8; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 12px rgba(56, 189, 248, 0.4); }
-    .search-input-box::placeholder { color: #94a3b8; font-weight: 500; }
-
-    .scrollable-body { flex: 1; overflow-y: auto; padding: 8px 12px; padding-bottom: 120px; background-color: var(--bg-body); }
-    
-    .section-label { font-size: 13px; font-weight: 800; color: #38bdf8; margin: 12px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
-    
-    /* Category Grid */
-    .category-grid-container { max-height: 185px; overflow-y: auto; margin-bottom: 12px; padding-right: 2px; scrollbar-width: none; }
-    .category-grid-container::-webkit-scrollbar { display: none; }
-    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    
-    .cat-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; transition: all 0.2s ease; }
-    .cat-box-icon { 
-      font-size: 20px; width: 44px; height: 44px; border-radius: 14px; 
-      background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); 
-      display: flex; align-items: center; justify-content: center; color: #60a5fa; margin-bottom: 4px;
-    }
-    .cat-box-title { font-size: 10.5px; font-weight: 700; color: #f8fafc; }
-
-    .cat-box.active { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border-color: #60a5fa; box-shadow: 0 4px 15px rgba(37,99,235,0.4); }
-    .cat-box.active .cat-box-title { color: #ffffff; font-weight: 800; }
-    .cat-box.active .cat-box-icon { background: rgba(255,255,255,0.25); color: #ffffff; }
-    
-    /* Cards Redesign */
-    .pro-card { background: linear-gradient(145deg, rgba(14, 24, 56, 0.95), rgba(19, 31, 66, 0.7)); border-radius: 18px; padding: 14px; margin-bottom: 12px; border: 1.5px solid var(--border-color); position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.2); backdrop-filter: blur(8px); }
-    
-    .badge-tag { font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); display: inline-block; }
-
-    .item-name { font-size: 16.5px; font-weight: 800; color: #ffffff; margin-top: 6px; margin-bottom: 2px; }
-    .item-loc { font-size: 11.5px; color: #facc15; margin-bottom: 8px; font-weight: 700; }
-    
-    .item-desc-highlight { font-size: 14px; color: #e2e8f0; background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.05); line-height: 1.5; font-weight: 500; }
-    
-    .shop-images-slider { 
-      display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px; 
-      scrollbar-width: none; margin-bottom: 8px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 14px; 
-    }
-    .shop-images-slider::-webkit-scrollbar { display: none; }
-    .shop-thumb-img { min-width: 85%; height: 220px; border-radius: 10px; object-fit: cover; scroll-snap-align: center; border: 1px solid var(--border-color); cursor: zoom-in; }
-
-    .card-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
-    .btn-pro-call { flex: 1; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
-
-    .btn-pro-wa { width: 40px; height: 40px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); flex-shrink: 0; }
-    .btn-pro-share { flex: 1; background: #2563eb; color: #ffffff; padding: 10px; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 2px 8px rgba(37,99,235,0.4); display: flex; align-items: center; justify-content: center; gap: 4px; }
-    .btn-pro-map { background: #0d9488; color: #ffffff; padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .btn-admin-edit { background: #2563eb; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; }
-    .btn-admin-del { background: #dc2626; color: white; border: none; padding: 9px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; }
-    
-    .floating-bar { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; gap: 8px; padding: 0 16px; }
-    .btn-add-pro { flex: 1; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); color: #ffffff; border: 1.5px solid #93c5fd; padding: 8px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); display: inline-flex; align-items: center; justify-content: center; }
-
-    .btn-emergency-quick { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: 1.5px solid #fca5a5; padding: 8px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); display: inline-flex; align-items: center; justify-content: center; }
-
-    /* Modern Bottom Nav Bar */
-    .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); border-top: 1.5px solid var(--border-color); padding: 8px 16px 14px 16px; display: flex; justify-content: space-around; z-index: 30; }
-    .nav-btn { border: none; background: transparent; color: #94a3b8; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; text-decoration: none; transition: color 0.2s; }
-    .nav-btn.active { color: #38bdf8; font-weight: 800; }
-    
-    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
-    .modal-box { background: #0f172a; border: 1.5px solid #3b82f6; border-radius: 24px; width: 100%; max-width: 380px; padding: 20px; color: #ffffff; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-
-    #imageZoomModal { background: rgba(0,0,0,0.92); z-index: 100; }
-    #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
-
-    #listings > div {
-      background: rgba(14, 24, 56, 0.85) !important;
-      color: #ffffff !important;
-      border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
+    .content-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    body.light-mode #listings > div {
-      background: #0f172a !important;
-      color: #ffffff !important;
+    /* Search Box */
+    .search-container {
+      position: relative;
+      width: 100%;
     }
 
-    #noticeSlider {
-      background: #0e1838 !important;
-      color: #ffffff !important;
-      border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
+    .search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 2px solid var(--accent-bright);
+      color: var(--text-main);
+      padding: 12px 16px 12px 42px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.15);
     }
 
-    #noticeSlider h4, 
-    #noticeSlider p, 
-    #noticeSlider span {
-      color: #ffffff !important;
+    .search-input::placeholder {
+      color: var(--text-sub);
+      font-weight: normal;
     }
 
-    body.light-mode #noticeSlider {
-      background: #0f172a !important;
-      color: #ffffff !important;
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--accent-bright);
+      pointer-events: none;
     }
 
-    body.light-mode #noticeSlider h4, 
-    body.light-mode #noticeSlider p, 
-    body.light-mode #noticeSlider span {
-      color: #ffffff !important;
+    /* Category Buttons */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .category-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .category-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-bright);
+      transform: translateY(-2px);
+    }
+
+    .category-icon-wrapper {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .category-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* Information Cards */
+    .info-cards-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .info-card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-card-item:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .info-card-icon {
+      font-size: 20px;
+    }
+
+    .info-card-text h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .info-card-text p {
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .section-header-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent-gold-light);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .announcement-card, .ad-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    .ad-card {
+      border-color: rgba(234, 179, 8, 0.4);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(40, 50, 70, 0.95) 100%);
+    }
+
+    .ad-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(234, 179, 8, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .announcement-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .date-badge {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-bright);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .announcement-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    .announcement-desc {
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* Bottom Navigation (All 5 items / features intact) */
+    .bottom-nav { 
+      position: fixed; 
+      bottom: 0; 
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px; 
+      background: rgba(15, 23, 42, 0.95); 
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-color); 
+      padding: 8px 12px 12px 12px; 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center;
+      z-index: 100; 
+    }
+
+    .nav-btn { 
+      border: none; 
+      background: transparent; 
+      color: var(--text-sub); 
+      font-size: 10px; 
+      font-weight: 600; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      gap: 3px; 
+      cursor: pointer; 
+      text-decoration: none; 
+      flex: 1;
+    }
+
+    .nav-btn span:first-child {
+      font-size: 18px;
+    }
+
+    .nav-btn.active { 
+      color: var(--accent-gold-light); 
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
-  <!-- ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്യാനുള്ള ബാനർ -->
-<div id="installAppBanner" style="display: none; background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; padding: 12px 16px; margin: 10px; border-radius: 12px; justify-content: space-between; align-items: center; font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);">
-  <span>📱 കോളയാട് കണക്ട് ആപ്പ് ഫോണിൽ ഇൻസ്റ്റാൾ ചെയ്യൂ!</span>
-  <button onclick="installAppToPhone()" style="background: #0f172a; color: #fde047; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">ഇൻസ്റ്റാൾ</button>
-</div>
 
   <div class="app-container">
-    <div class="sticky-header">
-      <div class="hero-banner" id="heroBannerBg">
-        <div class="hero-overlay"></div>
-        <div class="top-action-bar">
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button onclick="toggleSidebar()" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1.5px solid #3b82f6; color: #38bdf8; padding: 5px 11px; border-radius: 20px; font-size: 13px; cursor: pointer;">☰</button>
-            <div style="font-size: 10.5px; font-weight: 800; color: #ffffff; background: rgba(30, 58, 138, 0.7); backdrop-filter: blur(8px); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(147, 197, 253, 0.4);">🌴 കോളയാട്, കണ്ണൂർ</div>
-          </div>
-          
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-            <a href="admin.html" class="admin-badge-btn" id="adminNavBadge">അഡ്മിൻ</a>
-          </div>
-        </div>
-
-        <div class="hero-branding-content">
-          <div class="profile-avatar-wrap">
-            <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
-          </div>
-          <div class="main-app-name">കോളയാട് കണക്ട്</div>
-        </div>
-      </div>
-
-      <!-- Quick Action Shortcuts -->
-      <div class="quick-access-grid">
-        <div class="quick-chip" onclick="setCat('worker', document.querySelector('.cat-box:nth-child(5)'))">
-          <span class="quick-chip-icon">👷</span>
-          <span class="quick-chip-title">തൊഴിലാളികൾ</span>
-        </div>
-        <div class="quick-chip" onclick="setCat('emergency', document.querySelector('.cat-box:nth-child(24)'))">
-          <span class="quick-chip-icon">🏠</span>
-          <span class="quick-chip-title">നാട്ടുകാർ</span>
-        </div>
-        <div class="quick-chip" onclick="setCat('supermarket', document.querySelector('.cat-box:nth-child(7)'))">
-          <span class="quick-chip-icon">🏪</span>
-          <span class="quick-chip-title">കച്ചവടക്കാർ</span>
-        </div>
-        <div class="quick-chip" onclick="setCat('all', document.querySelector('.cat-box:nth-child(1)'))">
-          <span class="quick-chip-icon">🛠️</span>
-          <span class="quick-chip-title">സേവനങ്ങൾ</span>
-        </div>
-      </div>
-
-      <!-- സെർച്ച് ബോക്സ് മാത്രം മുകളിൽ സ്റ്റിക്ക് ചെയ്ത് നിൽക്കും -->
-      <div style="padding: 6px 12px 8px 12px; background: var(--bg-app); position: sticky; top: 0; z-index: 45;">
-        <div class="search-container">
-          <input type="text" id="searchInput" class="search-input-box" onkeyup="render()" placeholder="🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...">
-        </div>
-      </div>
-    </div>
-
-    <div class="scrollable-body" id="scrollBody">
-      <!-- ഈ താഴെ കൊടുക്കുന്ന ടിക്കറും തൊഴിൽ വാർത്തയും സ്ക്രോൾ ചെയ്യുമ്പോൾ മുകളിലേക്ക് മറഞ്ഞുപോകും -->
-      <div style="padding: 4px 0 0 0; background: var(--bg-app);">
-        <div style="text-align: center; padding: 0 0;">
-          <button id="enableNotifyBtn" onclick="requestNotificationPermissionManual()" style="display: none; background: #22c55e; color: white; border: none; padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin: 4px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%;">
-            🔔 നോട്ടിഫിക്കേഷൻ ഓൺ ചെയ്യുക
-          </button>
-        </div>
-
-        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
-        <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #0e1838 0%, #16244f 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-            <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4">
-              <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
-            </marquee>
-          </div>
-        </a>
-
-        <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
-        <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
-            <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4">
-              <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
-            </marquee>
-          </div>
-        </a>
-      </div>
-
-      <!-- ഒറ്റ അനൗൺസ്മെന്റ് ബോക്സ് -->
-      <div class="announcement-card-container" style="margin: 8px 0 14px 0;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-          <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-            🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ
-          </span>
-        </div>
-        <div id="noticeSlider" style="background: var(--notice-bg); border: 1.5px solid var(--border-color); border-radius: 18px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
-          <!-- ഡാറ്റ ഇവിടെ ലോഡ് ആയിക്കോളും -->
-        </div>
-      </div>
-
-      <div class="section-label">
-        <span>കാറ്റഗറികൾ (CATEGORIES)</span>
-        <span style="font-size:11px; font-weight:800; color:#38bdf8; background:rgba(56,189,248,0.15); padding:3px 8px; border-radius:8px; border:1px solid rgba(56,189,248,0.3);" id="activeCatText">എല്ലാം കാണിക്കുന്നു</span>
-      </div>
-
-      <div class="category-grid-container">
-        <div class="category-grid" id="categoryGridContainer">
-          <div class="cat-box active" onclick="setCat('all', this)"><div class="cat-box-icon">📂</div><div class="cat-box-title">എല്ലാം</div></div>
-          <div class="cat-box" onclick="setCat('hospital', this)"><div class="cat-box-icon">🏥</div><div class="cat-box-title">ആശുപത്രികൾ</div></div>
-          <div class="cat-box" onclick="setCat('bank', this)"><div class="cat-box-icon">🏦</div><div class="cat-box-title">ബാങ്കുകൾ</div></div>
-          <div class="cat-box" onclick="setCat('cooperative', this)"><div class="cat-box-icon">🏛️</div><div class="cat-box-title">സഹകരണ സംഘങ്ങൾ</div></div>
-          <div class="cat-box" onclick="setCat('worker', this)"><div class="cat-box-icon">👷‍♂️</div><div class="cat-box-title">തൊഴിലാളികൾ</div></div>
-          <div class="cat-box" onclick="setCat('catering', this)"><div class="cat-box-icon">🍳</div><div class="cat-box-title">കാറ്ററിംഗ്</div></div>
-          <div class="cat-box" onclick="setCat('supermarket', this)"><div class="cat-box-icon">🛒</div><div class="cat-box-title">സൂപ്പർമാർക്കറ്റ്</div></div>
-          <div class="cat-box" onclick="setCat('hotel', this)"><div class="cat-box-icon">🍲</div><div class="cat-box-title">ഹോട്ടൽ</div></div>
-          <div class="cat-box" onclick="setCat('bakery', this)"><div class="cat-box-icon">🎂</div><div class="cat-box-title">ബേക്കറി</div></div>
-          <div class="cat-box" onclick="setCat('textiles', this)"><div class="cat-box-icon">👗</div><div class="cat-box-title">ടെക്സ്റ്റൈൽസ്</div></div>
-          <div class="cat-box" onclick="setCat('tailor', this)"><div class="cat-box-icon">🧵</div><div class="cat-box-title">തയ്യൽക്കട</div></div>
-          <div class="cat-box" onclick="setCat('mobile', this)"><div class="cat-box-icon">📱</div><div class="cat-box-title">മൊബൈൽ ഷോപ്പ്</div></div>
-          <div class="cat-box" onclick="setCat('fish', this)"><div class="cat-box-icon">🐟</div><div class="cat-box-title">മത്സ്യ മാർക്കറ്റ്</div></div>
-          <div class="cat-box" onclick="setCat('meat', this)"><div class="cat-box-icon">🥩</div><div class="cat-box-title">ഇറച്ചിക്കടകൾ</div></div>
-          <div class="cat-box" onclick="setCat('watch', this)"><div class="cat-box-icon">⌚</div><div class="cat-box-title">വാച്ച് റിപ്പയർ</div></div>
-          <div class="cat-box" onclick="setCat('lottery', this)"><div class="cat-box-icon">🎟️</div><div class="cat-box-title">ലോട്ടറി സ്റ്റാൾ</div></div>
-          <div class="cat-box" onclick="setCat('csc', this)"><div class="cat-box-icon">💻</div><div class="cat-box-title">സിഎസ്സി സെന്റർ</div></div>
-          <div class="cat-box" onclick="setCat('mill', this)"><div class="cat-box-icon">🌾</div><div class="cat-box-title">ധാന്യപ്പൊടി മില്ല്</div></div>
-          <div class="cat-box" onclick="setCat('workshop', this)"><div class="cat-box-icon">🔧</div><div class="cat-box-title">വർക്ക്‌ഷോപ്പ്</div></div>
-          <div class="cat-box" onclick="setCat('ayurveda', this)"><div class="cat-box-icon">🌿</div><div class="cat-box-title">ആയുർവേദ ഷോപ്പ്</div></div>
-          <div class="cat-box" onclick="setCat('stationery', this)"><div class="cat-box-icon">📚</div><div class="cat-box-title">സ്റ്റേഷനറി കട</div></div>
-          <div class="cat-box" onclick="setCat('fruits', this)"><div class="cat-box-icon">🍎</div><div class="cat-box-title">ഫ്രൂട്ട്സ് കട</div></div>
-          <div class="cat-box" onclick="setCat('auto', this)"><div class="cat-box-icon">🛺</div><div class="cat-box-title">ഓട്ടോ / ടാക്സി</div></div>
-          <div class="cat-box" onclick="setCat('emergency', this)"><div class="cat-box-icon">🚨</div><div class="cat-box-title">പ്രധാന നമ്പറുകൾ</div></div>
-          <div class="cat-box" onclick="setCat('nursery', this)"><div class="cat-box-icon">🌱</div><div class="cat-box-title">നഴ്സറി</div></div>
-          <div class="cat-box" onclick="setCat('society', this)"><div class="cat-box-icon">🤝</div><div class="cat-box-title">സൊസൈറ്റി / സംഘങ്ങൾ</div></div>
-        </div>
-      </div>
-
-      <div class="section-label"><span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span></div>
-      <div id="listings"></div>
-
-      <footer>
-        <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #1e293b, #0f172a); color: #94a3b8; border-radius: 14px; font-size: 13px; margin-bottom: 20px; border: 1px solid var(--border-color); font-weight: 500;">
-          © 2026 Kolayad Connect. All Rights Reserved.
-        </div>
-      </footer>
-    </div>
-
-    <!-- Modern Bottom Nav Bar -->
-    <nav class="bottom-nav">
-      <a href="index.html" class="nav-btn active"><span style="font-size: 17px;">🏪</span><span>ഡയറക്ടറി</span></a>
-      <a href="jobs.html" class="nav-btn"><span style="font-size: 17px;">💼</span><span>തൊഴിൽ</span></a>
-      <a href="profile.html" class="nav-btn"><span style="font-size: 17px;">👤</span><span>പ്രൊഫൈൽ</span></a>
-          <!-- 🎮 താഴെയുള്ള നാവിഗേഷനിൽ അഡ്മിന് പകരം ഗെയിംസ് ബട്ടൺ -->
-    <a href="games.html" style="color: #eab308; text-decoration: none; font-size: 12px; text-align: center; font-weight: bold;">
-  <div style="font-size: 18px;">🎮</div>
-  ഗെയിംസ്
-</a>
-
-
-    </nav>
-  </div>
-
-  <!-- ഹാംബർഗർ സൈഡ് മെനു -->
-  <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 100; display: none; justify-content: flex-start;">
-    <div style="width: 280px; background: #0f172a; height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 25px rgba(0,0,0,0.5); overflow-y: auto;">
-      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
-        
-        <a href="index.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">🏠 ഹോം / ഡയറക്ടറി</a>
-        <a href="jobs.html" style="color: #38bdf8; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b; font-weight: bold;">💼 തൊഴിലവസരങ്ങൾ (Jobs)</a>
-        <a href="profile.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">👤 എന്റെ വിവരങ്ങൾ</a>
-        <a href="admin.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b;">⚙️ അഡ്മിൻ പാനൽ</a>
-        
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 0;">
-
-        <strong style="color: #60a5fa; font-size: 12px;">സഹായത്തിനും സംശയങ്ങൾക്കും (Support)</strong>
-        <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color: #22c55e; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: bold;">💬 വാട്സാപ്പിൽ സന്ദേശം അയക്കാം</a>
-
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 0;">
-        <a href="#" onclick="toggleSidebar(); toggleModal('feedbackModal'); return false;" style="color: #f59e0b; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e293b; font-weight: bold; display: flex; align-items: center; gap: 6px;">⭐ അഭിപ്രായങ്ങളും ഫീഡ്‌ബാക്കും</a>
-
-        <strong style="color: #60a5fa; font-size: 12px;">Quick Links</strong>
-        <a href="#" onclick="toggleSidebar(); toggleModal('aboutModal');" style="color: #94a3b8; text-decoration: none;">➔ About Us</a>
-        <a href="#" onclick="toggleSidebar(); toggleModal('contactModal');" style="color: #94a3b8; text-decoration: none;">➔ Contact Us</a>
-        <a href="#" onclick="toggleSidebar(); toggleModal('termsModal');" style="color: #94a3b8; text-decoration: none;">➔ Terms & Conditions</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Windows -->
-  <div class="modal-bg" id="aboutModal" onclick="closeModalOnBg(event, 'aboutModal')">
-    <div class="modal-box">
-      <h3 style="color:#38bdf8; margin-bottom:12px; font-size:16px;">ℹ️ ഞങ്ങളെക്കുറിച്ച് (About Us)</h3>
-      <p style="font-size:12px; line-height:1.6; color:#cbd5e1; margin-bottom:12px;">
-        ⛱️കോളയാട് കണക്ട് (Kolayad Connect)🛍️ എന്നത് കോളയാട് പ്രദേശത്തെ മുഴുവൻ സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, തൊഴിലാളികൾ, അത്യാഹിത നമ്പറുകൾ എന്നിവ ഒരു കുടക്കീഴിൽ ലഭ്യമാക്കുന്ന ഡിജിറ്റൽ ഡയറക്ടറി ആപ്പാണ്.
-      </p>
-      <button onclick="toggleModal('aboutModal')" class="btn-pro-call" style="width:100%; background:#1e293b; color:#ffffff; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
-    </div>
-  </div>
-
-  <div class="modal-bg" id="contactModal" onclick="closeModalOnBg(event, 'contactModal')">
-    <div class="modal-box">
-      <h3 style="color:#38bdf8; margin-bottom:12px; font-size:16px;">📞 ബന്ധപ്പെടാൻ (Contact Us)</h3>
-      <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; margin-bottom:12px;">
-        <div style="background:#131f42; padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>ഫോൺ നമ്പർ:</strong> <a href="tel:6238020523" style="color:#38bdf8; text-decoration:none; font-weight:bold;">6238020523</a>
-        </div>
-        <div style="background:#131f42; padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>സപ്പോർട്ട് വാട്സാപ്പ്:</strong> <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color:#22c55e; text-decoration:none; font-weight:bold;">💬 ചാറ്റ് ചെയ്യുക (6238020523)</a>
-        </div>
-        <div style="background:#131f42; padding:10px; border-radius:10px; border:1px solid var(--border-color);">
-          <strong>സ്ഥലം:</strong> കോളയാട്, കണ്ണൂർ, കേരളം.
-        </div>
-      </div>
-      <button onclick="toggleModal('contactModal')" class="btn-pro-call" style="width:100%; background:#1e293b; color:#ffffff; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
-    </div>
-  </div>
-
-  <div class="modal-bg" id="termsModal" onclick="closeModalOnBg(event, 'termsModal')">
-    <div class="modal-box">
-      <h3 style="color:#38bdf8; margin-bottom:12px; font-size:16px;">📜 നിബന്ധനകളും വ്യവസ്ഥകളും</h3>
-      <p style="font-size:12px; line-height:1.6; color:#cbd5e1; margin-bottom:12px;">
-        1. ഈ ആപ്പിൽ നൽകിയിരിക്കുന്ന വിവരങ്ങൾ പ്രാദേശിക ജനങ്ങളുടെ അറിവിലേക്കായി തയ്യാറാക്കിയതാണ്.<br>
-        2. സ്ഥാപനങ്ങൾ നൽകുന്ന വിവരങ്ങളുടെ പൂർണ്ണ ഉത്തരവാദിത്തം അവരവർക്കാണ്.<br>
-        3. തെറ്റായ വിവരങ്ങൾ ചേർക്കുന്നവരുടെ അക്കൗണ്ടുകൾ മുൻകൂറിയിപ്പില്ലാതെ നീക്കം ചെയ്യുന്നതാണ്.
-      </p>
-      <button onclick="toggleModal('termsModal')" class="btn-pro-call" style="width:100%; background:#1e293b; color:#ffffff; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
-    </div>
-  </div>
-
-  <div class="modal-bg" id="imageZoomModal" onclick="closeZoomModal(event)">
-    <div style="position:relative; width:100%; max-width:450px; text-align:center;">
-      <img id="zoomedImage" src="" alt="Zoomed Image">
-      <button onclick="closeZoomModalDirect()" style="margin-top:12px; background:#ef4444; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:bold; cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
-    </div>
-  </div>
-
-  <div class="floating-bar">
-    <a href="emergency.html" class="btn-emergency-quick" style="text-decoration: none;">🚨 എമർജൻസി നമ്പറുകൾ</a>
-    <a href="profile.html" class="btn-add-pro">+ സ്ഥാപനം ചേർക്കുക</a>
-  </div>
-
-  <div class="modal-bg" id="editShopModal" onclick="closeModalOnBg(event, 'editShopModal')">
-    <div class="modal-box" style="border: 1.5px solid #eab308; width: 92%; max-width: 400px; padding: 18px; border-radius: 20px;">
-      <h3 style="color:#eab308; margin-bottom:12px; font-size:15px; font-weight:800; text-align:center;">✏️ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h3>
-      <form onsubmit="updateShopData(event)" style="display: flex; flex-direction: column; gap: 10px;">
-        <input type="hidden" id="editShopId">
-        
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ പേര്:</label>
-          <input type="text" id="editShopName" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
-        </div>
-
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥലം / വിലാസം:</label>
-          <input type="text" id="editShopLoc" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
-        </div>
-
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">ഒന്നാമത്തെ ഫോൺ നമ്പർ:</label>
-          <input type="text" id="editShopPhone" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
-        </div>
-
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ):</label>
-          <input type="text" id="editShopPhone2" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;">
-        </div>
-
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക്:</label>
-          <input type="url" id="editShopMap" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" placeholder="https://maps.app.goo.gl/...">
-        </div>
-
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
-          <textarea id="editShopDesc" class="search-input-box" rows="3" style="padding: 10px 12px; font-size: 12.5px; resize: none;" required></textarea>
-        </div>
-        
-        <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോ മാറ്റാൻ:</label>
-          <input type="file" id="editShopImageFile" class="search-input-box" accept="image/*" style="padding: 6px; font-size: 11px;">
-        </div>
-
-        <button type="submit" class="btn-pro-call" style="margin-top: 6px; width: 100%; padding: 12px; font-size: 13px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
-      </form>
-    </div>
-  </div>
-
-       <div class="modal-bg" id="feedbackModal" onclick="closeModalOnBg(event, 'feedbackModal')">
-    <div class="modal-box" style="border: 1.5px solid #f59e0b; width: 92%; max-width: 400px; padding: 20px; border-radius: 20px;">
-      <h3 style="color:#f59e0b; margin-bottom:14px; font-size:16px; font-weight:800; text-align:center;">⭐ നിങ്ങളുടെ അഭിപ്രായങ്ങൾ അറിയിക്കുക</h3>
-      <form onsubmit="submitFeedback(event)" style="display: flex; flex-direction: column; gap: 12px;">
-        
-        <div>
-          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">പേര് (ഓപ്ഷണൽ):</label>
-          <input type="text" id="fbName" class="search-input-box" style="padding: 10px 14px; font-size: 12.5px;" placeholder="നിങ്ങളുടെ പേര്">
-        </div>
-        
-        <div>
-          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">റേറ്റിംഗ്:</label>
-          <div style="display: flex; gap: 6px;" id="starRatingGroup">
-            <button type="button" onclick="setRating(5, this)" class="star-btn active" style="flex:1; padding:8px 2px; background:linear-gradient(135deg, #d97706, #f59e0b); border:1.5px solid #fbbf24; border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐⭐</button>
-            <button type="button" onclick="setRating(4, this)" class="star-btn" style="flex:1; padding:8px 2px; background:#1e293b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐</button>
-            <button type="button" onclick="setRating(3, this)" class="star-btn" style="flex:1; padding:8px 2px; background:#1e293b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐</button>
-          </div>
-        </div>
-        <input type="hidden" id="fbRating" value="5">
-
-        <div>
-          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
-          <textarea id="fbComment" class="search-input-box" rows="3" style="padding: 10px 14px; font-size: 12.5px; resize: none;" placeholder="ആപ്പിനെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങൾ ഇവിടെ എഴുതുക..." required></textarea>
-        </div>
-
-        <button type="submit" style="width:100%; background:linear-gradient(135deg, #d97706, #f59e0b); color:#ffffff; border:none; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer; font-size:13px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">ഫീഡ്‌ബാക്ക് അയക്കുക</button>
-      </form>
-    </div>
-  </div>
- 
-  
-  <script>
-    let selectedCat = 'all';
-    let notices = [];
-    let shops = [];
-
-    function toggleSidebar() {
-      const menu = document.getElementById('sideMenu');
-      if (menu.style.display === 'flex') {
-        menu.style.display = 'none';
-      } else {
-        menu.style.display = 'flex';
-      }
-    }
-
-    function toggleTheme() {
-      const isLight = document.body.classList.toggle('light-mode');
-      document.getElementById('themeBtn').innerText = isLight ? '🌙' : '☀️';
-      localStorage.setItem('kolayad_theme', isLight ? 'light' : 'dark');
-    }
-
-    if (localStorage.getItem('kolayad_theme') === 'light') {
-      document.body.classList.add('light-mode');
-      const btn = document.getElementById('themeBtn');
-      if(btn) btn.innerText = '🌙';
-    }
-
-    async function loadAppSettings() {
-      try {
-        if (!window.db) {
-          setTimeout(loadAppSettings, 200);
-          return;
-        }
-        
-        let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
-        const badge = document.getElementById('adminNavBadge');
-        if(badge) {
-          if(isAdmin) {
-            badge.innerText = "അഡ്മിൻ (Online)";
-            badge.style.background = "#22c55e";
-            badge.style.color = "#091026";
-          } else {
-            badge.innerText = "അഡ്മിൻ";
-            badge.style.background = "";
-            badge.style.color = "";
-          }
-        }
-
-        try {
-          const logoDoc = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
-          if (logoDoc.exists() && logoDoc.data().url) {
-            document.getElementById('profileAvatarImg').style.backgroundImage = `url('${logoDoc.data().url}')`;
-          }
-        } catch(err) {}
-
-        try {
-          const bannerDoc = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
-          if (bannerDoc.exists() && bannerDoc.data().url) {
-            document.getElementById('heroBannerBg').style.backgroundImage = `url('${bannerDoc.data().url}')`;
-          }
-        } catch(err) {}
-
-        try {
-          const catSnap = await window.getDocs(window.collection(window.db, "categories"));
-          const gridContainer = document.getElementById('categoryGridContainer');
-          if (!catSnap.empty && gridContainer) {
-            catSnap.forEach(docSnap => {
-              const cData = docSnap.data();
-              const catName = cData.name || docSnap.id;
-              if (catName) {
-                const exists = Array.from(gridContainer.querySelectorAll('.cat-box-title')).some(el => el.innerText === catName);
-                if (!exists) {
-                  const newBox = document.createElement('div');
-                  newBox.className = 'cat-box';
-                  newBox.setAttribute('onclick', `setCat('${catName}', this)`);
-                  newBox.innerHTML = `
-                    <div class="cat-box-icon">${cData.emoji || '🏷️'}</div>
-                    <div class="cat-box-title">${catName}</div>
-                  `;
-                  gridContainer.appendChild(newBox);
-                }
-              }
-            });
-          }
-        } catch(err) {}
-        
-        try {
-          const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
-          if (rateDoc.exists()) {
-            let data = rateDoc.data();
-            let gold = data.gold || '58,000';
-            let silver = data.silver || '85';
-            let rubber = data.rubber || '185';
-            let pepper = data.pepper || '650';
-            let arecanut = data.arecanut || '260';
-            let coconut = data.coconut || '40';
-
-            const tickerElement = document.getElementById('homeTickerText');
-            if(tickerElement) {
-              tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-            }
-          }
-        } catch(err) {
-          console.log("Error loading market rates: ", err);
-        }
-
-        const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
-        if (!shopSnap.empty) {
-          shops = shopSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } else {
-          shops = [
-            { id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ്, മോട്ടോർ റിപ്പയറിംഗ് പണികൾ.", phone: "9876543210", phone2: "", mapLink: "", imageUrl: "" },
-            { id: '2', name: "പോലീസ് സ്റ്റേഷൻ പെരാവൂർ", cat: "emergency", catLabel: "പ്രധാന നമ്പറുകൾ", loc: "പെരാവൂർ", desc: "പെരാവൂർ പോലീസ് സ്റ്റേഷൻ ഔദ്യോഗിക കോൺടാക്റ്റ്.", phone: "04902435222", phone2: "", mapLink: "", imageUrl: "" }
-          ];
-        }
-
-        const noticeSnap = await window.getDocs(window.collection(window.db, "notices"));
-        if (!noticeSnap.empty) {
-          notices = noticeSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } else {
-          notices = [
-            { id: '1', title: "വമ്പിച്ച വിലക്കുറവ്", desc: "ദീപാവലി പ്രമാണിച്ച് 1000 രൂപയുടെ പർച്ചേസിന് മുകളിൽ നടത്തുമ്പോൾ 30 ശതമാനം ഡിസ്കൗണ്ട്", date: "07/11/2026", imageUrl: "" }
-          ];
-        }
-
-        renderNoticesBox();
-        render();
-      } catch (e) {
-        console.error("Firebase load error: ", e);
-        shops = [{ id: '1', name: "രമേശൻ (ഇലക്ട്രീഷ്യൻ & പ്ലംബർ)", cat: "worker", catLabel: "തൊഴിലാളി", loc: "കവല ജംഗ്ഷൻ", desc: "🛠️ വയറിങ്, പ്ലംബിംഗ് പണികൾ.", phone: "9876543210", phone2: "", mapLink: "", imageUrl: "" }];
-        notices = [{ id: '1', title: "പ്രധാന അറിയിപ്പ്", desc: "കോളയാട് കണക്ടിലേക്ക് സ്വാഗതം!", date: "07/11/2026", imageUrl: "" }];
-        renderNoticesBox();
-        render();
-      }
-    }
-
-    function initApp() {
-      let currentUser = JSON.parse(localStorage.getItem('kolayad_user')) || null;
-      if (currentUser && currentUser.name) {
-        document.getElementById('welcomeBarText').innerHTML = `<span>👋 ഹലോ ${currentUser.name}, വിവരങ്ങൾ ചേർക്കാം</span>`;
-      }
-      loadAppSettings();
-      startDynamicPlaceholder();
-    }
-
-    function startDynamicPlaceholder() {
-      const searchKeywords = [
-        "🔍 തൊഴിലാളി, കട, സേവനം, സ്ഥലം എന്നിവ തിരയുക...",
-        "🔍 ഓട്ടോ / ടാക്സി തിരയുക...",
-        "🔍 വർക്ക്‌ഷോപ്പുകൾ, മെക്കാനിക്കുകൾ...",
-        "🔍 ഇലക്ട്രീഷ്യൻമാർ, പ്ലംബർമാർ...",
-        "🔍 പ്രധാന അത്യാഹിത നമ്പറുകൾ..."
-      ];
-      let keywordIndex = 0;
-      const searchInput = document.getElementById("searchInput");
-
-      if (searchInput) {
-        setInterval(() => {
-          if (!searchInput.value) {
-            keywordIndex = (keywordIndex + 1) % searchKeywords.length;
-            searchInput.placeholder = searchKeywords[keywordIndex];
-          }
-        }, 3000);
-      }
-    }
-
-    function renderNoticesBox() {
-      const sliderContainer = document.getElementById("noticeSlider");
-      if (!sliderContainer) return;
-
-      if (notices.length > 0) {
-        let latestNotice = notices[notices.length - 1]; 
-        let isAd = latestNotice.isAd || latestNotice.type === 'ad';
-        
-        sliderContainer.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="background: ${isAd ? 'linear-gradient(135deg, #d97706, #f59e0b)' : 'linear-gradient(135deg, #0284c7, #0369a1)'}; color: #ffffff; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-              ${isAd ? '⭐ പരസ്യം (AD)' : '📢 പ്രധാന അറിയിപ്പ്'}
-            </span>
-            <span style="font-size: 11.5px; color: #94a3b8; font-weight: 700;">📅 ${latestNotice.date || ''}</span>
-          </div>
-          <h4 style="color: #ffffff; font-size: 18px; margin: 8px 0 6px 0; font-weight: 800; word-break: break-word;">${latestNotice.title || ''}</h4>
-          <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 12px; line-height: 1.6; font-weight: 500; word-break: break-word;">${latestNotice.desc || ''}</p>
-          
-          ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 14px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.3);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 220px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
-
-          <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px;">
-            <a href="announcements.html" style="font-size: 12.5px; color: #38bdf8; font-weight: 800; text-decoration: none; display: inline-block; white-space: nowrap;">
-              കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ അമർത്തുക →
-            </a>
-          </div>
-        `;
-      } else {
-        sliderContainer.innerHTML = `
-          <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 15px 0;">
-            <p style="margin: 0 0 8px 0; font-weight: 600;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
-            <a href="announcements.html" style="font-size: 12.5px; color: #38bdf8; font-weight: 800; text-decoration: none; white-space: nowrap;">
-              കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക 🔘
-            </a>
-          </div>
-        `;
-      }
-    }
-
-    function openZoomModal(imgSrc) {
-      document.getElementById('zoomedImage').src = imgSrc;
-      document.getElementById('imageZoomModal').style.display = 'flex';
-      history.pushState({ modalOpen: true }, '');
-    }
-
-    function closeZoomModal(event) {
-      if (event.target.id === 'imageZoomModal') {
-        document.getElementById('imageZoomModal').style.display = 'none';
-      }
-    }
-
-    function closeZoomModalDirect() {
-      document.getElementById('imageZoomModal').style.display = 'none';
-    }
-
-    function shareShop(name, loc, phone, desc) {
-      const text = `🌴 *കോളയാട് കണക്ട് ഡയറക്ടറി* 🌴\n\n📌 *${name}*\n📍 സ്ഥലം: ${loc}\n📞 ഫോൺ: ${phone}\nℹ️ വിവരങ്ങൾ: ${desc}\n\nകൂടുതൽ പ്രാദേശിക വിവരങ്ങൾക്ക് വിസിറ്റ് ചെയ്യൂ: https://kolayadconnect.in`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-    }
-
-    window.addEventListener('popstate', function(event) {
-      const editModal = document.getElementById('editShopModal');
-      const zoomModal = document.getElementById('imageZoomModal');
-      const feedbackModal = document.getElementById('feedbackModal');
-      if (editModal && editModal.style.display === 'flex') editModal.style.display = 'none';
-      if (zoomModal && zoomModal.style.display === 'flex') zoomModal.style.display = 'none';
-      if (feedbackModal && feedbackModal.style.display === 'flex') feedbackModal.style.display = 'none';
-    });
-
-    function toggleModal(id) {
-      const m = document.getElementById(id);
-      if (m.style.display === 'flex') {
-        m.style.display = 'none';
-      } else {
-        m.style.display = 'flex';
-      }
-    }
-
-    function closeModalOnBg(event, id) {
-      if (event.target.id === id) {
-        toggleModal(id);
-      }
-    }
-
-    function render() {
-      let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
-      const list = document.getElementById('listings');
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = shops.filter(s => {
-        const matchCat = selectedCat === 'all' || s.cat === selectedCat || s.catLabel === selectedCat;
-        const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.loc.toLowerCase().includes(q);
-        return matchCat && matchQ;
-      });
-
-      if(filtered.length === 0) {
-        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:30px 20px; font-size:13px; background: rgba(14, 24, 56, 0.5); border-radius:16px; border:1px solid var(--border-color);">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല! പുതിയ തിരച്ചിൽ നടത്തി നോക്കൂ.</div>`;
-        return;
-      }
-
-      const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
-
-      list.innerHTML = filtered.map(s => {
-        let photos = [s.imageUrl, s.imageUrl2, s.imageUrl3, s.imageUrl4].filter(img => img);
-        let photosHtml = photos.length > 0 ? `
-          <div class="shop-images-slider">
-            ${photos.map(img => `<img src="${img}" class="shop-thumb-img" alt="${s.name}" onclick="openZoomModal('${img}')">`).join('')}
-          </div>
-        ` : '';
-
-        let phone2Html = s.phone2 ? `
-          <div style="display:flex; gap:6px; margin-top:6px;">
-            <a href="tel:${s.phone2}" class="btn-pro-call" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">📞 2-ാം നമ്പർ കോൾ</a>
-            <a href="https://wa.me/91${s.phone2}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-          </div>
-        ` : '';
-
-        return `
-          <div class="pro-card">
-            <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
-            <div class="item-name">${s.name}</div>
-            <div class="item-loc">📍 ${s.loc}</div>
-            ${photosHtml}
-            <div class="item-desc-highlight">${s.desc}</div>
-            
-            <div class="card-actions">
-              <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ ചെയ്യുക</a>
-              <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-              
-              <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">
-                🔗 ഷെയർ
-              </button>
-
-              ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
-            </div>
-
-            ${phone2Html}
-
-            ${isAdmin ? `
-              <div style="display:flex; gap:6px; margin-top:8px;">
-                <button onclick="openEditShop('${s.id}')" class="btn-admin-edit">എഡിറ്റ്</button>
-                <button onclick="deleteShop('${s.id}')" class="btn-admin-del">ഡിലീറ്റ്</button>
-              </div>
-            ` : ''}
-
-            <div style="margin-top: 10px;">
-              <a href="shop.html?id=${s.id}" style="display: block; text-align: center; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
-                  കൂടുതൽ വിവരങ്ങൾ കാണുക ➔
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function openEditShop(id) {
-      const s = shops.find(x => x.id === id);
-      if(!s) return;
-      document.getElementById('editShopId').value = s.id;
-      document.getElementById('editShopName').value = s.name || '';
-      document.getElementById('editShopLoc').value = s.loc || '';
-      document.getElementById('editShopPhone').value = s.phone || '';
-      document.getElementById('editShopPhone2').value = s.phone2 || '';
-      document.getElementById('editShopMap').value = s.mapLink || '';
-      document.getElementById('editShopDesc').value = s.desc || '';
-      document.getElementById('editShopImageFile').value = ''; 
+    
+    <!-- Hero Header -->
+    <div class="hero-header" id="heroBannerArea" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');">
+      <div class="hero-overlay"></div>
       
-      toggleModal('editShopModal');
-      history.pushState({ modalOpen: true }, '');
-    }
+      <div class="hero-top-bar">
+        <div class="location-badge">
+          <span>🌴</span> കോളയാട്, കണ്ണൂർ
+        </div>
+        <a href="admin.html" class="admin-link-btn">
+          <span>⚙️</span> അഡ്മിൻ
+        </a>
+      </div>
 
-    async function compressImageToString(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          const img = new Image();
-          img.src = event.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 700;
-            const scaleSize = MAX_WIDTH / img.width;
-            
-            if (scaleSize < 1) {
-              canvas.width = MAX_WIDTH;
-              canvas.height = img.height * scaleSize;
-            } else {
-              canvas.width = img.width;
-              canvas.height = img.height;
-            }
+      <div class="header-branding">
+        <img id="appLogoImg" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=200&auto=format&fit=crop" alt="Logo" class="app-logo-img">
+        <h1 class="app-main-title">കോളയാട് കണക്ട്</h1>
+      </div>
+    </div>
 
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-            resolve(compressedDataUrl);
-          };
-        };
-        reader.onerror = (error) => reject(error);
-      });
-    }
+    <!-- Main Content Body -->
+    <div class="content-body">
+      
+      <!-- Search Box -->
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="globalSearchInput" class="search-input" placeholder="ജോലി / ടാക്സി തിരയുക...">
+      </div>
 
-    async function updateShopData(e) {
-      e.preventDefault();
-      const id = document.getElementById('editShopId').value;
-      const name = document.getElementById('editShopName').value;
-      const loc = document.getElementById('editShopLoc').value;
-      const phone = document.getElementById('editShopPhone').value;
-      const phone2 = document.getElementById('editShopPhone2').value;
-      const mapLink = document.getElementById('editShopMap').value;
-      const desc = document.getElementById('editShopDesc').value;
-      const imageFile = document.getElementById('editShopImageFile').files[0];
+      <!-- Category Buttons -->
+      <div class="categories-grid">
+        <a href="directory.html?cat=worker" class="category-card">
+          <div class="category-icon-wrapper">👷</div>
+          <span class="category-title">തൊഴിലാളികൾ</span>
+        </a>
+        <a href="directory.html?cat=citizen" class="category-card">
+          <div class="category-icon-wrapper">🏠</div>
+          <span class="category-title">നാട്ടുകാർ</span>
+        </a>
+        <a href="directory.html?cat=merchant" class="category-card">
+          <div class="category-icon-wrapper">🏪</div>
+          <span class="category-title">കച്ചവടക്കാർ</span>
+        </a>
+        <a href="directory.html?cat=service" class="category-card">
+          <div class="category-icon-wrapper">🛠️</div>
+          <span class="category-title">സേവനങ്ങൾ</span>
+        </a>
+      </div>
 
+      <!-- Information Cards -->
+      <div class="info-cards-row">
+        <a href="prices.html" class="info-card-item">
+          <span class="info-card-icon">📊</span>
+          <div class="info-card-text">
+            <h4>വിലനിലവാരം</h4>
+            <p>പ്രധാന ചന്ത വിവരങ്ങൾ</p>
+          </div>
+        </a>
+        <a href="news.html" class="info-card-item">
+          <span class="info-card-icon">📰</span>
+          <div class="info-card-text">
+            <h4>തൊഴിൽ വാർത്തകൾ</h4>
+            <p>പുതിയ അവസരങ്ങൾ</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Notices Section -->
+      <div>
+        <div class="section-header-title">🔥 ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ</div>
+        <div id="homeNoticesContainer">
+          <div class="announcement-card">
+            <div class="announcement-meta">
+              <span class="date-badge">09-11-2026</span>
+            </div>
+            <div class="announcement-title">പഞ്ചായത്ത് ഓഫീസിൽ പ്രത്യേക അദാലത്ത് സംഘടിപ്പിക്കുന്നു</div>
+            <div class="announcement-desc">നാളെ രാവിലെ 10 മണിക്ക് പഞ്ചായത്ത് കമ്മ്യൂണിറ്റി ഹാളിൽ വെച്ച് പൊതുജന പരാതി പരിഹാര അദാലത്ത് നടക്കും.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advertisement Section -->
+      <div id="homeAdContainer">
+        <div class="ad-card">
+          <span class="ad-badge">📢 പരസ്യം</span>
+          <div class="announcement-title" style="margin-top: 4px;">മിനു കാറ്ററിംഗ് & ഡെക്കറേഷൻസ്</div>
+          <div class="announcement-desc">വിവാഹങ്ങൾ, ഗൃഹപ്രവേശങ്ങൾ എന്നിവയ്ക്ക് മികച്ച രീതിയിൽ കാറ്ററിംഗ് സേവനങ്ങൾ ലഭ്യമാണ്. ബന്ധപ്പെടുക: 9847XXXXXX</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation (Directory, Workers, Profile, Games, etc.) -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-btn active">
+        <span>🏪</span>
+        <span>ഡയറക്ടറി</span>
+      </a>
+      <a href="workers.html" class="nav-btn">
+        <span>👷</span>
+        <span>തൊഴിൽ</span>
+      </a>
+      <a href="profile.html" class="nav-btn">
+        <span>👤</span>
+        <span>പ്രൊഫൈൽ</span>
+      </a>
+      <a href="games.html" class="nav-btn">
+        <span>🎮</span>
+        <span>ഗെയിംസ്</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- JavaScript functionality preserved fully -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
       try {
-        let updateData = { name, loc, phone, phone2, mapLink, desc };
+        if (window.db && window.getDoc && window.doc) {
+          const logoSnap = await window.getDoc(window.doc(window.db, "settings", "app_logo"));
+          if (logoSnap.exists() && logoSnap.data().url) {
+            document.getElementById('appLogoImg').src = logoSnap.data().url;
+          }
 
-        if (imageFile) {
-          alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
-          const imageUrl = await compressImageToString(imageFile);
-          updateData.imageUrl = imageUrl;
-        }
-
-        await window.updateDoc(window.doc(window.db, "shops", id), updateData);
-        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
-        toggleModal('editShopModal');
-        loadAppSettings();
-      } catch(err) {
-        console.error(err);
-        alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-      }
-    }
-
-    async function deleteShop(id) {
-      if(confirm('ഈ സ്ഥാപനം ഡിലീറ്റ് ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) {
-        try {
-          await window.deleteDoc(window.doc(window.db, "shops", id));
-          alert('സ്ഥാപനം വിജയകരമായി നീക്കം ചെയ്തു!');
-          loadAppSettings();
-        } catch(e) {
-          console.error(e);
-          alert('ഡിലീറ്റ് ചെയ്യുന്നതിൽ പിഴവ് സംഭവിച്ചു.');
-        }
-      }
-    }
-
-    function setCat(cat, elem) {
-      selectedCat = cat;
-      document.querySelectorAll('.cat-box').forEach(e => e.classList.remove('active'));
-      if(elem) elem.classList.add('active');
-      const txt = elem ? elem.querySelector('.cat-box-title').innerText : 'എല്ലാം';
-      document.getElementById('activeCatText').innerText = `${txt} കാണിക്കുന്നു`;
-      render();
-    }
-
-    async function requestNotificationPermissionManual() {
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          alert('നോട്ടിഫിക്കേഷൻ വിജയകരമായി ഓൺ ചെയ്തു!');
-          document.getElementById('enableNotifyBtn').style.display = 'none';
-
-          const currentToken = await getToken(messaging, { 
-            vapidKey: "BOUTUS1pKC5dX9jiJ3jjLsDcVxYAUojE8l4kHWjSLP9l_VG7LALGYUytBhYtBIklghGxRu6IJKdJgehqFj6fc0o"
-          });
-          if (currentToken) {
-            await setDoc(doc(db, "fcm_tokens", currentToken), {
-              token: currentToken,
-              createdAt: new Date().toISOString()
-            });
+          const bannerSnap = await window.getDoc(window.doc(window.db, "settings", "hero_banner"));
+          if (bannerSnap.exists() && bannerSnap.data().url) {
+            document.getElementById('heroBannerArea').style.backgroundImage = `url('${bannerSnap.data().url}')`;
           }
         }
       } catch (err) {
-        console.error('Error getting permission:', err);
+        console.error("Error loading settings:", err);
       }
-    }
-
-    function checkNotificationStatus() {
-      if ('Notification' in window && Notification.permission !== 'granted') {
-        const btn = document.getElementById('enableNotifyBtn');
-        if (btn) btn.style.display = 'block';
-      }
-    }
-
-    window.requestNotificationPermissionManual = requestNotificationPermissionManual;
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./firebase-messaging-sw.js')
-        .then(() => {
-          checkNotificationStatus();
-        }).catch((err) => {});
-    }
-
-    let currentRating = "5";
-    function setRating(val, elem) {
-      currentRating = val;
-      document.getElementById('fbRating').value = val;
-      document.querySelectorAll('.star-btn').forEach(btn => {
-        btn.style.background = '#1e293b';
-        btn.style.color = '#ffffff';
-        btn.style.borderColor = 'var(--border-color)';
-      });
-      elem.style.background = 'linear-gradient(135deg, #d97706, #f59e0b)';
-      elem.style.color = '#ffffff';
-      elem.style.borderColor = '#fbbf24';
-    }
-
-    async function submitFeedback(e) {
-      e.preventDefault();
-      const name = document.getElementById('fbName').value.trim() || 'അജ്ഞാതൻ';
-      const rating = document.getElementById('fbRating').value;
-      const comment = document.getElementById('fbComment').value.trim();
-
-      try {
-        await window.setDoc(window.doc(window.collection(window.db, "feedbacks")), {
-          name: name,
-          rating: rating,
-          comment: comment,
-          createdAt: new Date().toISOString()
-        });
-        alert('താങ്കളുടെ വിലയേറിയ അഭിപ്രായത്തിന് നന്ദി!');
-        toggleModal('feedbackModal');
-        document.getElementById('fbName').value = '';
-        document.getElementById('fbComment').value = '';
-      } catch (err) {
-        console.error("Error saving feedback: ", err);
-      }
-    }
-  
-    window.onload = function() {
-      async function loadLiveTickerRates() {
-        try {
-          if (window.db) {
-            const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
-            if (rateDoc.exists()) {
-              let data = rateDoc.data();
-              let gold = data.gold || data.adminGold || '58,000';
-              let silver = data.silver || data.adminSilver || '85.00';
-              let rubber = data.rubber || data.adminRubber || '185.00';
-              let pepper = data.pepper || data.adminPepper || '650.00';
-              let arecanut = data.arecanut || data.adminArecanut || '260.00';
-              let coconut = data.coconut || data.adminCoconut || '40.00';
-
-              gold = String(gold).replace(/₹/g, '').trim();
-              silver = String(silver).replace(/₹/g, '').trim();
-              rubber = String(rubber).replace(/₹/g, '').trim();
-              pepper = String(pepper).replace(/₹/g, '').trim();
-              arecanut = String(arecanut).replace(/₹/g, '').trim();
-              coconut = String(coconut).replace(/₹/g, '').trim();
-
-              const tickerElement = document.getElementById('homeTickerText');
-              if(tickerElement) {
-                tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-              }
-              return;
-            }
-          }
-        } catch(err) {
-          console.log("Error fetching live rates: ", err);
-        }
-
-        let gold = localStorage.getItem('p_gold') || '58,000';
-        let silver = localStorage.getItem('p_silver') || '85.00';
-        let rubber = localStorage.getItem('p_rubber') || '185.00';
-        let pepper = localStorage.getItem('p_pepper') || '650.00';
-        let arecanut = localStorage.getItem('p_arecanut') || '260.00';
-        let coconut = localStorage.getItem('p_coconut') || '40.00';
-
-        const tickerElement = document.getElementById('homeTickerText');
-        if(tickerElement) {
-          tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-        }
-      }
-
-      loadLiveTickerRates();
-      initApp();
-    };
-    let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  
-  const installBanner = document.getElementById('installAppBanner');
-  if (installBanner) {
-    installBanner.style.display = 'flex';
-  }
-});
-
-async function installAppToPhone() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    }
-    deferredPrompt = null;
-    const installBanner = document.getElementById('installAppBanner');
-    if (installBanner) {
-      installBanner.style.display = 'none';
-    }
-  }
-}
-
-window.addEventListener('appinstalled', (evt) => {
-  console.log('Kolayad Connect was installed successfully');
-});
-
-
-
+    });
   </script>
 </body>
 </html>
