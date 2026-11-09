@@ -268,16 +268,17 @@
     document.querySelectorAll('.theme-btn').forEach(b => b.style.border = '1.5px solid transparent');
     btn.style.border = '2px solid white';
   }
-
-  function checkAdminLogin() {
-    const pass = document.getElementById('adminPassInput').value;
-    if (pass === "admin123") {
-      localStorage.setItem('kolayad_admin', 'true');
-      showPanel();
-    } else {
-      alert('പാസ്‌വേഡ് തെറ്റാണ്!');
-    }
+function checkAdminLogin() {
+  const pass = document.getElementById('adminPassInput').value;
+  if (pass === "admin123") {
+    localStorage.setItem('kolayad_admin', 'true');
+    showPanel();
+  } else {
+    alert('പാസ്‌വേഡ് തെറ്റാണ്!');
   }
+}
+
+  
 
   function adminLogout() {
     localStorage.removeItem('kolayad_admin');
