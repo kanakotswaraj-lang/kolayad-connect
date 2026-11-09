@@ -98,9 +98,9 @@
       <form onsubmit="addNewShop(event)">
         <label>സ്ഥാപനത്തിന്റെ / സേവനത്തിന്റെ പേര് *</label>
         <input type="text" id="shopName" class="dark-input" placeholder="ഉദാ: രമേശൻ (ഇലക്ട്രീഷ്യൻ), ഗ്രീൻ മാൾ" required>
-
         <label>കാറ്റഗറി *</label>
-        <select id="shopCat" class="dark-input" required>
+        <input type="text" id="catSearchInput" class="dark-input" placeholder="🔍 കാറ്റഗറി തിരയുക..." onkeyup="filterCategoryDropdown()" style="margin-bottom: 6px;">
+        <select id="shopCat" class="dark-input" required size="1" style="margin-bottom: 12px;">
           <option value="">കാറ്റഗറി തിരഞ്ഞെടുക്കുക</option>
           <option value="worker">തൊഴിലാളികൾ</option>
           <option value="catering">കാറ്ററിംഗ്</option>
@@ -205,6 +205,47 @@
       });
     }
 
+    let allCategoriesList = [];
+
+    async function loadDynamicCategories() {
+      try {
+        const select = document.getElementById('shopCat');
+        
+        // നിലവിലുള്ള ഓപ്ഷനുകൾ ശേഖരിച്ചുവെക്കുന്നു
+        Array.from(select.options).forEach(opt => {
+          if(opt.value) {
+            allCategoriesList.push({ value: opt.value, text: opt.textContent });
+          }
+        });
+
+        const snap = await window.getDocs(window.collection(window.db, "categories"));
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.name) {
+            allCategoriesList.push({ value: data.name, text: data.name });
+          }
+        });
+        
+        renderCategoryDropdown(allCategoriesList);
+      } catch (e) {
+        console.error("Categories load error:", e);
+      }
+    }
+
+    function renderCategoryDropdown(list) {
+      const select = document.getElementById('shopCat');
+      let html = '<option value="">കാറ്റഗറി തിരഞ്ഞെടുക്കുക</option>';
+      list.forEach(c => {
+        html += `<option value="${c.value}">${c.text}</option>`;
+      });
+      select.innerHTML = html;
+    }
+
+    function filterCategoryDropdown() {
+      const query = document.getElementById('catSearchInput').value.toLowerCase();
+      const filtered = allCategoriesList.filter(c => c.text.toLowerCase().includes(query));
+      renderCategoryDropdown(filtered);
+    }
 
     async function addNewShop(e) {
       e.preventDefault();
