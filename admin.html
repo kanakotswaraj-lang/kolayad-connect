@@ -94,7 +94,7 @@
 
 <div class="container">
   
-    <!-- 1. അഡ്മിൻ ലോഗിൻ ബോക്സ് -->
+  <!-- 1. അഡ്മിൻ ലോഗിൻ ബോക്സ് -->
   <div id="loginBox">
     <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
     <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
@@ -269,22 +269,18 @@
     btn.style.border = '2px solid white';
   }
 
-    function checkAdminLogin() {
+  function checkAdminLogin() {
     const passInput = document.getElementById('adminPassInput');
     if (!passInput) return;
-    
     const pass = passInput.value.trim();
-    
-    // പാസ്‌വേഡ് 'admin123' എന്ന് പരിശോധിക്കുന്നു
     if (pass === "admin123") {
       localStorage.setItem('kolayad_admin', 'true');
       showPanel();
     } else {
-      alert('പാസ്‌വേഡ് തെറ്റാണ്! വീണ്ടും ശ്രമിക്കുക.');
+      alert('പാസ്‌വേഡ് തെറ്റാണ്!');
       passInput.value = '';
     }
   }
-
 
   function adminLogout() {
     localStorage.removeItem('kolayad_admin');
@@ -475,8 +471,6 @@
     } catch(e) { alert('പിഴവ് സംഭവിച്ചു.'); }
   }
 
-  async function postNotice() {
-  
   async function postNotice() {
     const editId = document.getElementById('editNoticeId').value;
     const title = document.getElementById('noticeTitleInput').value.trim();
@@ -678,7 +672,6 @@
     }
   }
 
-  // ഫീഡ്‌ബാക്ക് ലോഡ് ചെയ്യാനും ഡിലീറ്റ് ചെയ്യാനുമുള്ള ഫങ്ഷനുകൾ
   async function loadAdminFeedbacks() {
     const container = document.getElementById('adminFeedbacksList');
     if (!container) return;
