@@ -175,7 +175,7 @@
       }
     }
 
-    async function compressImageToString(file) {
+        async function compressImageToString(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -184,7 +184,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 700;
+            const MAX_WIDTH = 500; // വലിപ്പം കുറച്ചു
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -197,13 +197,14 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.4); // ക്വാളിറ്റി 0.4 ആക്കി കുറച്ചു
             resolve(compressedDataUrl);
           };
         };
         reader.onerror = (error) => reject(error);
       });
     }
+
 
     async function addNewShop(e) {
       e.preventDefault();
