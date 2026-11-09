@@ -94,7 +94,7 @@
 
 <div class="container">
   
-  <!-- 1. അഡ്മിൻ ലോഗിൻ ബോക്സ് -->
+    <!-- 1. അഡ്മിൻ ലോഗിൻ ബോക്സ് -->
   <div id="loginBox">
     <h2>🔐 അഡ്മിൻ ലോഗിൻ</h2>
     <p style="font-size: 11px; color: #94a3b8; margin-bottom: 14px;">തുടരാൻ അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</p>
@@ -268,17 +268,23 @@
     document.querySelectorAll('.theme-btn').forEach(b => b.style.border = '1.5px solid transparent');
     btn.style.border = '2px solid white';
   }
-function checkAdminLogin() {
-  const pass = document.getElementById('adminPassInput').value;
-  if (pass === "admin123") {
-    localStorage.setItem('kolayad_admin', 'true');
-    showPanel();
-  } else {
-    alert('പാസ്‌വേഡ് തെറ്റാണ്!');
-  }
-}
 
-  
+    function checkAdminLogin() {
+    const passInput = document.getElementById('adminPassInput');
+    if (!passInput) return;
+    
+    const pass = passInput.value.trim();
+    
+    // പാസ്‌വേഡ് 'admin123' എന്ന് പരിശോധിക്കുന്നു
+    if (pass === "admin123") {
+      localStorage.setItem('kolayad_admin', 'true');
+      showPanel();
+    } else {
+      alert('പാസ്‌വേഡ് തെറ്റാണ്! വീണ്ടും ശ്രമിക്കുക.');
+      passInput.value = '';
+    }
+  }
+
 
   function adminLogout() {
     localStorage.removeItem('kolayad_admin');
