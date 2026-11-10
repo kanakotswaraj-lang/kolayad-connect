@@ -2,59 +2,88 @@
 <html lang="ml">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>നാട്ടുകൂട്ടം ഗെയിംസ് - കോളയാട് കണക്ട്</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>നാട്ടുകൂട്ടം ഗെയിംസ് അരീന - കോളയാട് കണക്ട്</title>
   <style>
+    :root {
+      --bg-body: #070b19;
+      --bg-app: #0b1128;
+      --bg-card: #131c3f;
+      --border-color: rgba(59, 130, 246, 0.3);
+      --primary-blue: #2563eb;
+      --accent-gold: #facc15;
+    }
     body {
-      background-color: #0f172a;
+      background-color: var(--bg-body);
       color: #f8fafc;
-      font-family: sans-serif;
+      font-family: 'Noto Sans Malayalam', sans-serif;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
     .header {
-      background: #1e293b;
-      padding: 15px;
+      background: var(--bg-app);
+      padding: 12px 15px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #334155;
+      border-bottom: 2px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
     .back-btn {
-      background: #334155;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
+      background: var(--bg-card);
+      color: #38bdf8;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: bold;
       text-decoration: none;
-      margin-right: 15px;
+      margin-right: 12px;
     }
     .container {
-      padding: 20px;
-      max-width: 600px;
+      padding: 15px;
+      max-width: 480px;
       margin: 0 auto;
       text-align: center;
     }
     .game-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 15px;
+      background: linear-gradient(145deg, rgba(19, 28, 63, 0.95), rgba(23, 35, 77, 0.75));
+      border: 1.5px solid var(--border-color);
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 12px;
       text-align: left;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     .play-btn {
-      background: #eab308;
-      color: #0f172a;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
       border: none;
       padding: 8px 16px;
-      border-radius: 6px;
+      border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
+      font-size: 13px;
+      box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+    }
+    /* Full Screen Game Area Styling */
+    #gameArea {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-app);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      height: 100dvh;
+      overflow-y: auto;
+      padding: 10px 14px;
+      box-sizing: border-box;
     }
   </style>
 </head>
@@ -63,47 +92,49 @@
   <!-- ഹെഡർ ഭാഗം -->
   <div class="header">
     <a href="index.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 18px; color: #eab308;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
+    <h2 style="margin: 0; font-size: 17px; color: #facc15;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
   </div>
 
   <!-- പ്രധാന ഗെയിംസ് മെനു -->
   <div class="container" id="mainMenu">
-    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">ഒഴിവുസമയങ്ങളിൽ സുഹൃത്തുക്കൾക്കൊപ്പം ഒരേ ഫോണിൽ കളിക്കാൻ ലളിതമായ ഗെയിമുകൾ!</p>
+    <p style="color: #94a3b8; font-size: 13px; margin-bottom: 18px; font-weight: 500;">സുഹൃത്തുക്കൾക്കൊപ്പം ഒരേ ഫോണിൽ മാറിമാറി കളിക്കാവുന്ന പ്രൊഫഷണൽ ഗെയിമുകൾ!</p>
     
-    <!-- ടിക്ക് ടാക്ക് ടോ ഗെയിം കാർഡ് -->
+    <!-- ലൂഡോ ഗെയിം കാർഡ് -->
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 5px 0; color: #38bdf8; font-size: 16px;">❌ ടിക്ക് ടാക്ക് ടോ (Tic-Tac-Toe) ⭕</h3>
-        <p style="margin: 0; font-size: 12px; color: #94a3b8;">രണ്ടുപേർക്ക് മാറിമാറി കളിക്കാം</p>
+        <h3 style="margin: 0 0 4px 0; color: #facc15; font-size: 15px;">🎲 ലൂഡോ (Ludo Pro)</h3>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">4 കളിക്കാർക്ക് ഒരേ ഫോണിൽ കളിക്കാം</p>
       </div>
-      <button class="play-btn" onclick="openGame('tictactoe')">കളിക്കുക</button>
+      <button class="play-btn" onclick="openGame('ludo')">കളിക്കുക</button>
     </div>
 
-    <!-- കത്രിക-പേപ്പർ-കല്ല് ഗെയിം കാർഡ് -->
+    <!-- ചെസ്സ് ഗെയിം കാർഡ് -->
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 5px 0; color: #f43f5e; font-size: 16px;">✂️ കത്രിക-പേപ്പർ-കല്ല് (RPS)</h3>
-        <p style="margin: 0; font-size: 12px; color: #94a3b8;">രണ്ടുപേർക്ക് രഹസ്യമായി കളിക്കാം</p>
+        <h3 style="margin: 0 0 4px 0; color: #38bdf8; font-size: 15px;">♟️ ചെസ്സ് (Chess Classic)</h3>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">2 കളിക്കാർക്കായുള്ള ക്ലാസിക് ബോർഡ്</p>
       </div>
-      <button class="play-btn" onclick="openGame('rps')">കളിക്കുക</button>
+      <button class="play-btn" onclick="openGame('chess')">കളിക്കുക</button>
     </div>
 
     <!-- ഏണിയും പാമ്പും ഗെയിം കാർഡ് -->
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 5px 0; color: #4ade80; font-size: 16px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
-        <p style="margin: 0; font-size: 12px; color: #94a3b8;">ബോർഡും ഡൈസും ഉപയോഗിച്ച് കളിക്കാം</p>
+        <h3 style="margin: 0 0 4px 0; color: #4ade80; font-size: 15px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">4 പേർക്ക് വരെ ഒരേ ഫോണിൽ കളിക്കാം</p>
       </div>
       <button class="play-btn" onclick="openGame('snakes')">കളിക്കുക</button>
     </div>
   </div>
 
-  <!-- ഗെയിം കളിക്കുന്ന ഏരിയ -->
-  <div class="container" id="gameArea" style="display: none;">
-    <button onclick="backToMenu()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; float: left;">← ഗെയിം ലിസ്റ്റിലേക്ക്</button>
-    <div style="clear: both;"></div>
+  <!-- ഫുൾ-സ്ക്രീൻ ഗെയിം കളിക്കുന്ന ഏരിയ -->
+  <div id="gameArea">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+      <button onclick="backToMenu()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;">← ഗെയിം ലിസ്റ്റിലേക്ക്</button>
+      <h3 id="activeGameTitle" style="margin:0; font-size:15px; color:#facc15;">Game</h3>
+    </div>
     
-    <div id="gameContainer" style="background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; display: inline-block; width: 100%; box-sizing: border-box;">
+    <div id="gameContainer" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; overflow-y: auto; padding-bottom: 20px;">
       <!-- ഡൈനാമിക് ഗെയിം കണ്ടന്റ് ഇവിടെ ലോഡ് ആകും -->
     </div>
   </div>
@@ -112,58 +143,50 @@
   <script>
     function openGame(type) {
       document.getElementById('mainMenu').style.display = 'none';
-      document.getElementById('gameArea').style.display = 'block';
+      document.getElementById('gameArea').style.display = 'flex';
       
       const container = document.getElementById('gameContainer');
+      const titleEl = document.getElementById('activeGameTitle');
       
-      if(type === 'tictactoe') {
+      if(type === 'ludo') {
+        titleEl.innerText = '🎲 ലൂഡോ (4-Player Local)';
         container.innerHTML = `
-          <div id="tttSection" style="text-align: center;">
-            <p id="tttStatus" style="font-size: 16px; color: #38bdf8; margin-bottom: 15px; font-weight: bold;">കളിക്കാരൻ X-ന്റെ ടേൺ</p>
-            <div style="display: grid; grid-template-columns: repeat(3, 90px); gap: 8px; justify-content: center; margin-bottom: 20px;">
-              <button onclick="makeTTTMove(0)" id="t-0" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(1)" id="t-1" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(2)" id="t-2" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(3)" id="t-3" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(4)" id="t-4" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(5)" id="t-5" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(6)" id="t-6" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(7)" id="t-7" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
-              <button onclick="makeTTTMove(8)" id="t-8" style="width: 90px; height: 90px; font-size: 36px; font-weight: bold; background: #0f172a; color: #fff; border: 2px solid #475569; border-radius: 12px; cursor: pointer;"></button>
+          <div style="text-align: center; width: 100%; max-width: 360px;">
+            <p id="ludoStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 10px; font-weight: bold;">കളിക്കാരൻ 1 (🔴) - ഡൈസ് ഉരുട്ടുക</p>
+            <div id="ludoBoard" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; background: #070b19; padding: 10px; border-radius: 12px; border: 2px solid #2563eb; margin-bottom: 15px;">
+              <!-- Dynamic Ludo Mini Grid Cells -->
             </div>
-            <button onclick="resetTTTGame()" style="background: #eab308; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">പുതിയ കളി (Reset)</button>
+            <div style="font-size: 32px; margin-bottom: 8px;" id="ludoDice">🎲</div>
+            <button onclick="rollLudoDice()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="initLudoGame()" style="background: var(--bg-card); color: #94a3b8; border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; margin-top: 10px; cursor: pointer; font-size: 11px; display: block; margin-left: auto; margin-right: auto;">പുതിയ കളി (Reset)</button>
           </div>
         `;
-        resetTTTGame();
+        initLudoGame();
       } 
-      else if(type === 'rps') {
+      else if(type === 'chess') {
+        titleEl.innerText = '♟️ ക്ലാസിക് ചെസ്സ് (2-Player)';
         container.innerHTML = `
-          <div style="text-align: center; padding: 10px;">
-            <h3 style="color: #f43f5e; margin-bottom: 10px;">✂️ കത്രിക-പേപ്പർ-കല്ല്</h3>
-            <p id="rpsStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 20px;">കളിക്കാരൻ 1 നീക്കം തിരഞ്ഞെടുക്കുക</p>
-            <div id="rpsButtons" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
-              <button onclick="playRPS('കല്ല്')" style="background: #1e293b; color: #fff; border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 10px; font-size: 16px; cursor: pointer;">🪨 കല്ല്</button>
-              <button onclick="playRPS('പേപ്പർ')" style="background: #1e293b; color: #fff; border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 10px; font-size: 16px; cursor: pointer;">📄 പേപ്പർ</button>
-              <button onclick="playRPS('കത്രിക')" style="background: #1e293b; color: #fff; border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 10px; font-size: 16px; cursor: pointer;">✂️ കത്രിക</button>
+          <div style="text-align: center; width: 100%; max-width: 360px;">
+            <p id="chessStatus" style="font-size: 13px; color: #38bdf8; margin-bottom: 8px; font-weight: bold;">വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ</p>
+            <div id="chessBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; background: #334155; padding: 4px; border-radius: 8px; border: 2px solid #2563eb; margin-bottom: 10px;">
+              <!-- Chess Board -->
             </div>
-            <button onclick="resetRPS()" style="background: #eab308; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; display: none;" id="rpsResetBtn">വീണ്ടും കളിക്കുക</button>
+            <button onclick="initChessGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;">പുതിയ ചെസ്സ് കളി</button>
           </div>
         `;
-        resetRPS();
+        initChessGame();
       }
       else if(type === 'snakes') {
+        titleEl.innerText = '🐍 ഏണിയും പാമ്പും (Snakes & Ladders)';
         container.innerHTML = `
-          <div style="text-align: center; padding: 10px;">
-            <h3 style="color: #4ade80; margin-bottom: 5px;">🐍 ഏണിയും പാമ്പും (2-Player)</h3>
-            <p id="snakeStatus" style="font-size: 14px; color: #38bdf8; margin-bottom: 10px; font-weight: bold;">കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: 1 | P2: 1)</p>
-            
-            <div id="boardGrid" style="display: grid; grid-template-columns: repeat(6, 45px); gap: 4px; justify-content: center; margin-bottom: 15px; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
-              <!-- ബോർഡ് ബോക്സുകൾ -->
+          <div style="text-align: center; width: 100%; max-width: 380px;">
+            <p id="snakeStatus" style="font-size: 13px; color: #4ade80; margin-bottom: 8px; font-weight: bold;">കളിക്കാരൻ 1 (🔴) ടേൺ</p>
+            <div id="boardGrid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; background: #070b19; padding: 8px; border-radius: 12px; border: 2px solid #2563eb; margin-bottom: 10px;">
+              <!-- Snakes Board -->
             </div>
-
-            <div style="font-size: 36px; margin: 10px;" id="diceBox">🎲</div>
-            <button onclick="rollMultiSnakeDice()" style="background: #4ade80; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">ഡൈസ് ഉരുട്ടുക</button>
-            <button onclick="resetMultiSnakeBoard()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; margin-top: 10px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; font-size: 12px;">പുതിയ കളി</button>
+            <div style="font-size: 30px; margin: 6px;" id="diceBox">🎲</div>
+            <button onclick="rollMultiSnakeDice()" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 12px rgba(34,197,94,0.3);">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="initMultiSnakeBoard()" style="background: var(--bg-card); color: #94a3b8; border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; margin-top: 8px; cursor: pointer; font-size: 11px; display: block; margin-left: auto; margin-right: auto;">പുതിയ കളി</button>
           </div>
         `;
         initMultiSnakeBoard();
@@ -175,98 +198,92 @@
       document.getElementById('mainMenu').style.display = 'block';
     }
 
-    // Tic-Tac-Toe Logic
-    let tttGrid = ['', '', '', '', '', '', '', '', ''];
-    let tttTurn = 'X';
-    let tttActive = true;
-    const tttWins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    // --- LUDO LOCAL 4-PLAYER LOGIC ---
+    let ludoPlayers = [
+      { name: 'കളിക്കാരൻ 1 (🔴)', pos: 0, color: '#f43f5e' },
+      { name: 'കളിക്കാരൻ 2 (🔵)', pos: 0, color: '#38bdf8' },
+      { name: 'കളിക്കാരൻ 3 (🟢)', pos: 0, color: '#4ade80' },
+      { name: 'കളിക്കാരൻ 4 (🟡)', pos: 0, color: '#facc15' }
+    ];
+    let ludoTurn = 0;
 
-    function makeTTTMove(idx) {
-      if (tttGrid[idx] !== '' || !tttActive) return;
-      tttGrid[idx] = tttTurn;
-      let btn = document.getElementById(`t-${idx}`);
-      btn.innerText = tttTurn;
-      btn.style.color = tttTurn === 'X' ? '#38bdf8' : '#f43f5e';
+    function initLudoGame() {
+      ludoTurn = 0;
+      ludoPlayers.forEach(p => p.pos = 0);
+      updateLudoUI();
+    }
 
-      let won = false;
-      for (let w of tttWins) {
-        if (tttGrid[w[0]] && tttGrid[w[0]] === tttGrid[w[1]] && tttGrid[w[0]] === tttGrid[w[2]]) {
-          won = true;
-          break;
+    function updateLudoUI() {
+      let p = ludoPlayers[ludoTurn];
+      document.getElementById('ludoStatus').innerHTML = `<span style="color:${p.color}">${p.name}</span>-ന്റെ ടേൺ (നിലവിലെ കളം: ${p.pos}/24)`;
+      
+      let gridHtml = '';
+      for(let i=1; i<=24; i++) {
+        let occupant = ludoPlayers.find(pl => pl.pos === i);
+        let cellBg = '#131c3f';
+        let cellText = i;
+        if(occupant) {
+          cellBg = occupant.color;
+          cellText = occupant.name[6]; // P symbol
         }
+        gridHtml += `<div style="height: 38px; background: ${cellBg}; color: ${occupant ? '#0f172a':'#94a3b8'}; display:flex; justify-content:center; align-items:center; font-size:11px; font-weight:bold; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">${cellText}</div>`;
       }
+      document.getElementById('ludoBoard').innerHTML = gridHtml;
+    }
 
-      if (won) {
-        document.getElementById('tttStatus').innerText = `🎉 കളിക്കാരൻ ${tttTurn} വിജയിച്ചു!`;
-        tttActive = false;
+    function rollLudoDice() {
+      let dice = Math.floor(Math.random() * 6) + 1;
+      let diceIcons = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+      document.getElementById('ludoDice').innerText = diceIcons[dice - 1];
+
+      let p = ludoPlayers[ludoTurn];
+      p.pos += dice;
+      if(p.pos >= 24) {
+        p.pos = 24;
+        updateLudoUI();
+        alert(`🎉 അഭിനന്ദനങ്ങൾ! ${p.name} ലൂഡോ കളി വിജയിച്ചിരിക്കുന്നു! 🏆`);
+        initLudoGame();
         return;
       }
+      ludoTurn = (ludoTurn + 1) % 4;
+      updateLudoUI();
+    }
 
-      if (!tttGrid.includes('')) {
-        document.getElementById('tttStatus').innerText = `🤝 കളി സമനിലയിൽ ആയി!`;
-        tttActive = false;
-        return;
+    // --- CHESS 2-PLAYER LOGIC ---
+    let chessTurn = 'White';
+    function initChessGame() {
+      chessTurn = 'White';
+      document.getElementById('chessStatus').innerText = 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ';
+      let boardEl = document.getElementById('chessBoard');
+      let boardHtml = '';
+      let pieces = ['♜','♞','♝','♛','♚','♝','♞','♜','♟','♟','♟','♟','♟','♟','♟','♟','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','♙','♙','♙','♙','♙','♙','♙','♙','♖','♘','♗','♕','♔','♗','♘','♖'];
+      
+      for(let i=0; i<64; i++) {
+        let isDark = (Math.floor(i/8) + (i%8)) % 2 === 1;
+        let bg = isDark ? '#1e293b' : '#334155';
+        boardHtml += `<div onclick="selectChessCell(${i})" style="height: 36px; background: ${bg}; display:flex; justify-content:center; align-items:center; font-size: 20px; cursor: pointer; border-radius: 2px;">${pieces[i] || ''}</div>`;
       }
-
-      tttTurn = tttTurn === 'X' ? 'O' : 'X';
-      document.getElementById('tttStatus').innerText = `കളിക്കാരൻ ${tttTurn}-ന്റെ ടേൺ`;
+      boardEl.innerHTML = boardHtml;
     }
 
-    function resetTTTGame() {
-      tttGrid = ['', '', '', '', '', '', '', '', ''];
-      tttTurn = 'X';
-      tttActive = true;
-      let status = document.getElementById('tttStatus');
-      if(status) status.innerText = `കളിക്കാരൻ X-ന്റെ ടേൺ`;
-      for (let i = 0; i < 9; i++) {
-        let b = document.getElementById(`t-${i}`);
-        if(b) { b.innerText = ''; b.style.color = '#fff'; }
-      }
+    function selectChessCell(idx) {
+      chessTurn = chessTurn === 'White' ? 'Black' : 'White';
+      document.getElementById('chessStatus').innerText = `${chessTurn === 'White' ? 'വെളുപ്പ് (White)' : 'കറുപ്പ് (Black)'} കളിക്കാരുടെ ടേൺ`;
     }
 
-    // Rock, Paper, Scissors Logic
-    let rpsPlayer1 = '';
-    function playRPS(choice) {
-      if(!rpsPlayer1) {
-        rpsPlayer1 = choice;
-        document.getElementById('rpsStatus').innerText = `കളിക്കാരൻ 1 തിരഞ്ഞെടുത്തു! ഇനി കളിക്കാരൻ 2 ഫോൺ എടുക്കുക.`;
-      } else {
-        let player2 = choice;
-        let result = '';
-        if(rpsPlayer1 === player2) {
-          result = `🤝 സമനില! (രണ്ടുപേരും ${rpsPlayer1} എടുത്തു)`;
-        } else if(
-          (rpsPlayer1 === 'കല്ല്' && player2 === 'കത്രിക') ||
-          (rpsPlayer1 === 'പേപ്പർ' && player2 === 'കല്ല്') ||
-          (rpsPlayer1 === 'കത്രിക' && player2 === 'പേപ്പർ')
-        ) {
-          result = `🎉 കളിക്കാരൻ 1 വിജയിച്ചു! (${rpsPlayer1} > ${player2})`;
-        } else {
-          result = `🎉 കളിക്കാരൻ 2 വിജയിച്ചു! (${player2} > ${rpsPlayer1})`;
-        }
-        document.getElementById('rpsStatus').innerText = result;
-        document.getElementById('rpsButtons').style.display = 'none';
-        document.getElementById('rpsResetBtn').style.display = 'inline-block';
-      }
-    }
-
-    function resetRPS() {
-      rpsPlayer1 = '';
-      document.getElementById('rpsStatus').innerText = `കളിക്കാരൻ 1 നീക്കം തിരഞ്ഞെടുക്കുക`;
-      document.getElementById('rpsButtons').style.display = 'flex';
-      document.getElementById('rpsResetBtn').style.display = 'none';
-    }
-
-    // Two-Player Snakes and Ladders Logic
-    let p1Pos = 1;
-    let p2Pos = 1;
-    let currentTurn = 1;
+    // --- SNAKES & LADDERS 4-PLAYER LOGIC ---
+    let snakePlayers = [
+      { name: 'P1', pos: 1, color: '#f43f5e' },
+      { name: 'P2', pos: 1, color: '#38bdf8' },
+      { name: 'P3', pos: 1, color: '#4ade80' },
+      { name: 'P4', pos: 1, color: '#facc15' }
+    ];
+    let snakeTurnIdx = 0;
 
     function initMultiSnakeBoard() {
-      p1Pos = 1;
-      p2Pos = 1;
-      currentTurn = 1;
-      document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: 1 | P2: 1)`;
+      snakePlayers.forEach(p => p.pos = 1);
+      snakeTurnIdx = 0;
+      document.getElementById('snakeStatus').innerHTML = `<span style="color:${snakePlayers[0].color}">${snakePlayers[0].name}</span>-ന്റെ ടേൺ`;
       document.getElementById('diceBox').innerText = '🎲';
       renderMultiBoard();
     }
@@ -274,32 +291,18 @@
     function renderMultiBoard() {
       let gridHtml = '';
       for (let i = 30; i >= 1; i--) {
-        let isP1Here = (i === p1Pos);
-        let isP2Here = (i === p2Pos);
+        let occupants = snakePlayers.filter(p => p.pos === i);
+        let bg = '#131c3f';
+        let badges = occupants.map(o => `<span style="color:${o.color}; font-size:9px; font-weight:bold;">${o.name}</span>`).join(' ');
         
-        let bg = '#1e293b';
-        let badge = '';
-        if (isP1Here && isP2Here) {
-          bg = '#a855f7';
-          badge = 'P1&P2';
-        } else if (isP1Here) {
-          bg = '#38bdf8';
-          badge = 'P1';
-        } else if (isP2Here) {
-          bg = '#f43f5e';
-          badge = 'P2';
-        }
-
-        let fg = (isP1Here || isP2Here) ? '#0f172a' : '#fff';
         let extraText = '';
-        if(i === 4) extraText = '🪜(എണി)';
-        if(i === 14) extraText = '⭐(ടോപ്പ്)';
-        if(i === 17) extraText = '🐍(പാമ്പ്)';
-        if(i === 7) extraText = '🔻';
+        if(i === 4) extraText = '🪜';
+        if(i === 14) extraText = '⭐';
+        if(i === 17) extraText = '🐍';
 
-        gridHtml += `<div style="width: 45px; height: 45px; background: ${bg}; color: ${fg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; border-radius: 4px; border: 1px solid #475569;">
-          <span>${badge ? badge + ' (' + i + ')' : i}</span>
-          <span style="font-size: 7px;">${extraText}</span>
+        gridHtml += `<div style="height: 42px; background: ${bg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+          <span style="color: #94a3b8; font-size: 9px;">${i} ${extraText}</span>
+          <div>${badges}</div>
         </div>`;
       }
       document.getElementById('boardGrid').innerHTML = gridHtml;
@@ -310,41 +313,24 @@
       let diceIcons = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
       document.getElementById('diceBox').innerText = diceIcons[dice - 1];
       
-      if (currentTurn === 1) {
-        p1Pos += dice;
-        if(p1Pos === 4) { p1Pos = 14; alert('കളിക്കാരൻ 1: എണി കയറി 4 ൽ നിന്ന് 14 ലേക്ക് എത്തി! 🪜'); }
-        else if(p1Pos === 17) { p1Pos = 7; alert('കളിക്കാരൻ 1: പാമ്പ് കടിച്ചു 17 ൽ നിന്ന് 7 ലേക്ക് വീണു! 🐍'); }
+      let p = snakePlayers[snakeTurnIdx];
+      p.pos += dice;
+      
+      if(p.pos === 4) { p.pos = 14; alert(`${p.name}: ഏണി കയറി 14-ലേക്ക് എത്തി! 🪜`); }
+      else if(p.pos === 17) { p.pos = 7; alert(`${p.name}: പാമ്പ് കടിച്ച് 7-ലേക്ക് വീണു! 🐍`); }
 
-        if(p1Pos >= 30) {
-          p1Pos = 30;
-          renderMultiBoard();
-          document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! കളിക്കാരൻ 1 വിജയിച്ചു!`;
-          alert('കളിക്കാരൻ 1 കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
-          return;
-        }
-        currentTurn = 2;
-        document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 2-ന്റെ ടേൺ (P1: ${p1Pos} | P2: ${p2Pos})`;
-      } else {
-        p2Pos += dice;
-        if(p2Pos === 4) { p2Pos = 14; alert('കളിക്കാരൻ 2: എണി കയറി 4 ൽ നിന്ന് 14 ലേക്ക് എത്തി! 🪜'); }
-        else if(p2Pos === 17) { p2Pos = 7; alert('കളിക്കാരൻ 2: പാമ്പ് കടിച്ചു 17 ൽ നിന്ന് 7 ലേക്ക് വീണു! 🐍'); }
-
-        if(p2Pos >= 30) {
-          p2Pos = 30;
-          renderMultiBoard();
-          document.getElementById('snakeStatus').innerText = `🏆 അഭിനന്ദനങ്ങൾ! കളിക്കാരൻ 2 വിജയിച്ചു!`;
-          alert('കളിക്കാരൻ 2 കളി വിജയിച്ചിരിക്കുന്നു! 🎉');
-          return;
-        }
-        currentTurn = 1;
-        document.getElementById('snakeStatus').innerText = `കളിക്കാരൻ 1-ന്റെ ടേൺ (P1: ${p1Pos} | P2: ${p2Pos})`;
+      if(p.pos >= 30) {
+        p.pos = 30;
+        renderMultiBoard();
+        alert(`🏆 അഭിനന്ദനങ്ങൾ! ${p.name} കളി വിജയിച്ചിരിക്കുന്നു! 🎉`);
+        initMultiSnakeBoard();
+        return;
       }
 
+      snakeTurnIdx = (snakeTurnIdx + 1) % 4;
+      let nextP = snakePlayers[snakeTurnIdx];
+      document.getElementById('snakeStatus').innerHTML = `<span style="color:${nextP.color}">${nextP.name}</span>-ന്റെ ടേൺ`;
       renderMultiBoard();
-    }
-
-    function resetMultiSnakeBoard() {
-      initMultiSnakeBoard();
     }
   </script>
 </body>
