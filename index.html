@@ -146,16 +146,16 @@
       position: relative; 
     }
 
-    /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രം കൂടുതൽ വ്യക്തതയുള്ളതാക്കാൻ ഓവർലേ ലൈറ്റ് ആക്കി മാറ്റിയിരിക്കുന്നു */
+    /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രത്തിന്റെ തെളിച്ചം കൂട്ടാൻ ഓവർലേ ലൈറ്റ് ആക്കിയിരിക്കുന്നു */
     .hero-banner { 
       position: relative; 
-      height: 175px; 
+      height: 165px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      background: linear-gradient(180deg, rgba(7, 11, 25, 0.15) 0%, rgba(11, 17, 40, 0.70) 85%, var(--bg-app) 100%); 
+      background: linear-gradient(180deg, rgba(7, 11, 25, 0.1) 0%, rgba(11, 17, 40, 0.60) 85%, var(--bg-app) 100%); 
     }
 
     .top-action-bar { position: absolute; top: 12px; left: 14px; right: 14px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
@@ -172,30 +172,28 @@
       cursor: pointer; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    /* ലോഗോയും പേരും ഒതുക്കത്തിൽ കൃത്യമായ സ്പേസിംഗിൽ ക്രമീകരിച്ചിരിക്കുന്നു */
+    /* ലോഗോ ഇടതുവശത്തും പേര് അതിനോട് ചേർന്ന് വൃത്തിയായി വരുന്ന ലേഔട്ട് */
     .hero-branding-content {
-      position: absolute; bottom: 12px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; width: 100%;
+      position: absolute; bottom: 12px; left: 16px; right: 16px; display: flex; align-items: center; gap: 12px; z-index: 10;
     }
 
-    .profile-avatar-wrap { display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 4px; }
+    .profile-avatar-wrap { display: flex; align-items: center; flex-shrink: 0; }
     .profile-avatar { 
-      width: 60px; height: 60px; border-radius: 50%; border: 2.5px solid #facc15; 
+      width: 58px; height: 58px; border-radius: 50%; border: 2.5px solid #facc15; 
       background: var(--bg-card) center/cover no-repeat; box-shadow: 0 4px 18px rgba(250, 204, 21, 0.5); 
     }
 
     .main-app-name { 
-      font-size: 20px; 
+      font-size: 21px; 
       font-weight: 800; 
       background: linear-gradient(135deg, #ffffff 0%, #facc15 100%); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
       text-shadow: 0 2px 10px rgba(0,0,0,0.6); 
       letter-spacing: -0.2px; 
-      text-align: center;
-      width: 100%;
     }
 
-    /* ക്വിക്ക് ആക്സസ് കള്ളികൾ പുറത്തേക്ക് പോകാതെ കൃത്യമായ പാഡിംഗിൽ ഒതുക്കിയിരിക്കുന്നു */
+    /* ഒതുക്കമുള്ള ക്വിക്ക് ആക്സസ് കള്ളികൾ */
     .quick-access-grid { 
       display: grid; 
       grid-template-columns: repeat(4, 1fr); 
@@ -359,7 +357,7 @@
           </div>
         </div>
 
-        <!-- കൂടുതൽ വ്യക്തതയോടെ മനോഹരമായി ക്രമീകരിച്ച ഹെഡർ ലോഗോയും പേരും -->
+        <!-- ലോഗോ ഇടതുവശത്തും പേര് വലതുവശത്തും വരുന്ന രീതിയിൽ കൂടുതൽ വ്യക്തതയോടെ ക്രമീകരിച്ചിരിക്കുന്നു -->
         <div class="hero-branding-content">
           <div class="profile-avatar-wrap">
             <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
