@@ -146,15 +146,16 @@
       position: relative; 
     }
 
+    /* ബാക്ക്ഗ്രൗണ്ട് ചിത്രം കൂടുതൽ വ്യക്തതയുള്ളതാക്കാൻ ഓവർലേ ലൈറ്റ് ആക്കി മാറ്റിയിരിക്കുന്നു */
     .hero-banner { 
       position: relative; 
-      height: 170px; 
+      height: 175px; 
       background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat; 
     }
     .hero-overlay { 
       position: absolute; 
       inset: 0; 
-      background: linear-gradient(180deg, rgba(7, 11, 25, 0.25) 0%, rgba(11, 17, 40, 0.85) 85%, var(--bg-app) 100%); 
+      background: linear-gradient(180deg, rgba(7, 11, 25, 0.15) 0%, rgba(11, 17, 40, 0.70) 85%, var(--bg-app) 100%); 
     }
 
     .top-action-bar { position: absolute; top: 12px; left: 14px; right: 14px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
@@ -171,42 +172,56 @@
       cursor: pointer; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    /* ലോഗോ ഇടതുവശത്തും, പേര് സെന്ററിലും ആക്കിയ പുതിയ ലേഔട്ട് */
+    /* ലോഗോയും പേരും ഒതുക്കത്തിൽ കൃത്യമായ സ്പേസിംഗിൽ ക്രമീകരിച്ചിരിക്കുന്നു */
     .hero-branding-content {
-      position: absolute; bottom: 12px; left: 16px; right: 16px; display: flex; align-items: center; gap: 14px; z-index: 10;
+      position: absolute; bottom: 12px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; width: 100%;
     }
 
-    .profile-avatar-wrap { display: flex; align-items: center; flex-shrink: 0; }
+    .profile-avatar-wrap { display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 4px; }
     .profile-avatar { 
-      width: 65px; height: 65px; border-radius: 50%; border: 3px solid #facc15; 
-      background: var(--bg-card) center/cover no-repeat; box-shadow: 0 4px 20px rgba(250, 204, 21, 0.45); 
-    }
-
-    .main-app-name-wrap {
-      flex: 1; text-align: center; display: flex; justify-content: center; align-items: center;
+      width: 60px; height: 60px; border-radius: 50%; border: 2.5px solid #facc15; 
+      background: var(--bg-card) center/cover no-repeat; box-shadow: 0 4px 18px rgba(250, 204, 21, 0.5); 
     }
 
     .main-app-name { 
-      font-size: 22px; 
+      font-size: 20px; 
       font-weight: 800; 
       background: linear-gradient(135deg, #ffffff 0%, #facc15 100%); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
       text-shadow: 0 2px 10px rgba(0,0,0,0.6); 
       letter-spacing: -0.2px; 
+      text-align: center;
+      width: 100%;
     }
 
-    .quick-access-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px 14px 4px 14px; }
+    /* ക്വിക്ക് ആക്സസ് കള്ളികൾ പുറത്തേക്ക് പോകാതെ കൃത്യമായ പാഡിംഗിൽ ഒതുക്കിയിരിക്കുന്നു */
+    .quick-access-grid { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 6px; 
+      padding: 8px 12px 6px 12px; 
+      background: var(--bg-app);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+    }
     .quick-chip {
-      background: linear-gradient(145deg, rgba(19, 28, 63, 0.9), rgba(23, 35, 77, 0.7));
-      border: 1.5px solid rgba(59, 130, 246, 0.4); border-radius: 14px; padding: 9px 6px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; text-decoration: none; text-align: center; transition: transform 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      background: linear-gradient(145deg, rgba(19, 28, 63, 0.95), rgba(23, 35, 77, 0.8));
+      border: 1.5px solid rgba(59, 130, 246, 0.35); 
+      border-radius: 12px; 
+      padding: 8px 4px;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center;
+      cursor: pointer; 
+      text-decoration: none; 
+      text-align: center; 
+      transition: transform 0.2s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
     .quick-chip:active { transform: scale(0.95); }
-    .quick-chip-icon { font-size: 18px; margin-bottom: 2px; }
-    .quick-chip-title { font-size: 10.5px; font-weight: 700; color: #f8fafc; }
+    .quick-chip-icon { font-size: 16px; margin-bottom: 2px; }
+    .quick-chip-title { font-size: 10px; font-weight: 700; color: #f8fafc; white-space: nowrap; }
 
     .search-container { position: relative; width: 100%; margin-top: 4px; }
     .search-input-box {
@@ -344,17 +359,16 @@
           </div>
         </div>
 
-        <!-- ലോഗോ ഇടതുവശത്തും, പേര് കൃത്യം സെന്ററിലും വരുന്ന ലേഔട്ട് -->
+        <!-- കൂടുതൽ വ്യക്തതയോടെ മനോഹരമായി ക്രമീകരിച്ച ഹെഡർ ലോഗോയും പേരും -->
         <div class="hero-branding-content">
           <div class="profile-avatar-wrap">
             <div class="profile-avatar" id="profileAvatarImg" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80');"></div>
           </div>
-          <div class="main-app-name-wrap">
-            <div class="main-app-name">കോളയാട് കണക്ട്</div>
-          </div>
+          <div class="main-app-name">കോളയാട് കണക്ട്</div>
         </div>
       </div>
 
+      <!-- ഒതുക്കമുള്ള ക്വിക്ക് ആക്സസ് കള്ളികൾ -->
       <div class="quick-access-grid">
         <div class="quick-chip" onclick="setCat('worker', document.querySelector('.cat-box:nth-child(5)'))">
           <span class="quick-chip-icon">👷</span>
