@@ -204,26 +204,6 @@
     .quick-chip-icon { font-size: 18px; margin-bottom: 2px; }
     .quick-chip-title { font-size: 10.5px; font-weight: 700; color: #f8fafc; }
 
-    .ticker-box-wrapper {
-      display: flex !important;
-      align-items: center !important;
-      gap: 10px !important;
-      overflow: hidden !important;
-      padding: 10px 14px !important;
-      width: 100% !important;
-      border-radius: 14px !important;
-    }
-
-    marquee {
-      width: 100% !important;
-      overflow: hidden !important;
-      white-space: nowrap !important;
-      color: #ffffff !important;
-      font-weight: 800 !important;
-      font-size: 13.5px !important;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-    }
-
     .search-container { position: relative; width: 100%; margin-top: 4px; }
     .search-input-box {
       width: 100%; padding: 12px 16px; background: rgba(19, 28, 63, 0.75); backdrop-filter: blur(14px);
@@ -393,25 +373,28 @@
           </button>
         </div>
 
-        <!-- മാർക്കറ്റ് റേറ്റ് പ്രൊഫഷണൽ സ്ക്രോളിങ് ടിക്കർ ബാർ -->
-        <a href="market-rates.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #131c3f 0%, #1c2b5e 100%); border: 1.5px solid rgba(59, 130, 246, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-            <span style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 7px; white-space: nowrap; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">📊 വിലനിലവാരം</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4">
-              <span id="homeTickerText">സ്വർണ്ണം: ₹ 58,000  •  വെള്ളി: ₹ 85  •  റബർ: ₹ 185  •  കുരുമുളക്: ₹ 650  •  അടയ്ക്ക: ₹ 260  •  തേങ്ങ: ₹ 40  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)</span>
-            </marquee>
-          </div>
-        </a>
+        <!-- 2 ബോക്സുകളായുള്ള ഗ്രീൻ & വയലറ്റ് ഗ്രേഡിയൻ്റ് സ്റ്റൈൽ ലേഔട്ട് -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; width: 100%;">
+          
+          <!-- വിലനിലവാരം ബോക്സ് (പച്ച ഗ്രേഡിയൻ്റ്) -->
+          <a href="market-rates.html" style="text-decoration: none; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, #065f46 0%, #047857 100%); border: 1.5px solid #10b981; border-radius: 14px; padding: 10px 12px; box-shadow: 0 4px 15px rgba(4, 120, 87, 0.35);">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+              <span style="font-size: 16px;">📊</span>
+              <span style="color: #ffffff; font-size: 12.5px; font-weight: 800;">വിലനിലവാരം</span>
+            </div>
+            <span style="color: #d1fae5; font-size: 11px; font-weight: 600;">പ്രധാന ചന്ത വിവരങ്ങൾ ➔</span>
+          </a>
 
-        <!-- തൊഴിലവസരങ്ങൾ സ്ക്രോളിങ് ബാനർ ബാർ -->
-        <a href="jobs.html" style="text-decoration: none; display: block; width: 100%; margin-bottom: 8px;">
-          <div class="ticker-box-wrapper" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border: 1.5px solid rgba(124, 58, 237, 0.5); box-shadow: 0 4px 15px rgba(124,58,237,0.3);">
-            <span style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 7px; white-space: nowrap; box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 4px; flex-shrink: 0;">💼 തൊഴിൽ വാർത്തകൾ</span>
-            <marquee behavior="scroll" direction="left" scrollamount="4">
-              <span>കോളയാട് പ്രദേശത്തെ പുതിയ തൊഴിലവസരങ്ങൾ അറിയാനും, നിങ്ങളുടെ സ്ഥാപനത്തിലെ ഒഴിവുകൾ സൗജന്യമായി പരസ്യം ചെയ്യാനും ഇവിടെ ക്ലിക്ക് ചെയ്യൂ! ➔</span>
-            </marquee>
-          </div>
-        </a>
+          <!-- തൊഴിൽ വാർത്തകൾ ബോക്സ് (വയലറ്റ് ഗ്രേഡിയൻ്റ്) -->
+          <a href="jobs.html" style="text-decoration: none; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); border: 1.5px solid #a78bfa; border-radius: 14px; padding: 10px 12px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+              <span style="font-size: 16px;">💼</span>
+              <span style="color: #ffffff; font-size: 12.5px; font-weight: 800;">തൊഴിൽ വാർത്തകൾ</span>
+            </div>
+            <span style="color: #ede9fe; font-size: 11px; font-weight: 600;">പുതിയ അവസരങ്ങൾ ➔</span>
+          </a>
+
+        </div>
       </div>
 
       <div class="announcement-card-container" style="margin: 6px 0 12px 0;">
@@ -718,33 +701,6 @@
             });
           }
         } catch(err) {}
-        
-        try {
-          const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
-          if (rateDoc.exists()) {
-            let data = rateDoc.data();
-            let gold = data.gold || '58,000';
-            let silver = data.silver || '85';
-            let rubber = data.rubber || '185';
-            let pepper = data.pepper || '650';
-            let arecanut = data.arecanut || '260';
-            let coconut = data.coconut || '40';
-
-            gold = String(gold).replace(/₹/g, '').trim();
-            silver = String(silver).replace(/₹/g, '').trim();
-            rubber = String(rubber).replace(/₹/g, '').trim();
-            pepper = String(pepper).replace(/₹/g, '').trim();
-            arecanut = String(arecanut).replace(/₹/g, '').trim();
-            coconut = String(coconut).replace(/₹/g, '').trim();
-
-            const tickerElement = document.getElementById('homeTickerText');
-            if(tickerElement) {
-              tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-            }
-          }
-        } catch(err) {
-          console.log("Error loading market rates: ", err);
-        }
 
         const shopSnap = await window.getDocs(window.collection(window.db, "shops"));
         if (!shopSnap.empty) {
@@ -817,10 +773,10 @@
             </span>
             <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">📅 ${latestNotice.date || ''}</span>
           </div>
-          <h4 style="color: #ffffff; font-size: 17px; margin: 6px 0 4px 0; font-weight: 800; word-break: break-word;">${latestNotice.title || ''}</h4>
-          <p style="color: #cbd5e1; font-size: 13.5px; margin-bottom: 10px; line-height: 1.5; font-weight: 500; word-break: break-word;">${latestNotice.desc || ''}</p>
+          <h4 style="color: #ffffff; font-size: 16px; margin: 8px 0 6px 0; font-weight: 800; word-break: break-word; line-height: 1.4;">${latestNotice.title || ''}</h4>
+          <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 12px; line-height: 1.5; font-weight: 500; word-break: break-word;">${latestNotice.desc || ''}</p>
           
-          ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 14px; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.3);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 210px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
+          ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 14px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.3);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 210px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
 
           <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px;">
             <a href="announcements.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #ffffff; padding: 11px 16px; border-radius: 14px; font-size: 13.5px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); border: 1.5px solid rgba(196, 181, 253, 0.4);">
@@ -1128,51 +1084,6 @@
     }
   
     window.onload = function() {
-      async function loadLiveTickerRates() {
-        try {
-          if (window.db) {
-            const rateDoc = await window.getDoc(window.doc(window.db, "settings", "market_rates"));
-            if (rateDoc.exists()) {
-              let data = rateDoc.data();
-              let gold = data.gold || data.adminGold || '58,000';
-              let silver = data.silver || data.adminSilver || '85.00';
-              let rubber = data.rubber || data.adminRubber || '185.00';
-              let pepper = data.pepper || data.adminPepper || '650.00';
-              let arecanut = data.arecanut || data.adminArecanut || '260.00';
-              let coconut = data.coconut || data.adminCoconut || '40.00';
-
-              gold = String(gold).replace(/₹/g, '').trim();
-              silver = String(silver).replace(/₹/g, '').trim();
-              rubber = String(rubber).replace(/₹/g, '').trim();
-              pepper = String(pepper).replace(/₹/g, '').trim();
-              arecanut = String(arecanut).replace(/₹/g, '').trim();
-              coconut = String(coconut).replace(/₹/g, '').trim();
-
-              const tickerElement = document.getElementById('homeTickerText');
-              if(tickerElement) {
-                tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-              }
-              return;
-            }
-          }
-        } catch(err) {
-          console.log("Error fetching live rates: ", err);
-        }
-
-        let gold = localStorage.getItem('p_gold') || '58,000';
-        let silver = localStorage.getItem('p_silver') || '85.00';
-        let rubber = localStorage.getItem('p_rubber') || '185.00';
-        let pepper = localStorage.getItem('p_pepper') || '650.00';
-        let arecanut = localStorage.getItem('p_arecanut') || '260.00';
-        let coconut = localStorage.getItem('p_coconut') || '40.00';
-
-        const tickerElement = document.getElementById('homeTickerText');
-        if(tickerElement) {
-          tickerElement.innerText = `സ്വർണ്ണം: ₹ ${gold}  •  വെള്ളി: ₹ ${silver}  •  റബർ: ₹ ${rubber}  •  കുരുമുളക്: ₹ ${pepper}  •  അടയ്ക്ക: ₹ ${arecanut}  •  തേങ്ങ: ₹ ${coconut}  •  (കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ ക്ലിക്ക് ചെയ്യൂ...)`;
-        }
-      }
-
-      loadLiveTickerRates();
       initApp();
     };
 
