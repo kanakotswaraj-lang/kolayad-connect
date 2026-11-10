@@ -138,7 +138,7 @@
     </div>
   </div>
 
-  <!-- പ്ലെയർ സെലക്ഷൻ ഡയലോഗ് / സ്ക്രീൻ -->
+  <!-- പ്ലെയർ സെലക്ഷൻ ഡയലോഗ് -->
   <div id="setupArea" style="position: fixed; inset: 0; background: var(--bg-app); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
     <h3 id="setupTitle" style="color: #facc15; margin-bottom: 15px; font-size: 18px;">കളിക്കാരുടെ എണ്ണം തിരഞ്ഞെടുക്കുക</h3>
     <div style="display: flex; gap: 10px; margin-bottom: 25px;" id="playerCountBtns">
@@ -169,7 +169,6 @@
 
     function openSetup(type) {
       currentGameType = type;
-      document.getElementById('setupTitle.innerText') = type === 'ludo' ? 'ലൂഡോ കളിക്കാരുടെ എണ്ണം തിരഞ്ഞെടുക്കുക' : 'പാമ്പും ഏണിയും കളിക്കാരുടെ എണ്ണം';
       document.getElementById('setupArea').style.display = 'flex';
     }
 
@@ -265,14 +264,14 @@
       
       let gridHtml = '';
       for(let i=1; i<=24; i++) {
-        let occupant = activeLudoPlayers.find(pl => pl.pos === i);
+        let occupants = activeLudoPlayers.filter(pl => pl.pos === i);
         let cellBg = '#131c3f';
-        let cellText = i;
-        if(occupant) {
-          cellBg = occupant.color;
-          cellText = occupant.name[6]; 
-        }
-        gridHtml += `<div style="height: 52px; background: ${cellBg}; color: ${occupant ? '#0f172a':'#fff'}; display:flex; justify-content:center; align-items:center; font-size:14px; font-weight:bold; border-radius:8px; border:1px solid rgba(255,255,255,0.15);">${cellText}</div>`;
+        let badges = occupants.map(o => `<span style="color:#0f172a; background:${o.color}; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:bold; margin:1px;">${o.name[6]}</span>`).join('');
+        
+        gridHtml += `<div style="height: 54px; background: ${cellBg}; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:12px; font-weight:bold; border-radius:8px; border:1px solid rgba(255,255,255,0.15); color:#fff;">
+          <span style="font-size:10px; color:#94a3b8; margin-bottom:2px;">${i}</span>
+          <div>${badges}</div>
+        </div>`;
       }
       document.getElementById('ludoBoard').innerHTML = gridHtml;
     }
@@ -295,7 +294,7 @@
       updateLudoUI();
     }
 
-    // --- CHESS LOGIC (Playable with selection) ---
+    // --- CHESS LOGIC (Correct Move / Click & Place) ---
     let chessBoardState = [];
     let selectedCell = null;
     let chessTurn = 'White';
@@ -326,7 +325,7 @@
           let isDark = (r + c) % 2 === 1;
           let bg = isDark ? '#1e293b' : '#334155';
           if(selectedCell && selectedCell.r === r && selectedCell.c === c) {
-            bg = '#2563eb';
+            bg = '#2563eb'; // Highlight selected piece
           }
           let piece = chessBoardState[r][c];
           boardHtml += `<div onclick="handleChessClick(${r}, ${c})" style="height: 40px; background: ${bg}; display:flex; justify-content:center; align-items:center; font-size: 24px; cursor: pointer; border-radius: 3px;">${piece}</div>`;
@@ -337,16 +336,26 @@
 
     function handleChessClick(r, c) {
       let piece = chessBoardState[r][c];
+      
       if(!selectedCell) {
+        // Select a piece if it's not empty
         if(piece !== '') {
           selectedCell = {r, c};
           renderChessBoard();
         }
       } else {
-        // Move piece
+        // If clicking the same cell again, unselect
+        if(selectedCell.r === r && selectedCell.c === c) {
+          selectedCell = null;
+          renderChessBoard();
+          return;
+        }
+
+        // Move the selected piece to the new target cell
         chessBoardState[r][c] = chessBoardState[selectedCell.r][selectedCell.c];
         chessBoardState[selectedCell.r][selectedCell.c] = '';
         selectedCell = null;
+        
         chessTurn = chessTurn === 'White' ? 'Black' : 'White';
         document.getElementById('chessStatus').innerText = `${chessTurn === 'White' ? 'വെളുപ്പ് (White)' : 'കറുപ്പ് (Black)'} കളിക്കാരുടെ ടേൺ`;
         renderChessBoard();
@@ -378,7 +387,7 @@
       for (let i = 30; i >= 1; i--) {
         let occupants = activeSnakePlayers.filter(p => p.pos === i);
         let bg = '#131c3f';
-        let badges = occupants.map(o => `<span style="color:${o.color}; font-size:11px; font-weight:bold; background:rgba(0,0,0,0.4); padding:1px 4px; border-radius:4px;">${o.name}</span>`).join(' ');
+        let badges = occupants.map(o => `<span style="color:#0f172a; background:${o.color}; padding:1px 5px; border-radius:4px; font-size:10px; font-weight:bold; margin:1px;">${o.name}</span>`).join(' ');
         
         let extraText = '';
         if(i === 4) extraText = '🪜(എണി)';
@@ -386,7 +395,7 @@
 
         gridHtml += `<div style="height: 54px; background: ${bg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12);">
           <span style="color: #94a3b8; font-size: 10px; font-weight: bold;">${i} ${extraText}</span>
-          <div style="margin-top:2px;">${badges}</div>
+          <div style="margin-top:3px;">${badges}</div>
         </div>`;
       }
       document.getElementById('boardGrid').innerHTML = gridHtml;
