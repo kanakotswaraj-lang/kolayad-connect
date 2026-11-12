@@ -18,7 +18,7 @@
 
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <meta name="theme-color" content="#0b1128">
+  <meta name="theme-color" content="#0f172a">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -107,7 +107,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
     
     :root {
-      /* 🌟 Rich Royal Blue & Purple Gradient Background Theme */
       --bg-body: radial-gradient(circle at top, #1e1b4b 0%, #0f172a 100%);
       --bg-app: #0f172a;
       --bg-card: rgba(30, 27, 75, 0.85);
@@ -119,11 +118,12 @@
       --accent-gold: #facc15;
     }
 
+    /* 🌟 മനോഹരമായ വൈറ്റ് തീം (Light Mode) ക്രമീകരണങ്ങൾ */
     body.light-mode {
-      --bg-body: #f1f5f9;
+      --bg-body: #f8fafc;
       --bg-app: #ffffff;
       --bg-card: #ffffff;
-      --bg-input: #f8fafc;
+      --bg-input: #f1f5f9;
       --text-main: #0f172a;
       --text-sub: #475569;
       --border-color: #cbd5e1;
@@ -165,12 +165,14 @@
       color: #c084fc; padding: 6px 12px; border-radius: 20px; font-size: 13px; cursor: pointer; 
       display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
+    body.light-mode .theme-toggle-btn { background: #ffffff; color: #7c3aed; border-color: #7c3aed; }
 
     .admin-badge-btn { 
       background: rgba(30, 27, 75, 0.85); backdrop-filter: blur(10px); border: 1.5px solid #a855f7; 
       color: #e879f9; padding: 6px 14px; border-radius: 20px; font-size: 11.5px; font-weight: 800; 
       cursor: pointer; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
+    body.light-mode .admin-badge-btn { background: #ffffff; color: #7c3aed; border-color: #7c3aed; }
 
     .hero-branding-content {
       position: absolute; bottom: 12px; left: 16px; right: 16px; display: flex; align-items: center; gap: 12px; z-index: 10;
@@ -213,9 +215,11 @@
       transition: transform 0.2s;
       box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
+    body.light-mode .quick-chip { background: #f8fafc; border-color: #cbd5e1; }
     .quick-chip:active { transform: scale(0.95); }
     .quick-chip-icon { font-size: 16px; margin-bottom: 2px; }
     .quick-chip-title { font-size: 10px; font-weight: 700; color: #f8fafc; white-space: nowrap; }
+    body.light-mode .quick-chip-title { color: #0f172a; }
 
     .search-container { position: relative; width: 100%; margin-top: 4px; }
     .search-input-box {
@@ -223,31 +227,36 @@
       border: 1.5px solid rgba(168, 85, 247, 0.6); border-radius: 16px; color: #ffffff; font-size: 13.5px; font-weight: 600;
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(124, 58, 237, 0.2); outline: none; transition: all 0.3s ease;
     }
-    body.light-mode .search-input-box { background: rgba(248, 250, 252, 0.95); color: #0f172a; border: 1.5px solid rgba(124, 58, 237, 0.4); }
+    body.light-mode .search-input-box { background: #f8fafc; color: #0f172a; border: 1.5px solid #cbd5e1; box-shadow: none; }
     .search-input-box:focus { border-color: #c084fc; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 15px rgba(168, 85, 247, 0.5); }
+    body.light-mode .search-input-box:focus { border-color: #7c3aed; box-shadow: 0 0 10px rgba(124, 58, 237, 0.2); }
     .search-input-box::placeholder { color: #94a3b8; font-weight: 500; }
 
-    .scrollable-body { flex: 1; overflow-y: auto; padding: 10px 14px; padding-bottom: 120px; background: radial-gradient(circle at center, #111827 0%, #0f172a 100%); }
+    .scrollable-body { flex: 1; overflow-y: auto; padding: 10px 14px; padding-bottom: 120px; background: var(--bg-app); }
     
     .section-label { font-size: 13px; font-weight: 800; color: #c084fc; margin: 12px 0 8px 2px; display: flex; justify-content: space-between; align-items: center; }
+    body.light-mode .section-label { color: #7c3aed; }
     
     .category-grid-container { max-height: 190px; overflow-y: auto; margin-bottom: 12px; padding-right: 2px; scrollbar-width: none; }
     .category-grid-container::-webkit-scrollbar { display: none; }
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
     
     .cat-box { background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 11px 8px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    body.light-mode .cat-box { background: #ffffff; border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     .cat-box-icon { 
       font-size: 20px; width: 44px; height: 44px; border-radius: 13px; 
       background: rgba(147, 51, 234, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); 
       display: flex; align-items: center; justify-content: center; color: #d8b4fe; margin-bottom: 5px;
     }
+    body.light-mode .cat-box-icon { background: #f3e8ff; color: #7c3aed; border-color: #d8b4fe; }
     .cat-box-title { font-size: 11px; font-weight: 700; color: #f8fafc; }
+    body.light-mode .cat-box-title { color: #0f172a; }
 
     .cat-box.active { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border-color: #c084fc; box-shadow: 0 6px 20px rgba(124,58,237,0.5); }
     .cat-box.active .cat-box-title { color: #ffffff; font-weight: 800; }
     .cat-box.active .cat-box-icon { background: rgba(255,255,255,0.25); color: #ffffff; }
     
-    /* 🌟 പ്രീമിയം ഹൊറിസോണ്ടൽ കാർഡ് (ഫോട്ടോ ഇടതുവശത്ത് വൃത്തിയായി + വിവരങ്ങൾ മുഴുവനായും വ്യക്തമായി) */
+    /* 🌟 ഫോട്ടോ കൃത്യം നടുവിൽ (Center) വരുന്ന ഹൊറിസോണ്ടൽ കാർഡ് ഡിസൈൻ */
     .pro-card { 
       background: linear-gradient(145deg, rgba(30, 27, 75, 0.95), rgba(15, 23, 42, 0.9)); 
       border-radius: 18px; 
@@ -262,25 +271,30 @@
       align-items: stretch;
       height: auto;
     }
+    body.light-mode .pro-card { background: #ffffff; border-color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 
     .pro-card-left {
       width: 112px;
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center; /* 🌟 ഫോട്ടോ ലംബമായി (Vertical) നടുവിൽ നിൽക്കാൻ */
     }
 
     .shop-thumb-img { 
       width: 100%; 
       height: 100%;
       min-height: 145px;
-      max-height: 220px;
+      max-height: 200px;
       object-fit: cover; 
+      object-position: center; /* 🌟 ഫോട്ടോ ഏത് സൈസ് ആയാലും സെന്റർ ആയി ക്രോപ്പ് ചെയ്യാൻ */
       border-radius: 12px; 
       border: 1.5px solid rgba(168, 85, 247, 0.4); 
       cursor: zoom-in; 
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
+    body.light-mode .shop-thumb-img { border-color: #cbd5e1; }
 
     .pro-card-right {
       flex: 1;
@@ -302,6 +316,7 @@
       width: fit-content;
       margin-bottom: 4px;
     }
+    body.light-mode .badge-tag { background: #f3e8ff; color: #7c3aed; border-color: #d8b4fe; }
 
     .item-name { 
       font-size: 15.5px; 
@@ -311,6 +326,7 @@
       line-height: 1.3;
       word-break: break-word;
     }
+    body.light-mode .item-name { color: #0f172a; }
     
     .item-loc { 
       font-size: 11.5px; 
@@ -320,6 +336,7 @@
       line-height: 1.3;
       word-break: break-word;
     }
+    body.light-mode .item-loc { color: #d97706; }
     
     .item-desc-highlight { 
       font-size: 12px; 
@@ -333,6 +350,7 @@
       font-weight: 500; 
       word-break: break-word;
     }
+    body.light-mode .item-desc-highlight { background: #f8fafc; color: #334155; border-color: #e2e8f0; }
 
     .card-actions { display: flex; gap: 6px; align-items: center; }
     
@@ -406,11 +424,14 @@
     .btn-emergency-quick { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: 1.5px solid #fca5a5; padding: 9px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; cursor: pointer; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35); display: inline-flex; align-items: center; justify-content: center; }
 
     .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(14px); border-top: 1.5px solid var(--border-color); padding: 8px 16px 14px 16px; display: flex; justify-content: space-around; z-index: 30; }
+    body.light-mode .bottom-nav { background: #ffffff; border-top-color: #cbd5e1; }
     .nav-btn { border: none; background: transparent; color: #94a3b8; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; text-decoration: none; transition: color 0.2s; }
     .nav-btn.active { color: #c084fc; font-weight: 800; }
+    body.light-mode .nav-btn.active { color: #7c3aed; }
     
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: #0f172a; border: 1.5px solid #7c3aed; border-radius: 24px; width: 100%; max-width: 380px; padding: 20px; color: #ffffff; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    body.light-mode .modal-box { background: #ffffff; color: #0f172a; border-color: #cbd5e1; }
 
     #imageZoomModal { background: rgba(0,0,0,0.92); z-index: 100; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
@@ -422,8 +443,9 @@
     }
 
     body.light-mode #listings > div {
-      background: #0f172a !important;
-      color: #ffffff !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1.5px solid #cbd5e1 !important;
     }
 
     #noticeSlider {
@@ -431,23 +453,20 @@
       color: #ffffff !important;
       border: 1.5px solid rgba(147, 51, 234, 0.4) !important;
     }
+    body.light-mode #noticeSlider {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+      border: 1.5px solid #cbd5e1 !important;
+    }
 
     #noticeSlider h4, 
     #noticeSlider p, 
     #noticeSlider span {
       color: #ffffff !important;
     }
-
-    body.light-mode #noticeSlider {
-      background: #0f172a !important;
-      color: #ffffff !important;
-    }
-
-    body.light-mode #noticeSlider h4, 
-    body.light-mode #noticeSlider p, 
-    body.light-mode #noticeSlider span {
-      color: #ffffff !important;
-    }
+    body.light-mode #noticeSlider h4 { color: #0f172a !important; }
+    body.light-mode #noticeSlider p { color: #334155 !important; }
+    body.light-mode #noticeSlider span { color: #475569 !important; }
 
     .ticker-marquee {
       width: 100%;
@@ -457,6 +476,7 @@
       font-weight: 700;
       font-size: 11px;
     }
+    body.light-mode .ticker-marquee { color: #0f172a; }
   </style>
 </head>
 <body>
@@ -603,7 +623,7 @@
       <div id="listings"></div>
 
       <footer>
-        <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #1e1b4b, #0f172a); color: #94a3b8; border-radius: 14px; font-size: 13px; margin-bottom: 20px; border: 1px solid var(--border-color); font-weight: 500;">
+        <div style="text-align: center; padding: 12px; background: rgba(30, 27, 75, 0.4); color: #94a3b8; border-radius: 14px; font-size: 13px; margin-bottom: 20px; border: 1px solid var(--border-color); font-weight: 500;">
           © 2026 Kolayad Connect. All Rights Reserved.
         </div>
       </footer>
@@ -621,12 +641,12 @@
   </div>
 
   <div id="sideMenu" style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 100; display: none; justify-content: flex-start;">
-    <div style="width: 280px; background: #0f172a; height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 25px rgba(0,0,0,0.5); overflow-y: auto;">
+    <div style="width: 280px; background: var(--bg-app); height: 100%; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 5px 0 25px rgba(0,0,0,0.5); overflow-y: auto;">
       <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 600;">
-        <a href="index.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e1b4b;">🏠 ഹോം / ഡയറക്ടറി</a>
-        <a href="jobs.html" style="color: #c084fc; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e1b4b; font-weight: bold;">💼 തൊഴിലവസരങ്ങൾ (Jobs)</a>
-        <a href="profile.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e1b4b;">👤 എന്റെ വിവരങ്ങൾ</a>
-        <a href="admin.html" style="color: #ffffff; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e1b4b;">⚙️ അഡ്മിൻ പാനൽ</a>
+        <a href="index.html" style="color: var(--text-main); text-decoration: none; padding: 10px; border-radius: 10px; background: var(--bg-card);">🏠 ഹോം / ഡയറക്ടറി</a>
+        <a href="jobs.html" style="color: #c084fc; text-decoration: none; padding: 10px; border-radius: 10px; background: var(--bg-card); font-weight: bold;">💼 തൊഴിലവസരങ്ങൾ (Jobs)</a>
+        <a href="profile.html" style="color: var(--text-main); text-decoration: none; padding: 10px; border-radius: 10px; background: var(--bg-card);">👤 എന്റെ വിവരങ്ങൾ</a>
+        <a href="admin.html" style="color: var(--text-main); text-decoration: none; padding: 10px; border-radius: 10px; background: var(--bg-card);">⚙️ അഡ്മിൻ പാനൽ</a>
         
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 0;">
 
@@ -634,12 +654,12 @@
         <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color: #22c55e; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: bold;">💬 വാട്സാപ്പിൽ സന്ദേശം അയക്കാം</a>
 
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 0;">
-        <a href="#" onclick="toggleSidebar(); toggleModal('feedbackModal'); return false;" style="color: #f59e0b; text-decoration: none; padding: 10px; border-radius: 10px; background: #1e1b4b; font-weight: bold; display: flex; align-items: center; gap: 6px;">⭐ അഭിപ്രായങ്ങളും ഫീഡ്‌ബാക്കും</a>
+        <a href="#" onclick="toggleSidebar(); toggleModal('feedbackModal'); return false;" style="color: #f59e0b; text-decoration: none; padding: 10px; border-radius: 10px; background: var(--bg-card); font-weight: bold; display: flex; align-items: center; gap: 6px;">⭐ അഭിപ്രായങ്ങളും ഫീഡ്‌ബാക്കും</a>
 
         <strong style="color: #c084fc; font-size: 12px;">Quick Links</strong>
-        <a href="#" onclick="toggleSidebar(); toggleModal('aboutModal');" style="color: #94a3b8; text-decoration: none;">➔ About Us</a>
-        <a href="#" onclick="toggleSidebar(); toggleModal('contactModal');" style="color: #94a3b8; text-decoration: none;">➔ Contact Us</a>
-        <a href="#" onclick="toggleSidebar(); toggleModal('termsModal');" style="color: #94a3b8; text-decoration: none;">➔ Terms & Conditions</a>
+        <a href="#" onclick="toggleSidebar(); toggleModal('aboutModal');" style="color: var(--text-sub); text-decoration: none;">➔ About Us</a>
+        <a href="#" onclick="toggleSidebar(); toggleModal('contactModal');" style="color: var(--text-sub); text-decoration: none;">➔ Contact Us</a>
+        <a href="#" onclick="toggleSidebar(); toggleModal('termsModal');" style="color: var(--text-sub); text-decoration: none;">➔ Terms & Conditions</a>
       </div>
     </div>
   </div>
@@ -647,10 +667,10 @@
   <div class="modal-bg" id="aboutModal" onclick="closeModalOnBg(event, 'aboutModal')">
     <div class="modal-box">
       <h3 style="color:#c084fc; margin-bottom:12px; font-size:16px;">ℹ️ ഞങ്ങളെക്കുറിച്ച് (About Us)</h3>
-      <p style="font-size:12px; line-height:1.6; color:#cbd5e1; margin-bottom:12px;">
+      <p style="font-size:12px; line-height:1.6; color:var(--text-sub); margin-bottom:12px;">
         ⛱️കോളയാട് കണക്ട് (Kolayad Connect)🛍️ എന്നത് കോളയാട് പ്രദേശത്തെ മുഴുവൻ സ്ഥാപനങ്ങൾ, സേവനങ്ങൾ, തൊഴിലാളികൾ, അത്യാഹിത നമ്പറുകൾ എന്നിവ ഒരു കുടക്കീഴിൽ ലഭ്യമാക്കുന്ന ഡിജിറ്റൽ ഡയറക്ടറി ആപ്പാണ്.
       </p>
-      <button onclick="toggleModal('aboutModal')" class="btn-pro-call" style="width:100%; background:#1e1b4b; color:#ffffff; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+      <button onclick="toggleModal('aboutModal')" class="btn-pro-call" style="width:100%; background:var(--bg-card); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
@@ -658,29 +678,29 @@
     <div class="modal-box">
       <h3 style="color:#c084fc; margin-bottom:12px; font-size:16px;">📞 ബന്ധപ്പെടാൻ (Contact Us)</h3>
       <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; margin-bottom:12px;">
-        <div style="background:#1e1b4b; padding:10px; border-radius:10px; border:1px solid var(--border-color);">
+        <div style="background:var(--bg-input); padding:10px; border-radius:10px; border:1px solid var(--border-color); color:var(--text-main);">
           <strong>ഫോൺ നമ്പർ:</strong> <a href="tel:6238020523" style="color:#c084fc; text-decoration:none; font-weight:bold;">6238020523</a>
         </div>
-        <div style="background:#1e1b4b; padding:10px; border-radius:10px; border:1px solid var(--border-color);">
+        <div style="background:var(--bg-input); padding:10px; border-radius:10px; border:1px solid var(--border-color); color:var(--text-main);">
           <strong>സപ്പോർട്ട് വാട്സാപ്പ്:</strong> <a href="https://wa.me/916238020523?text=ഹലോ,%20കോളയാട്%20കണക്ട്%20വഴി%20ബന്ധപ്പെട്ടതാണ്." target="_blank" style="color:#22c55e; text-decoration:none; font-weight:bold;">💬 ചാറ്റ് ചെയ്യുക (6238020523)</a>
         </div>
-        <div style="background:#1e1b4b; padding:10px; border-radius:10px; border:1px solid var(--border-color);">
+        <div style="background:var(--bg-input); padding:10px; border-radius:10px; border:1px solid var(--border-color); color:var(--text-main);">
           <strong>സ്ഥലം:</strong> കോളയാട്, കണ്ണൂർ, കേരളം.
         </div>
       </div>
-      <button onclick="toggleModal('contactModal')" class="btn-pro-call" style="width:100%; background:#1e1b4b; color:#ffffff; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+      <button onclick="toggleModal('contactModal')" class="btn-pro-call" style="width:100%; background:var(--bg-card); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
   <div class="modal-bg" id="termsModal" onclick="closeModalOnBg(event, 'termsModal')">
     <div class="modal-box">
       <h3 style="color:#c084fc; margin-bottom:12px; font-size:16px;">📜 നിബന്ധനകളും വ്യവസ്ഥകളും</h3>
-      <p style="font-size:12px; line-height:1.6; color:#cbd5e1; margin-bottom:12px;">
+      <p style="font-size:12px; line-height:1.6; color:var(--text-sub); margin-bottom:12px;">
         1. ഈ ആപ്പിൽ നൽകിയിരിക്കുന്ന വിവരങ്ങൾ പ്രാദേശിക ജനങ്ങളുടെ അറിവിലേക്കായി തയ്യാറാക്കിയതാണ്.<br>
         2. സ്ഥാപനങ്ങൾ നൽകുന്ന വിവരങ്ങളുടെ പൂർണ്ണ ഉത്തരവാദിത്തം അവരവർക്കാണ്.<br>
         3. തെറ്റായ വിവരങ്ങൾ ചേർക്കുന്നവരുടെ അക്കൗണ്ടുകൾ മുൻകൂറിയിപ്പില്ലാതെ നീക്കം ചെയ്യുന്നതാണ്.
       </p>
-      <button onclick="toggleModal('termsModal')" class="btn-pro-call" style="width:100%; background:#1e1b4b; color:#ffffff; border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
+      <button onclick="toggleModal('termsModal')" class="btn-pro-call" style="width:100%; background:var(--bg-card); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer;">ക്ലോസ് ചെയ്യുക</button>
     </div>
   </div>
 
@@ -703,37 +723,37 @@
         <input type="hidden" id="editShopId">
         
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ പേര്:</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ പേര്:</label>
           <input type="text" id="editShopName" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
         </div>
 
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥലം / വിലാസം:</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">സ്ഥലം / വിലാസം:</label>
           <input type="text" id="editShopLoc" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
         </div>
 
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">ഒന്നാമത്തെ ഫോൺ നമ്പർ:</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">ഒന്നാമത്തെ ഫോൺ നമ്പർ:</label>
           <input type="text" id="editShopPhone" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" required>
         </div>
 
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ):</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">രണ്ടാമത്തെ ഫോൺ നമ്പർ (ഓപ്ഷണൽ):</label>
           <input type="text" id="editShopPhone2" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;">
         </div>
 
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക്:</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ ലിങ്ക്:</label>
           <input type="url" id="editShopMap" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;" placeholder="https://maps.app.goo.gl/...">
         </div>
 
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
           <textarea id="editShopDesc" class="search-input-box" rows="3" style="padding: 10px 12px; font-size: 12.5px; resize: none;" required></textarea>
         </div>
         
         <div>
-          <label style="font-size:11px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോ മാറ്റാൻ:</label>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">സ്ഥാപനത്തിന്റെ ഫോട്ടോ മാറ്റാൻ:</label>
           <input type="file" id="editShopImageFile" class="search-input-box" accept="image/*" style="padding: 6px; font-size: 11px;">
         </div>
 
@@ -748,22 +768,22 @@
       <form onsubmit="submitFeedback(event)" style="display: flex; flex-direction: column; gap: 12px;">
         
         <div>
-          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">പേര് (ഓപ്ഷണൽ):</label>
+          <label style="font-size:11.5px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 4px;">പേര് (ഓപ്ഷണൽ):</label>
           <input type="text" id="fbName" class="search-input-box" style="padding: 10px 14px; font-size: 12.5px;" placeholder="നിങ്ങളുടെ പേര്">
         </div>
         
         <div>
-          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">റേറ്റിംഗ്:</label>
+          <label style="font-size:11.5px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 4px;">റേറ്റിംഗ്:</label>
           <div style="display: flex; gap: 6px;" id="starRatingGroup">
             <button type="button" onclick="setRating(5, this)" class="star-btn active" style="flex:1; padding:8px 2px; background:linear-gradient(135deg, #d97706, #f59e0b); border:1.5px solid #fbbf24; border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐⭐</button>
-            <button type="button" onclick="setRating(4, this)" class="star-btn" style="flex:1; padding:8px 2px; background:#1e1b4b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐</button>
-            <button type="button" onclick="setRating(3, this)" class="star-btn" style="flex:1; padding:8px 2px; background:#1e1b4b; border:1.5px solid var(--border-color); border-radius:10px; color:#ffffff; font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐</button>
+            <button type="button" onclick="setRating(4, this)" class="star-btn" style="flex:1; padding:8px 2px; background:var(--bg-input); border:1.5px solid var(--border-color); border-radius:10px; color:var(--text-main); font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐⭐</button>
+            <button type="button" onclick="setRating(3, this)" class="star-btn" style="flex:1; padding:8px 2px; background:var(--bg-input); border:1.5px solid var(--border-color); border-radius:10px; color:var(--text-main); font-weight:bold; cursor:pointer; font-size:11px; text-align:center;">⭐⭐⭐</button>
           </div>
         </div>
         <input type="hidden" id="fbRating" value="5">
 
         <div>
-          <label style="font-size:11.5px; color:#94a3b8; font-weight:700; display: block; margin-bottom: 4px;">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
+          <label style="font-size:11.5px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 4px;">അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും:</label>
           <textarea id="fbComment" class="search-input-box" rows="3" style="padding: 10px 14px; font-size: 12.5px; resize: none;" placeholder="ആപ്പിനെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങൾ ഇവിടെ എഴുതുക..." required></textarea>
         </div>
 
@@ -953,14 +973,14 @@
             <span style="background: ${isAd ? 'linear-gradient(135deg, #d97706, #f59e0b)' : 'linear-gradient(135deg, #0284c7, #0369a1)'}; color: #ffffff; padding: 3.5px 9px; border-radius: 7px; font-size: 10.5px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
               ${isAd ? '⭐ പരസ്യം (AD)' : '📢 പ്രധാന അറിയിപ്പ്'}
             </span>
-            <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">📅 ${latestNotice.date || ''}</span>
+            <span style="font-size: 11px; color: var(--text-sub); font-weight: 700;">📅 ${latestNotice.date || ''}</span>
           </div>
-          <h4 style="color: #ffffff; font-size: 16px; margin: 8px 0 6px 0; font-weight: 800; word-break: break-word; line-height: 1.4;">${latestNotice.title || ''}</h4>
-          <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 12px; line-height: 1.5; font-weight: 500; word-break: break-word;">${latestNotice.desc || ''}</p>
+          <h4 style="color: var(--text-main); font-size: 16px; margin: 8px 0 6px 0; font-weight: 800; word-break: break-word; line-height: 1.4;">${latestNotice.title || ''}</h4>
+          <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 12px; line-height: 1.5; font-weight: 500; word-break: break-word;">${latestNotice.desc || ''}</p>
           
           ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 14px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.3);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 210px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
 
-          <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px;">
+          <div style="text-align: center; border-top: 1px solid var(--border-color); margin-top: 10px; padding-top: 10px;">
             <a href="announcements.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #ffffff; padding: 11px 16px; border-radius: 14px; font-size: 13.5px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); border: 1.5px solid rgba(196, 181, 253, 0.4);">
               <span>കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ അമർത്തുക</span> <span style="font-size: 16px;">➔</span>
             </a>
@@ -968,7 +988,7 @@
         `;
       } else {
         sliderContainer.innerHTML = `
-          <div style="text-align: center; color: #94a3b8; font-size: 12.5px; padding: 12px 0;">
+          <div style="text-align: center; color: var(--text-sub); font-size: 12.5px; padding: 12px 0;">
             <p style="margin: 0 0 6px 0; font-weight: 600;">ഇന്നത്തെ പ്രധാന അറിയിപ്പുകൾ ഉടൻ ലഭ്യമാകും...</p>
             <a href="announcements.html" style="font-size: 12px; color: #c084fc; font-weight: 800; text-decoration: none; white-space: nowrap;">
               കൂടുതൽ ഫോട്ടോകൾ ഇവിടെ അമർത്തുക 🔘
@@ -1034,7 +1054,7 @@
       });
 
       if(filtered.length === 0) {
-        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:25px 15px; font-size:12.5px; background: rgba(30, 27, 75, 0.5); border-radius:14px; border:1px solid var(--border-color);">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല! പുതിയ തിരച്ചിൽ നടത്തി നോക്കൂ.</div>`;
+        list.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:25px 15px; font-size:12.5px; background: var(--bg-card); border-radius:14px; border:1px solid var(--border-color);">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല! പുതിയ തിരച്ചിൽ നടത്തി നോക്കൂ.</div>`;
         return;
       }
 
@@ -1059,9 +1079,9 @@
 
         return `
           <div class="pro-card">
-            <!-- ഇടതുവശത്ത് ഫോട്ടോ -->
+            <!-- ഇടതുവശത്ത് സെന്റർ ചെയ്ത ഫോട്ടോ കള്ളി -->
             <div class="pro-card-left">
-              ${hasImage ? `<img src="${displayImg}" class="shop-thumb-img" alt="${s.name}" onclick="openZoomModal('${displayImg}')">` : `<div class="shop-thumb-img" style="display:flex; align-items:center; justify-content:center; background:#1e1b4b; color:#a855f7; font-size:28px;">🏪</div>`}
+              ${hasImage ? `<img src="${displayImg}" class="shop-thumb-img" alt="${s.name}" onclick="openZoomModal('${displayImg}')">` : `<div class="shop-thumb-img" style="display:flex; align-items:center; justify-content:center; background:var(--bg-input); color:#a855f7; font-size:28px;">🏪</div>`}
             </div>
 
             <!-- വലതുവശത്ത് മുഴുവൻ വിവരങ്ങളും ബട്ടണുകളും -->
@@ -1242,8 +1262,8 @@
       currentRating = val;
       document.getElementById('fbRating').value = val;
       document.querySelectorAll('.star-btn').forEach(btn => {
-        btn.style.background = '#1e1b4b';
-        btn.style.color = '#ffffff';
+        btn.style.background = 'var(--bg-input)';
+        btn.style.color = 'var(--text-main)';
         btn.style.borderColor = 'var(--border-color)';
       });
       elem.style.background = 'linear-gradient(135deg, #d97706, #f59e0b)';
