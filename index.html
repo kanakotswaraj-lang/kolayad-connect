@@ -101,7 +101,7 @@
     window.updateDoc = updateDoc;
   </script>
 
-  <style>
+    <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
     
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
@@ -246,11 +246,8 @@
     .cat-box.active .cat-box-title { color: #ffffff; font-weight: 800; }
     .cat-box.active .cat-box-icon { background: rgba(255,255,255,0.25); color: #ffffff; }
     
-    /* ------------------------------------------------------------- */
-    /* പുതിയ ഹോറിസോണ്ടൽ പ്രൊഫഷണൽ കാർഡ് ലേഔട്ട് സ്റ്റൈൽ (Horizontal Style) */
-    /* ------------------------------------------------------------- */
-    
-        .pro-card { 
+    /* ഫുൾ-ഹൈറ്റ് ഫോട്ടോയുള്ള പെർഫെക്റ്റ് ഹൊറിസോണ്ടൽ കാർഡ് ലേഔട്ട് */
+    .pro-card { 
       background: linear-gradient(145deg, rgba(19, 28, 63, 0.95), rgba(23, 35, 77, 0.75)); 
       border-radius: 16px; 
       padding: 10px; 
@@ -261,7 +258,7 @@
       backdrop-filter: blur(10px); 
       display: flex; 
       gap: 12px; 
-      align-items: stretch; /* കള്ളി മുഴുവൻ ഹൈറ്റ് കിട്ടാൻ ഇത് സഹായിക്കും */
+      align-items: stretch;
       overflow: hidden;
     }
 
@@ -270,13 +267,13 @@
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      margin: -10px 0 -10px -10px; /* കാർഡിന്റെ അറ്റം വരെ ഫോട്ടോ നീണ്ടുനിൽക്കാൻ */
+      margin: -10px 0 -10px -10px;
     }
 
     .shop-thumb-img { 
       width: 100%; 
       height: 100%; 
-      min-height: 140px; 
+      min-height: 160px; 
       object-fit: cover; 
       cursor: zoom-in; 
       border: none;
@@ -291,8 +288,7 @@
       min-width: 0;
       padding: 2px 0;
     }
-
-     
+    
     .badge-tag { 
       font-size: 9.5px; 
       font-weight: 800; 
@@ -337,7 +333,7 @@
       line-height: 1.4; 
       font-weight: 500; 
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -402,7 +398,6 @@
       justify-content: center; 
       flex-shrink: 0; 
     }
-
     
     .btn-admin-edit { background: #2563eb; color: white; border: none; padding: 6px 8px; border-radius: 6px; font-size: 10.5px; font-weight: bold; cursor: pointer; }
     .btn-admin-del { background: #dc2626; color: white; border: none; padding: 6px 8px; border-radius: 6px; font-size: 10.5px; font-weight: bold; cursor: pointer; }
@@ -465,6 +460,10 @@
       font-size: 11px;
     }
   </style>
+
+    
+        
+    
 </head>
 <body>
   <div id="installAppBanner" style="display: none; background: linear-gradient(135deg, #eab308, #ca8a04); color: #0b1128; padding: 10px 14px; margin: 8px; border-radius: 12px; justify-content: space-between; align-items: center; font-weight: bold; font-size: 12.5px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);">
@@ -1047,28 +1046,34 @@
 
       const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
 
-      list.innerHTML = filtered.map(s => {
+            list.innerHTML = filtered.map(s => {
         let hasImage = s.imageUrl || s.imageUrl2 || s.imageUrl3 || s.imageUrl4;
         let displayImg = s.imageUrl || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
 
-        let phone2Html = s.phone2 ? `
-          <div style="display:flex; gap:6px; margin-top:4px;">
-            <a href="tel:${s.phone2}" class="btn-pro-call" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">📞 2-ാം നമ്പർ</a>
-            <a href="https://wa.me/91${s.phone2}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-          </div>
-        ` : '';
+        let extraRowHtml = '';
+        if (s.mapLink || s.phone2) {
+          extraRowHtml = `
+            <div style="display: flex; gap: 6px; margin-top: 6px; align-items: center;">
+              ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map" style="flex:1;">🗺️ മാപ്പ്</a>` : ''}
+              ${s.phone2 ? `
+                <a href="tel:${s.phone2}" class="btn-pro-call" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); flex:1;">📞 2-ാം നമ്പർ</a>
+                <a href="https://wa.me/91${s.phone2}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
+              ` : ''}
+            </div>
+          `;
+        }
 
         return `
           <div class="pro-card">
-            <!-- ഇടതുവശത്ത് ഫോട്ടോയും ബാഡ്ജും -->
+            <!-- ഇടതുവശത്ത് ഫുൾ-ഹൈറ്റ് ഫോട്ടോ -->
             <div class="pro-card-left">
-              <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
               ${hasImage ? `<img src="${displayImg}" class="shop-thumb-img" alt="${s.name}" onclick="openZoomModal('${displayImg}')">` : `<div class="shop-thumb-img" style="display:flex; align-items:center; justify-content:center; background:#1e293b; color:#64748b; font-size:24px;">🏪</div>`}
             </div>
 
-            <!-- വലതുവശത്ത് സ്ഥാപനത്തിന്റെ വിവരങ്ങളും ബട്ടണുകളും -->
+            <!-- വലതുവശത്ത് വിവരങ്ങളും ബട്ടണുകളും -->
             <div class="pro-card-right">
               <div>
+                <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
                 <div class="item-name">${s.name}</div>
                 <div class="item-loc">📍 ${s.loc}</div>
                 <div class="item-desc-highlight">${s.desc}</div>
@@ -1078,15 +1083,10 @@
                 <div class="card-actions">
                   <a href="tel:${s.phone}" class="btn-pro-call">📞 കോൾ</a>
                   <a href="https://wa.me/91${s.phone}?text=${defaultWaMsg}" target="_blank" class="btn-pro-wa" title="WhatsApp ചാറ്റ്">💬</a>
-                  
-                  <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">
-                    🔗 ഷെയർ
-                  </button>
-
-                  ${s.mapLink ? `<a href="${s.mapLink}" target="_blank" class="btn-pro-map">🗺️ മാപ്പ്</a>` : ''}
+                  <button onclick="shareShop('${s.name}', '${s.loc}', '${s.phone}', '${s.desc}')" class="btn-pro-share">🔗 ഷെയർ</button>
                 </div>
 
-                ${phone2Html}
+                ${extraRowHtml}
 
                 ${isAdmin ? `
                   <div style="display:flex; gap:6px; margin-top:6px;">
@@ -1105,7 +1105,7 @@
           </div>
         `;
       }).join('');
-    }
+
 
     function openEditShop(id) {
       const s = shops.find(x => x.id === id);
