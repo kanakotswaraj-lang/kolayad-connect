@@ -249,10 +249,11 @@
     /* ------------------------------------------------------------- */
     /* പുതിയ ഹോറിസോണ്ടൽ പ്രൊഫഷണൽ കാർഡ് ലേഔട്ട് സ്റ്റൈൽ (Horizontal Style) */
     /* ------------------------------------------------------------- */
-    .pro-card { 
+    
+        .pro-card { 
       background: linear-gradient(145deg, rgba(19, 28, 63, 0.95), rgba(23, 35, 77, 0.75)); 
       border-radius: 16px; 
-      padding: 12px; 
+      padding: 10px; 
       margin-bottom: 12px; 
       border: 1.5px solid var(--border-color); 
       position: relative; 
@@ -260,24 +261,26 @@
       backdrop-filter: blur(10px); 
       display: flex; 
       gap: 12px; 
-      align-items: stretch;
+      align-items: stretch; /* കള്ളി മുഴുവൻ ഹൈറ്റ് കിട്ടാൻ ഇത് സഹായിക്കും */
+      overflow: hidden;
     }
 
     .pro-card-left {
-      width: 110px;
+      width: 120px;
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      margin: -10px 0 -10px -10px; /* കാർഡിന്റെ അറ്റം വരെ ഫോട്ടോ നീണ്ടുനിൽക്കാൻ */
     }
 
     .shop-thumb-img { 
       width: 100%; 
-      height: 110px; 
-      border-radius: 12px; 
+      height: 100%; 
+      min-height: 140px; 
       object-fit: cover; 
-      border: 1px solid var(--border-color); 
       cursor: zoom-in; 
+      border: none;
+      border-radius: 14px 0 0 14px;
     }
 
     .pro-card-right {
@@ -286,8 +289,10 @@
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
+      padding: 2px 0;
     }
-    
+
+     
     .badge-tag { 
       font-size: 9.5px; 
       font-weight: 800; 
@@ -298,7 +303,7 @@
       border: 1px solid rgba(56, 189, 248, 0.35); 
       display: inline-block; 
       width: fit-content;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .item-name { 
@@ -314,7 +319,7 @@
     .item-loc { 
       font-size: 11px; 
       color: #facc15; 
-      margin-bottom: 6px; 
+      margin-bottom: 5px; 
       font-weight: 700; 
       white-space: nowrap; 
       overflow: hidden; 
@@ -337,7 +342,7 @@
       overflow: hidden;
     }
 
-    .card-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: auto; }
+    .card-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
     
     .btn-pro-call { 
       flex: 1; 
@@ -397,6 +402,7 @@
       justify-content: center; 
       flex-shrink: 0; 
     }
+
     
     .btn-admin-edit { background: #2563eb; color: white; border: none; padding: 6px 8px; border-radius: 6px; font-size: 10.5px; font-weight: bold; cursor: pointer; }
     .btn-admin-del { background: #dc2626; color: white; border: none; padding: 6px 8px; border-radius: 6px; font-size: 10.5px; font-weight: bold; cursor: pointer; }
