@@ -118,7 +118,7 @@
       --accent-gold: #facc15;
     }
 
-    /* 🌟 മനോഹരമായ വൈറ്റ് തീം (Light Mode) ക്രമീകരണങ്ങൾ */
+    /* 🌟 വൈറ്റ് തീം (Light Mode) ക്രമീകരണങ്ങൾ */
     body.light-mode {
       --bg-body: #f8fafc;
       --bg-app: #ffffff;
@@ -256,7 +256,6 @@
     .cat-box.active .cat-box-title { color: #ffffff; font-weight: 800; }
     .cat-box.active .cat-box-icon { background: rgba(255,255,255,0.25); color: #ffffff; }
     
-    /* 🌟 ഫോട്ടോ കൃത്യം നടുവിൽ (Center) വരുന്ന ഹൊറിസോണ്ടൽ കാർഡ് ഡിസൈൻ */
     .pro-card { 
       background: linear-gradient(145deg, rgba(30, 27, 75, 0.95), rgba(15, 23, 42, 0.9)); 
       border-radius: 18px; 
@@ -279,7 +278,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center; /* 🌟 ഫോട്ടോ ലംബമായി (Vertical) നടുവിൽ നിൽക്കാൻ */
+      justify-content: center;
     }
 
     .shop-thumb-img { 
@@ -288,7 +287,7 @@
       min-height: 145px;
       max-height: 200px;
       object-fit: cover; 
-      object-position: center; /* 🌟 ഫോട്ടോ ഏത് സൈസ് ആയാലും സെന്റർ ആയി ക്രോപ്പ് ചെയ്യാൻ */
+      object-position: center; 
       border-radius: 12px; 
       border: 1.5px solid rgba(168, 85, 247, 0.4); 
       cursor: zoom-in; 
@@ -304,19 +303,21 @@
       min-width: 0;
     }
     
+    /* 🌟 താങ്കൾ ആവശ്യപ്പെട്ട റോയൽ ഓറഞ്ച് / കോപ്പർ (Royal Orange / Amber) കളർ ടാഗ് */
     .badge-tag { 
-      font-size: 9.5px; 
+      font-size: 10px; 
       font-weight: 800; 
-      padding: 3px 9px; 
-      border-radius: 6px; 
-      background: rgba(168, 85, 247, 0.2); 
-      color: #e879f9; 
-      border: 1px solid rgba(168, 85, 247, 0.4); 
+      padding: 3.5px 10px; 
+      border-radius: 7px; 
+      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); 
+      color: #ffffff; 
+      border: 1px solid #fb923c; 
       display: inline-block; 
       width: fit-content;
       margin-bottom: 4px;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.35);
     }
-    body.light-mode .badge-tag { background: #f3e8ff; color: #7c3aed; border-color: #d8b4fe; }
+    body.light-mode .badge-tag { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff; border-color: #fb923c; }
 
     .item-name { 
       font-size: 15.5px; 
@@ -1079,12 +1080,10 @@
 
         return `
           <div class="pro-card">
-            <!-- ഇടതുവശത്ത് സെന്റർ ചെയ്ത ഫോട്ടോ കള്ളി -->
             <div class="pro-card-left">
               ${hasImage ? `<img src="${displayImg}" class="shop-thumb-img" alt="${s.name}" onclick="openZoomModal('${displayImg}')">` : `<div class="shop-thumb-img" style="display:flex; align-items:center; justify-content:center; background:var(--bg-input); color:#a855f7; font-size:28px;">🏪</div>`}
             </div>
 
-            <!-- വലതുവശത്ത് മുഴുവൻ വിവരങ്ങളും ബട്ടണുകളും -->
             <div class="pro-card-right">
               <div>
                 <div class="badge-tag">${s.catLabel || 'സേവനം'}</div>
