@@ -303,7 +303,6 @@
       min-width: 0;
     }
     
-    /* 🌟 താങ്കൾ ആവശ്യപ്പെട്ട റോയൽ ഓറഞ്ച് / കോപ്പർ (Royal Orange / Amber) കളർ ടാഗ് */
     .badge-tag { 
       font-size: 10px; 
       font-weight: 800; 
@@ -620,7 +619,10 @@
         </div>
       </div>
 
-      <div class="section-label"><span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span></div>
+      <div class="section-label">
+        <span>സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ</span>
+        <span id="totalShopsBadge" style="font-size:11px; font-weight:800; color:#c084fc; background:rgba(168,85,247,0.15); padding:3px 9px; border-radius:8px; border:1px solid rgba(168,85,247,0.3);">ആകെ: 0</span>
+      </div>
       <div id="listings"></div>
 
       <footer>
@@ -1053,6 +1055,12 @@
         const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.loc.toLowerCase().includes(q);
         return matchCat && matchQ;
       });
+
+      // 🌟 ആകെ എണ്ണം അപ്ഡേറ്റ് ചെയ്യുന്നു
+      const totalBadge = document.getElementById('totalShopsBadge');
+      if(totalBadge) {
+        totalBadge.innerText = `ആകെ: ${filtered.length}`;
+      }
 
       if(filtered.length === 0) {
         list.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:25px 15px; font-size:12.5px; background: var(--bg-card); border-radius:14px; border:1px solid var(--border-color);">വിവരങ്ങൾ ഒന്നും ലഭ്യമല്ല! പുതിയ തിരച്ചിൽ നടത്തി നോക്കൂ.</div>`;
