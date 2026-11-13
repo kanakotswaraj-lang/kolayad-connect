@@ -133,8 +133,8 @@
 
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #a855f7; font-size: 15px;">🤖 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Hard AI)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">ബുദ്ധിമുട്ടേറിയ കമ്പ്യൂട്ടർ എതിരാളി</p>
+        <h3 style="margin: 0 0 4px 0; color: #a855f7; font-size: 15px;">🤖 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Master AI)</h3>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">വളരെ ബുദ്ധിപൂർവ്വം കളിക്കുന്ന എതിരാളി</p>
       </div>
       <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">കളിക്കുക</button>
     </div>
@@ -231,7 +231,7 @@
         initChessGame();
       }
       else if(type === 'chessAI') {
-        titleEl.innerText = '🤖 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Hard AI)';
+        titleEl.innerText = '🤖 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Master AI)';
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 380px;">
             <p id="chessAIStatus" style="font-size: 14px; color: #a855f7; margin-bottom: 10px; font-weight: bold;">നിങ്ങളുടെ ടേൺ (White)</p>
@@ -403,7 +403,7 @@
       statusEl.innerText = turnText;
     }
 
-    // --- HARD AI CHESS LOGIC ---
+    // --- MASTER AI CHESS LOGIC ---
     let aiGame = null;
     let aiSelectedSquare = null;
 
@@ -475,33 +475,43 @@
           updateAIStatus();
 
           if (!aiGame.game_over() && aiGame.turn() === 'b') {
-            document.getElementById('chessAIStatus').innerText = 'കമ്പ്യൂട്ടർ ബുദ്ധിപൂർവ്വം ചിന്തിക്കുന്നു... 🤖';
-            setTimeout(makeHardAIMove, 600);
+            document.getElementById('chessAIStatus').innerText = 'മാസ്റ്റർ ബോട്ട് ചിന്തിക്കുന്നു... 🤖';
+            setTimeout(makeMasterAIMove, 600);
           }
         }
       }
     }
 
-    // Smart AI logic: Prioritizes captures (eating player pieces) to make it harder
-    function makeHardAIMove() {
+    // Master AI logic: Evaluates captures AND checks/threats to attack player pieces aggressively
+    function makeMasterAIMove() {
       let moves = aiGame.moves({ verbose: true });
       if (moves.length === 0) return;
 
-      // Check if AI can capture any piece (prioritize Queen, Rook, Bishop/Knight, Pawn)
-      let captureMoves = moves.filter(m => m.captured);
-      let selectedMove = null;
+      const pieceValues = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+      
+      // Score every possible move to find the most dangerous one
+      let scoredMoves = moves.map(m => {
+        let score = 0;
+        // High priority for capturing player pieces
+        if (m.captured) {
+          score += pieceValues[m.captured] * 10;
+        }
+        // Extra bonus if the move gives check to the player
+        aiGame.move(m);
+        if (aiGame.in_check()) {
+          score += 25;
+        }
+        // Small randomness to keep it varied
+        score += Math.random() * 2;
+        aiGame.undo();
+        return { move: m, score: score };
+      });
 
-      if (captureMoves.length > 0) {
-        // Sort captures by piece value
-        const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-        captureMoves.sort((a, b) => values[b.captured] - values[a.captured]);
-        selectedMove = captureMoves[0]; // Take the best available capture
-      } else {
-        // Otherwise, pick a random smart move
-        selectedMove = moves[Math.floor(Math.random() * moves.length)];
-      }
+      // Sort by best score descending
+      scoredMoves.sort((a, b) => b.score - a.score);
+      let bestMove = scoredMoves[0].move;
 
-      aiGame.move(selectedMove);
+      aiGame.move(bestMove);
       renderAIBoard();
       updateAIStatus();
     }
@@ -509,7 +519,7 @@
     function updateAIStatus() {
       let statusEl = document.getElementById('chessAIStatus');
       let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🤖';
-      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 കമ്പ്യൂട്ടർ വിജയിച്ചു! 🤖' : '🎉 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ കമ്പ്യൂട്ടറെ തോൽപ്പിച്ചു! 🏆';
+      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 കമ്പ്യൂട്ടർ വിജയിച്ചു! 🤖' : '🎉 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ മാസ്റ്റർ ബോട്ടിനെ തോൽപ്പിച്ചു! 🏆';
       else if (aiGame.in_draw()) turnText = '🤝 കളി സമനിലയിൽ!';
       else if (aiGame.in_check()) turnText += ' ⚠️ (ചെക്ക്!)';
       statusEl.innerText = turnText;
