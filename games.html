@@ -142,7 +142,7 @@
     <div class="game-card">
       <div>
         <h3 style="margin: 0 0 4px 0; color: #4ade80; font-size: 15px;">🐍 ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">വലിയ ബോർഡും ഒറിജിനൽ പാമ്പ്-ഏണി കളിയും</p>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">പാമ്പിന്റെ കടിയും ഏണി കയറ്റവും ഉള്ള ഒറിജിനൽ ഫീൽ</p>
       </div>
       <button class="play-btn" onclick="openSetup('snakes')">കളിക്കുക</button>
     </div>
@@ -263,7 +263,7 @@
       document.getElementById('mainMenu').style.display = 'block';
     }
 
-    // --- ENHANCED LUDO LOGIC (36 Squares Board) ---
+    // --- LUDO LOGIC ---
     let ludoAllPlayers = [
       { name: 'കളിക്കാരൻ 1 (🔴)', pos: 0, color: '#f43f5e' },
       { name: 'കളിക്കാരൻ 2 (🔵)', pos: 0, color: '#38bdf8' },
@@ -288,7 +288,7 @@
       for(let i=1; i<=36; i++) {
         let occupants = activeLudoPlayers.filter(pl => pl.pos === i);
         let cellBg = '#131c3f';
-        if(i === 36) cellBg = '#1e3a8a'; // Winning home stretch
+        if(i === 36) cellBg = '#1e3a8a';
         let badges = occupants.map(o => `<span style="color:#0f172a; background:${o.color}; padding:2px 5px; border-radius:4px; font-size:10.5px; font-weight:bold; margin:1px;">${o.name[6]}</span>`).join('');
         
         gridHtml += `<div style="height: 48px; background: ${cellBg}; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:11px; font-weight:bold; border-radius:6px; border:1px solid rgba(255,255,255,0.12); color:#fff;">
@@ -500,7 +500,7 @@
       statusEl.innerText = turnText;
     }
 
-    // --- ENHANCED SNAKES & LADDERS (36 Squares Board with More Ladders & Snakes) ---
+    // --- ENHANCED SNAKES & LADDERS (Interactive Snake Bite & Ladder Climb) ---
     let snakeAllPlayers = [
       { name: 'P1', pos: 1, color: '#f43f5e' },
       { name: 'P2', pos: 1, color: '#38bdf8' },
@@ -530,11 +530,11 @@
         let extraText = '';
         if(i === 3) extraText = '🪜(എണി ➔ 15)';
         else if(i === 12) extraText = '🪜(എണി ➔ 28)';
-        else if(i === 18) extraText = '🐍(പാമ്പ് ➔ 6)';
-        else if(i === 32) extraText = '🐍(പാമ്പ് ➔ 14)';
+        else if(i === 18) extraText = '🐍(പാമ്പ് തിന്നു! ➔ 6)';
+        else if(i === 32) extraText = '🐍(പാമ്പ് തിന്നു! ➔ 14)';
 
-        gridHtml += `<div style="height: 48px; background: ${bg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10.5px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12);">
-          <span style="color: #94a3b8; font-size: 9.5px; font-weight: bold;">${i} ${extraText}</span>
+        gridHtml += `<div style="height: 48px; background: ${bg}; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12);">
+          <span style="color: ${i === 18 || i === 32 ? '#f87171' : '#94a3b8'}; font-size: 9.5px; font-weight: bold;">${i} ${extraText}</span>
           <div style="margin-top:2px;">${badges}</div>
         </div>`;
       }
@@ -549,10 +549,27 @@
       let p = activeSnakePlayers[snakeTurnIdx];
       p.pos += dice;
       
-      if(p.pos === 3) { p.pos = 15; alert(`${p.name}: എണി കയറി 15-ലേക്ക് എത്തി! 🪜`); }
-      else if(p.pos === 12) { p.pos = 28; alert(`${p.name}: വലിയ എണി കയറി 28-ലേക്ക് എത്തി! 🚀`); }
-      else if(p.pos === 18) { p.pos = 6; alert(`${p.name}: പാമ്പ് കടിച്ച് 6-ലേക്ക് വീണു! 🐍`); }
-      else if(p.pos === 32) { p.pos = 14; alert(`${p.name}: വലിയ പാമ്പ് കടിച്ച് 14-ലേക്ക് വീണു! 🐍`); }
+      let message = '';
+      if(p.pos === 3) {
+        p.pos = 15;
+        message = `✨ അത്ഭുതം! ${p.name} എണിയിലൂടെ മുകളിലേക്ക് കയറി 15-ൽ എത്തി! 🪜`;
+      }
+      else if(p.pos === 12) {
+        p.pos = 28;
+        message = `🚀 സൂപ്പർ നീക്കം! ${p.name} വലിയ എണി കയറി 28-ൽ എത്തി! 🌟`;
+      }
+      else if(p.pos === 18) {
+        p.pos = 6;
+        message = `😱 അയ്യോ! ${p.name}-യെ പാമ്പ് വിഴുങ്ങി! താഴെ 6-ാം കളത്തിലേക്ക് വീണു! 🐍👇`;
+      }
+      else if(p.pos === 32) {
+        p.pos = 14;
+        message = `⚡ വൻ ദുരന്തം! ${p.name}-യെ വലിയ പാമ്പ് കടിച്ചുവീഴ്ത്തി! 14-ാം കളത്തിലേക്ക് പോയി! 🐍💥`;
+      }
+
+      if(message) {
+        document.getElementById('snakeStatus').innerHTML = `<span style="color:#f87171; font-weight:bold;">${message}</span>`;
+      }
 
       if(p.pos >= 36) {
         p.pos = 36;
@@ -562,9 +579,11 @@
         return;
       }
 
-      snakeTurnIdx = (snakeTurnIdx + 1) % activeSnakePlayers.length;
-      let nextP = activeSnakePlayers[snakeTurnIdx];
-      document.getElementById('snakeStatus').innerHTML = `<span style="color:${nextP.color}">${nextP.name}</span>-ന്റെ ടേൺ`;
+      if(!message) {
+        snakeTurnIdx = (snakeTurnIdx + 1) % activeSnakePlayers.length;
+        let nextP = activeSnakePlayers[snakeTurnIdx];
+        document.getElementById('snakeStatus').innerHTML = `<span style="color:${nextP.color}">${nextP.name}</span>-ന്റെ ടേൺ`;
+      }
       renderMultiBoard();
     }
   </script>
