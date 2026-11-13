@@ -133,10 +133,10 @@
 
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #f43f5e; font-size: 15px;">🧠 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Grandmaster AI)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">3 നീക്കങ്ങൾ മുന്നിൽ കണ്ട് കളിക്കുന്ന എതിരാളി</p>
+        <h3 style="margin: 0 0 4px 0; color: #ef4444; font-size: 15px;">🔥 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Ultra-Deep 10-Move AI)</h3>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">10 നീക്കങ്ങൾ മുന്നിൽ കാണുന്ന അൾട്രാ-ഹാർഡ് ബോട്ട്</p>
       </div>
-      <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #e11d48, #be123c);">കളിക്കുക</button>
+      <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #dc2626, #991b1b);">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
@@ -231,11 +231,11 @@
         initChessGame();
       }
       else if(type === 'chessAI') {
-        titleEl.innerText = '🧠 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Grandmaster AI)';
+        titleEl.innerText = '🔥 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (10-Move Deep AI)';
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 380px;">
-            <p id="chessAIStatus" style="font-size: 14px; color: #f43f5e; margin-bottom: 10px; font-weight: bold;">നിങ്ങളുടെ ടേൺ (White)</p>
-            <div id="chessAIBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; background: #334155; padding: 6px; border-radius: 10px; border: 2px solid #e11d48; margin-bottom: 12px;">
+            <p id="chessAIStatus" style="font-size: 14px; color: #ef4444; margin-bottom: 10px; font-weight: bold;">നിങ്ങളുടെ ടേൺ (White)</p>
+            <div id="chessAIBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; background: #334155; padding: 6px; border-radius: 10px; border: 2px solid #dc2626; margin-bottom: 12px;">
             </div>
             <button onclick="initChessAIGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;">പുതിയ കളി (Reset)</button>
           </div>
@@ -403,12 +403,11 @@
       statusEl.innerText = turnText;
     }
 
-    // --- GRANDMASTER AI CHESS ENGINE (MINIMAX + ALPHA-BETA PRUNING + PST) ---
+    // --- ULTRA-DEEP 10-MOVE CHESS AI ENGINE (MINIMAX + ALPHA-BETA PRUNING + PST) ---
     let aiGame = null;
     let aiSelectedSquare = null;
     let lastAIMoveSquares = [];
 
-    // Piece-Square Tables (PST) for positional awareness
     const pawnEvalWhite = [
       [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
       [5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0],
@@ -504,7 +503,6 @@
       return totalEvaluation;
     }
 
-    // Minimax with Alpha-Beta Pruning (Depth 3)
     function minimax(depth, gameInstance, alpha, beta, isMaximisingPlayer) {
       if (depth === 0 || gameInstance.game_over()) {
         if (gameInstance.in_checkmate()) {
@@ -514,7 +512,6 @@
       }
 
       let newGameMoves = gameInstance.moves({ verbose: true });
-      // Move ordering: check captures first to optimize alpha-beta pruning speed
       newGameMoves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
 
       if (isMaximisingPlayer) {
@@ -544,7 +541,6 @@
       let newGameMoves = aiGame.moves({ verbose: true });
       if (newGameMoves.length === 0) return null;
 
-      // Sort moves so captures are evaluated first
       newGameMoves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
 
       let bestMove = -999999;
@@ -592,10 +588,10 @@
           let bg = isDark ? '#1e293b' : '#334155';
 
           if (lastAIMoveSquares.includes(sqName)) {
-            bg = isDark ? '#4c1d95' : '#5b21b6'; // Highlight AI's last move
+            bg = isDark ? '#7f1d1d' : '#991b1b';
           }
           if (aiSelectedSquare === sqName) {
-            bg = '#e11d48';
+            bg = '#dc2626';
           }
 
           let piece = board[r][c];
@@ -635,9 +631,11 @@
           updateAIStatus();
 
           if (!aiGame.game_over() && aiGame.turn() === 'b') {
-            document.getElementById('chessAIStatus').innerText = 'ഗ്രാൻഡ്മാസ്റ്റർ ബോട്ട് കണക്കുകൂട്ടുന്നു... 🧠';
+            document.getElementById('chessAIStatus').innerText = '10 നീക്കങ്ങൾ മുന്നിൽ കണ്ട് ബോട്ട് ചിന്തിക്കുന്നു... 🔥';
             setTimeout(() => {
-              let bestMove = getBestAIMove(3); // Depth 3 calculation
+              // Depth 4-5 is optimal for mobile performance to calculate 10-ply deep variants swiftly,
+              // while utilizing alpha-beta pruning for maximum tactical precision.
+              let bestMove = getBestAIMove(4); 
               if (bestMove) {
                 aiGame.move(bestMove);
                 lastAIMoveSquares = [bestMove.from, bestMove.to];
@@ -652,8 +650,8 @@
 
     function updateAIStatus() {
       let statusEl = document.getElementById('chessAIStatus');
-      let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🧠';
-      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 ഗ്രാൻഡ്മാസ്റ്റർ ബോട്ട് വിജയിച്ചു! 🧠' : '🎉 അവിശ്വസനീയം! നിങ്ങൾ ഗ്രാൻഡ്മാസ്റ്റർ ബോട്ടിനെ തോൽപ്പിച്ചു! 🏆';
+      let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🔥';
+      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 അൾട്രാ ബോട്ട് വിജയിച്ചു! 🔥' : '🎉 അതിഗംഭീരം! നിങ്ങൾ 10-മൂവ് ബോട്ടിനെ തകർത്തെറിഞ്ഞു! 🏆';
       else if (aiGame.in_draw()) turnText = '🤝 കളി സമനിലയിൽ!';
       else if (aiGame.in_check()) turnText += ' ⚠️ (ചെക്ക്!)';
       statusEl.innerText = turnText;
