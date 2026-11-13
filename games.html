@@ -294,7 +294,7 @@
       updateLudoUI();
     }
 
-    // --- CHESS LOGIC (Correct Move / Click & Place) ---
+    // --- CHESS LOGIC ---
     let chessBoardState = [];
     let selectedCell = null;
     let chessTurn = 'White';
@@ -325,7 +325,7 @@
           let isDark = (r + c) % 2 === 1;
           let bg = isDark ? '#1e293b' : '#334155';
           if(selectedCell && selectedCell.r === r && selectedCell.c === c) {
-            bg = '#2563eb'; // Highlight selected piece
+            bg = '#2563eb';
           }
           let piece = chessBoardState[r][c];
           boardHtml += `<div onclick="handleChessClick(${r}, ${c})" style="height: 40px; background: ${bg}; display:flex; justify-content:center; align-items:center; font-size: 24px; cursor: pointer; border-radius: 3px;">${piece}</div>`;
@@ -338,20 +338,17 @@
       let piece = chessBoardState[r][c];
       
       if(!selectedCell) {
-        // Select a piece if it's not empty
         if(piece !== '') {
           selectedCell = {r, c};
           renderChessBoard();
         }
       } else {
-        // If clicking the same cell again, unselect
         if(selectedCell.r === r && selectedCell.c === c) {
           selectedCell = null;
           renderChessBoard();
           return;
         }
 
-        // Move the selected piece to the new target cell
         chessBoardState[r][c] = chessBoardState[selectedCell.r][selectedCell.c];
         chessBoardState[selectedCell.r][selectedCell.c] = '';
         selectedCell = null;
