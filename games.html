@@ -133,10 +133,10 @@
 
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #a855f7; font-size: 15px;">🤖 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Master AI)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">വളരെ ബുദ്ധിപൂർവ്വം കളിക്കുന്ന എതിരാളി</p>
+        <h3 style="margin: 0 0 4px 0; color: #f43f5e; font-size: 15px;">🧠 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Grandmaster AI)</h3>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">3 നീക്കങ്ങൾ മുന്നിൽ കണ്ട് കളിക്കുന്ന എതിരാളി</p>
       </div>
-      <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">കളിക്കുക</button>
+      <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #e11d48, #be123c);">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
@@ -231,11 +231,11 @@
         initChessGame();
       }
       else if(type === 'chessAI') {
-        titleEl.innerText = '🤖 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Master AI)';
+        titleEl.innerText = '🧠 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (Grandmaster AI)';
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 380px;">
-            <p id="chessAIStatus" style="font-size: 14px; color: #a855f7; margin-bottom: 10px; font-weight: bold;">നിങ്ങളുടെ ടേൺ (White)</p>
-            <div id="chessAIBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; background: #334155; padding: 6px; border-radius: 10px; border: 2px solid #7c3aed; margin-bottom: 12px;">
+            <p id="chessAIStatus" style="font-size: 14px; color: #f43f5e; margin-bottom: 10px; font-weight: bold;">നിങ്ങളുടെ ടേൺ (White)</p>
+            <div id="chessAIBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; background: #334155; padding: 6px; border-radius: 10px; border: 2px solid #e11d48; margin-bottom: 12px;">
             </div>
             <button onclick="initChessAIGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;">പുതിയ കളി (Reset)</button>
           </div>
@@ -403,13 +403,170 @@
       statusEl.innerText = turnText;
     }
 
-    // --- MASTER AI CHESS LOGIC ---
+    // --- GRANDMASTER AI CHESS ENGINE (MINIMAX + ALPHA-BETA PRUNING + PST) ---
     let aiGame = null;
     let aiSelectedSquare = null;
+    let lastAIMoveSquares = [];
+
+    // Piece-Square Tables (PST) for positional awareness
+    const pawnEvalWhite = [
+      [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
+      [5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0],
+      [1.0,  1.0,  2.0,  3.0,  3.0,  2.0,  1.0,  1.0],
+      [0.5,  0.5,  1.0,  2.5,  2.5,  1.0,  0.5,  0.5],
+      [0.0,  0.0,  0.0,  2.0,  2.0,  0.0,  0.0,  0.0],
+      [0.5, -0.5, -1.0,  0.0,  0.0, -1.0, -0.5,  0.5],
+      [0.5,  1.0,  1.0, -2.0, -2.0,  1.0,  1.0,  0.5],
+      [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0]
+    ];
+    const pawnEvalBlack = pawnEvalWhite.slice().reverse();
+
+    const knightEval = [
+      [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0],
+      [-4.0, -2.0,  0.0,  0.0,  0.0,  0.0, -2.0, -4.0],
+      [-3.0,  0.0,  1.0,  1.5,  1.5,  1.0,  0.0, -3.0],
+      [-3.0,  0.5,  1.5,  2.0,  2.0,  1.5,  0.5, -3.0],
+      [-3.0,  0.0,  1.5,  2.0,  2.0,  1.5,  0.0, -3.0],
+      [-3.0,  0.5,  1.0,  1.5,  1.5,  1.0,  0.5, -3.0],
+      [-4.0, -2.0,  0.0,  0.5,  0.5,  0.0, -2.0, -4.0],
+      [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
+    ];
+
+    const bishopEvalWhite = [
+      [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
+      [-1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
+      [-1.0,  0.0,  0.5,  1.0,  1.0,  0.5,  0.0, -1.0],
+      [-1.0,  0.5,  0.5,  1.0,  1.0,  0.5,  0.5, -1.0],
+      [-1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  0.0, -1.0],
+      [-1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0, -1.0],
+      [-1.0,  0.5,  0.0,  0.0,  0.0,  0.0,  0.5, -1.0],
+      [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
+    ];
+    const bishopEvalBlack = bishopEvalWhite.slice().reverse();
+
+    const rookEvalWhite = [
+      [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
+      [0.5,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  0.5],
+      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+      [0.0,  0.0,  0.0,  0.5,  0.5,  0.0,  0.0,  0.0]
+    ];
+    const rookEvalBlack = rookEvalWhite.slice().reverse();
+
+    const evalQueen = [
+      [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
+      [-1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
+      [-1.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
+      [-0.5,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
+      [0.0,   0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
+      [-1.0,  0.5,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
+      [-1.0,  0.0,  0.5,  0.0,  0.0,  0.0,  0.0, -1.0],
+      [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0]
+    ];
+
+    const kingEvalWhite = [
+      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+      [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
+      [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
+      [2.0,   2.0,  0.0,  0.0,  0.0,  0.0,  2.0,  2.0],
+      [2.0,   3.0,  1.0,  0.0,  0.0,  1.0,  3.0,  2.0]
+    ];
+    const kingEvalBlack = kingEvalWhite.slice().reverse();
+
+    function getPieceValue(piece, x, y) {
+      if (piece === null) return 0;
+      let getAbsoluteValue = function (piece, isWhite, x, y) {
+        if (piece.type === 'p') return 10 + (isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x]);
+        else if (piece.type === 'r') return 50 + (isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x]);
+        else if (piece.type === 'n') return 30 + knightEval[y][x];
+        else if (piece.type === 'b') return 30 + (isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x]);
+        else if (piece.type === 'q') return 90 + evalQueen[y][x];
+        else if (piece.type === 'k') return 900 + (isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x]);
+        return 0;
+      };
+      let absoluteValue = getAbsoluteValue(piece, piece.color === 'w', x, y);
+      return piece.color === 'w' ? absoluteValue : -absoluteValue;
+    }
+
+    function evaluateBoard(board) {
+      let totalEvaluation = 0;
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          totalEvaluation += getPieceValue(board[i][j], j, i);
+        }
+      }
+      return totalEvaluation;
+    }
+
+    // Minimax with Alpha-Beta Pruning (Depth 3)
+    function minimax(depth, gameInstance, alpha, beta, isMaximisingPlayer) {
+      if (depth === 0 || gameInstance.game_over()) {
+        if (gameInstance.in_checkmate()) {
+          return isMaximisingPlayer ? -99999 : 99999;
+        }
+        return -evaluateBoard(gameInstance.board());
+      }
+
+      let newGameMoves = gameInstance.moves({ verbose: true });
+      // Move ordering: check captures first to optimize alpha-beta pruning speed
+      newGameMoves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
+
+      if (isMaximisingPlayer) {
+        let bestMove = -999999;
+        for (let i = 0; i < newGameMoves.length; i++) {
+          gameInstance.move(newGameMoves[i]);
+          bestMove = Math.max(bestMove, minimax(depth - 1, gameInstance, alpha, beta, !isMaximisingPlayer));
+          gameInstance.undo();
+          alpha = Math.max(alpha, bestMove);
+          if (beta <= alpha) return bestMove;
+        }
+        return bestMove;
+      } else {
+        let bestMove = 999999;
+        for (let i = 0; i < newGameMoves.length; i++) {
+          gameInstance.move(newGameMoves[i]);
+          bestMove = Math.min(bestMove, minimax(depth - 1, gameInstance, alpha, beta, !isMaximisingPlayer));
+          gameInstance.undo();
+          beta = Math.min(beta, bestMove);
+          if (beta <= alpha) return bestMove;
+        }
+        return bestMove;
+      }
+    }
+
+    function getBestAIMove(depth) {
+      let newGameMoves = aiGame.moves({ verbose: true });
+      if (newGameMoves.length === 0) return null;
+
+      // Sort moves so captures are evaluated first
+      newGameMoves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
+
+      let bestMove = -999999;
+      let bestMoveFound = newGameMoves[0];
+
+      for (let i = 0; i < newGameMoves.length; i++) {
+        let newGameMove = newGameMoves[i];
+        aiGame.move(newGameMove);
+        let value = minimax(depth - 1, aiGame, -1000000, 1000000, false);
+        aiGame.undo();
+        if (value > bestMove) {
+          bestMove = value;
+          bestMoveFound = newGameMove;
+        }
+      }
+      return bestMoveFound;
+    }
 
     function initChessAIGame() {
       aiGame = new Chess();
       aiSelectedSquare = null;
+      lastAIMoveSquares = [];
       updateAIStatus();
       renderAIBoard();
     }
@@ -434,8 +591,11 @@
           let isDark = (r + c) % 2 === 1;
           let bg = isDark ? '#1e293b' : '#334155';
 
+          if (lastAIMoveSquares.includes(sqName)) {
+            bg = isDark ? '#4c1d95' : '#5b21b6'; // Highlight AI's last move
+          }
           if (aiSelectedSquare === sqName) {
-            bg = '#7c3aed';
+            bg = '#e11d48';
           }
 
           let piece = board[r][c];
@@ -475,51 +635,25 @@
           updateAIStatus();
 
           if (!aiGame.game_over() && aiGame.turn() === 'b') {
-            document.getElementById('chessAIStatus').innerText = 'മാസ്റ്റർ ബോട്ട് ചിന്തിക്കുന്നു... 🤖';
-            setTimeout(makeMasterAIMove, 600);
+            document.getElementById('chessAIStatus').innerText = 'ഗ്രാൻഡ്മാസ്റ്റർ ബോട്ട് കണക്കുകൂട്ടുന്നു... 🧠';
+            setTimeout(() => {
+              let bestMove = getBestAIMove(3); // Depth 3 calculation
+              if (bestMove) {
+                aiGame.move(bestMove);
+                lastAIMoveSquares = [bestMove.from, bestMove.to];
+              }
+              renderAIBoard();
+              updateAIStatus();
+            }, 150);
           }
         }
       }
     }
 
-    // Master AI logic: Evaluates captures AND checks/threats to attack player pieces aggressively
-    function makeMasterAIMove() {
-      let moves = aiGame.moves({ verbose: true });
-      if (moves.length === 0) return;
-
-      const pieceValues = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-      
-      // Score every possible move to find the most dangerous one
-      let scoredMoves = moves.map(m => {
-        let score = 0;
-        // High priority for capturing player pieces
-        if (m.captured) {
-          score += pieceValues[m.captured] * 10;
-        }
-        // Extra bonus if the move gives check to the player
-        aiGame.move(m);
-        if (aiGame.in_check()) {
-          score += 25;
-        }
-        // Small randomness to keep it varied
-        score += Math.random() * 2;
-        aiGame.undo();
-        return { move: m, score: score };
-      });
-
-      // Sort by best score descending
-      scoredMoves.sort((a, b) => b.score - a.score);
-      let bestMove = scoredMoves[0].move;
-
-      aiGame.move(bestMove);
-      renderAIBoard();
-      updateAIStatus();
-    }
-
     function updateAIStatus() {
       let statusEl = document.getElementById('chessAIStatus');
-      let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🤖';
-      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 കമ്പ്യൂട്ടർ വിജയിച്ചു! 🤖' : '🎉 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ മാസ്റ്റർ ബോട്ടിനെ തോൽപ്പിച്ചു! 🏆';
+      let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🧠';
+      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 ഗ്രാൻഡ്മാസ്റ്റർ ബോട്ട് വിജയിച്ചു! 🧠' : '🎉 അവിശ്വസനീയം! നിങ്ങൾ ഗ്രാൻഡ്മാസ്റ്റർ ബോട്ടിനെ തോൽപ്പിച്ചു! 🏆';
       else if (aiGame.in_draw()) turnText = '🤝 കളി സമനിലയിൽ!';
       else if (aiGame.in_check()) turnText += ' ⚠️ (ചെക്ക്!)';
       statusEl.innerText = turnText;
