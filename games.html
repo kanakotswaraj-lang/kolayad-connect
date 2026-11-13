@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>നാട്ടുകൂട്ടം ഗെയിംസ് അരീന - കോളയാട് കണക്ട്</title>
+  <!-- 🌟 Chess.js Library for Official Chess Rules Validation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
   <style>
     :root {
       --bg-body: #070b19;
@@ -124,7 +126,7 @@
     <div class="game-card">
       <div>
         <h3 style="margin: 0 0 4px 0; color: #38bdf8; font-size: 15px;">♟️ ചെസ്സ് (Chess Classic)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">2 കളിക്കാർക്കായുള്ള വലിയ ബോർഡ്</p>
+        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">ഔദ്യോഗിക നിയമങ്ങൾ പൂർണ്ണമായി പാലിക്കുന്ന ബോർഡ്</p>
       </div>
       <button class="play-btn" onclick="openGame('chess')">കളിക്കുക</button>
     </div>
@@ -294,69 +296,108 @@
       updateLudoUI();
     }
 
-    // --- CHESS LOGIC ---
-    let chessBoardState = [];
-    let selectedCell = null;
-    let chessTurn = 'White';
+    // --- CHESS LOGIC (Using Chess.js for Official Rules) ---
+    let game = null;
+    let chessSelectedSquare = null;
+
+    const pieceSymbols = {
+      'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
+      'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
+    };
 
     function initChessGame() {
-      chessTurn = 'White';
-      selectedCell = null;
-      document.getElementById('chessStatus').innerText = 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ';
-      
-      chessBoardState = [
-        ['♜','♞','♝','♛','♚','♝','♞','♜'],
-        ['♟','♟','♟','♟','♟','♟','♟','♟'],
-        ['','','','','','','',''],
-        ['','','','','','','',''],
-        ['','','','','','','',''],
-        ['','','','','','','',''],
-        ['♙','♙','♙','♙','♙','♙','♙','♙'],
-        ['♖','♘','♗','♕','♔','♗','♘','♖']
-      ];
+      game = new Chess();
+      chessSelectedSquare = null;
+      updateChessStatus();
       renderChessBoard();
     }
 
     function renderChessBoard() {
       let boardEl = document.getElementById('chessBoard');
       let boardHtml = '';
-      for(let r=0; r<8; r++) {
-        for(let c=0; c<8; c++) {
+      let board = game.board();
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          let squareNames = ['a8','b8','c8','d8','e8','f8','g8','h8',
+                             'a7','b7','c7','d7','e7','f7','g7','h7',
+                             'a6','b6','c6','d6','e6','f6','g6','h6',
+                             'a5','b5','c5','d5','e5','f5','g5','h5',
+                             'a4','b4','c4','d4','e4','f4','g4','h4',
+                             'a3','b3','c3','d3','e3','f3','g3','h3',
+                             'a2','b2','c2','d2','e2','f2','g2','h2',
+                             'a1','b1','c1','d1','e1','f1','g1','h1'];
+          let sqIndex = r * 8 + c;
+          let sqName = squareNames[sqIndex];
           let isDark = (r + c) % 2 === 1;
           let bg = isDark ? '#1e293b' : '#334155';
-          if(selectedCell && selectedCell.r === r && selectedCell.c === c) {
-            bg = '#2563eb';
+
+          if (chessSelectedSquare === sqName) {
+            bg = '#2563eb'; // Selected square highlight
           }
-          let piece = chessBoardState[r][c];
-          boardHtml += `<div onclick="handleChessClick(${r}, ${c})" style="height: 40px; background: ${bg}; display:flex; justify-content:center; align-items:center; font-size: 24px; cursor: pointer; border-radius: 3px;">${piece}</div>`;
+
+          let piece = board[r][c];
+          let pieceChar = '';
+          if (piece) {
+            let symbolKey = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
+            pieceChar = pieceSymbols[symbolKey] || '';
+          }
+
+          boardHtml += `<div onclick="handleChessSquareClick('${sqName}')" style="height: 40px; background: ${bg}; display:flex; justify-content:center; align-items:center; font-size: 24px; cursor: pointer; border-radius: 3px;">${pieceChar}</div>`;
         }
       }
       boardEl.innerHTML = boardHtml;
     }
 
-    function handleChessClick(r, c) {
-      let piece = chessBoardState[r][c];
-      
-      if(!selectedCell) {
-        if(piece !== '') {
-          selectedCell = {r, c};
+    function handleChessSquareClick(sq) {
+      if (!chessSelectedSquare) {
+        let piece = game.get(sq);
+        if (piece && piece.color === game.turn()) {
+          chessSelectedSquare = sq;
           renderChessBoard();
         }
       } else {
-        if(selectedCell.r === r && selectedCell.c === c) {
-          selectedCell = null;
+        if (chessSelectedSquare === sq) {
+          chessSelectedSquare = null;
           renderChessBoard();
           return;
         }
 
-        chessBoardState[r][c] = chessBoardState[selectedCell.r][selectedCell.c];
-        chessBoardState[selectedCell.r][selectedCell.c] = '';
-        selectedCell = null;
+        // Try to make the move following official chess rules
+        let move = game.move({
+          from: chessSelectedSquare,
+          to: sq,
+          promotion: 'q' // automatically promote pawn to queen for simplicity
+        });
+
+        chessSelectedSquare = null;
+
+        if (move === null) {
+          // Illegal move, check if user clicked another of their own pieces to change selection
+          let piece = game.get(sq);
+          if (piece && piece.color === game.turn()) {
+            chessSelectedSquare = sq;
+          }
+        }
         
-        chessTurn = chessTurn === 'White' ? 'Black' : 'White';
-        document.getElementById('chessStatus').innerText = `${chessTurn === 'White' ? 'വെളുപ്പ് (White)' : 'കറുപ്പ് (Black)'} കളിക്കാരുടെ ടേൺ`;
         renderChessBoard();
+        updateChessStatus();
       }
+    }
+
+    function updateChessStatus() {
+      let statusEl = document.getElementById('chessStatus');
+      let turnText = game.turn() === 'w' ? 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ' : 'കറുപ്പ് (Black) കളിക്കാരുടെ ടേൺ';
+
+      if (game.in_checkmate()) {
+        turnText = `🏁 ചെക്ക്മേറ്റ്! ${game.turn() === 'w' ? 'കറുപ്പ് (Black)' : 'വെളുപ്പ് (White)'} വിജയിച്ചു! 🎉`;
+      } else if (game.in_draw()) {
+        turnText = `🤝 കളി സമനിലയിൽ (Draw)!`;
+      } else if (game.in_check()) {
+        turnText += ' ⚠️ (ചെക്ക്!)';
+      }
+
+      statusEl.innerText = turnText;
     }
 
     // --- SNAKES & LADDERS LOGIC ---
