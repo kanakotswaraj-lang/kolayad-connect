@@ -40,12 +40,11 @@
       padding: 6px 14px;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 12.5px;
+      font-size: 14px;
       font-weight: 800;
       text-decoration: none;
       margin-right: 12px;
       box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
-      transition: all 0.2s ease;
     }
     .back-btn:active { transform: scale(0.95); }
 
@@ -71,12 +70,14 @@
       background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #ffffff;
       border: none;
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
       box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+      text-decoration: none;
+      display: inline-block;
     }
     #gameArea {
       position: fixed;
@@ -98,7 +99,7 @@
       border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 15px;
       transition: all 0.2s;
     }
     .player-select-btn.active {
@@ -106,38 +107,38 @@
       border-color: #38bdf8;
     }
 
-    /* 🌟 EXTERNAL PLAYERS STATUS BAR (പുറത്തെ കരുക്കളുടെ സ്റ്റാറ്റസ് ബോർഡ്) */
+    /* 🌟 EXTERNAL PLAYERS STATUS BAR (വലിയ വ്യക്തമായ അക്ഷരങ്ങൾ) */
     .external-status-panel {
       display: flex;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1.5px solid rgba(250, 204, 21, 0.4);
-      padding: 8px 10px;
-      border-radius: 12px;
-      margin-bottom: 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid rgba(250, 204, 21, 0.6);
+      padding: 10px 12px;
+      border-radius: 14px;
+      margin-bottom: 12px;
       width: 100%;
-      max-width: 360px;
+      max-width: 380px;
       box-sizing: border-box;
     }
     .status-badge {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       background: #1e293b;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      border: 1.5px solid rgba(255,255,255,0.2);
     }
 
-    /* 🌟 3D SNAKES & LADDERS & LUDO PRO STYLES */
+    /* 🌟 3D SNAKES & LADDERS & LUDO PRO STYLES (കൂടുതൽ വലിയ അക്കങ്ങൾ) */
     .snake-3d-stage {
       perspective: 900px;
       width: 100%;
-      max-width: 360px;
+      max-width: 380px;
       margin: 4px auto 10px auto;
       padding: 4px 0;
     }
@@ -145,19 +146,19 @@
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      transform: rotateX(16deg);
+      transform: rotateX(14deg);
       transform-style: preserve-3d;
       border-radius: 18px;
       background: linear-gradient(145deg, #0f172a, #1e1b4b);
       padding: 8px;
-      border: 3px solid #facc15;
+      border: 3.5px solid #facc15;
       box-shadow: 0 16px 0 #78350f, 0 25px 35px rgba(0, 0, 0, 0.8);
     }
     .snake-3d-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       grid-template-rows: repeat(6, 1fr);
-      gap: 4px;
+      gap: 5px;
       width: 100%;
       height: 100%;
       position: relative;
@@ -169,11 +170,11 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 3px;
+      padding: 4px;
       position: relative;
-      box-shadow: inset 0 2px 4px rgba(255,255,255,0.25), 0 3px 0 rgba(0,0,0,0.4);
-      font-weight: 800;
-      font-size: 11px;
+      box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), 0 3px 0 rgba(0,0,0,0.5);
+      font-weight: 900;
+      font-size: 16px; /* അക്കങ്ങളുടെ വലിപ്പം നന്നായി കൂട്ടിയിരിക്കുന്നു */
     }
     .snake-3d-overlay {
       position: absolute;
@@ -189,19 +190,19 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       z-index: 5;
-      transform: translateZ(12px);
+      transform: translateZ(14px);
     }
     .pawn-3d {
-      width: 16px;
-      height: 22px;
+      width: 18px;
+      height: 24px;
       border-radius: 50% 50% 35% 35%;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 8px;
+      font-size: 10px;
       font-weight: 900;
       color: #0f172a;
       box-shadow: inset -2.5px -2.5px 5px rgba(0,0,0,0.45), inset 2.5px 2.5px 5px rgba(255,255,255,0.8), 0 5px 6px rgba(0,0,0,0.6);
@@ -210,8 +211,8 @@
 
     /* 3D 🎲 Dice Cube */
     .dice-3d-scene {
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       perspective: 400px;
       margin: 4px auto 8px auto;
     }
@@ -224,27 +225,27 @@
     }
     .dice-face {
       position: absolute;
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       background: linear-gradient(145deg, #ffffff, #e2e8f0);
       border: 2px solid #cbd5e1;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
+      font-size: 28px;
       color: #0f172a;
       font-weight: 900;
       box-shadow: inset 0 0 6px rgba(0,0,0,0.15);
     }
-    .face-1 { transform: rotateY(0deg) translateZ(24px); }
-    .face-2 { transform: rotateY(90deg) translateZ(24px); }
-    .face-3 { transform: rotateY(180deg) translateZ(24px); }
-    .face-4 { transform: rotateY(-90deg) translateZ(24px); }
-    .face-5 { transform: rotateX(90deg) translateZ(24px); }
-    .face-6 { transform: rotateX(-90deg) translateZ(24px); }
+    .face-1 { transform: rotateY(0deg) translateZ(25px); }
+    .face-2 { transform: rotateY(90deg) translateZ(25px); }
+    .face-3 { transform: rotateY(180deg) translateZ(25px); }
+    .face-4 { transform: rotateY(-90deg) translateZ(25px); }
+    .face-5 { transform: rotateX(90deg) translateZ(25px); }
+    .face-6 { transform: rotateX(-90deg) translateZ(25px); }
 
-    /* 🌟 3D Chess Sleek Pieces Styling */
+    /* 3D Chess Sleek Pieces Styling */
     .chess-3d-square {
       height: 40px;
       display: flex;
@@ -256,9 +257,7 @@
       transition: transform 0.15s ease, background-color 0.15s ease;
       text-shadow: 0 3px 6px rgba(0,0,0,0.6);
     }
-    .chess-3d-square:active {
-      transform: scale(0.92);
-    }
+    .chess-3d-square:active { transform: scale(0.92); }
   </style>
 </head>
 <body>
@@ -266,57 +265,66 @@
   <!-- ഹെഡർ ഭാഗം -->
   <div class="header">
     <a href="index.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 17px; color: #facc15;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
+    <h2 style="margin: 0; font-size: 18px; color: #facc15; font-weight: 900;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
   </div>
 
   <!-- പ്രധാന ഗെയിംസ് മെനു -->
   <div class="container" id="mainMenu">
-    <p style="color: #94a3b8; font-size: 13px; margin-bottom: 18px; font-weight: 500;">സുഹൃത്തുക്കൾക്കൊപ്പമോ കമ്പ്യൂട്ടറിനെതിരെയോ കളിക്കാം!</p>
+    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 18px; font-weight: 700;">സുഹൃത്തുക്കൾക്കൊപ്പമോ കമ്പ്യൂട്ടറിനെതിരെയോ കളിക്കാം!</p>
     
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #facc15; font-size: 15px;">🎲 ലൂഡോ (Ludo Pro 3D)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">3D രൂപകൽപ്പനയും കിടിലൻ ഡൈസ് അനുഭവവും</p>
+        <h3 style="margin: 0 0 4px 0; color: #facc15; font-size: 16px; font-weight: 900;">🎲 ലൂഡോ (Ludo Pro 3D)</h3>
+        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">3D രൂപകൽപ്പനയും കിടിലൻ ഡൈസ് അനുഭവവും</p>
       </div>
       <button class="play-btn" onclick="openSetup('ludo')">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #38bdf8; font-size: 15px;">♟️ ചെസ്സ് (3D 2-Player Local)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">ഔദ്യോഗിക നിയമങ്ങളും 3D കരിക്കളും</p>
+        <h3 style="margin: 0 0 4px 0; color: #38bdf8; font-size: 16px; font-weight: 900;">♟️ ചെസ്സ് (3D 2-Player Local)</h3>
+        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">ഔദ്യോഗിക നിയമങ്ങളും 3D കരിക്കളും</p>
       </div>
       <button class="play-btn" onclick="openGame('chess')">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #f87171; font-size: 15px;">🔥 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (3D Ultra-Deep AI)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">10 നീക്കങ്ങൾ മുന്നിൽ കാണുന്ന അൾട്രാ-ഹാർഡ് ബോട്ട്</p>
+        <h3 style="margin: 0 0 4px 0; color: #f87171; font-size: 16px; font-weight: 900;">🔥 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (3D AI)</h3>
+        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">10 നീക്കങ്ങൾ മുന്നിൽ കാണുന്ന അൾട്രാ-ഹാർഡ് ബോട്ട്</p>
       </div>
       <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #dc2626, #991b1b);">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
       <div>
-        <h3 style="margin: 0 0 4px 0; color: #4ade80; font-size: 15px;">🐍 3D ഏണിയും പാമ്പും (Snakes & Ladders)</h3>
-        <p style="margin: 0; font-size: 11.5px; color: #94a3b8;">3D പശ്ചാത്തലവും SVG പാമ്പുകളും ഏണികളും</p>
+        <h3 style="margin: 0 0 4px 0; color: #4ade80; font-size: 16px; font-weight: 900;">🐍 3D ഏണിയും പാമ്പും</h3>
+        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">3D പശ്ചാത്തലവും വലിയ അക്കങ്ങളും</p>
       </div>
       <button class="play-btn" onclick="openSetup('snakes')">കളിക്കുക</button>
+    </div>
+
+    <!-- മോളുടെ സർപ്രൈസ് ഗിഫ്റ്റ് ബോക്സ് ഗെയിം ലിങ്ക് -->
+    <div class="game-card" style="border-color: #facc15;">
+      <div>
+        <h3 style="margin: 0 0 4px 0; color: #facc15; font-size: 16px; font-weight: 900;">🎁 മിസ്ട്രി സമ്മാനപ്പെട്ടി</h3>
+        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">പെട്ടി തുറന്ന് കോയിനുകളും സമ്മാനങ്ങളും നേടാം!</p>
+      </div>
+      <a href="prize_box.html" class="play-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a;">തുടരുക</a>
     </div>
   </div>
 
   <!-- പ്ലെയർ സെലക്ഷൻ ഡയലോഗ് -->
   <div id="setupArea" style="position: fixed; inset: 0; background: var(--bg-app); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
-    <h3 id="setupTitle" style="color: #facc15; margin-bottom: 15px; font-size: 18px;">കളിക്കാരുടെ എണ്ണം തിരഞ്ഞെടുക്കുക</h3>
+    <h3 id="setupTitle" style="color: #facc15; margin-bottom: 15px; font-size: 18px; font-weight: 900;">കളിക്കാരുടെ എണ്ണം തിരഞ്ഞെടുക്കുക</h3>
     <div style="display: flex; gap: 10px; margin-bottom: 25px;" id="playerCountBtns">
       <button class="player-select-btn" onclick="setPlayerCount(2)">2 പ്ലെയർ</button>
       <button class="player-select-btn" onclick="setPlayerCount(3)">3 പ്ലെയർ</button>
       <button class="player-select-btn active" onclick="setPlayerCount(4)">4 പ്ലെയർ</button>
     </div>
     <div style="display: flex; gap: 12px;">
-      <button onclick="startConfiguredGame()" style="background: #22c55e; color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;">തുടരുക ➔</button>
-      <button onclick="closeSetup()" style="background: var(--bg-card); color: #94a3b8; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;">തിരികെ</button>
+      <button onclick="startConfiguredGame()" style="background: #22c55e; color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 15px;">തുടരുക ➔</button>
+      <button onclick="closeSetup()" style="background: var(--bg-card); color: #cbd5e1; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 15px;">തിരികെ</button>
     </div>
   </div>
 
@@ -324,7 +332,7 @@
   <div id="gameArea">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
       <button onclick="backToMenu()" class="back-btn">← ഗെയിം ലിസ്റ്റിലേക്ക്</button>
-      <h3 id="activeGameTitle" style="margin:0; font-size:15px; color:#facc15;">Game</h3>
+      <h3 id="activeGameTitle" style="margin:0; font-size:16px; color:#facc15; font-weight: 900;">Game</h3>
     </div>
     
     <div id="gameContainer" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; overflow-y: auto; padding-bottom: 15px;">
@@ -366,9 +374,8 @@
         titleEl.innerText = `🎲 ലൂഡോ പ്രോ 3D (${selectedPlayerCount}-Player)`;
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 400px;">
-            <p id="ludoStatus" style="font-size: 13.5px; color: #facc15; margin-bottom: 4px; font-weight: bold;"></p>
+            <p id="ludoStatus" style="font-size: 16px; color: #facc15; margin-bottom: 6px; font-weight: 900;"></p>
             
-            <!-- പുറത്തെ കരുക്കളുടെ പൊസിഷൻ കാണിക്കുന്ന ബാർ -->
             <div id="ludoExternalStatus" class="external-status-panel"></div>
 
             <div class="snake-3d-stage">
@@ -388,8 +395,8 @@
               </div>
             </div>
 
-            <button onclick="rollLudoDice()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; border: none; padding: 10px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(245,158,11,0.4);">ഡൈസ് ഉരുട്ടുക</button>
-            <button onclick="initLudoGame()" style="background: var(--bg-card); color: #94a3b8; border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 8px; margin-top: 8px; cursor: pointer; font-size: 11px; display: block; margin-left: auto; margin-right: auto;">പുതിയ കളി (Reset)</button>
+            <button onclick="rollLudoDice()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 900; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(245,158,11,0.4);">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="initLudoGame()" style="background: var(--bg-card); color: #cbd5e1; border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 8px; margin-top: 8px; cursor: pointer; font-size: 12.5px; display: block; margin-left: auto; margin-right: auto; font-weight: bold;">പുതിയ കളി (Reset)</button>
           </div>
         `;
         initLudoGame();
@@ -398,22 +405,22 @@
         titleEl.innerText = '♟️ 3D ക്ലാസിക് ചെസ്സ് (2-Player)';
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 380px;">
-            <p id="chessStatus" style="font-size: 13.5px; color: #facc15; margin-bottom: 8px; font-weight: bold;">വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ</p>
+            <p id="chessStatus" style="font-size: 16px; color: #facc15; margin-bottom: 8px; font-weight: 900;">വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ</p>
             <div id="chessBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #0f172a; padding: 8px; border-radius: 14px; border: 2.5px solid #38bdf8; margin-bottom: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
             </div>
-            <button onclick="initChessGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;">പുതിയ കളി (Reset)</button>
+            <button onclick="initChessGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;">പുതിയ കളി (Reset)</button>
           </div>
         `;
         initChessGame();
       }
       else if(type === 'chessAI') {
-        titleEl.innerText = '🔥 3D ചെസ്സ് Vs കമ്പ്യൂട്ടർ (10-Move AI)';
+        titleEl.innerText = '🔥 3D ചെസ്സ് Vs കമ്പ്യൂട്ടർ (AI)';
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 380px;">
-            <p id="chessAIStatus" style="font-size: 13.5px; color: #facc15; margin-bottom: 8px; font-weight: bold;">നിങ്ങളുടെ ടേൺ (White)</p>
+            <p id="chessAIStatus" style="font-size: 16px; color: #facc15; margin-bottom: 8px; font-weight: 900;">നിങ്ങളുടെ ടേൺ (White)</p>
             <div id="chessAIBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #0f172a; padding: 8px; border-radius: 14px; border: 2.5px solid #dc2626; margin-bottom: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
             </div>
-            <button onclick="initChessAIGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;">പുതിയ കളി (Reset)</button>
+            <button onclick="initChessAIGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;">പുതിയ കളി (Reset)</button>
           </div>
         `;
         initChessAIGame();
@@ -422,9 +429,8 @@
         titleEl.innerText = `🐍 3D ഏണിയും പാമ്പും (${selectedPlayerCount}-Player)`;
         container.innerHTML = `
           <div style="text-align: center; width: 100%; max-width: 400px;">
-            <p id="snakeStatus" style="font-size: 13.5px; color: #facc15; margin-bottom: 4px; font-weight: bold;"></p>
+            <p id="snakeStatus" style="font-size: 16px; color: #facc15; margin-bottom: 4px; font-weight: 900;"></p>
             
-            <!-- പുറത്തെ കരുക്കളുടെ പൊസിഷൻ കാണിക്കുന്ന ബാർ -->
             <div id="snakeExternalStatus" class="external-status-panel"></div>
             
             <div class="snake-3d-stage">
@@ -466,8 +472,8 @@
               </div>
             </div>
 
-            <button onclick="rollMultiSnakeDice()" style="background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; border: none; padding: 11px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(34,197,94,0.4);">ഡൈസ് ഉരുട്ടുക</button>
-            <button onclick="initMultiSnakeBoard()" style="background: var(--bg-card); color: #94a3b8; border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 8px; margin-top: 8px; cursor: pointer; font-size: 11px; display: block; margin-left: auto; margin-right: auto;">പുതിയ കളി</button>
+            <button onclick="rollMultiSnakeDice()" style="background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 900; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(34,197,94,0.4);">ഡൈസ് ഉരുട്ടുക</button>
+            <button onclick="initMultiSnakeBoard()" style="background: var(--bg-card); color: #cbd5e1; border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 8px; margin-top: 8px; cursor: pointer; font-size: 12.5px; display: block; margin-left: auto; margin-right: auto; font-weight: bold;">പുതിയ കളി</button>
           </div>
         `;
         initMultiSnakeBoard();
@@ -501,17 +507,15 @@
 
     function updateLudoUI() {
       let p = activeLudoPlayers[ludoTurn];
-      document.getElementById('ludoStatusinnerHTML', `<span style="color:${p.color}">${p.name}</span>-ന്റെ ടേൺ`);
       document.getElementById('ludoStatus').innerHTML = `<span style="color:${p.color}">${p.name}</span>-ന്റെ ടേൺ`;
       
-      // പുറത്തെ സ്റ്റാറ്റസ് ബാർ അപ്ഡേറ്റ് ചെയ്യൽ
       let statusHtml = '';
       activeLudoPlayers.forEach((pl, idx) => {
-        let activeBorder = (idx === ludoTurn) ? '2px solid #facc15' : '1px solid rgba(255,255,255,0.1)';
+        let activeBorder = (idx === ludoTurn) ? '2.5px solid #facc15' : '1px solid rgba(255,255,255,0.2)';
         statusHtml += `<div class="status-badge" style="border:${activeBorder}">
-          <span style="width:10px; height:10px; border-radius:50%; background:${pl.color}; display:inline-block;"></span>
-          <span style="color:#f8fafc">${pl.name}:</span>
-          <span style="color:#facc15;">${pl.pos}/36</span>
+          <span style="width:12px; height:12px; border-radius:50%; background:${pl.color}; display:inline-block;"></span>
+          <span style="color:#ffffff">${pl.name}:</span>
+          <span style="color:#facc15; font-size:15px;">${pl.pos}/36</span>
         </div>`;
       });
       document.getElementById('ludoExternalStatus').innerHTML = statusHtml;
@@ -524,8 +528,8 @@
         
         let badges = occupants.map(o => `<div class="pawn-3d" style="background:${o.bgStyle};">${o.name}</div>`).join('');
         
-        gridHtml += `<div class="snake-3d-cell" style="background: ${cellBg}; color: ${i === 36 ? '#0f172a' : '#cbd5e1'};">
-          <div style="width:100%; display:flex; justify-content:space-between; font-size:9.5px; opacity:0.85;">
+        gridHtml += `<div class="snake-3d-cell" style="background: ${cellBg}; color: ${i === 36 ? '#0f172a' : '#f8fafc'};">
+          <div style="width:100%; display:flex; justify-content:space-between; font-size:13.5px; opacity:0.95;">
             <span>${i === 36 ? '🏆' : i}</span>
           </div>
           <div class="pawn-container">${badges}</div>
@@ -569,10 +573,9 @@
       }, 700);
     }
 
-    // --- CHESS 2-PLAYER LOGIC (WITH 3D Sleek Pieces) ---
+    // --- CHESS 2-PLAYER LOGIC ---
     let game = null;
     let chessSelectedSquare = null;
-
     const pieceSymbols = {
       'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
       'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
@@ -605,9 +608,7 @@
           let isDark = (r + c) % 2 === 1;
           let bg = isDark ? 'linear-gradient(135deg, #1e293b, #0f172a)' : 'linear-gradient(135deg, #475569, #334155)';
 
-          if (chessSelectedSquare === sqName) {
-            bg = 'linear-gradient(135deg, #2563eb, #1d4ed8)';
-          }
+          if (chessSelectedSquare === sqName) bg = 'linear-gradient(135deg, #2563eb, #1d4ed8)';
 
           let piece = board[r][c];
           let pieceChar = '';
@@ -615,13 +616,8 @@
           if (piece) {
             let symbolKey = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
             pieceChar = pieceSymbols[symbolKey] || '';
-            if (piece.color === 'w') {
-              pieceStyle = 'color: #f8fafc; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.8));';
-            } else {
-              pieceStyle = 'color: #cbd5e1; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.9));';
-            }
+            pieceStyle = piece.color === 'w' ? 'color: #f8fafc;' : 'color: #cbd5e1;';
           }
-
           boardHtml += `<div class="chess-3d-square" onclick="handleChessSquareClick('${sqName}')" style="background: ${bg};"><span style="${pieceStyle}">${pieceChar}</span></div>`;
         }
       }
@@ -655,166 +651,76 @@
     function updateChessStatus() {
       let statusEl = document.getElementById('chessStatus');
       let turnText = game.turn() === 'w' ? 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ' : 'കറുപ്പ് (Black) കളിക്കാരുടെ ടേൺ';
-      if (game.in_checkmate()) turnText = `🏁 ചെക്ക്മേറ്റ്! ${game.turn() === 'w' ? 'കറുപ്പ്' : 'വെളുപ്പ്'} വിജയിച്ചു! 🎉`;
+      if (game.in_checkmate()) turnText = `🏁 ചെക്ക്മേറ്റ്! ${game.turn() === 'w' ? 'കറുപ്പ്' : 'വെളുപ്പ്'} വിജയിച്ചു!`;
       else if (game.in_draw()) turnText = `🤝 കളി സമനിലയിൽ!`;
       else if (game.in_check()) turnText += ' ⚠️ (ചെക്ക്!)';
       statusEl.innerText = turnText;
     }
 
-    // --- ULTRA-DEEP 10-MOVE CHESS AI ENGINE (WITH 3D Sleek Pieces) ---
+    // --- CHESS AI ENGINE ---
     let aiGame = null;
     let aiSelectedSquare = null;
     let lastAIMoveSquares = [];
 
-    const pawnEvalWhite = [
-      [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
-      [5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0],
-      [1.0,  1.0,  2.0,  3.0,  3.0,  2.0,  1.0,  1.0],
-      [0.5,  0.5,  1.0,  2.5,  2.5,  1.0,  0.5,  0.5],
-      [0.0,  0.0,  0.0,  2.0,  2.0,  0.0,  0.0,  0.0],
-      [0.5, -0.5, -1.0,  0.0,  0.0, -1.0, -0.5,  0.5],
-      [0.5,  1.0,  1.0, -2.0, -2.0,  1.0,  1.0,  0.5],
-      [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0]
-    ];
+    const pawnEvalWhite = [[0,0,0,0,0,0,0,0],[5,5,5,5,5,5,5,5],[1,1,2,3,3,2,1,1],[0.5,0.5,1,2.5,2.5,1,0.5,0.5],[0,0,0,2,2,0,0,0],[0.5,-0.5,-1,0,0,-1,-0.5,0.5],[0.5,1,1,-2,-2,1,1,0.5],[0,0,0,0,0,0,0,0]];
     const pawnEvalBlack = pawnEvalWhite.slice().reverse();
-
-    const knightEval = [
-      [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0],
-      [-4.0, -2.0,  0.0,  0.0,  0.0,  0.0, -2.0, -4.0],
-      [-3.0,  0.0,  1.0,  1.5,  1.5,  1.0,  0.0, -3.0],
-      [-3.0,  0.5,  1.5,  2.0,  2.0,  1.5,  0.5, -3.0],
-      [-3.0,  0.0,  1.5,  2.0,  2.0,  1.5,  0.0, -3.0],
-      [-3.0,  0.5,  1.0,  1.5,  1.5,  1.0,  0.5, -3.0],
-      [-4.0, -2.0,  0.0,  0.5,  0.5,  0.0, -2.0, -4.0],
-      [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
-    ];
-
-    const bishopEvalWhite = [
-      [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
-      [-1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
-      [-1.0,  0.0,  0.5,  1.0,  1.0,  0.5,  0.0, -1.0],
-      [-1.0,  0.5,  0.5,  1.0,  1.0,  0.5,  0.5, -1.0],
-      [-1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  0.0, -1.0],
-      [-1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0, -1.0],
-      [-1.0,  0.5,  0.0,  0.0,  0.0,  0.0,  0.5, -1.0],
-      [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
-    ];
-    const bishopEvalBlack = bishopEvalWhite.slice().reverse();
-
-    const rookEvalWhite = [
-      [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
-      [0.5,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  0.5],
-      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-      [-0.5, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-      [0.0,  0.0,  0.0,  0.5,  0.5,  0.0,  0.0,  0.0]
-    ];
-    const rookEvalBlack = rookEvalWhite.slice().reverse();
-
-    const evalQueen = [
-      [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
-      [-1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
-      [-1.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
-      [-0.5,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
-      [0.0,   0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
-      [-1.0,  0.5,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
-      [-1.0,  0.0,  0.5,  0.0,  0.0,  0.0,  0.0, -1.0],
-      [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0]
-    ];
-
-    const kingEvalWhite = [
-      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-      [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-      [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
-      [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
-      [2.0,   2.0,  0.0,  0.0,  0.0,  0.0,  2.0,  2.0],
-      [2.0,   3.0,  1.0,  0.0,  0.0,  1.0,  3.0,  2.0]
-    ];
-    const kingEvalBlack = kingEvalWhite.slice().reverse();
+    const knightEval = [[-5,-4,-3,-3,-3,-3,-4,-5],[-4,-2,0,0,0,0,-2,-4],[-3,0,1,1.5,1.5,1,0,-3],[-3,0.5,1.5,2,2,1.5,0.5,-3],[-3,0,1.5,2,2,1.5,0,-3],[-3,0.5,1,1.5,1.5,1,0.5,-3],[-4,-2,0,0.5,0.5,0,-2,-4],[-5,-4,-3,-3,-3,-3,-4,-5]];
 
     function getPieceValue(piece, x, y) {
-      if (piece === null) return 0;
-      let getAbsoluteValue = function (piece, isWhite, x, y) {
-        if (piece.type === 'p') return 10 + (isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x]);
-        else if (piece.type === 'r') return 50 + (isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x]);
-        else if (piece.type === 'n') return 30 + knightEval[y][x];
-        else if (piece.type === 'b') return 30 + (isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x]);
-        else if (piece.type === 'q') return 90 + evalQueen[y][x];
-        else if (piece.type === 'k') return 900 + (isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x]);
-        return 0;
-      };
-      let absoluteValue = getAbsoluteValue(piece, piece.color === 'w', x, y);
-      return piece.color === 'w' ? absoluteValue : -absoluteValue;
+      if (!piece) return 0;
+      let val = piece.type === 'p' ? 10 : piece.type === 'r' ? 50 : piece.type === 'n' ? 30 : piece.type === 'b' ? 30 : piece.type === 'q' ? 90 : 900;
+      return piece.color === 'w' ? val : -val;
     }
 
     function evaluateBoard(board) {
-      let totalEvaluation = 0;
-      for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-          totalEvaluation += getPieceValue(board[i][j], j, i);
-        }
-      }
-      return totalEvaluation;
+      let total = 0;
+      for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++) total += getPieceValue(board[i][j], j, i);
+      return total;
     }
 
-    function minimax(depth, gameInstance, alpha, beta, isMaximisingPlayer) {
-      if (depth === 0 || gameInstance.game_over()) {
-        if (gameInstance.in_checkmate()) {
-          return isMaximisingPlayer ? -99999 : 99999;
-        }
-        return -evaluateBoard(gameInstance.board());
-      }
-
-      let newGameMoves = gameInstance.moves({ verbose: true });
-      newGameMoves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
-
-      if (isMaximisingPlayer) {
-        let bestMove = -999999;
-        for (let i = 0; i < newGameMoves.length; i++) {
-          gameInstance.move(newGameMoves[i]);
-          bestMove = Math.max(bestMove, minimax(depth - 1, gameInstance, alpha, beta, !isMaximisingPlayer));
+    function minimax(depth, gameInstance, alpha, beta, isMax) {
+      if (depth === 0 || gameInstance.game_over()) return -evaluateBoard(gameInstance.board());
+      let moves = gameInstance.moves({ verbose: true });
+      if (isMax) {
+        let maxEval = -999999;
+        for (let m of moves) {
+          gameInstance.move(m);
+          let evaluation = minimax(depth - 1, gameInstance, alpha, beta, false);
           gameInstance.undo();
-          alpha = Math.max(alpha, bestMove);
-          if (beta <= alpha) return bestMove;
+          maxEval = Math.max(maxEval, evaluation);
+          alpha = Math.max(alpha, evaluation);
+          if (beta <= alpha) break;
         }
-        return bestMove;
+        return maxEval;
       } else {
-        let bestMove = 999999;
-        for (let i = 0; i < newGameMoves.length; i++) {
-          gameInstance.move(newGameMoves[i]);
-          bestMove = Math.min(bestMove, minimax(depth - 1, gameInstance, alpha, beta, !isMaximisingPlayer));
+        let minEval = 999999;
+        for (let m of moves) {
+          gameInstance.move(m);
+          let evaluation = minimax(depth - 1, gameInstance, alpha, beta, true);
           gameInstance.undo();
-          beta = Math.min(beta, bestMove);
-          if (beta <= alpha) return bestMove;
+          minEval = Math.min(minEval, evaluation);
+          beta = Math.min(beta, evaluation);
+          if (beta <= alpha) break;
         }
-        return bestMove;
+        return minEval;
       }
     }
 
-    function getBestAIMove(depth) {
-      let newGameMoves = aiGame.moves({ verbose: true });
-      if (newGameMoves.length === 0) return null;
-
-      newGameMoves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
-
-      let bestMove = -999999;
-      let bestMoveFound = newGameMoves[0];
-
-      for (let i = 0; i < newGameMoves.length; i++) {
-        let newGameMove = newGameMoves[i];
-        aiGame.move(newGameMove);
-        let value = minimax(depth - 1, aiGame, -1000000, 1000000, false);
+    function getBestAIMove() {
+      let moves = aiGame.moves({ verbose: true });
+      if (!moves.length) return null;
+      let bestMove = moves[0];
+      let bestVal = -999999;
+      for (let m of moves) {
+        aiGame.move(m);
+        let val = minimax(3, aiGame, -1000000, 1000000, false);
         aiGame.undo();
-        if (value > bestMove) {
-          bestMove = value;
-          bestMoveFound = newGameMove;
+        if (val > bestVal) {
+          bestVal = val;
+          bestMove = m;
         }
       }
-      return bestMoveFound;
+      return bestMove;
     }
 
     function initChessAIGame() {
@@ -829,14 +735,7 @@
       let boardEl = document.getElementById('chessAIBoard');
       let boardHtml = '';
       let board = aiGame.board();
-      const squareNames = ['a8','b8','c8','d8','e8','f8','g8','h8',
-                           'a7','b7','c7','d7','e7','f7','g7','h7',
-                           'a6','b6','c6','d6','e6','f6','g6','h6',
-                           'a5','b5','c5','d5','e5','f5','g5','h5',
-                           'a4','b4','c4','d4','e4','f4','g4','h4',
-                           'a3','b3','c3','d3','e3','f3','g3','h3',
-                           'a2','b2','c2','d2','e2','f2','g2','h2',
-                           'a1','b1','c1','d1','e1','f1','g1','h1'];
+      const squareNames = ['a8','b8','c8','d8','e8','f8','g8','h8','a7','b7','c7','d7','e7','f7','g7','h7','a6','b6','c6','d6','e6','f6','g6','h6','a5','b5','c5','d5','e5','f5','g5','h5','a4','b4','c4','d4','e4','f4','g4','h4','a3','b3','c3','d3','e3','f3','g3','h3','a2','b2','c2','d2','e2','f2','g2','h2','a1','b1','c1','d1','e1','f1','g1','h1'];
 
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
@@ -845,12 +744,7 @@
           let isDark = (r + c) % 2 === 1;
           let bg = isDark ? 'linear-gradient(135deg, #1e293b, #0f172a)' : 'linear-gradient(135deg, #475569, #334155)';
 
-          if (lastAIMoveSquares.includes(sqName)) {
-            bg = isDark ? 'linear-gradient(135deg, #7f1d1d, #450a0a)' : 'linear-gradient(135deg, #991b1b, #7f1d1d)';
-          }
-          if (aiSelectedSquare === sqName) {
-            bg = 'linear-gradient(135deg, #dc2626, #991b1b)';
-          }
+          if (aiSelectedSquare === sqName) bg = 'linear-gradient(135deg, #dc2626, #991b1b)';
 
           let piece = board[r][c];
           let pieceChar = '';
@@ -858,13 +752,8 @@
           if (piece) {
             let symbolKey = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
             pieceChar = pieceSymbols[symbolKey] || '';
-            if (piece.color === 'w') {
-              pieceStyle = 'color: #f8fafc; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.8));';
-            } else {
-              pieceStyle = 'color: #cbd5e1; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.9));';
-            }
+            pieceStyle = piece.color === 'w' ? 'color: #f8fafc;' : 'color: #cbd5e1;';
           }
-
           boardHtml += `<div class="chess-3d-square" onclick="handleAISquareClick('${sqName}')" style="background: ${bg};"><span style="${pieceStyle}">${pieceChar}</span></div>`;
         }
       }
@@ -873,21 +762,15 @@
 
     function handleAISquareClick(sq) {
       if (aiGame.turn() !== 'w') return;
-
       if (!aiSelectedSquare) {
         let piece = aiGame.get(sq);
-        if (piece && piece.color === 'w') {
-          aiSelectedSquare = sq;
-          renderAIBoard();
-        }
+        if (piece && piece.color === 'w') { aiSelectedSquare = sq; renderAIBoard(); }
       } else {
-        if (aiSelectedSquare === sq) {
-          aiSelectedSquare = null;
-          renderAIBoard();
-        } else {
+        if (aiSelectedSquare === sq) { aiSelectedSquare = null; renderAIBoard(); }
+        else {
           let move = aiGame.move({ from: aiSelectedSquare, to: sq, promotion: 'q' });
           aiSelectedSquare = null;
-          if (move === null) {
+          if (!move) {
             let piece = aiGame.get(sq);
             if (piece && piece.color === 'w') aiSelectedSquare = sq;
           }
@@ -895,13 +778,10 @@
           updateAIStatus();
 
           if (!aiGame.game_over() && aiGame.turn() === 'b') {
-            document.getElementById('chessAIStatus').innerText = '10 നീക്കങ്ങൾ മുന്നിൽ കണ്ട് ബോട്ട് ചിന്തിക്കുന്നു... 🔥';
+            document.getElementById('chessAIStatus').innerText = 'ബോട്ട് ചിന്തിക്കുന്നു... 🔥';
             setTimeout(() => {
-              let bestMove = getBestAIMove(4); 
-              if (bestMove) {
-                aiGame.move(bestMove);
-                lastAIMoveSquares = [bestMove.from, bestMove.to];
-              }
+              let bm = getBestAIMove();
+              if (bm) aiGame.move(bm);
               renderAIBoard();
               updateAIStatus();
             }, 150);
@@ -913,9 +793,7 @@
     function updateAIStatus() {
       let statusEl = document.getElementById('chessAIStatus');
       let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🔥';
-      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 അൾട്രാ ബോട്ട് വിജയിച്ചു! 🔥' : '🎉 അതിഗംഭീരം! നിങ്ങൾ 10-മൂവ് ബോട്ടിനെ തകർത്തെറിഞ്ഞു! 🏆';
-      else if (aiGame.in_draw()) turnText = '🤝 കളി സമനിലയിൽ!';
-      else if (aiGame.in_check()) turnText += ' ⚠️ (ചെക്ക്!)';
+      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 ബോട്ട് വിജയിച്ചു!' : '🎉 അതിഗംഭീരം! നിങ്ങൾ വിജയിച്ചു!';
       statusEl.innerText = turnText;
     }
 
@@ -935,9 +813,6 @@
       activeSnakePlayers.forEach(p => p.pos = 1);
       snakeTurnIdx = 0;
       isSnakeRolling = false;
-      let p = activeSnakePlayers[0];
-      document.getElementById('snakeStatus').innerHTML = `<span style="color:${p.color}">${p.name}</span>-ന്റെ ടേൺ`;
-      document.getElementById('diceCube').style.transform = 'rotateX(0deg) rotateY(0deg)';
       renderMultiBoard();
     }
 
@@ -945,14 +820,13 @@
       let p = activeSnakePlayers[snakeTurnIdx];
       document.getElementById('snakeStatus').innerHTML = `<span style="color:${p.color}">${p.name}</span>-ന്റെ ടേൺ`;
       
-      // പുറത്തെ സ്റ്റാറ്റസ് ബാർ അപ്ഡേറ്റ് ചെയ്യൽ
       let statusHtml = '';
       activeSnakePlayers.forEach((pl, idx) => {
-        let activeBorder = (idx === snakeTurnIdx) ? '2px solid #facc15' : '1px solid rgba(255,255,255,0.1)';
+        let activeBorder = (idx === snakeTurnIdx) ? '2.5px solid #facc15' : '1px solid rgba(255,255,255,0.2)';
         statusHtml += `<div class="status-badge" style="border:${activeBorder}">
-          <span style="width:10px; height:10px; border-radius:50%; background:${pl.color}; display:inline-block;"></span>
-          <span style="color:#f8fafc">${pl.name}:</span>
-          <span style="color:#facc15;">കളം ${pl.pos}</span>
+          <span style="width:12px; height:12px; border-radius:50%; background:${pl.color}; display:inline-block;"></span>
+          <span style="color:#ffffff">${pl.name}:</span>
+          <span style="color:#facc15; font-size:15px;">കളം ${pl.pos}</span>
         </div>`;
       });
       document.getElementById('snakeExternalStatus').innerHTML = statusHtml;
@@ -977,13 +851,10 @@
 
           let badges = occupants.map(o => `<div class="pawn-3d" style="background:${o.bgStyle};">${o.name}</div>`).join('');
           
-          let tag = '';
-          if(i === 36) tag = '🏆';
-          else if(i === 3 || i === 12) tag = '🪜';
-          else if(i === 18 || i === 32) tag = '🐍';
+          let tag = i === 36 ? '🏆' : (i === 3 || i === 12) ? '🪜' : (i === 18 || i === 32) ? '🐍' : '';
 
-          gridHtml += `<div class="snake-3d-cell" style="background: ${bg}; color: ${i === 36 ? '#0f172a' : '#cbd5e1'};">
-            <div style="width:100%; display:flex; justify-content:space-between; font-size:9.5px; opacity:0.85;">
+          gridHtml += `<div class="snake-3d-cell" style="background: ${bg}; color: ${i === 36 ? '#0f172a' : '#f8fafc'};">
+            <div style="width:100%; display:flex; justify-content:space-between; font-size:13.5px; opacity:0.95;">
               <span>${i}</span>
               <span>${tag}</span>
             </div>
@@ -1000,51 +871,26 @@
 
       let dice = Math.floor(Math.random() * 6) + 1;
       const cube = document.getElementById('diceCube');
-      
-      const rotations = {
-        1: 'rotateX(360deg) rotateY(360deg)',
-        2: 'rotateX(360deg) rotateY(270deg)',
-        3: 'rotateX(360deg) rotateY(180deg)',
-        4: 'rotateX(360deg) rotateY(90deg)',
-        5: 'rotateX(270deg) rotateY(360deg)',
-        6: 'rotateX(450deg) rotateY(360deg)'
-      };
+      const rotations = { 1: 'rotateX(360deg) rotateY(360deg)', 2: 'rotateX(360deg) rotateY(270deg)', 3: 'rotateX(360deg) rotateY(180deg)', 4: 'rotateX(360deg) rotateY(90deg)', 5: 'rotateX(270deg) rotateY(360deg)', 6: 'rotateX(450deg) rotateY(360deg)' };
       cube.style.transform = rotations[dice];
 
       setTimeout(() => {
         let p = activeSnakePlayers[snakeTurnIdx];
         p.pos += dice;
         
-        let message = '';
-        if(p.pos === 3) {
-          p.pos = 15;
-          message = `✨ സൂപ്പർ! ${p.name} എണി കയറി 15-ൽ എത്തി! 🪜`;
-        }
-        else if(p.pos === 12) {
-          p.pos = 28;
-          message = `🚀 കിടിലൻ! ${p.name} വലിയ എണി വഴി 28-ൽ എത്തി! 🌟`;
-        }
-        else if(p.pos === 18) {
-          p.pos = 6;
-          message = `😱 അയ്യോ! ${p.name}-യെ പാമ്പ് കടിച്ചുവീഴ്ത്തി! 6-ലേക്ക് വീണു! 🐍`;
-        }
-        else if(p.pos === 32) {
-          p.pos = 17;
-          message = `⚡ വൻ വീഴ്ച! വലിയ പാമ്പ് ${p.name}-യെ 17-ലേക്ക് ഇറക്കി! 🐍`;
-        }
+        if(p.pos === 3) p.pos = 15;
+        else if(p.pos === 12) p.pos = 28;
+        else if(p.pos === 18) p.pos = 6;
+        else if(p.pos === 32) p.pos = 17;
 
         if(p.pos >= 36) {
           p.pos = 36;
           renderMultiBoard();
           setTimeout(() => {
-            alert(`🏆 അഭിനന്ദനങ്ങൾ! ${p.name} 3D ഏണിയും പാമ്പും വിജയിച്ചിരിക്കുന്നു! 🎉`);
+            alert(`🏆 അഭിനന്ദനങ്ങൾ! ${p.name} വിജയിച്ചിരിക്കുന്നു! 🎉`);
             initMultiSnakeBoard();
           }, 200);
           return;
-        }
-
-        if(message) {
-          document.getElementById('snakeStatus').innerHTML = `<span style="color:#f87171;">${message}</span>`;
         }
 
         snakeTurnIdx = (snakeTurnIdx + 1) % activeSnakePlayers.length;
