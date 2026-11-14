@@ -993,11 +993,12 @@
           
           ${latestNotice.imageUrl || latestNotice.image ? `<div style="border-radius: 14px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.3);"><img src="${latestNotice.imageUrl || latestNotice.image}" style="width: 100%; max-height: 210px; object-fit: cover; display: block;" onclick="openZoomModal('${latestNotice.imageUrl || latestNotice.image}')"></div>` : ''}
 
-          <div style="text-align: center; border-top: 1px solid var(--border-color); margin-top: 10px; padding-top: 10px;">
-            <a href="announcements.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #ffffff !important; padding: 11px 16px; border-radius: 14px; font-size: 13.5px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); border: 1.5px solid rgba(196, 181, 253, 0.4);">
-              <span>കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ അമർത്തുക</span> <span style="font-size: 16px;">➔</span>
+                  <div style="text-align: center; border-top: 1px solid var(--border-color); margin-top: 10px; padding-top: 10px;">
+            <a href="announcements.html" style="display: block; width: 100%; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #ffffff !important; padding: 11px 16px; border-radius: 14px; font-size: 13.5px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); border: 1.5px solid rgba(196, 181, 253, 0.4);">
+              കൂടുതൽ വിവരങ്ങൾക്ക് ഇവിടെ അമർത്തുക ➔
             </a>
           </div>
+  
         `;
       } else {
         sliderContainer.innerHTML = `
