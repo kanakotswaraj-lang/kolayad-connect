@@ -57,12 +57,14 @@
       justify-content: space-between;
       width: 100%;
       max-width: 400px;
-      padding: 12px 20px;
+      padding: 10px 15px;
       box-sizing: border-box;
-      font-size: 16px;
+      font-size: 14.5px;
       font-weight: 900;
       color: var(--accent-gold);
       z-index: 5;
+      background: rgba(15, 23, 42, 0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     #playArea {
       position: relative;
@@ -72,7 +74,6 @@
       overflow: hidden;
       touch-action: none;
     }
-    /* റോക്കറ്റ് കുറച്ചുകൂടി മുകളിലേക്ക് മാറ്റിയിരിക്കുന്നു */
     .shooter {
       position: absolute;
       bottom: 70px;
@@ -100,6 +101,12 @@
       box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
       cursor: pointer;
     }
+    /* ബോംബിന്റെ സ്റ്റൈൽ */
+    .target-bomb {
+      background: linear-gradient(145deg, #ef4444, #991b1b);
+      border-color: #f87171;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.6);
+    }
     .bullet {
       position: absolute;
       width: 8px;
@@ -112,7 +119,7 @@
     .start-screen {
       position: absolute;
       inset: 0;
-      background: rgba(7, 11, 25, 0.92);
+      background: rgba(7, 11, 25, 0.95);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -144,7 +151,8 @@
 
   <div class="game-container">
     <div class="hud">
-      <div>സ്കോർ: <span id="scoreVal">0</span></div>
+      <div>സ്കോർ: <span id="scoreVal">0</span>/500</div>
+      <div>സ്റ്റേജ്: <span id="stageVal">1</span></div>
       <div>ലൈഫ്: <span id="lifeVal">❤️❤️❤️</span></div>
     </div>
 
@@ -152,8 +160,12 @@
       <div class="shooter" id="shooterObj">🚀</div>
 
       <div id="startScreen" class="start-screen">
-        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">ബോക്സുകൾ വെടിവെച്ച് വീഴ്ത്തൂ!</h2>
-        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 20px;">സ്ക്രീനിൽ വിരൽ വെച്ച് നീക്കി റോക്കറ്റ് ചലിപ്പിക്കാം. ബോക്സുകളിൽ തൊട്ടും വെടിവെച്ചും തകർക്കൂ!</p>
+        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">ചലഞ്ച് ഗെയിം തുടങ്ങാം! 🚀</h2>
+        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 15px;">
+          • ലക്ഷ്യം: <b>500 പോയിന്റ്</b> നേടി വിജയിക്കുക!<br>
+          • ബോംബുകളിൽ (💣) വെടിവെച്ചാൽ ലൈഫ് പോകും!<br>
+          • സ്റ്റേജുകൾ കയറുമ്പോൾ വേഗത കൂടും!
+        </p>
         <button class="action-btn" onclick="startGame()">കളി തുടങ്ങാം 🎮</button>
       </div>
     </div>
@@ -162,9 +174,11 @@
   <script>
     let score = 0;
     let lives = 3;
+    let stage = 1;
     let gameInterval = null;
     let boxTimer = null;
     let isPlaying = false;
+    let fallSpeed = 1.8;
 
     const playArea = document.getElementById('playArea');
     const shooter = document.getElementById('shooterObj');
@@ -173,18 +187,20 @@
     function startGame() {
       score = 0;
       lives = 3;
+      stage = 1;
+      fallSpeed = 1.8;
       document.getElementById('scoreVal').innerText = score;
+      document.getElementById('stageVal').innerText = stage;
       document.getElementById('lifeVal').innerText = '❤️❤️❤️';
       document.getElementById('startScreen').style.display = 'none';
       
-      document.querySelectorAll('.target-box').forEach(b => b.remove());
+      document.querySelectorAll('.target-box, .target-bomb').forEach(b => b.remove());
       isPlaying = true;
       
-      boxTimer = setInterval(createBox, 1400);
+      boxTimer = setInterval(createTarget, 1400);
       gameInterval = setInterval(updateGame, 30);
     }
 
-    // സ്ക്രീനിൽ തൊട്ട് നീക്കുമ്പോൾ റോക്കറ്റ് ചലിക്കുന്ന സംവിധാനം (Touch & Drag)
     playArea.addEventListener('pointermove', (e) => {
       if (!isPlaying) return;
       const rect = playArea.getBoundingClientRect();
@@ -195,50 +211,68 @@
       shooter.style.transform = 'translateX(-50%)';
     });
 
-    // സ്ക്രീനിൽ തൊടുമ്പോൾ വെടിയുതിർക്കുക
     playArea.addEventListener('pointerdown', (e) => {
       if (!isPlaying) return;
       shootBullet(shooterX);
     });
 
-    function createBox() {
+    function createTarget() {
       if (!isPlaying) return;
-      const box = document.createElement('div');
-      box.classList.add('target-box');
-      box.innerHTML = ['🎁', '💰', '⭐', '📦'][Math.floor(Math.random() * 4)];
+      const el = document.createElement('div');
+      
+      // 25% സാധ്യതയിൽ ബോംബ് വരുത്തുക
+      let isBomb = Math.random() < 0.25;
+      
+      if (isBomb) {
+        el.classList.add('target-box', 'target-bomb');
+        el.innerHTML = '💣';
+      } else {
+        el.classList.add('target-box');
+        el.innerHTML = ['🎁', '💰', '⭐', '📦'][Math.floor(Math.random() * 4)];
+      }
       
       const maxX = playArea.clientWidth - 60;
       const randomX = Math.floor(Math.random() * maxX);
-      box.style.left = randomX + 'px';
-      box.style.top = '-60px';
+      el.style.left = randomX + 'px';
+      el.style.top = '-60px';
       
-      box.onclick = (e) => {
+      el.onclick = (e) => {
         e.stopPropagation();
         if (!isPlaying) return;
-        score += 10;
-        document.getElementById('scoreVal').innerText = score;
-        box.innerHTML = '💥';
-        setTimeout(() => box.remove(), 100);
+        if (isBomb) {
+          lives--;
+          updateLivesDisplay();
+          el.innerHTML = '💥';
+          if (lives <= 0) endGame(false);
+        } else {
+          score += 10;
+          checkScoreAndStage();
+          el.innerHTML = '💥';
+        }
+        setTimeout(() => el.remove(), 100);
       };
 
-      playArea.appendChild(box);
+      playArea.appendChild(el);
     }
 
     function updateGame() {
       if (!isPlaying) return;
       
-      const boxes = document.querySelectorAll('.target-box');
-      boxes.forEach(box => {
-        let currentTop = parseFloat(box.style.top || -60);
-        currentTop += 2; 
+      const targets = document.querySelectorAll('.target-box');
+      targets.forEach(el => {
+        let currentTop = parseFloat(el.style.top || -60);
+        currentTop += fallSpeed; 
         
         if (currentTop > playArea.clientHeight - 90) {
-          box.remove();
-          lives--;
-          updateLivesDisplay();
-          if (lives <= 0) endGame();
+          el.remove();
+          // ബോക്സ് താഴെ വീണാൽ മാത്രം ലൈഫ് കുറയും (ബോംബ് താഴെ വീണാൽ കുറയില്ല)
+          if (!el.classList.contains('target-bomb')) {
+            lives--;
+            updateLivesDisplay();
+            if (lives <= 0) endGame(false);
+          }
         } else {
-          box.style.top = currentTop + 'px';
+          el.style.top = currentTop + 'px';
         }
       });
     }
@@ -255,19 +289,29 @@
         currentBottom += 16;
         bullet.style.bottom = currentBottom + 'px';
 
-        const boxes = document.querySelectorAll('.target-box');
-        boxes.forEach(box => {
-          const boxRect = box.getBoundingClientRect();
+        const targets = document.querySelectorAll('.target-box');
+        targets.forEach(el => {
+          const boxRect = el.getBoundingClientRect();
           const bulletRect = bullet.getBoundingClientRect();
 
           if (bulletRect.left < boxRect.right && bulletRect.right > boxRect.left &&
               bulletRect.top < boxRect.bottom && bulletRect.bottom > boxRect.top) {
-            box.innerHTML = '💥';
-            setTimeout(() => box.remove(), 100);
+            
+            if (el.classList.contains('target-bomb')) {
+              // ബോംബിൽ വെടിവെച്ചു! ലൈഫ് പോകും
+              lives--;
+              updateLivesDisplay();
+              el.innerHTML = '💥';
+              if (lives <= 0) endGame(false);
+            } else {
+              score += 15;
+              checkScoreAndStage();
+              el.innerHTML = '💥';
+            }
+
+            setTimeout(() => el.remove(), 100);
             bullet.remove();
             clearInterval(bulletTimer);
-            score += 15;
-            document.getElementById('scoreVal').innerText = score;
           }
         });
 
@@ -278,24 +322,52 @@
       }, 20);
     }
 
+    function checkScoreAndStage() {
+      document.getElementById('scoreVal').innerText = score;
+      
+      // സ്റ്റേജ് മാറ്റം (ഓരോ 200 പോയിന്റിലും)
+      if (score >= 400 && stage < 3) {
+        stage = 3;
+        fallSpeed = 3.2;
+      } else if (score >= 200 && stage < 2) {
+        stage = 2;
+        fallSpeed = 2.5;
+      }
+      document.getElementById('stageVal').innerText = stage;
+
+      // 500 പോയിന്റ് ആയാൽ വിജയം!
+      if (score >= 500) {
+        endGame(true);
+      }
+    }
+
     function updateLivesDisplay() {
       let hearts = '';
       for(let i=0; i<lives; i++) hearts += '❤️';
       document.getElementById('lifeVal').innerText = hearts || '💔';
     }
 
-    function endGame() {
+    function endGame(isWon) {
       isPlaying = false;
       clearInterval(gameInterval);
       clearInterval(boxTimer);
       
       const startScreen = document.getElementById('startScreen');
       startScreen.style.display = 'flex';
-      startScreen.innerHTML = `
-        <h2 style="color: #ef4444; font-size: 22px; margin-bottom: 5px;">കളി കഴിഞ്ഞു! (Game Over)</h2>
-        <p style="color: #facc15; font-size: 16px; font-weight: 900; margin-bottom: 15px;">ലഭിച്ച ആകെ സ്കോർ: ${score}</p>
-        <button class="action-btn" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
-      `;
+      
+      if (isWon) {
+        startScreen.innerHTML = `
+          <h2 style="color: #facc15; font-size: 24px; margin-bottom: 5px;">🎉 അതിഗംഭീരം! മോൾ ജാക്ക്പോട്ട് ജയിച്ചു! 🏆</h2>
+          <p style="color: #4ade80; font-size: 16px; font-weight: 900; margin-bottom: 15px;">ആകെ സ്കോർ: ${score}/500</p>
+          <button class="action-btn" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
+        `;
+      } else {
+        startScreen.innerHTML = `
+          <h2 style="color: #ef4444; font-size: 22px; margin-bottom: 5px;">കളി കഴിഞ്ഞു! (Game Over)</h2>
+          <p style="color: #facc15; font-size: 16px; font-weight: 900; margin-bottom: 15px;">ലഭിച്ച സ്കോർ: ${score}</p>
+          <button class="action-btn" onclick="startGame()">വീണ്ടും ശ്രമിക്കൂ 🔄</button>
+        `;
+      }
     }
   </script>
 </body>
