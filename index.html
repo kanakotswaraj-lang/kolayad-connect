@@ -477,6 +477,20 @@
       font-size: 11px;
     }
     body.light-mode .ticker-marquee { color: #0f172a; }
+   /* ലൈറ്റ് മോഡിൽ ബട്ടണിലെയും ഫൂട്ടറിലെയും എഴുത്ത് വ്യക്തമായി കാണാൻ */
+body.light-mode a[style*="background"],
+body.light-mode button[style*="background"] {
+  color: #ffffff !important;
+}
+
+body.light-mode footer,
+body.light-mode .footer-box,
+body.light-mode div[style*="All Rights Reserved"] {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+  background-color: #e2e8f0 !important;
+}
+ 
   </style>
 </head>
 <body>
