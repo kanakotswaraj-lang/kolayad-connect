@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>മിസ്ട്രി ബോക്സ് സർപ്രൈസ് - കോളയാട് കണക്ട്</title>
+  <style>
+    :root {
+      --bg-body: #070b19;
+      --bg-app: #0b1128;
+      --bg-card: #131c3f;
+      --border-color: rgba(59, 130, 246, 0.3);
+      --accent-gold: #facc15;
+    }
+    body {
+      background-color: var(--bg-body);
+      color: #f8fafc;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      box-sizing: border-box;
+    }
+    .header {
+      background: var(--bg-app);
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .back-btn {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #38bdf8;
+      border: 1.5px solid #38bdf8;
+      padding: 6px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      margin-right: 12px;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .score-board {
+      background: rgba(19, 28, 63, 0.9);
+      border: 2px solid var(--accent-gold);
+      padding: 10px 25px;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.2);
+    }
+    .boxes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 25px;
+    }
+    .mystery-box {
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(145deg, #2563eb, #1d4ed8);
+      border: 2.5px solid #60a5fa;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #1e3a8a, 0 10px 20px rgba(0,0,0,0.5);
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .mystery-box:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #1e3a8a, 0 5px 10px rgba(0,0,0,0.5);
+    }
+    .mystery-box.opened {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-color: #475569;
+      box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
+      cursor: default;
+      transform: none;
+    }
+    #resultMessage {
+      font-size: 16px;
+      font-weight: 900;
+      color: #4ade80;
+      min-height: 30px;
+      margin-bottom: 15px;
+    }
+    .reset-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0f172a;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="games.html" class="back-btn">← തിരികെ</a>
+    <h2 style="margin: 0; font-size: 17px; color: #facc15;">🎁 മിസ്ട്രി സമ്മാനപ്പെട്ടി</h2>
+  </div>
+
+  <div class="container">
+    <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 15px; font-weight: 600;">ഒരു പെട്ടി തുറന്ന് സർപ്രൈസ് സമ്മാനങ്ങളും ക്യാഷും സ്വന്തമാക്കൂ!</p>
+    
+    <div class="score-board">ആകെ സമ്പാദ്യം: <span id="totalPoints">0</span> കോയിൻ 🪙</div>
+
+    <div class="boxes-grid" id="boxesGrid">
+      <!-- 6 Mystery Boxes -->
+      <div class="mystery-box" onclick="openBox(0)">🎁</div>
+      <div class="mystery-box" onclick="openBox(1)">🎁</div>
+      <div class="mystery-box" onclick="openBox(2)">🎁</div>
+      <div class="mystery-box" onclick="openBox(3)">🎁</div>
+      <div class="mystery-box" onclick="openBox(4)">🎁</div>
+      <div class="mystery-box" onclick="openBox(5)">🎁</div>
+    </div>
+
+    <div id="resultMessage">ഒരു പെട്ടി തിരഞ്ഞെടുക്കൂ!</div>
+
+    <button class="reset-btn" onclick="resetBoxes()">പുതിയ പെട്ടികൾ വെക്കുക 🔄</button>
+  </div>
+
+  <script>
+    let score = 0;
+    const rewards = [
+      { text: "🎉 അതിഗംഭീരം! 50 കോയിൻ ലഭിച്ചു!", val: 50 },
+      { text: "⭐ സൂപ്പർ ലക്ക്! 100 കോയിൻ!", val: 100 },
+      { text: "💎 ജാക്ക്പോട്ട്! 250 കോയിൻ!", val: 250 },
+      { text: "🪙 ചെറിയ സമ്മാനം: 10 കോയിൻ", val: 10 },
+      { text: "🧧 ബോണസ്: 100 കോയിൻ!", val: 100 },
+      { text: "🎁 മെഗാ പ്രൈസ്: 500 കോയിൻ!", val: 500 }
+    ];
+
+    function openBox(index) {
+      const boxes = document.querySelectorAll('.mystery-box');
+      const box = boxes[index];
+      
+      if(box.classList.contains('opened')) return;
+
+      // Random reward
+      let reward = rewards[Math.floor(Math.random() * rewards.length)];
+      score += reward.val;
+      
+      box.classList.add('opened');
+      box.innerHTML = '💰';
+      
+      document.getElementById('totalPoints').innerText = score;
+      document.getElementById('resultMessage').innerHTML = reward.text;
+    }
+
+    function resetBoxes() {
+      const boxes = document.querySelectorAll('.mystery-box');
+      boxes.forEach(box => {
+        box.classList.remove('opened');
+        box.innerHTML = '🎁';
+      });
+      document.getElementById('resultMessage').innerHTML = 'പുതിയ പെട്ടി തുറക്കൂ!';
+    }
+  </script>
+</body>
+</html>
