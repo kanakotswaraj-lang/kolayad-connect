@@ -64,28 +64,26 @@
       color: var(--accent-gold);
       z-index: 5;
     }
-    /* കളി നടക്കുന്ന ബോർഡ് */
     #playArea {
       position: relative;
       width: 100%;
       max-width: 420px;
       flex: 1;
       overflow: hidden;
-      touch-action: manipulation;
+      touch-action: none;
     }
-    /* താഴെ നിന്ന് വെടിവെക്കുന്ന തോക്ക് / പ്ലെയർ */
+    /* റോക്കറ്റ് കുറച്ചുകൂടി മുകളിലേക്ക് മാറ്റിയിരിക്കുന്നു */
     .shooter {
       position: absolute;
-      bottom: 20px;
+      bottom: 70px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 38px;
+      font-size: 42px;
       z-index: 10;
-      cursor: pointer;
       user-select: none;
-      filter: drop-shadow(0 0 10px #38bdf8);
+      filter: drop-shadow(0 0 12px #38bdf8);
+      pointer-events: none;
     }
-    /* മുകളിൽ നിന്ന് താഴേക്ക് വരുന്ന ബോക്സുകൾ */
     .target-box {
       position: absolute;
       width: 55px;
@@ -101,12 +99,7 @@
       color: #0f172a;
       box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
       cursor: pointer;
-      transition: transform 0.1s;
     }
-    .target-box:active {
-      transform: scale(0.85);
-    }
-    /* തൊടുകുമ്പോൾ പോകുന്ന ബുള്ളറ്റ് */
     .bullet {
       position: absolute;
       width: 8px;
@@ -155,14 +148,12 @@
       <div>ലൈഫ്: <span id="lifeVal">❤️❤️❤️</span></div>
     </div>
 
-    <div id="playArea" onclick="shootBullet(event)">
-      <!-- താഴെയുള്ള തോക്ക് -->
+    <div id="playArea">
       <div class="shooter" id="shooterObj">🚀</div>
 
-      <!-- തുടക്കത്തിലെ സ്ക്രീൻ -->
       <div id="startScreen" class="start-screen">
         <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">ബോക്സുകൾ വെടിവെച്ച് വീഴ്ത്തൂ!</h2>
-        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 20px;">സ്ക്രീനിൽ തൊട്ടാൽ റോക്കറ്റ് വെടിയുതിർക്കും. താഴെ എത്തും മുൻപ് ബോക്സുകൾ തകർക്കൂ!</p>
+        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 20px;">സ്ക്രീനിൽ വിരൽ വെച്ച് നീക്കി റോക്കറ്റ് ചലിപ്പിക്കാം. ബോക്സുകളിൽ തൊട്ടും വെടിവെച്ചും തകർക്കൂ!</p>
         <button class="action-btn" onclick="startGame()">കളി തുടങ്ങാം 🎮</button>
       </div>
     </div>
@@ -177,6 +168,7 @@
 
     const playArea = document.getElementById('playArea');
     const shooter = document.getElementById('shooterObj');
+    let shooterX = window.innerWidth / 2;
 
     function startGame() {
       score = 0;
@@ -185,15 +177,29 @@
       document.getElementById('lifeVal').innerText = '❤️❤️❤️';
       document.getElementById('startScreen').style.display = 'none';
       
-      // പഴയ ബോക്സുകൾ നീക്കം ചെയ്യുക
       document.querySelectorAll('.target-box').forEach(b => b.remove());
-      
       isPlaying = true;
       
-      // പുതിയ ബോക്സുകൾ മുകളിൽ നിന്ന് താഴേക്ക് വരുത്തുക
-      boxTimer = setInterval(createBox, 1500);
+      boxTimer = setInterval(createBox, 1400);
       gameInterval = setInterval(updateGame, 30);
     }
+
+    // സ്ക്രീനിൽ തൊട്ട് നീക്കുമ്പോൾ റോക്കറ്റ് ചലിക്കുന്ന സംവിധാനം (Touch & Drag)
+    playArea.addEventListener('pointermove', (e) => {
+      if (!isPlaying) return;
+      const rect = playArea.getBoundingClientRect();
+      shooterX = e.clientX - rect.left;
+      if (shooterX < 20) shooterX = 20;
+      if (shooterX > playArea.clientWidth - 20) shooterX = playArea.clientWidth - 20;
+      shooter.style.left = shooterX + 'px';
+      shooter.style.transform = 'translateX(-50%)';
+    });
+
+    // സ്ക്രീനിൽ തൊടുമ്പോൾ വെടിയുതിർക്കുക
+    playArea.addEventListener('pointerdown', (e) => {
+      if (!isPlaying) return;
+      shootBullet(shooterX);
+    });
 
     function createBox() {
       if (!isPlaying) return;
@@ -206,17 +212,13 @@
       box.style.left = randomX + 'px';
       box.style.top = '-60px';
       
-      // ബോക്സിൽ തൊട്ടാൽ തകരുന്ന രീതി (Tap to Shoot)
       box.onclick = (e) => {
         e.stopPropagation();
         if (!isPlaying) return;
         score += 10;
         document.getElementById('scoreVal').innerText = score;
-        
-        // ചെറിയൊരു പൊട്ടൽ എഫക്റ്റ്
         box.innerHTML = '💥';
-        box.style.transform = 'scale(1.3)';
-        setTimeout(() => box.remove(), 120);
+        setTimeout(() => box.remove(), 100);
       };
 
       playArea.appendChild(box);
@@ -228,43 +230,31 @@
       const boxes = document.querySelectorAll('.target-box');
       boxes.forEach(box => {
         let currentTop = parseFloat(box.style.top || -60);
-        currentTop += 2.2; // താഴേക്ക് വരുന്ന വേഗത
+        currentTop += 2; 
         
-        // താഴെ എത്തിയാൽ ലൈഫ് കുറയുക
-        if (currentTop > playArea.clientHeight - 70) {
+        if (currentTop > playArea.clientHeight - 90) {
           box.remove();
           lives--;
           updateLivesDisplay();
-          if (lives <= 0) {
-            endGame();
-          }
+          if (lives <= 0) endGame();
         } else {
           box.style.top = currentTop + 'px';
         }
       });
     }
 
-    function shootBullet(e) {
-      if (!isPlaying) return;
-      
-      // സ്ക്രീനിൽ തൊട്ട ഭാഗത്തേക്ക് റോക്കറ്റ് നീങ്ങുക
-      const rect = playArea.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      shooter.style.left = (clickX - 20) + 'px';
-
-      // ബുള്ളറ്റ് മുകളിലേക്ക് പായുക
+    function shootBullet(xPos) {
       const bullet = document.createElement('div');
       bullet.classList.add('bullet');
-      bullet.style.left = clickX + 'px';
-      bullet.style.bottom = '70px';
+      bullet.style.left = (xPos - 4) + 'px';
+      bullet.style.bottom = '120px';
       playArea.appendChild(bullet);
 
       let bulletTimer = setInterval(() => {
         let currentBottom = parseFloat(bullet.style.bottom);
-        currentBottom += 15;
+        currentBottom += 16;
         bullet.style.bottom = currentBottom + 'px';
 
-        // ബോക്സുകളിൽ കൊള്ളുന്നുണ്ടോ എന്ന് പരിശോധിക്കുക
         const boxes = document.querySelectorAll('.target-box');
         boxes.forEach(box => {
           const boxRect = box.getBoundingClientRect();
@@ -272,7 +262,6 @@
 
           if (bulletRect.left < boxRect.right && bulletRect.right > boxRect.left &&
               bulletRect.top < boxRect.bottom && bulletRect.bottom > boxRect.top) {
-            // ബോക്സ് തകർന്നു!
             box.innerHTML = '💥';
             setTimeout(() => box.remove(), 100);
             bullet.remove();
@@ -282,7 +271,6 @@
           }
         });
 
-        // സ്ക്രീനിന് പുറത്തുപോയാൽ ബുള്ളറ്റ് ഒഴിവാക്കുക
         if (currentBottom > playArea.clientHeight) {
           bullet.remove();
           clearInterval(bulletTimer);
