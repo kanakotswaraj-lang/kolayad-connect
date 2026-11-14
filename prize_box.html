@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>മിസ്ട്രി ബോക്സ് സർപ്രൈസ് - കോളയാട് കണക്ട്</title>
+  <title>ബോക്സ് ബ്ലാസ്റ്റർ ഷൂട്ടർ - കോളയാട് കണക്ട്</title>
   <style>
     :root {
       --bg-body: #070b19;
       --bg-app: #0b1128;
-      --bg-card: #131c3f;
       --border-color: rgba(59, 130, 246, 0.3);
       --accent-gold: #facc15;
     }
@@ -21,6 +20,7 @@
       display: flex;
       flex-direction: column;
       height: 100dvh;
+      overflow: hidden;
       box-sizing: border-box;
     }
     .header {
@@ -29,6 +29,7 @@
       display: flex;
       align-items: center;
       border-bottom: 2px solid var(--border-color);
+      z-index: 10;
     }
     .back-btn {
       background: linear-gradient(135deg, #1e293b, #0f172a);
@@ -42,78 +43,102 @@
       text-decoration: none;
       margin-right: 12px;
     }
-    .container {
+    .game-container {
       flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #070b19 100%);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
-      max-width: 420px;
-      margin: 0 auto;
     }
-    .score-board {
-      background: rgba(19, 28, 63, 0.9);
-      border: 2px solid var(--accent-gold);
-      padding: 10px 25px;
-      border-radius: 14px;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--accent-gold);
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.2);
-    }
-    .boxes-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+    .hud {
+      display: flex;
+      justify-content: space-between;
       width: 100%;
-      margin-bottom: 25px;
-    }
-    .mystery-box {
-      aspect-ratio: 1 / 1;
-      background: linear-gradient(145deg, #2563eb, #1d4ed8);
-      border: 2.5px solid #60a5fa;
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      cursor: pointer;
-      box-shadow: 0 8px 0 #1e3a8a, 0 10px 20px rgba(0,0,0,0.5);
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-    .mystery-box:active {
-      transform: translateY(6px);
-      box-shadow: 0 2px 0 #1e3a8a, 0 5px 10px rgba(0,0,0,0.5);
-    }
-    .mystery-box.opened {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border-color: #475569;
-      box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
-      cursor: default;
-      transform: none;
-    }
-    #resultMessage {
+      max-width: 400px;
+      padding: 12px 20px;
+      box-sizing: border-box;
       font-size: 16px;
       font-weight: 900;
-      color: #4ade80;
-      min-height: 30px;
-      margin-bottom: 15px;
+      color: var(--accent-gold);
+      z-index: 5;
     }
-    .reset-btn {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #0f172a;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 12px;
-      font-weight: 900;
-      font-size: 15px;
+    /* കളി നടക്കുന്ന ബോർഡ് */
+    #playArea {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      flex: 1;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+    /* താഴെ നിന്ന് വെടിവെക്കുന്ന തോക്ക് / പ്ലെയർ */
+    .shooter {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 38px;
+      z-index: 10;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      user-select: none;
+      filter: drop-shadow(0 0 10px #38bdf8);
+    }
+    /* മുകളിൽ നിന്ന് താഴേക്ക് വരുന്ന ബോക്സുകൾ */
+    .target-box {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      background: linear-gradient(145deg, #f59e0b, #d97706);
+      border: 2.5px solid #facc15;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .target-box:active {
+      transform: scale(0.85);
+    }
+    /* തൊടുകുമ്പോൾ പോകുന്ന ബുള്ളറ്റ് */
+    .bullet {
+      position: absolute;
+      width: 8px;
+      height: 18px;
+      background: #38bdf8;
+      border-radius: 4px;
+      box-shadow: 0 0 8px #38bdf8;
+      z-index: 8;
+    }
+    .start-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      text-align: center;
+      padding: 20px;
+    }
+    .action-btn {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -121,64 +146,168 @@
 
   <div class="header">
     <a href="games.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 17px; color: #facc15;">🎁 മിസ്ട്രി സമ്മാനപ്പെട്ടി</h2>
+    <h2 style="margin: 0; font-size: 17px; color: #facc15;">🎯 ബോക്സ് ബ്ലാസ്റ്റർ ഷൂട്ടർ</h2>
   </div>
 
-  <div class="container">
-    <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 15px; font-weight: 600;">ഒരു പെട്ടി തുറന്ന് സർപ്രൈസ് സമ്മാനങ്ങളും ക്യാഷും സ്വന്തമാക്കൂ!</p>
-    
-    <div class="score-board">ആകെ സമ്പാദ്യം: <span id="totalPoints">0</span> കോയിൻ 🪙</div>
-
-    <div class="boxes-grid" id="boxesGrid">
-      <!-- 6 Mystery Boxes -->
-      <div class="mystery-box" onclick="openBox(0)">🎁</div>
-      <div class="mystery-box" onclick="openBox(1)">🎁</div>
-      <div class="mystery-box" onclick="openBox(2)">🎁</div>
-      <div class="mystery-box" onclick="openBox(3)">🎁</div>
-      <div class="mystery-box" onclick="openBox(4)">🎁</div>
-      <div class="mystery-box" onclick="openBox(5)">🎁</div>
+  <div class="game-container">
+    <div class="hud">
+      <div>സ്കോർ: <span id="scoreVal">0</span></div>
+      <div>ലൈഫ്: <span id="lifeVal">❤️❤️❤️</span></div>
     </div>
 
-    <div id="resultMessage">ഒരു പെട്ടി തിരഞ്ഞെടുക്കൂ!</div>
+    <div id="playArea" onclick="shootBullet(event)">
+      <!-- താഴെയുള്ള തോക്ക് -->
+      <div class="shooter" id="shooterObj">🚀</div>
 
-    <button class="reset-btn" onclick="resetBoxes()">പുതിയ പെട്ടികൾ വെക്കുക 🔄</button>
+      <!-- തുടക്കത്തിലെ സ്ക്രീൻ -->
+      <div id="startScreen" class="start-screen">
+        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">ബോക്സുകൾ വെടിവെച്ച് വീഴ്ത്തൂ!</h2>
+        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 20px;">സ്ക്രീനിൽ തൊട്ടാൽ റോക്കറ്റ് വെടിയുതിർക്കും. താഴെ എത്തും മുൻപ് ബോക്സുകൾ തകർക്കൂ!</p>
+        <button class="action-btn" onclick="startGame()">കളി തുടങ്ങാം 🎮</button>
+      </div>
+    </div>
   </div>
 
   <script>
     let score = 0;
-    const rewards = [
-      { text: "🎉 അതിഗംഭീരം! 50 കോയിൻ ലഭിച്ചു!", val: 50 },
-      { text: "⭐ സൂപ്പർ ലക്ക്! 100 കോയിൻ!", val: 100 },
-      { text: "💎 ജാക്ക്പോട്ട്! 250 കോയിൻ!", val: 250 },
-      { text: "🪙 ചെറിയ സമ്മാനം: 10 കോയിൻ", val: 10 },
-      { text: "🧧 ബോണസ്: 100 കോയിൻ!", val: 100 },
-      { text: "🎁 മെഗാ പ്രൈസ്: 500 കോയിൻ!", val: 500 }
-    ];
+    let lives = 3;
+    let gameInterval = null;
+    let boxTimer = null;
+    let isPlaying = false;
 
-    function openBox(index) {
-      const boxes = document.querySelectorAll('.mystery-box');
-      const box = boxes[index];
-      
-      if(box.classList.contains('opened')) return;
+    const playArea = document.getElementById('playArea');
+    const shooter = document.getElementById('shooterObj');
 
-      // Random reward
-      let reward = rewards[Math.floor(Math.random() * rewards.length)];
-      score += reward.val;
+    function startGame() {
+      score = 0;
+      lives = 3;
+      document.getElementById('scoreVal').innerText = score;
+      document.getElementById('lifeVal').innerText = '❤️❤️❤️';
+      document.getElementById('startScreen').style.display = 'none';
       
-      box.classList.add('opened');
-      box.innerHTML = '💰';
+      // പഴയ ബോക്സുകൾ നീക്കം ചെയ്യുക
+      document.querySelectorAll('.target-box').forEach(b => b.remove());
       
-      document.getElementById('totalPoints').innerText = score;
-      document.getElementById('resultMessage').innerHTML = reward.text;
+      isPlaying = true;
+      
+      // പുതിയ ബോക്സുകൾ മുകളിൽ നിന്ന് താഴേക്ക് വരുത്തുക
+      boxTimer = setInterval(createBox, 1500);
+      gameInterval = setInterval(updateGame, 30);
     }
 
-    function resetBoxes() {
-      const boxes = document.querySelectorAll('.mystery-box');
+    function createBox() {
+      if (!isPlaying) return;
+      const box = document.createElement('div');
+      box.classList.add('target-box');
+      box.innerHTML = ['🎁', '💰', '⭐', '📦'][Math.floor(Math.random() * 4)];
+      
+      const maxX = playArea.clientWidth - 60;
+      const randomX = Math.floor(Math.random() * maxX);
+      box.style.left = randomX + 'px';
+      box.style.top = '-60px';
+      
+      // ബോക്സിൽ തൊട്ടാൽ തകരുന്ന രീതി (Tap to Shoot)
+      box.onclick = (e) => {
+        e.stopPropagation();
+        if (!isPlaying) return;
+        score += 10;
+        document.getElementById('scoreVal').innerText = score;
+        
+        // ചെറിയൊരു പൊട്ടൽ എഫക്റ്റ്
+        box.innerHTML = '💥';
+        box.style.transform = 'scale(1.3)';
+        setTimeout(() => box.remove(), 120);
+      };
+
+      playArea.appendChild(box);
+    }
+
+    function updateGame() {
+      if (!isPlaying) return;
+      
+      const boxes = document.querySelectorAll('.target-box');
       boxes.forEach(box => {
-        box.classList.remove('opened');
-        box.innerHTML = '🎁';
+        let currentTop = parseFloat(box.style.top || -60);
+        currentTop += 2.2; // താഴേക്ക് വരുന്ന വേഗത
+        
+        // താഴെ എത്തിയാൽ ലൈഫ് കുറയുക
+        if (currentTop > playArea.clientHeight - 70) {
+          box.remove();
+          lives--;
+          updateLivesDisplay();
+          if (lives <= 0) {
+            endGame();
+          }
+        } else {
+          box.style.top = currentTop + 'px';
+        }
       });
-      document.getElementById('resultMessage').innerHTML = 'പുതിയ പെട്ടി തുറക്കൂ!';
+    }
+
+    function shootBullet(e) {
+      if (!isPlaying) return;
+      
+      // സ്ക്രീനിൽ തൊട്ട ഭാഗത്തേക്ക് റോക്കറ്റ് നീങ്ങുക
+      const rect = playArea.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      shooter.style.left = (clickX - 20) + 'px';
+
+      // ബുള്ളറ്റ് മുകളിലേക്ക് പായുക
+      const bullet = document.createElement('div');
+      bullet.classList.add('bullet');
+      bullet.style.left = clickX + 'px';
+      bullet.style.bottom = '70px';
+      playArea.appendChild(bullet);
+
+      let bulletTimer = setInterval(() => {
+        let currentBottom = parseFloat(bullet.style.bottom);
+        currentBottom += 15;
+        bullet.style.bottom = currentBottom + 'px';
+
+        // ബോക്സുകളിൽ കൊള്ളുന്നുണ്ടോ എന്ന് പരിശോധിക്കുക
+        const boxes = document.querySelectorAll('.target-box');
+        boxes.forEach(box => {
+          const boxRect = box.getBoundingClientRect();
+          const bulletRect = bullet.getBoundingClientRect();
+
+          if (bulletRect.left < boxRect.right && bulletRect.right > boxRect.left &&
+              bulletRect.top < boxRect.bottom && bulletRect.bottom > boxRect.top) {
+            // ബോക്സ് തകർന്നു!
+            box.innerHTML = '💥';
+            setTimeout(() => box.remove(), 100);
+            bullet.remove();
+            clearInterval(bulletTimer);
+            score += 15;
+            document.getElementById('scoreVal').innerText = score;
+          }
+        });
+
+        // സ്ക്രീനിന് പുറത്തുപോയാൽ ബുള്ളറ്റ് ഒഴിവാക്കുക
+        if (currentBottom > playArea.clientHeight) {
+          bullet.remove();
+          clearInterval(bulletTimer);
+        }
+      }, 20);
+    }
+
+    function updateLivesDisplay() {
+      let hearts = '';
+      for(let i=0; i<lives; i++) hearts += '❤️';
+      document.getElementById('lifeVal').innerText = hearts || '💔';
+    }
+
+    function endGame() {
+      isPlaying = false;
+      clearInterval(gameInterval);
+      clearInterval(boxTimer);
+      
+      const startScreen = document.getElementById('startScreen');
+      startScreen.style.display = 'flex';
+      startScreen.innerHTML = `
+        <h2 style="color: #ef4444; font-size: 22px; margin-bottom: 5px;">കളി കഴിഞ്ഞു! (Game Over)</h2>
+        <p style="color: #facc15; font-size: 16px; font-weight: 900; margin-bottom: 15px;">ലഭിച്ച ആകെ സ്കോർ: ${score}</p>
+        <button class="action-btn" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
+      `;
     }
   </script>
 </body>
