@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ബോക്സ് ബ്ലാസ്റ്റർ ഷൂട്ടർ - കോളയാട് കണക്ട്</title>
+  <title>ബോക്സ് ബ്ലാസ്റ്റർ അഡ്വഞ്ചർ - കോളയാട് കണക്ട്</title>
   <style>
     :root {
       --bg-body: #070b19;
@@ -51,6 +51,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background 0.5s ease;
     }
     .hud {
       display: flex;
@@ -59,11 +60,11 @@
       max-width: 400px;
       padding: 10px 15px;
       box-sizing: border-box;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 900;
       color: var(--accent-gold);
       z-index: 5;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.7);
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     #playArea {
@@ -79,45 +80,51 @@
       bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 44px;
+      font-size: 42px;
       z-index: 10;
       user-select: none;
       filter: drop-shadow(0 0 12px #38bdf8);
       cursor: pointer;
     }
+    /* ചെറിയ ബോക്സുകൾ (Small Size Targets) */
     .target-box {
       position: absolute;
-      width: 52px;
-      height: 52px;
+      width: 42px;
+      height: 42px;
       background: linear-gradient(145deg, #f59e0b, #d97706);
-      border: 2.5px solid #facc15;
-      border-radius: 12px;
+      border: 2px solid #facc15;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 900;
       color: #0f172a;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
     }
     .target-bomb {
       background: linear-gradient(145deg, #ef4444, #991b1b);
       border-color: #f87171;
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.6);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.6);
+    }
+    .target-heart {
+      background: linear-gradient(145deg, #ec4899, #be185d);
+      border-color: #f472b6;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.6);
     }
     .bullet {
       position: absolute;
-      width: 8px;
-      height: 18px;
+      width: 7px;
+      height: 16px;
       background: #38bdf8;
-      border-radius: 4px;
+      border-radius: 3px;
       box-shadow: 0 0 8px #38bdf8;
       z-index: 8;
     }
     .start-screen {
       position: absolute;
       inset: 0;
-      background: rgba(7, 11, 25, 0.95);
+      background: rgba(7, 11, 25, 0.96);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -138,16 +145,29 @@
       box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
       margin-top: 15px;
     }
+    /* മിസ്ട്രി ഗിഫ്റ്റ് ബോക്സ് പോപ്പ്അപ്പ് സ്റ്റൈൽ */
+    .gift-modal {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 30;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
 
   <div class="header">
     <a href="games.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 17px; color: #facc15;">🎯 ബോക്സ് ബ്ലാസ്റ്റർ ഷൂട്ടർ</h2>
+    <h2 style="margin: 0; font-size: 17px; color: #facc15;" id="themeTitle">🎯 ബോക്സ് അഡ്വഞ്ചർ ഷൂട്ടർ</h2>
   </div>
 
-  <div class="game-container">
+  <div class="game-container" id="gameContainerBg">
     <div class="hud">
       <div>സ്കോർ: <span id="scoreVal">0</span>/1000</div>
       <div>സ്റ്റേജ്: <span id="stageVal">1</span>/5</div>
@@ -157,15 +177,24 @@
     <div id="playArea">
       <div class="shooter" id="shooterObj" onpointerdown="shootDirectly(event)">🚀</div>
 
+      <!-- സ്റ്റാർട്ട് സ്ക്രീൻ -->
       <div id="startScreen" class="start-screen">
-        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">ചലഞ്ച് കളി തുടങ്ങാം! 🚀</h2>
-        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 15px;">
-          • വിരൽ വെച്ച് റോക്കറ്റ് എവിടേക്കും നീക്കാം.<br>
-          • റോക്കറ്റിൽ അമർത്തുമ്പോൾ വെടിവയ്ക്കാം.<br>
-          • <b>5 സ്റ്റേജുകൾ</b> താണ്ടി <b>1000 പോയിന്റ്</b> നേടി ജാക്ക്പോട്ട് നേടൂ!<br>
-          • ബോംബുകളിൽ (💣) വെടിവെച്ചാൽ ലൈഫ് പോകും!
+        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">അഡ്വഞ്ചർ ഷൂട്ടർ തുടങ്ങാം! 🚀</h2>
+        <p style="color: #94a3b8; font-size: 13.5px; margin-bottom: 15px; line-height: 1.6;">
+          • ചെറിയ ബോക്സുകൾ ഷൂട്ട് ചെയ്ത് പോയിന്റ് നേടാം!<br>
+          • ❤️ (ഹാർട്ട്) ബോക്സ് കിട്ടിയാൽ ലൈഫ് കൂടും.<br>
+          • 💣 ബോംബുകളിൽ വെടിവെച്ചാൽ ലൈഫ് പോകും!<br>
+          • 5 സ്റ്റേജുകൾ താണ്ടി 1000 പോയിന്റ് നേടി <b>മിസ്ട്രി ഗിഫ്റ്റ് ബോക്സ്</b> തുറക്കൂ!
         </p>
         <button class="action-btn" onclick="startGame()">കളി തുടങ്ങാം 🎮</button>
+      </div>
+
+      <!-- ജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് ബോക്സ് മോഡൽ -->
+      <div id="giftModal" class="gift-modal">
+        <h2 style="color: #facc15; font-size: 24px; margin-bottom: 10px;">🎉 അതിഗംഭീരം! താങ്കൾ ജാക്ക്പോട്ട് വിജയിച്ചു! 🏆</h2>
+        <p style="color: #4ade80; font-size: 15px; font-weight: 900; margin-bottom: 20px;">ആകെ സ്കോർ: 1000/1000</p>
+        <div style="font-size: 65px; cursor: pointer; animation: bounce 1s infinite;" onclick="openMysteryBox()">🎁</div>
+        <p style="color: #cbd5e1; font-size: 13.5px; margin-top: 15px;">സമ്മാനം തുറക്കാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
       </div>
     </div>
   </div>
@@ -177,27 +206,38 @@
     let gameInterval = null;
     let boxTimer = null;
     let isPlaying = false;
-    let fallSpeed = 1.1;
+    let fallSpeed = 1.2;
 
     const playArea = document.getElementById('playArea');
     const shooter = document.getElementById('shooterObj');
     let shooterX = window.innerWidth / 2;
     let shooterY = window.innerHeight - 180;
 
+    const themes = [
+      { name: "🎯 സ്പേസ് അഡ്വഞ്ചർ (Stage 1)", bg: "radial-gradient(circle at center, #1e1b4b 0%, #070b19 100%)" },
+      { name: "🌲 കാട്ടിലെ സാഹസികത (Stage 2)", bg: "radial-gradient(circle at center, #064e3b 0%, #022c22 100%)" },
+      { name: "⚡ മിന്നൽ കോട്ട (Stage 3)", bg: "radial-gradient(circle at center, #78350f 0%, #451a03 100%)" },
+      { name: "🔥 ലാവ വേൾഡ് (Stage 4)", bg: "radial-gradient(circle at center, #831843 0%, #500724 100%)" },
+      { name: "👑 റോയൽ ഗാലക്‌സി (Stage 5)", bg: "radial-gradient(circle at center, #312e81 0%, #0f172a 100%)" }
+    ];
+
     function startGame() {
       score = 0;
       lives = 3;
       stage = 1;
-      fallSpeed = 1.1;
+      fallSpeed = 1.2;
       document.getElementById('scoreVal').innerText = score;
       document.getElementById('stageVal').innerText = stage + '/5';
       document.getElementById('lifeVal').innerText = '❤️❤️❤️';
       document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('giftModal').style.display = 'none';
+      document.getElementById('themeTitle').innerText = themes[0].name;
+      document.getElementById('gameContainerBg').style.background = themes[0].bg;
       
-      document.querySelectorAll('.target-box, .target-bomb').forEach(b => b.remove());
+      document.querySelectorAll('.target-box, .target-bomb, .target-heart').forEach(b => b.remove());
       isPlaying = true;
       
-      boxTimer = setInterval(createTarget, 1400);
+      boxTimer = setInterval(createTarget, 1300);
       gameInterval = setInterval(updateGame, 30);
     }
 
@@ -227,21 +267,25 @@
       if (!isPlaying) return;
       const el = document.createElement('div');
       
-      // ബോംബുകളുടെ എണ്ണം കൂട്ടിയിരിക്കുന്നു (32% സാധ്യത)
-      let isBomb = Math.random() < 0.32;
-      
-      if (isBomb) {
+      let rand = Math.random();
+      if (rand < 0.25) {
+        // ബോംബ് (25% സാധ്യത)
         el.classList.add('target-box', 'target-bomb');
         el.innerHTML = '💣';
+      } else if (rand < 0.35) {
+        // ലൈഫ് തരുന്ന ഹാർട്ട് ബോക്സ് (10% സാധ്യത)
+        el.classList.add('target-box', 'target-heart');
+        el.innerHTML = '❤️';
       } else {
+        // സാധാരണ സമ്മാന ബോക്സുകൾ
         el.classList.add('target-box');
-        el.innerHTML = ['🎁', '💰', '⭐', '📦'][Math.floor(Math.random() * 4)];
+        el.innerHTML = ['🎁', '💰', '⭐', '📦', '💎'][Math.floor(Math.random() * 5)];
       }
       
-      const maxX = playArea.clientWidth - 60;
+      const maxX = playArea.clientWidth - 50;
       const randomX = Math.floor(Math.random() * maxX);
       el.style.left = randomX + 'px';
-      el.style.top = '-60px';
+      el.style.top = '-50px';
       
       playArea.appendChild(el);
     }
@@ -251,7 +295,7 @@
       
       const targets = document.querySelectorAll('.target-box');
       targets.forEach(el => {
-        let currentTop = parseFloat(el.style.top || -60);
+        let currentTop = parseFloat(el.style.top || -50);
         currentTop += fallSpeed; 
         
         if (currentTop > playArea.clientHeight) {
@@ -265,7 +309,7 @@
     function shootBullet(xPos, yPos) {
       const bullet = document.createElement('div');
       bullet.classList.add('bullet');
-      bullet.style.left = (xPos - 4) + 'px';
+      bullet.style.left = (xPos - 3.5) + 'px';
       bullet.style.top = (yPos - 25) + 'px';
       playArea.appendChild(bullet);
 
@@ -287,8 +331,14 @@
               updateLivesDisplay();
               el.innerHTML = '💥';
               if (lives <= 0) endGame(false);
+            } else if (el.classList.contains('target-heart')) {
+              if (lives < 5) lives++; // പരമാവധി 5 ലൈഫ് വരെ ആവാം
+              updateLivesDisplay();
+              el.innerHTML = '💖';
+              score += 20;
+              checkScoreAndStage();
             } else {
-              score += 10;
+              score += 15;
               checkScoreAndStage();
               el.innerHTML = '💥';
             }
@@ -309,31 +359,57 @@
     function checkScoreAndStage() {
       document.getElementById('scoreVal').innerText = score;
       
-      // 5 സ്റ്റേജുകളായി ക്രമീകരിച്ചിരിക്കുന്നു
       if (score >= 800 && stage < 5) {
         stage = 5;
-        fallSpeed = 2.3;
+        fallSpeed = 2.4;
+        updateTheme();
       } else if (score >= 600 && stage < 4) {
         stage = 4;
-        fallSpeed = 2.0;
+        fallSpeed = 2.1;
+        updateTheme();
       } else if (score >= 400 && stage < 3) {
         stage = 3;
-        fallSpeed = 1.7;
+        fallSpeed = 1.8;
+        updateTheme();
       } else if (score >= 200 && stage < 2) {
         stage = 2;
-        fallSpeed = 1.4;
+        fallSpeed = 1.5;
+        updateTheme();
       }
       document.getElementById('stageVal').innerText = stage + '/5';
 
       if (score >= 1000) {
-        endGame(true);
+        triggerWin();
       }
+    }
+
+    function updateTheme() {
+      let t = themes[stage - 1];
+      document.getElementById('themeTitle').innerText = t.name;
+      document.getElementById('gameContainerBg').style.background = t.bg;
     }
 
     function updateLivesDisplay() {
       let hearts = '';
       for(let i=0; i<lives; i++) hearts += '❤️';
       document.getElementById('lifeVal').innerText = hearts || '💔';
+    }
+
+    function triggerWin() {
+      isPlaying = false;
+      clearInterval(gameInterval);
+      clearInterval(boxTimer);
+      document.querySelectorAll('.target-box, .target-bomb, .target-heart').forEach(b => b.remove());
+      document.getElementById('giftModal').style.display = 'flex';
+    }
+
+    function openMysteryBox() {
+      const modal = document.getElementById('giftModal');
+      modal.innerHTML = `
+        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">🎁 സർപ്രൈസ് സമ്മാനം തുറന്നു! 🌟</h2>
+        <p style="color: #4ade80; font-size: 16px; font-weight: 900; margin-bottom: 20px;">താങ്കൾക്ക് 500 ബോണസ് കോയിനുകളും സ്പെഷ്യൽ സ്റ്റാറും ലഭിച്ചിരിക്കുന്നു!</p>
+        <button class="action-btn" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
+      `;
     }
 
     function endGame(isWon) {
@@ -343,20 +419,11 @@
       
       const startScreen = document.getElementById('startScreen');
       startScreen.style.display = 'flex';
-      
-      if (isWon) {
-        startScreen.innerHTML = `
-          <h2 style="color: #facc15; font-size: 22px; margin-bottom: 5px;">🎉 അതിഗംഭീരം! താങ്കൾ ജാക്ക്പോട്ട് വിജയിച്ചു! 🏆</h2>
-          <p style="color: #4ade80; font-size: 15px; font-weight: 900; margin-bottom: 15px;">ആകെ സ്കോർ: ${score}/1000</p>
-          <button class="action-btn" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
-        `;
-      } else {
-        startScreen.innerHTML = `
-          <h2 style="color: #ef4444; font-size: 22px; margin-bottom: 5px;">കളി കഴിഞ്ഞു! (Game Over)</h2>
-          <p style="color: #facc15; font-size: 15px; font-weight: 900; margin-bottom: 15px;">ലഭിച്ച സ്കോർ: ${score}</p>
-          <button class="action-btn" onclick="startGame()">വീണ്ടും ശ്രമിക്കൂ 🔄</button>
-        `;
-      }
+      startScreen.innerHTML = `
+        <h2 style="color: #ef4444; font-size: 22px; margin-bottom: 5px;">കളി കഴിഞ്ഞു! (Game Over)</h2>
+        <p style="color: #facc15; font-size: 15px; font-weight: 900; margin-bottom: 15px;">ലഭിച്ച സ്കോർ: ${score}/1000</p>
+        <button class="action-btn" onclick="startGame()">വീണ്ടും ശ്രമിക്കൂ 🔄</button>
+      `;
     }
   </script>
 </body>
