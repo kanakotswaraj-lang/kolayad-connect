@@ -56,23 +56,48 @@
       padding: 8px 10px;
       box-sizing: border-box;
     }
-    .hud {
-      display: flex;
-      justify-content: space-around;
+
+    /* പുതിയ സ്കോർബോർഡ് ലേഔട്ട് (രണ്ട് കള്ളികളിലായി രണ്ട് റോ) */
+    .hud-box {
       width: 100%;
       max-width: 410px;
-      padding: 10px 8px;
-      box-sizing: border-box;
-      font-size: 12.5px;
-      font-weight: 900;
-      color: var(--accent-gold);
       background: rgba(15, 23, 42, 0.95);
-      border: 2px solid rgba(56, 189, 248, 0.4);
-      border-radius: 12px;
+      border: 2px solid rgba(56, 189, 248, 0.5);
+      border-radius: 14px;
+      padding: 8px 12px;
       margin-bottom: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
+    .hud-top-row {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 900;
+      color: #38bdf8;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 4px;
+    }
+    .hud-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .hud-pill {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      border-radius: 10px;
+      padding: 6px 10px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
     .start-screen {
       position: absolute;
       inset: 0;
@@ -230,11 +255,18 @@
   </div>
 
   <div class="game-container">
-    <div class="hud">
-      <div>👤 <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
-      <div>🎯 സ്റ്റേജ്: <span id="stageVal" style="color:#facc15;">1</span>/3</div>
-      <div>⏳ സമയം: <span id="timerVal" style="color:#f87171;">45</span>സെ</div>
-      <div>⭐ സ്കോർ: <span id="scoreVal" style="color:#4ade80;">100</span></div>
+    <!-- പുതിയ രൂപത്തിലുള്ള സ്കോർബോർഡ് (HUD) -->
+    <div class="hud-box">
+      <div class="hud-top-row">👤 കളിക്കാരൻ: <span id="hudPlayer" style="color:#facc15;">-</span></div>
+      <div class="hud-bottom-row">
+        <div class="hud-pill">
+          <span>🎯 സ്റ്റേജ്: <b id="stageVal" style="color:#facc15;">1</b>/3</span>
+        </div>
+        <div class="hud-pill">
+          <span>⏳ സമയം: <b id="timerVal" style="color:#f87171;">45സെ</b></span>
+          <span>⭐ സ്കോർ: <b id="scoreVal" style="color:#4ade80;">100</b></span>
+        </div>
+      </div>
     </div>
 
     <div class="cards-grid stage-1" id="cardsGrid"></div>
@@ -414,7 +446,7 @@
 
       document.getElementById('scoreVal').innerText = score;
       document.getElementById('stageVal').innerText = currentStage;
-      document.getElementById('timerVal').innerText = timeLeft;
+      document.getElementById('timerVal').innerText = timeLeft + 'സെ';
 
       let allIcons = categories[selectedCategory] || categories['fruits'];
       if (currentStage === 1) {
@@ -438,7 +470,7 @@
     function startTimer() {
       timerInterval = setInterval(() => {
         timeLeft--;
-        document.getElementById('timerVal').innerText = timeLeft;
+        document.getElementById('timerVal').innerText = timeLeft + 'സെ';
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
           playSound('gameover');
@@ -592,7 +624,6 @@
         } else {
           if (currentPlayer) {
             currentPlayer.stage = currentStage + 1;
-            localStorage.setItem('memoryStoragePlayers', JSON.stringify(players)); // Fixed storage reference sync
             localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
           }
         }
@@ -613,7 +644,7 @@
     }
 
     function nextStage() {
-      if (currentStage < 3) currentstage_check = ++currentStage;
+      if (currentStage < 3) currentStage++;
       startGame();
     }
 
