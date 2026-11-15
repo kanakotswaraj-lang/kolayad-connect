@@ -63,7 +63,7 @@
       max-width: 410px;
       padding: 10px 8px;
       box-sizing: border-box;
-      font-size: 13.5px;
+      font-size: 12.5px;
       font-weight: 900;
       color: var(--accent-gold);
       background: rgba(15, 23, 42, 0.95);
@@ -100,17 +100,17 @@
     }
     .action-btn:active { transform: scale(0.95); }
 
-    .input-field {
+    .input-field, .select-field {
       background: #1e293b;
       border: 2px solid #38bdf8;
       color: #fff;
       padding: 10px 15px;
       border-radius: 12px;
-      font-size: 15px;
+      font-size: 14px;
       width: 80%;
       max-width: 280px;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-family: 'Noto Sans Malayalam', sans-serif;
       outline: none;
     }
@@ -171,7 +171,6 @@
       cursor: default;
     }
 
-    /* പ്രൊഫഷണൽ ഗ്ലാസ് ലുക്കിലുള്ള മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ */
     .gift-modal {
       display: none;
       position: absolute;
@@ -234,28 +233,36 @@
     <div class="hud">
       <div>👤 <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
       <div>🎯 സ്റ്റേജ്: <span id="stageVal" style="color:#facc15;">1</span>/3</div>
+      <div>⏳ സമയം: <span id="timerVal" style="color:#f87171;">45</span>സെ</div>
       <div>⭐ സ്കോർ: <span id="scoreVal" style="color:#4ade80;">100</span></div>
     </div>
 
     <div class="cards-grid stage-1" id="cardsGrid"></div>
 
+    <!-- പ്രൊഫൈൽ & കാറ്റഗറി സ്റ്റാർട്ട് സ്ക്രീൻ -->
     <div id="startScreen" class="start-screen">
-      <h2 style="color: #facc15; font-size: 21px; margin-bottom: 8px;">മെമ്മറി പസിൽ പ്രൊഫൈൽ 🧠</h2>
-      <p style="color: #94a3b8; font-size: 13px; margin-bottom: 12px;">പുതിയ പേര് നൽകി കളി തുടങ്ങാം അല്ലെങ്കിൽ താഴെ നിന്ന് തിരഞ്ഞെടുക്കാം:</p>
+      <h2 style="color: #facc15; font-size: 21px; margin-bottom: 6px;">മെമ്മറി പസിൽ പ്രൊഫൈൽ 🧠</h2>
+      <p style="color: #94a3b8; font-size: 12.5px; margin-bottom: 10px;">പേര് നൽകി കാറ്റഗറി തിരഞ്ഞെടുത്ത് കളി തുടങ്ങാം:</p>
       
       <input type="text" id="playerNameInput" class="input-field" placeholder="കളിക്കുന്ന കുട്ടിയുടെ പേര്..." />
-      <button class="action-btn" onclick="createNewPlayerAndStart()">പുതിയ പേരിൽ കളിക്കാം 🚀</button>
+      
+      <select id="categorySelect" class="select-field">
+        <option value="fruits">🍎 പഴങ്ങൾ (Fruits)</option>
+        <option value="animals">🐶 മൃഗങ്ങൾ (Animals)</option>
+        <option value="numbers">🔢 നമ്പറുകൾ (Numbers)</option>
+      </select>
 
-      <div style="width: 100%; max-width: 310px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;">
-        <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 8px; font-weight: bold;">നിലവിലുള്ള കളിക്കാർ:</p>
-        <div id="playerListContainer" style="max-height: 160px; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+      <button class="action-btn" onclick="createNewPlayerAndStart()">കളി തുടങ്ങാം 🚀</button>
+
+      <div style="width: 100%; max-width: 310px; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 10px;">
+        <p style="color: #cbd5e1; font-size: 12.5px; margin-bottom: 6px; font-weight: bold;">നിലവിലുള്ള കളിക്കാർ:</p>
+        <div id="playerListContainer" style="max-height: 140px; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
       </div>
     </div>
 
-    <!-- പ്രൊഫഷണൽ ലുക്കിലുള്ള വിജയിക്കുമ്പോൾ വരുന്ന മോഡൽ -->
     <div id="giftModal" class="gift-modal">
       <div style="width: 100%; max-width: 340px; background: rgba(15, 23, 42, 0.85); padding: 10px; border-radius: 12px; border: 1px solid rgba(250,204,21,0.3);">
-        <h2 style="color: #facc15; font-size: 18px; margin: 0 0 3px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
+        <h2 style="color: #facc15; font-size: 18px; margin: 0 0 3px 0;" id="winTitleText">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
         <p style="color: #4ade80; font-size: 13px; font-weight: 900; margin: 0;" id="winStatsText">ആകെ സ്കോർ: 100</p>
       </div>
       
@@ -274,13 +281,66 @@
 
     let currentStage = 1;
     let score = 100;
-    const allIcons = ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉', '🍍', '🥝', '🍒', '🍑'];
+    let selectedCategory = 'fruits';
+    
+    // വിവിധ കാറ്റഗറികൾ
+    const categories = {
+      fruits: ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉', '🍍', '🥝', '🍒', '🍑'],
+      animals: ['🐶', '🐱', '🦁', '🐯', '🐼', '🐨', '🦊', '🐰', '🐵', '🦄'],
+      numbers: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
+    };
+
     let icons = [];
     let cardList = [];
     let flippedCards = [];
     let matchedPairs = 0;
     let moves = 0;
     let isLocked = false;
+    let timeLeft = 45;
+    let timerInterval = null;
+
+    // വെബ് ഓഡിയോ സിഎൻഎൻ (സൗണ്ട് എഫക്റ്റുകൾക്കായി)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      let osc = audioCtx.createOscillator();
+      let gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'flip') {
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } else if (type === 'match') {
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'win') {
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.15);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+      } else if (type === 'gameover') {
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      }
+    }
 
     function renderPlayerList() {
       const container = document.getElementById('playerListContainer');
@@ -294,7 +354,7 @@
         html += `<div class="player-pill">
           <div onclick="selectExistingPlayer(${index})" style="text-align: left; cursor: pointer; flex: 1;">
             <div style="color: #f8fafc; font-weight: bold; font-size: 14px;">👤 ${p.name}</div>
-            <div style="color: #94a3b8; font-size: 11.5px;">സ്റ്റേജ്: <b style="color:#38bdf8;">${stageInfo}/3</b> | വിജയങ്ങൾ: <b style="color:#facc15;">${p.wins || 0} 🏆</b></div>
+            <div style="color: #94a3b8; font-size: 11px;">സ്റ്റേജ്: <b style="color:#38bdf8;">${stageInfo}/3</b> | വിജയങ്ങൾ: <b style="color:#facc15;">${p.wins || 0} 🏆</b></div>
           </div>
           <button class="del-btn" onclick="deletePlayer(event, ${index})">ഡിലീറ്റ്</button>
         </div>`;
@@ -304,12 +364,14 @@
 
     function createNewPlayerAndStart() {
       const input = document.getElementById('playerNameInput');
+      const catSelect = document.getElementById('categorySelect');
       let name = input.value.trim();
       if (!name) {
         alert('ദയവായി കളിക്കുന്ന കുട്ടിയുടെ പേര് എന്റർ ചെയ്യുക!');
         return;
       }
-      let newP = { name: name, wins: 0, stage: 1 };
+      selectedCategory = catSelect.value;
+      let newP = { name: name, wins: 0, stage: 1, category: selectedCategory };
       players.push(newP);
       localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
       currentPlayer = newP;
@@ -320,6 +382,7 @@
     function selectExistingPlayer(index) {
       currentPlayer = players[index];
       currentStage = currentPlayer.stage || 1;
+      selectedCategory = currentPlayer.category || 'fruits';
       startGame();
     }
 
@@ -342,12 +405,22 @@
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('giftModal').style.display = 'none';
       
+      if (timerInterval) clearInterval(timerInterval);
+
       moves = 0;
       matchedPairs = 0;
       score = 100;
+      
+      // സ്റ്റേജുകൾ അനുസരിച്ച് സമയം വ്യത്യാസപ്പെടുന്നു (കൂടുതൽ സ്റ്റേജുകൾക്ക് കൂടുതൽ സമയം)
+      if (currentStage === 1) timeLeft = 45;
+      else if (currentStage === 2) timeLeft = 60;
+      else timeLeft = 75;
+
       document.getElementById('scoreVal').innerText = score;
       document.getElementById('stageVal').innerText = currentStage;
+      document.getElementById('timerVal').innerText = timeLeft;
 
+      let allIcons = categories[selectedCategory] || categories['fruits'];
       if (currentStage === 1) {
         icons = allIcons.slice(0, 6);
       } else if (currentStage === 2) {
@@ -363,6 +436,19 @@
       document.getElementById('giftInstruction').style.display = 'block';
 
       generateCards();
+      startTimer();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timerVal').innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          playSound('gameover');
+          triggerGameOver();
+        }
+      }, 1000);
     }
 
     function generateCards() {
@@ -390,6 +476,7 @@
       
       if (clickedCard.isFlipped || clickedCard.isMatched) return;
 
+      playSound('flip');
       clickedCard.isFlipped = true;
       cardEl.classList.add('flipped');
       cardEl.innerHTML = clickedCard.icon;
@@ -405,6 +492,7 @@
       const [card1, card2] = flippedCards;
       
       if (card1.icon === card2.icon) {
+        playSound('match');
         cardList[card1.index].isMatched = true;
         cardList[card2.index].isMatched = true;
         card1.element.classList.add('matched');
@@ -414,6 +502,7 @@
         flippedCards = [];
 
         if (matchedPairs === icons.length) {
+          clearInterval(timerInterval);
           setTimeout(triggerWin, 500);
         }
       } else {
@@ -435,8 +524,31 @@
     }
 
     function triggerWin() {
+      playSound('win');
+      document.getElementById('winTitleText').innerText = "🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆";
       document.getElementById('winStatsText').innerText = `സ്റ്റേജ് ${currentStage} വിജയിച്ചു! (ശേഷിക്കുന്ന സ്കോർ: ${score} പോയിന്റ്)`;
       document.getElementById('giftModal').style.display = 'flex';
+    }
+
+    function triggerGameOver() {
+      document.getElementById('winTitleText').innerText = "⏰ സമയം കഴിഞ്ഞു! (Game Over)";
+      document.getElementById('winStatsText').innerText = `ശ്രമങ്ങൾ പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കൂ!`;
+      document.getElementById('mysteryBoxEl').style.display = 'none';
+      document.getElementById('giftInstruction').style.display = 'none';
+      
+      const resArea = document.getElementById('rewardResultArea');
+      resArea.innerHTML = `
+        <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #ef4444; padding: 12px; border-radius: 14px; box-shadow: 0 10px 25px rgba(239,68,68,0.3);">
+          <h3 style="color: #ef4444; margin: 0 0 3px 0; font-size: 16px;">⏱️ സമയം തീർന്നുപോയി!</h3>
+          <p style="color: #cbd5e1; font-size: 12.5px; margin: 0 0 8px 0;">വേഗത്തിൽ കളിക്കാൻ വീണ്ടും ശ്രമിക്കൂ!</p>
+          <div style="display: flex; gap: 8px; justify-content: center;">
+            <button class="action-btn" style="margin-top: 0; padding: 8px 14px; font-size: 13px; background: linear-gradient(135deg, #ef4444, #991b1b);" onclick="startGame()">വീണ്ടും ശ്രമിക്കൂ 🔄</button>
+            <button class="action-btn" style="margin-top: 0; padding: 8px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('giftModal').style.display = 'flex';
+      setTimeout(() => resArea.classList.add('show-reward'), 50);
     }
 
     function openMysteryBox(e) {
