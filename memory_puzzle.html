@@ -57,14 +57,14 @@
       box-sizing: border-box;
     }
 
-    /* പുതിയ സ്കോർബോർഡ് ലേഔട്ട് (രണ്ട് കള്ളികളിലായി രണ്ട് റോ) */
+    /* മൂന്ന് സെക്ഷനും മൂന്ന് വേറിട്ട കള്ളികളിലായി വലിയ അക്ഷരത്തിൽ */
     .hud-box {
       width: 100%;
       max-width: 410px;
       background: rgba(15, 23, 42, 0.95);
       border: 2px solid rgba(56, 189, 248, 0.5);
       border-radius: 14px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       margin-bottom: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       flex-shrink: 0;
@@ -74,28 +74,37 @@
     }
     .hud-top-row {
       text-align: center;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 900;
       color: #38bdf8;
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-      padding-bottom: 4px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 5px;
+      border-radius: 10px;
     }
     .hud-bottom-row {
       display: flex;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
     }
     .hud-pill {
       flex: 1;
-      background: rgba(30, 41, 59, 0.85);
-      border: 1px solid rgba(250, 204, 21, 0.3);
+      background: rgba(30, 41, 59, 0.9);
+      border: 1.5px solid rgba(250, 204, 21, 0.4);
       border-radius: 10px;
-      padding: 6px 10px;
+      padding: 7px 4px;
       display: flex;
-      justify-content: space-around;
+      flex-direction: column;
       align-items: center;
-      font-size: 13px;
-      font-weight: 900;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #94a3b8;
+      text-align: center;
+    }
+    .hud-pill b {
+      font-size: 14px;
+      margin-top: 2px;
     }
 
     .start-screen {
@@ -255,16 +264,21 @@
   </div>
 
   <div class="game-container">
-    <!-- പുതിയ രൂപത്തിലുള്ള സ്കോർബോർഡ് (HUD) -->
+    <!-- മൂന്ന് സെക്ഷനും മൂന്ന് വേറിട്ട കള്ളികളിലായുള്ള സ്കോർബോർഡ് -->
     <div class="hud-box">
       <div class="hud-top-row">👤 കളിക്കാരൻ: <span id="hudPlayer" style="color:#facc15;">-</span></div>
       <div class="hud-bottom-row">
         <div class="hud-pill">
-          <span>🎯 സ്റ്റേജ്: <b id="stageVal" style="color:#facc15;">1</b>/3</span>
+          <span>🎯 സ്റ്റേജ്</span>
+          <b id="stageVal" style="color:#facc15;">1/3</b>
         </div>
         <div class="hud-pill">
-          <span>⏳ സമയം: <b id="timerVal" style="color:#f87171;">45സെ</b></span>
-          <span>⭐ സ്കോർ: <b id="scoreVal" style="color:#4ade80;">100</b></span>
+          <span>⏳ സമയം</span>
+          <b id="timerVal" style="color:#f87171;">45സെ</b>
+        </div>
+        <div class="hud-pill">
+          <span>⭐ സ്കോർ</span>
+          <b id="scoreVal" style="color:#4ade80;">100</b>
         </div>
       </div>
     </div>
@@ -445,7 +459,7 @@
       else timeLeft = 75;
 
       document.getElementById('scoreVal').innerText = score;
-      document.getElementById('stageVal').innerText = currentStage;
+      document.getElementById('stageVal').innerText = currentStage + '/3';
       document.getElementById('timerVal').innerText = timeLeft + 'സെ';
 
       let allIcons = categories[selectedCategory] || categories['fruits'];
