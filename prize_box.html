@@ -25,7 +25,7 @@
     }
     .header {
       background: var(--bg-app);
-      padding: 12px 15px;
+      padding: 10px 15px;
       display: flex;
       align-items: center;
       border-bottom: 2px solid var(--border-color);
@@ -35,14 +35,13 @@
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #38bdf8;
       border: 1.5px solid #38bdf8;
-      padding: 6px 14px;
-      border-radius: 10px;
+      padding: 5px 12px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
       text-decoration: none;
-      margin-right: 12px;
-      box-shadow: 0 4px 10px rgba(56, 189, 248, 0.2);
+      margin-right: 10px;
     }
     .game-container {
       flex: 1;
@@ -59,9 +58,9 @@
       justify-content: space-between;
       width: 100%;
       max-width: 400px;
-      padding: 10px 15px;
+      padding: 8px 12px;
       box-sizing: border-box;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 900;
       color: var(--accent-gold);
       z-index: 5;
@@ -129,7 +128,7 @@
     .start-screen {
       position: absolute;
       inset: 0;
-      background: rgba(7, 11, 25, 0.96);
+      background: rgba(7, 11, 25, 0.97);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -137,21 +136,61 @@
       z-index: 20;
       text-align: center;
       padding: 20px;
+      overflow-y: auto;
     }
     .action-btn {
       background: linear-gradient(135deg, #22c55e, #15803d);
       color: #fff;
       border: none;
-      padding: 12px 30px;
+      padding: 12px 28px;
       border-radius: 14px;
       font-weight: 900;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-      margin-top: 15px;
+      margin-top: 12px;
     }
     .action-btn:active { transform: scale(0.95); }
 
+    .input-field {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      width: 80%;
+      max-width: 280px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      outline: none;
+    }
+    .player-pill {
+      background: #1e293b;
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      padding: 8px 14px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 85%;
+      max-width: 280px;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .del-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* സ്ക്രീനിന്റെ മുകൾഭാഗത്തായി വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ */
     .gift-modal {
       display: none;
       position: absolute;
@@ -160,33 +199,33 @@
       z-index: 30;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding-top: 30px;
       text-align: center;
-      padding: 20px;
+      overflow-y: auto;
     }
     .gift-box-anim {
-      font-size: 80px;
+      font-size: 75px;
       cursor: pointer;
-      animation: bounce 0.9s infinite alternate;
+      animation: bounce 0.8s infinite alternate;
       filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8));
       user-select: none;
+      margin-top: 10px;
     }
     @keyframes bounce {
       0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-15px) scale(1.08); }
+      100% { transform: translateY(-12px) scale(1.06); }
     }
-    /* നക്ഷത്രങ്ങളും കോയിനുകളും ദീർഘനേരം ചിതറിനിൽക്കുന്ന പാർട്ടിക്കിൾ ആനിമേഷൻ */
     .particle {
       position: absolute;
       font-size: 28px;
       pointer-events: none;
-      animation: explodeAnimLong 2.2s forwards ease-out;
+      animation: explodeAnimLong 2.5s forwards ease-out;
       z-index: 35;
     }
     @keyframes explodeAnimLong {
       0% { transform: translate(0, 0) scale(0.4); opacity: 1; }
-      70% { transform: translate(var(--dx), var(--dy)) scale(1.8); opacity: 1; }
-      100% { transform: translate(var(--dx), var(--dy)) scale(1.8); opacity: 0; }
+      75% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 0; }
     }
   </style>
 </head>
@@ -194,52 +233,58 @@
 
   <div class="header">
     <a href="games.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 17px; color: #facc15;" id="themeTitle">🎯 ഹൈ-റിസ്ക് അഡ്വഞ്ചർ</h2>
+    <h2 style="margin: 0; font-size: 16px; color: #facc15;" id="themeTitle">🎯 ഹൈ-റിസ്ക് അഡ്വഞ്ചർ</h2>
   </div>
 
   <div class="game-container" id="gameContainerBg">
     <div class="hud">
+      <div>കളിക്കാരൻ: <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
       <div>സ്കോർ: <span id="scoreVal">0</span>/1000</div>
       <div>സ്റ്റേജ്: <span id="stageVal">1</span>/5</div>
-      <div>പവർ: <span id="powerVal">Normal</span></div>
       <div>ലൈഫ്: <span id="lifeVal">❤️❤️❤️</span></div>
     </div>
 
     <div id="playArea">
       <div class="shooter" id="shooterObj" onpointerdown="shootDirectly(event)">🚀</div>
 
-      <!-- സ്റ്റാർട്ട് സ്ക്രീൻ -->
+      <!-- സ്റ്റാർട്ട് സ്ക്രീൻ & പ്ലെയർ മാനേജ്മെന്റ് -->
       <div id="startScreen" class="start-screen">
-        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 10px;">ഹൈ-റിസ്ക് അഡ്വഞ്ചർ ഷൂട്ടർ! 🚀</h2>
-        <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px; line-height: 1.5;">
-          • സ്റ്റേജുകൾ കയറുമ്പോൾ ബോക്സുകളുടെ വേഗതയും റിസ്കും കൂടും!<br>
-          • ⚡ (Double Fire) ബോക്സിൽ വെടിവെച്ചാൽ ഒരേസമയം 2 ബുള്ളറ്റുകൾ ലഭിക്കും.<br>
-          • 1000 പോയിന്റ് നേടി ജയിക്കുമ്പോൾ കോയിനുകളും നക്ഷത്രങ്ങളും ദീർഘനേരം ചിതറിത്തെറിക്കുന്ന സമ്മാനപ്പെട്ടി തുറക്കൂ!
-        </p>
-        <button class="action-btn" onclick="startGame()">കളി തുടങ്ങാം 🎮</button>
+        <h2 style="color: #facc15; font-size: 21px; margin-bottom: 8px;">ഗെയിം പ്രൊഫൈൽ 🎮</h2>
+        <p style="color: #94a3b8; font-size: 13px; margin-bottom: 12px;">പുതിയ പേര് നൽകി കളി തുടങ്ങാം അല്ലെങ്കിൽ താഴെ നിന്ന് തിരഞ്ഞെടുക്കാം:</p>
+        
+        <input type="text" id="playerNameInput" class="input-field" placeholder="കളിക്കുന്ന ആളുടെ പേര്..." />
+        <button class="action-btn" onclick="createNewPlayerAndStart()">പുതിയ പേരിൽ കളിക്കാം 🚀</button>
+
+        <div style="width: 100%; max-width: 300px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;">
+          <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 8px; font-weight: bold;">നിലവിലുള്ള കളിക്കാർ:</p>
+          <div id="playerListContainer" style="max-height: 150px; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+        </div>
       </div>
 
-      <!-- ജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് ബോക്സ് മോഡൽ -->
+      <!-- ജയിക്കുമ്പോൾ സ്ക്രീനിന്റെ മുകൾഭാഗത്തായി വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ -->
       <div id="giftModal" class="gift-modal">
-        <h2 style="color: #facc15; font-size: 24px; margin-bottom: 8px;">🎉 അതിഗംഭീരം! താങ്കൾ ജാക്ക്പോട്ട് വിജയിച്ചു! 🏆</h2>
-        <p style="color: #4ade80; font-size: 15px; font-weight: 900; margin-bottom: 25px;">ആകെ സ്കോർ: 1000/1000</p>
+        <h2 style="color: #facc15; font-size: 22px; margin-bottom: 5px;">🎉 അതിഗംഭീരം! ജാക്ക്പോട്ട് വിജയിച്ചു! 🏆</h2>
+        <p style="color: #4ade80; font-size: 14px; font-weight: 900; margin-bottom: 12px;">ആകെ സ്കോർ: 1000/1000</p>
         
         <div id="mysteryBoxEl" class="gift-box-anim" onclick="openMysteryBoxEveryTime(event)">🎁</div>
-        <p id="giftInstruction" style="color: #cbd5e1; font-size: 14.5px; margin-top: 15px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് തുറക്കാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
+        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13.5px; margin-top: 10px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
         
-        <div id="rewardResultArea" style="margin-top: 20px;"></div>
+        <div id="rewardResultArea" style="margin-top: 15px;"></div>
       </div>
     </div>
   </div>
 
   <script>
+    let players = JSON.parse(localStorage.getItem('boxShooterPlayers')) || [];
+    let currentPlayer = null;
+
     let score = 0;
     let lives = 3;
     let stage = 1;
     let gameInterval = null;
     let boxTimer = null;
     let isPlaying = false;
-    let fallSpeed = 1.6; // വേഗത കൂട്ടിയിരിക്കുന്നു
+    let fallSpeed = 1.5;
     let isDoubleFire = false;
     let doubleFireTimer = null;
 
@@ -256,15 +301,66 @@
       { name: "👑 റോയൽ ഗാലക്‌സി (Stage 5)", bg: "radial-gradient(circle at center, #312e81 0%, #0f172a 100%)" }
     ];
 
+    function renderPlayerList() {
+      const container = document.getElementById('playerListContainer');
+      if (players.length === 0) {
+        container.innerHTML = '<p style="color: #64748b; font-size: 12px;">കളിക്കാർ ആരുംമില്ല.</p>';
+        return;
+      }
+      let html = '';
+      players.forEach((p, index) => {
+        html += `<div class="player-pill">
+          <span onclick="selectExistingPlayer(${index})" style="color: #f8fafc; font-weight: bold; font-size: 14px; cursor: pointer;">👤 ${p.name} (സ്കോർ: ${p.score})</span>
+          <button class="del-btn" onclick="deletePlayer(event, ${index})">ഡിലീറ്റ്</button>
+        </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function createNewPlayerAndStart() {
+      const input = document.getElementById('playerNameInput');
+      let name = input.value.trim();
+      if (!name) {
+        alert('ദയവായി കളിക്കുന്ന ആളുടെ പേര് എന്റർ ചെയ്യുക!');
+        return;
+      }
+      let newP = { name: name, score: 0 };
+      players.push(newP);
+      localStorage.setItem('boxShooterPlayers', JSON.stringify(players));
+      currentPlayer = newP;
+      input.value = '';
+      startGame();
+    }
+
+    function selectExistingPlayer(index) {
+      currentPlayer = players[index];
+      startGame();
+    }
+
+    function deletePlayer(e, index) {
+      e.stopPropagation();
+      if (confirm(`തീർച്ചയായും ${players[index].name} എന്ന പ്രൊഫൈൽ ഡിലീറ്റ് ചെയ്യണമെന്നുണ്ടോ?`)) {
+        players.splice(index, 1);
+        localStorage.setItem('boxShooterPlayers', JSON.stringify(players));
+        renderPlayerList();
+      }
+    }
+
+    window.onload = () => {
+      renderPlayerList();
+    };
+
     function startGame() {
-      score = 0;
+      if (!currentPlayer) return;
+      score = currentPlayer.score || 0;
       lives = 3;
       stage = 1;
-      fallSpeed = 1.6;
+      fallSpeed = 1.5;
       isDoubleFire = false;
+      
+      document.getElementById('hudPlayer').innerText = currentPlayer.name;
       document.getElementById('scoreVal').innerText = score;
       document.getElementById('stageVal').innerText = stage + '/5';
-      document.getElementById('powerVal').innerText = 'Normal';
       document.getElementById('lifeVal').innerText = '❤️❤️❤️';
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('giftModal').style.display = 'none';
@@ -314,14 +410,12 @@
       
       let rand = Math.random();
       if (rand < 0.38) {
-        // ബോംബുകളുടെ എണ്ണം കൂട്ടി റിസ്ക് വർദ്ധിപ്പിച്ചിരിക്കുന്നു
         el.classList.add('target-box', 'target-bomb');
         el.innerHTML = '💣';
       } else if (rand < 0.45) {
         el.classList.add('target-box', 'target-heart');
         el.innerHTML = '❤️';
       } else if (rand < 0.52) {
-        // ഡബിൾ ഫയർ പവർ-അപ്പ് ബോക്സ് (⚡)
         el.classList.add('target-box', 'target-power');
         el.innerHTML = '⚡';
       } else {
@@ -410,18 +504,20 @@
 
     function activateDoubleFire() {
       isDoubleFire = true;
-      document.getElementById('powerVal').innerText = 'Double 🔥';
       if (doubleFireTimer) clearTimeout(doubleFireTimer);
       doubleFireTimer = setTimeout(() => {
         isDoubleFire = false;
-        document.getElementById('powerVal').innerText = 'Normal';
-      }, 8000); // 8 സെക്കൻഡ് ഡബിൾ ഫയർ പവർ ലഭിക്കും
+      }, 8000);
     }
 
     function checkScoreAndStage() {
       document.getElementById('scoreVal').innerText = score;
+      if (currentPlayer) {
+        currentPlayer.score = score;
+        localStorage.setItem('boxShooterPlayers', JSON.stringify(players));
+      }
       
-      // സ്റ്റേജുകൾ കയറുമ്പോൾ വേഗത ക്രമാനുഗതമായി കൂടും (റിസ്ക് വർദ്ധിക്കുന്നു)
+      // ഓരോ സ്റ്റേജ് കഴിയുമ്പോഴും സ്പീഡ് ക്രമാനുഗതമായി കൂടും
       if (score >= 800 && stage < 5) {
         stage = 5;
         fallSpeed = 3.2;
@@ -480,14 +576,14 @@
       const originX = rect.left + rect.width / 2;
       const originY = rect.top + rect.height / 2;
 
-      // നക്ഷത്രങ്ങളും കോയിനുകളും ദീർഘനേരം ചിതറിനിൽക്കുന്ന പാർട്ടിക്കിളുകൾ
-      for (let i = 0; i < 28; i++) {
+      // കോയിനുകളും നക്ഷത്രങ്ങളും ദീർഘനേരം (2.5 സെക്കൻഡ്) സ്ക്രീനിൽ ചിതറിനിൽക്കുന്ന ആനിമേഷൻ
+      for (let i = 0; i < 30; i++) {
         let particle = document.createElement('div');
         particle.classList.add('particle');
         particle.innerHTML = ['🪙', '⭐', '💎', '🎉', '💖', '🌟', '🏆'][Math.floor(Math.random() * 7)];
         
         let angle = Math.random() * Math.PI * 2;
-        let distance = 80 + Math.random() * 140;
+        let distance = 90 + Math.random() * 150;
         let dx = Math.cos(angle) * distance;
         let dy = Math.sin(angle) * distance;
         
@@ -497,19 +593,19 @@
         particle.style.top = originY + 'px';
         
         document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 2200); // 2.2 സെക്കൻഡ് വരെ സ്ക്രീനിൽ കാണാം
+        setTimeout(() => particle.remove(), 2500);
       }
 
       setTimeout(() => {
         boxEl.style.display = 'none';
         document.getElementById('rewardResultArea').innerHTML = `
-          <div style="background: rgba(30, 41, 59, 0.95); border: 2.5px solid #facc15; padding: 16px 22px; border-radius: 18px; box-shadow: 0 10px 30px rgba(250,204,21,0.4);">
-            <h3 style="color: #facc15; margin: 0 0 8px 0; font-size: 19px;">🎁 കിടിലൻ സമ്മാനം അൺലോക്ക് ചെയ്തു!</h3>
-            <p style="color: #4ade80; font-size: 15px; font-weight: 900; margin: 0 0 15px 0;">താങ്കൾക്ക് 500 ബോണസ് കോയിനുകളും മെഗാ സ്റ്റാറും ലഭിച്ചു!</p>
-            <button class="action-btn" style="margin-top: 0;" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
+          <div style="background: rgba(30, 41, 59, 0.95); border: 2.5px solid #facc15; padding: 15px 20px; border-radius: 16px; box-shadow: 0 10px 30px rgba(250,204,21,0.4);">
+            <h3 style="color: #facc15; margin: 0 0 6px 0; font-size: 18px;">🎁 കിടിലൻ സമ്മാനം അൺലോക്ക് ചെയ്തു!</h3>
+            <p style="color: #4ade80; font-size: 14.5px; font-weight: 900; margin: 0 0 12px 0;">${currentPlayer ? currentPlayer.name : 'താങ്കൾക്ക്'} 500 കോയിനും മെഗാ സ്റ്റാറും ലഭിച്ചു!</p>
+            <button class="action-btn" style="margin-top: 0;" onclick="location.reload()">പ്രൊഫൈൽ മാറ്റുക / വീണ്ടും 🔄</button>
           </div>
         `;
-      }, 800);
+      }, 900);
     }
 
     function endGame(isWon) {
@@ -523,7 +619,7 @@
       startScreen.innerHTML = `
         <h2 style="color: #ef4444; font-size: 22px; margin-bottom: 5px;">കളി കഴിഞ്ഞു! (Game Over)</h2>
         <p style="color: #facc15; font-size: 15px; font-weight: 900; margin-bottom: 15px;">ലഭിച്ച സ്കോർ: ${score}/1000</p>
-        <button class="action-btn" onclick="startGame()">വീണ്ടും ശ്രമിക്കൂ 🔄</button>
+        <button class="action-btn" onclick="location.reload()">പ്രൊഫൈൽ പേജിലേക്ക് 🔄</button>
       `;
     }
   </script>
