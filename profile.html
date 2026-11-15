@@ -154,13 +154,13 @@
       </div>
 
       <div class="info-group">
-        <div class="info-label">ഫോൺ നമ്പർ 1 (കോൾ ചെയ്യുവാൻ)</div>
-        <input type="tel" class="input-field" id="phoneCall" placeholder="ഫോൺ നമ്പർ...">
+        <div class="info-label">ഫോൺ നമ്പർ 1 (കോൾ / WhatsApp)</div>
+        <input type="tel" class="input-field" id="phoneCall" placeholder="ആദ്യത്തെ നമ്പർ...">
       </div>
 
       <div class="info-group">
-        <div class="info-label">ഫോൺ നമ്പർ 2 (WhatsApp)</div>
-        <input type="tel" class="input-field" id="phoneWhatsapp" placeholder="വാട്സാപ്പ് നമ്പർ...">
+        <div class="info-label">ഫോൺ നമ്പർ 2 (കോൾ / WhatsApp)</div>
+        <input type="tel" class="input-field" id="phoneWhatsapp" placeholder="രണ്ടാമത്തെ നമ്പർ...">
       </div>
 
       <div class="info-group">
@@ -180,31 +180,31 @@
         <input type="text" class="input-field" id="shopAddress" placeholder="സ്ഥലം (ഉദാ: കോളയാട്)...">
       </div>
 
-      <button class="action-btn" onclick="compressAndUploadBusiness()">വിവരങ്ങൾ സേവ് ചെയ്യുക 💾</button>
+      <button class="action-btn" id="saveBtn" type="button">വിവരങ്ങൾ സേവ് ചെയ്യുക 💾</button>
     </div>
   </div>
 
-  <!-- Firebase SDK-കൾ -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  <!-- Firebase Modular SDK Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-  <script>
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
+      authDomain: "kolayad-connect.firebaseapp.com",
+      projectId: "kolayad-connect",
+      storageBucket: "kolayad-connect.firebasestorage.app",
+      messagingSenderId: "400179608074",
+      appId: "1:400179608074:web:b6f5c269d60662efcdfdf3",
+      measurementId: "G-EYK4SLBXBB"
     };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.firestore();
-    const storage = firebase.storage();
 
-    function getCurrentLocation() {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    window.getCurrentLocation = function() {
       if (navigator.geolocation) {
         alert('ലൊക്കേഷൻ എടുക്കുന്നു, ദയവായി അലൗ (Allow) ചെയ്യുക...');
         navigator.geolocation.getCurrentPosition((position) => {
@@ -219,9 +219,8 @@
       } else {
         alert('ബ്രൗസർ ലൊക്കേഷൻ സപ്പോർട്ട് ചെയ്യുന്നില്ല.');
       }
-    }
+    };
 
-    // ഫോട്ടോയുടെ സൈസ് കുറയ്ക്കുന്ന (Compress) ഫംഗ്ഷൻ
     function compressImage(file, maxWidth, maxHeight, quality, callback) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -246,7 +245,7 @@
       };
     }
 
-    function compressAndUploadBusiness() {
+    async function saveBusinessData() {
       const owner = document.getElementById('ownerName').value.trim();
       const shop = document.getElementById('shopName').value.trim();
       const category = document.getElementById('shopCategory').value;
@@ -261,46 +260,47 @@
         return;
       }
 
-      alert('വിവരങ്ങൾ സേവ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കുക...');
+      alert('വിവരങ്ങൾ ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...');
 
-      if (fileInput.files && fileInput.files[0]) {
-        compressImage(fileInput.files[0], 600, 600, 0.7, (compressedBlob) => {
-          const imageName = 'shops/' + Date.now() + '_' + shop + '.jpg';
-          const storageRef = storage.ref().child(imageName);
-          storageRef.put(compressedBlob).then((snapshot) => {
-            snapshot.ref.getDownloadURL().then((downloadURL) => {
-              saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, downloadURL);
+      try {
+        let imageUrl = '';
+        if (fileInput.files && fileInput.files[0]) {
+          await new Promise((resolve) => {
+            compressImage(fileInput.files[0], 600, 600, 0.7, async (compressedBlob) => {
+              try {
+                const imageName = 'shops/' + Date.now() + '_' + shop + '.jpg';
+                const storageRef = ref(storage, imageName);
+                const snapshot = await uploadBytes(storageRef, compressedBlob);
+                imageUrl = await getDownloadURL(snapshot.ref);
+              } catch (err) {
+                console.error("Image upload error:", err);
+              }
+              resolve();
             });
-          }).catch((error) => {
-            console.error(error);
-            saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
           });
+        }
+
+        await addDoc(collection(db, "businesses"), {
+          ownerName: owner,
+          shopName: shop,
+          category: category,
+          phoneCall: phoneCall,
+          phoneWhatsapp: phoneWhatsapp,
+          mapLink: mapLink,
+          address: address,
+          imageUrl: imageUrl,
+          createdAt: serverTimestamp()
         });
-      } else {
-        saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
+
+        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു!');
+        window.location.href = 'index.html';
+
+      } catch (error) {
+        alert('ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിഴവ്: ' + error.message);
       }
     }
 
-    function saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, imageUrl) {
-      db.collection("businesses").add({
-        ownerName: owner,
-        shopName: shop,
-        category: category,
-        phoneCall: phoneCall,
-        phoneWhatsapp: phoneWhatsapp,
-        mapLink: mapLink,
-        address: address,
-        imageUrl: imageUrl,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു!');
-        window.location.href = 'index.html';
-      })
-      .catch((error) => {
-        alert('ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിഴവ്: ' + error.message);
-      });
-    }
+    document.getElementById('saveBtn').addEventListener('click', saveBusinessData);
   </script>
 </body>
 </html>
