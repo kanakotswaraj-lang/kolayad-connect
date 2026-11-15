@@ -142,11 +142,14 @@
       <div class="info-group">
         <div class="info-label">കാറ്റഗറി</div>
         <select class="select-field" id="shopCategory">
-          <option value="supermarket">പച്ചക്കറി / സൂപ്പർമാർക്കറ്റ്</option>
-          <option value="hotel">ഹോട്ടൽ / ബേക്കറി</option>
-          <option value="hardware">ഹാർഡ്വെയർ / ഇലക്ട്രിക്കൽ</option>
-          <option value="textiles">വസ്ത്രവ്യാപാരം / സിൽക്സ്</option>
-          <option value="others">മറ്റു സേവനങ്ങൾ</option>
+          <option value="സൂപ്പർമാർക്കറ്റ് / പലവ്യഞ്ജനം">സൂപ്പർമാർക്കറ്റ് / പലവ്യഞ്ജനം</option>
+          <option value="ഹോട്ടൽ / ബേക്കറി">ഹോട്ടൽ / ബേക്കറി</option>
+          <option value="ഹാർഡ്വെയർ / ഇലക്ട്രിക്കൽ">ഹാർഡ്വെയർ / ഇലക്ട്രിക്കൽ</option>
+          <option value="വസ്ത്രവ്യാപാരം / സിൽക്സ്">വസ്ത്രവ്യാപാരം / സിൽക്സ്</option>
+          <option value="മെഡിക്കൽ ഷോപ്പ് / ഫാർമസി">മെഡിക്കൽ ഷോപ്പ് / ഫാർമസി</option>
+          <option value="വർക്ക്ഷോപ്പ് / ഓട്ടോമൊബൈൽ">വർക്ക്ഷോപ്പ് / ഓട്ടോമൊബൈൽ</option>
+          <option value="സ്റ്റേഷനറി / ബുക്ക്സ്റ്റാൾ">സ്റ്റേഷനറി / ബുക്ക്സ്റ്റാൾ</option>
+          <option value="മറ്റു സേവനങ്ങൾ">മറ്റു സേവനങ്ങൾ</option>
         </select>
       </div>
 
@@ -181,7 +184,6 @@
     </div>
   </div>
 
-  <!-- Firebase SDK-കൾ -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
@@ -201,7 +203,6 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    // ലൊക്കേഷൻ ഓട്ടോമാറ്റിക് ആയി എടുക്കുന്ന ഫംഗ്ഷൻ
     function getCurrentLocation() {
       if (navigator.geolocation) {
         alert('ലൊക്കേഷൻ എടുക്കുന്നു, ദയവായി അലൗ (Allow) ചെയ്യുക...');
@@ -212,14 +213,13 @@
           document.getElementById('mapLink').value = mapUrl;
           alert('ലൊക്കേഷൻ വിജയകരമായി എടുത്തു!');
         }, (error) => {
-          alert('ലൊക്കേഷൻ എടുക്കാൻ കഴിഞ്ഞില്ല. പെർമിഷൻ പരിശോധിക്കുക: ' + error.message);
+          alert('ലൊക്കേഷൻ എടുക്കാൻ കഴിഞ്ഞില്ല: ' + error.message);
         }, { enableHighAccuracy: true });
       } else {
-        alert('താങ്കളുടെ ബ്രൗസർ ജിപിഎസ് ലൊക്കേഷൻ സപ്പോർട്ട് ചെയ്യുന്നില്ല.');
+        alert('ബ്രൗസർ ലൊക്കേഷൻ സപ്പോർട്ട് ചെയ്യുന്നില്ല.');
       }
     }
 
-    // ഫോട്ടോയുടെ സൈസ് കുറയ്ക്കുന്ന (Compress) ഫംഗ്ഷൻ
     function compressImage(file, maxWidth, maxHeight, quality, callback) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -230,27 +230,16 @@
           let canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-
           if (width > height) {
-            if (width > maxWidth) {
-              height *= maxWidth / width;
-              width = maxWidth;
-            }
+            if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
           } else {
-            if (height > maxHeight) {
-              width *= maxHeight / height;
-              height = maxHeight;
-            }
+            if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
           }
-
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-
-          canvas.toBlob((blob) => {
-            callback(blob);
-          }, 'image/jpeg', quality);
+          canvas.toBlob((blob) => { callback(blob); }, 'image/jpeg', quality);
         };
       };
     }
@@ -276,13 +265,12 @@
         compressImage(fileInput.files[0], 600, 600, 0.7, (compressedBlob) => {
           const imageName = 'shops/' + Date.now() + '_' + shop + '.jpg';
           const storageRef = storage.ref().child(imageName);
-
           storageRef.put(compressedBlob).then((snapshot) => {
             snapshot.ref.getDownloadURL().then((downloadURL) => {
               saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, downloadURL);
             });
           }).catch((error) => {
-            alert('ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു: ' + error.message);
+            alert('ഫോട്ടോ അപ്‌ലോഡ് തടസ്സപ്പെട്ടു: ' + error.message);
           });
         });
       } else {
@@ -307,7 +295,7 @@
         window.location.href = 'index.html';
       })
       .catch((error) => {
-        alert('ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിഴവ്: ' + error.message);
+        alert('പിഴവ്: ' + error.message);
       });
     }
   </script>
