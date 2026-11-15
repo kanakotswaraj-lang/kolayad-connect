@@ -25,20 +25,21 @@
     }
     .header {
       background: var(--bg-app);
-      padding: 10px 15px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       border-bottom: 2px solid var(--border-color);
       z-index: 10;
+      flex-shrink: 0;
     }
     .back-btn {
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #38bdf8;
       border: 1.5px solid #38bdf8;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
       text-decoration: none;
       margin-right: 10px;
@@ -52,24 +53,25 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 12px;
+      padding: 8px 10px;
+      box-sizing: border-box;
     }
-    /* സ്കോർബോർഡ് വലുതാക്കി വ്യക്തമാക്കിയിരിക്കുന്നു */
     .hud {
       display: flex;
       justify-content: space-around;
       width: 100%;
       max-width: 410px;
-      padding: 12px 10px;
+      padding: 10px 8px;
       box-sizing: border-box;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 900;
       color: var(--accent-gold);
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.95);
       border: 2px solid rgba(56, 189, 248, 0.4);
       border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      margin-bottom: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      flex-shrink: 0;
     }
     .start-screen {
       position: absolute;
@@ -88,13 +90,13 @@
       background: linear-gradient(135deg, #22c55e, #15803d);
       color: #fff;
       border: none;
-      padding: 12px 26px;
+      padding: 11px 24px;
       border-radius: 14px;
       font-weight: 900;
-      font-size: 14.5px;
+      font-size: 14px;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .action-btn:active { transform: scale(0.95); }
 
@@ -137,10 +139,11 @@
 
     .cards-grid {
       display: grid;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
-      max-width: 380px;
+      max-width: 360px;
       justify-content: center;
+      flex-shrink: 1;
     }
     .cards-grid.stage-1 { grid-template-columns: repeat(4, 1fr); }
     .cards-grid.stage-2 { grid-template-columns: repeat(4, 1fr); }
@@ -154,7 +157,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
+      font-size: 24px;
       user-select: none;
       box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
       transition: transform 0.3s ease, background 0.3s;
@@ -168,27 +171,28 @@
       cursor: default;
     }
 
-    /* ജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ - മുകളിൽ എഴുത്ത്, നടുവിൽ ബോക്സ്, താഴെ ബട്ടൺ */
+    /* പ്രൊഫഷണൽ ഗ്ലാസ് ലുക്കിലുള്ള മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ */
     .gift-modal {
       display: none;
       position: absolute;
       inset: 0;
-      background: rgba(7, 11, 25, 0.97);
+      background: rgba(7, 11, 25, 0.95);
       z-index: 30;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 25px 15px;
+      justify-content: space-evenly;
+      padding: 20px 10px;
       text-align: center;
       overflow-y: auto;
+      box-sizing: border-box;
     }
     .gift-box-anim {
       font-size: 80px;
       cursor: pointer;
       animation: bounce 0.8s infinite alternate;
-      filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8));
+      filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.9));
       user-select: none;
-      margin: 15px 0;
+      margin: 10px 0;
     }
     @keyframes bounce {
       0% { transform: translateY(0) scale(1); }
@@ -207,7 +211,7 @@
       100% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 0; }
     }
     #rewardResultArea {
-      width: 92%;
+      width: 95%;
       max-width: 340px;
       opacity: 0;
       transform: translateY(15px);
@@ -227,17 +231,14 @@
   </div>
 
   <div class="game-container">
-    <!-- വലുതാക്കിയ സ്കോർബോർഡ് (HUD) -->
     <div class="hud">
       <div>👤 <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
       <div>🎯 സ്റ്റേജ്: <span id="stageVal" style="color:#facc15;">1</span>/3</div>
       <div>⭐ സ്കോർ: <span id="scoreVal" style="color:#4ade80;">100</span></div>
     </div>
 
-    <!-- കാർഡുകൾ കളിക്കുന്ന സ്ഥലം -->
     <div class="cards-grid stage-1" id="cardsGrid"></div>
 
-    <!-- പ്രൊഫൈൽ സ്റ്റാർട്ട് സ്ക്രീൻ -->
     <div id="startScreen" class="start-screen">
       <h2 style="color: #facc15; font-size: 21px; margin-bottom: 8px;">മെമ്മറി പസിൽ പ്രൊഫൈൽ 🧠</h2>
       <p style="color: #94a3b8; font-size: 13px; margin-bottom: 12px;">പുതിയ പേര് നൽകി കളി തുടങ്ങാം അല്ലെങ്കിൽ താഴെ നിന്ന് തിരഞ്ഞെടുക്കാം:</p>
@@ -251,21 +252,18 @@
       </div>
     </div>
 
-    <!-- വിജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ (മുകളിൽ എഴുത്ത്, നടുവിൽ ബോക്സ്, താഴെ ബട്ടൺ) -->
+    <!-- പ്രൊഫഷണൽ ലുക്കിലുള്ള വിജയിക്കുമ്പോൾ വരുന്ന മോഡൽ -->
     <div id="giftModal" class="gift-modal">
-      <!-- മുകളിലെ എഴുത്ത് ഭാഗം -->
-      <div style="width: 100%; max-width: 340px;">
-        <h2 style="color: #facc15; font-size: 21px; margin: 0 0 5px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
-        <p style="color: #4ade80; font-size: 14px; font-weight: 900; margin: 0;" id="winStatsText">ആകെ സ്കോർ: 100</p>
+      <div style="width: 100%; max-width: 340px; background: rgba(15, 23, 42, 0.85); padding: 10px; border-radius: 12px; border: 1px solid rgba(250,204,21,0.3);">
+        <h2 style="color: #facc15; font-size: 18px; margin: 0 0 3px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
+        <p style="color: #4ade80; font-size: 13px; font-weight: 900; margin: 0;" id="winStatsText">ആകെ സ്കോർ: 100</p>
       </div>
       
-      <!-- നടുവിലുള്ള സമ്മാനപ്പെട്ടി (ഇവിടെയാണ് നക്ഷത്രങ്ങൾ കൃത്യം സെന്ററിൽ നിന്ന് പൊട്ടിത്തെറിക്കുന്നത്) -->
-      <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 10px 0;">
         <div id="mysteryBoxEl" class="gift-box-anim" onclick="openMysteryBox(event)">🎁</div>
-        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13.5px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
+        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
       </div>
       
-      <!-- താഴത്തെ ബട്ടണുകൾ / സമ്മാന വിവരങ്ങൾ -->
       <div id="rewardResultArea"></div>
     </div>
   </div>
@@ -446,7 +444,6 @@
       boxEl.innerHTML = '💥';
       document.getElementById('giftInstruction').style.display = 'none';
 
-      // സമ്മാനപ്പെട്ടിയുടെ കൃത്യം സെന്റർ പോയിന്റിൽ നിന്ന് നക്ഷത്രങ്ങൾ പൊട്ടിത്തെറിക്കുന്നു
       const rect = boxEl.getBoundingClientRect();
       const originX = rect.left + rect.width / 2;
       const originY = rect.top + rect.height / 2;
@@ -493,9 +490,9 @@
 
         const resArea = document.getElementById('rewardResultArea');
         resArea.innerHTML = `
-          <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #facc15; padding: 14px; border-radius: 14px; box-shadow: 0 10px 25px rgba(250,204,21,0.3);">
-            <h3 style="color: #facc15; margin: 0 0 4px 0; font-size: 16.5px;">🎁 സൂപ്പർ ഓർമ്മശക്തി!</h3>
-            <p style="color: #4ade80; font-size: 13px; font-weight: 900; margin: 0 0 10px 0;">${currentPlayer ? currentPlayer.name : 'കുട്ടിക്ക്'} ലഭിച്ച സ്കോർ: ${score} പോയിന്റ്! ⭐</p>
+          <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #facc15; padding: 12px; border-radius: 14px; box-shadow: 0 10px 25px rgba(250,204,21,0.3);">
+            <h3 style="color: #facc15; margin: 0 0 3px 0; font-size: 16px;">🎁 സൂപ്പർ ഓർമ്മശക്തി!</h3>
+            <p style="color: #4ade80; font-size: 12.5px; font-weight: 900; margin: 0 0 8px 0;">${currentPlayer ? currentPlayer.name : 'കുട്ടിക്ക്'} ലഭിച്ച സ്കോർ: ${score} പോയിന്റ്! ⭐</p>
             <div style="display: flex; gap: 8px; justify-content: center;">
               <button class="action-btn" style="margin-top: 0; padding: 8px 14px; font-size: 13px;" onclick="${nextAction}">${nextBtnText}</button>
               <button class="action-btn" style="margin-top: 0; padding: 8px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
