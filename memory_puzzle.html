@@ -57,7 +57,6 @@
       box-sizing: border-box;
     }
 
-    /* മൂന്ന് സെക്ഷനും മൂന്ന് വേറിട്ട കള്ളികളിലായി വലിയ അക്ഷരത്തിൽ */
     .hud-box {
       width: 100%;
       max-width: 410px;
@@ -264,7 +263,6 @@
   </div>
 
   <div class="game-container">
-    <!-- മൂന്ന് സെക്ഷനും മൂന്ന് വേറിട്ട കള്ളികളിലായുള്ള സ്കോർബോർഡ് -->
     <div class="hud-box">
       <div class="hud-top-row">👤 കളിക്കാരൻ: <span id="hudPlayer" style="color:#facc15;">-</span></div>
       <div class="hud-bottom-row">
@@ -291,10 +289,14 @@
       
       <input type="text" id="playerNameInput" class="input-field" placeholder="കളിക്കുന്ന കുട്ടിയുടെ പേര്..." />
       
+      <!-- പുതിയ കാറ്റഗറികൾ ഉൾപ്പെടുത്തിയിരിക്കുന്നു -->
       <select id="categorySelect" class="select-field">
         <option value="fruits">🍎 പഴങ്ങൾ (Fruits)</option>
         <option value="animals">🐶 മൃഗങ്ങൾ (Animals)</option>
         <option value="numbers">🔢 നമ്പറുകൾ (Numbers)</option>
+        <option value="birds">🦅 പക്ഷികൾ (Birds)</option>
+        <option value="vehicles">🚗 വാഹനങ്ങൾ (Vehicles)</option>
+        <option value="flowers">🌸 പൂക്കൾ (Flowers)</option>
       </select>
 
       <button class="action-btn" onclick="createNewPlayerAndStart()">കളി തുടങ്ങാം 🚀</button>
@@ -328,10 +330,14 @@
     let score = 100;
     let selectedCategory = 'fruits';
     
+    // പുതിയ കാറ്റഗറികൾ (പക്ഷികൾ, വാഹനങ്ങൾ, പൂക്കൾ എന്നിവ ഉൾപ്പെടെ)
     const categories = {
       fruits: ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉', '🍍', '🥝', '🍒', '🍑'],
       animals: ['🐶', '🐱', '🦁', '🐯', '🐼', '🐨', '🦊', '🐰', '🐵', '🦄'],
-      numbers: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
+      numbers: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'],
+      birds: ['🦅', '🦉', '🦆', '🦢', '🦚', '🦜', '🐧', '🕊️', '🐦', '🐤'],
+      vehicles: ['🚗', '🚕', '🚙', '🚌', '🚎', '🏎️', '🚓', '🚑', '🚒', '🚐'],
+      flowers: ['🌹', '🌷', '🌸', '💐', '🌺', '🌻', '🌼', '🪷', '💮', '🌸']
     };
 
     let icons = [];
@@ -394,10 +400,11 @@
       let html = '';
       players.forEach((p, index) => {
         let stageInfo = p.stage || 1;
+        let highSc = p.highScore || 0;
         html += `<div class="player-pill">
           <div onclick="selectExistingPlayer(${index})" style="text-align: left; cursor: pointer; flex: 1;">
             <div style="color: #f8fafc; font-weight: bold; font-size: 14px;">👤 ${p.name}</div>
-            <div style="color: #94a3b8; font-size: 11px;">സ്റ്റേജ്: <b style="color:#38bdf8;">${stageInfo}/3</b> | വിജയങ്ങൾ: <b style="color:#facc15;">${p.wins || 0} 🏆</b></div>
+            <div style="color: #94a3b8; font-size: 11px;">സ്റ്റേജ്: <b style="color:#38bdf8;">${stageInfo}/3</b> | ഹൈസ്കോർ: <b style="color:#facc15;">${highSc} ⭐</b></div>
           </div>
           <button class="del-btn" onclick="deletePlayer(event, ${index})">ഡിലീറ്റ്</button>
         </div>`;
@@ -414,7 +421,7 @@
         return;
       }
       selectedCategory = catSelect.value;
-      let newP = { name: name, wins: 0, stage: 1, category: selectedCategory };
+      let newP = { name: name, wins: 0, stage: 1, category: selectedCategory, highScore: 0 };
       players.push(newP);
       localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
       currentPlayer = newP;
@@ -567,8 +574,23 @@
 
     function triggerWin() {
       playSound('win');
-      document.getElementById('winTitleText').innerText = "🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆";
-      document.getElementById('winStatsText').innerText = `സ്റ്റേജ് ${currentStage} വിജയിച്ചു! (ശേഷിക്കുന്ന സ്കോർ: ${score} പോയിന്റ്)`;
+      
+      // ഹൈസ്കോർ അപ്ഡേറ്റ് ചെയ്യൽ
+      if (currentPlayer) {
+        if (!currentPlayer.highScore || score > currentPlayer.highScore) {
+          currentPlayer.highScore = score;
+        }
+        currentPlayer.wins = (currentPlayer.wins || 0) + 1;
+        localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
+      }
+
+      // സ്റ്റാർ റേറ്റിംഗ് കണക്കാക്കൽ
+      let stars = '⭐';
+      if (score >= 80) stars = '⭐⭐⭐';
+      else if (score >= 50) stars = '⭐⭐';
+
+      document.getElementById('winTitleText').innerText = `🎉 അതിഗംഭീരം! ${stars}`;
+      document.getElementById('winStatsText').innerText = `സ്റ്റേജ് ${currentStage} വിജയിച്ചു! (സ്കോർ: ${score} പോയിന്റ്)`;
       document.getElementById('giftModal').style.display = 'flex';
     }
 
@@ -629,7 +651,6 @@
         
         if (currentStage >= 3) {
           if (currentPlayer) {
-            currentPlayer.wins = (currentPlayer.wins || 0) + 1;
             currentPlayer.stage = 1;
             localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
           }
