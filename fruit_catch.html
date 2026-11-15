@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ഫ്രൂട്ട് ക്യാച്ച് ഗെയിം - കോളയാട് കണക്ട്</title>
+  <style>
+    :root {
+      --bg-body: #070b19;
+      --bg-app: #0b1128;
+      --border-color: rgba(59, 130, 246, 0.4);
+      --accent-gold: #facc15;
+    }
+    body {
+      background-color: var(--bg-body);
+      color: #f8fafc;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      overflow: hidden;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .header {
+      background: var(--bg-app);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #38bdf8;
+      border: 1.5px solid #38bdf8;
+      padding: 5px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+    .game-container {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #070b19 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 10px;
+      box-sizing: border-box;
+    }
+
+    .hud-box {
+      width: 100%;
+      max-width: 410px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid rgba(56, 189, 248, 0.5);
+      border-radius: 14px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 5;
+    }
+    .hud-top-row {
+      text-align: center;
+      font-size: 14.5px;
+      font-weight: 900;
+      color: #38bdf8;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 5px;
+      border-radius: 10px;
+    }
+    .hud-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .hud-pill {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1.5px solid rgba(250, 204, 21, 0.4);
+      border-radius: 10px;
+      padding: 7px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #94a3b8;
+      text-align: center;
+    }
+    .hud-pill b {
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    /* പ്ലേഗ്രൗണ്ട് / ബാസ്കറ്റ് ഏരിയ */
+    .play-area {
+      flex: 1;
+      width: 100%;
+      max-width: 410px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.6) 0%, rgba(30,27,75,0.8) 100%);
+      border: 2px solid rgba(147, 51, 234, 0.4);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .basket {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 75px;
+      height: 45px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: 2px solid #facc15;
+      border-radius: 0 0 25px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5);
+      z-index: 5;
+    }
+
+    .falling-fruit {
+      position: absolute;
+      font-size: 32px;
+      top: -40px;
+      user-select: none;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      z-index: 4;
+    }
+
+    .start-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      text-align: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .action-btn {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #fff;
+      border: none;
+      padding: 11px 24px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+      margin-top: 8px;
+    }
+    .action-btn:active { transform: scale(0.95); }
+
+    .input-field, .select-field {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+      width: 80%;
+      max-width: 280px;
+      text-align: center;
+      margin-bottom: 10px;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      outline: none;
+    }
+    .player-pill {
+      background: #1e293b;
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      padding: 8px 14px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 88%;
+      max-width: 300px;
+      margin-bottom: 8px;
+    }
+    .del-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .gift-modal {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.95);
+      z-index: 30;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 20px 10px;
+      text-align: center;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .gift-box-anim {
+      font-size: 80px;
+      cursor: pointer;
+      animation: bounce 0.8s infinite alternate;
+      filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.9));
+      user-select: none;
+      margin: 10px 0;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-12px) scale(1.06); }
+    }
+    .particle {
+      position: absolute;
+      font-size: 28px;
+      pointer-events: none;
+      animation: explodeAnimCenter 2.2s forwards ease-out;
+      z-index: 35;
+    }
+    @keyframes explodeAnimCenter {
+      0% { transform: translate(0, 0) scale(0.4); opacity: 1; }
+      75% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 0; }
+    }
+    #rewardResultArea {
+      width: 95%;
+      max-width: 340px;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.5s ease;
+    }
+    #rewardResultArea.show-reward {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="games.html" class="back-btn">← തിരികെ</a>
+    <h2 style="margin: 0; font-size: 16px; color: #facc15;">🧺 ഫ്രൂട്ട് ക്യാച്ച് ഗെയിം</h2>
+  </div>
+
+  <div class="game-container">
+    <div class="hud-box">
+      <div class="hud-top-row">👤 കളിക്കാരൻ: <span id="hudPlayer" style="color:#facc15;">-</span></div>
+      <div class="hud-bottom-row">
+        <div class="hud-pill">
+          <span>🎯 സ്റ്റേജ്</span>
+          <b id="stageVal" style="color:#facc15;">1/4</b>
+        </div>
+        <div class="hud-pill">
+          <span>⏳ സമയം</span>
+          <b id="timerVal" style="color:#f87171;">30സെ</b>
+        </div>
+        <div class="hud-pill">
+          <span>🍎 പഴങ്ങൾ</span>
+          <b id="scoreVal" style="color:#4ade80;">0/10</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- ഗെയിം കളിക്കുന്ന സ്ഥലം -->
+    <div class="play-area" id="playArea">
+      <div class="basket" id="basket">🧺</div>
+    </div>
+
+    <!-- പ്രൊഫൈൽ സ്ക്രീൻ -->
+    <div id="startScreen" class="start-screen">
+      <h2 style="color: #facc15; font-size: 21px; margin-bottom: 6px;">ഫ്രൂട്ട് ക്യാച്ച് പ്രൊഫൈൽ 🧺</h2>
+      <p style="color: #94a3b8; font-size: 12.5px; margin-bottom: 10px;">പേര് നൽകി സ്റ്റേജ് തിരഞ്ഞെടുത്ത് കളി തുടങ്ങാം:</p>
+      
+      <input type="text" id="playerNameInput" class="input-field" placeholder="കളിക്കുന്ന കുട്ടിയുടെ പേര്..." />
+      
+      <select id="categorySelect" class="select-field">
+        <option value="1">സ്റ്റേജ് 1 (തുടക്കം - 10 പഴങ്ങൾ)</option>
+        <option value="2">സ്റ്റേജ് 2 (വേഗത കൂടും - 15 പഴങ്ങൾ)</option>
+        <option value="3">സ്റ്റേജ് 3 (ചലഞ്ച് - 20 പഴങ്ങൾ)</option>
+        <option value="4">സ്റ്റേജ് 4 (മാസ്റ്റർ ലെവൽ - 25 പഴങ്ങൾ)</option>
+      </select>
+
+      <button class="action-btn" onclick="createNewPlayerAndStart()">കളി തുടങ്ങാം 🚀</button>
+
+      <div style="width: 100%; max-width: 310px; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 10px;">
+        <p style="color: #cbd5e1; font-size: 12.5px; margin-bottom: 6px; font-weight: bold;">നിലവിലുള്ള കളിക്കാർ:</p>
+        <div id="playerListContainer" style="max-height: 140px; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+      </div>
+    </div>
+
+    <!-- വിജയമോ തോൽവിയോ വരുമ്പോൾ വരുന്ന മോഡൽ -->
+    <div id="giftModal" class="gift-modal">
+      <div style="width: 100%; max-width: 340px; background: rgba(15, 23, 42, 0.85); padding: 10px; border-radius: 12px; border: 1px solid rgba(250,204,21,0.3);">
+        <h2 style="color: #facc15; font-size: 18px; margin: 0 0 3px 0;" id="winTitleText">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
+        <p style="color: #4ade80; font-size: 13px; font-weight: 900; margin: 0;" id="winStatsText">പെറുക്കിയ പഴങ്ങൾ: 10</p>
+      </div>
+      
+      <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 10px 0;">
+        <div id="mysteryBoxEl" class="gift-box-anim" onclick="openMysteryBox(event)">🎁</div>
+        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
+      </div>
+      
+      <div id="rewardResultArea"></div>
+    </div>
+  </div>
+
+  <script>
+    let players = JSON.parse(localStorage.getItem('fruitCatchPlayers')) || [];
+    let currentPlayer = null;
+
+    let currentStage = 1;
+    let score = 0;
+    let targetScore = 10;
+    let timeLeft = 30;
+    let timerInterval = null;
+    let gameInterval = null;
+    let fruitSpawnInterval = null;
+    let fruitsArray = [];
+    let isPlaying = false;
+
+    const fruitList = ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉', '🍍', '🥝'];
+
+    // സൗണ്ട് എഫക്റ്റുകൾക്കായി വെബ് ഓഡിയോ
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      let osc = audioCtx.createOscillator();
+      let gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'catch') {
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } else if (type === 'win') {
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.15);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+      } else if (type === 'gameover') {
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      }
+    }
+
+    function renderPlayerList() {
+      const container = document.getElementById('playerListContainer');
+      if (players.length === 0) {
+        container.innerHTML = '<p style="color: #64748b; font-size: 12px;">കളിക്കാർ ആരുമില്ല.</p>';
+        return;
+      }
+      let html = '';
+      players.forEach((p, index) => {
+        let stageInfo = p.stage || 1;
+        html += `<div class="player-pill">
+          <div onclick="selectExistingPlayer(${index})" style="text-align: left; cursor: pointer; flex: 1;">
+            <div style="color: #f8fafc; font-weight: bold; font-size: 14px;">👤 ${p.name}</div>
+            <div style="color: #94a3b8; font-size: 11px;">സ്റ്റേജ്: <b style="color:#38bdf8;">${stageInfo}/4</b> | വിജയങ്ങൾ: <b style="color:#facc15;">${p.wins || 0} 🏆</b></div>
+          </div>
+          <button class="del-btn" onclick="deletePlayer(event, ${index})">ഡിലീറ്റ്</button>
+        </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function createNewPlayerAndStart() {
+      const input = document.getElementById('playerNameInput');
+      const catSelect = document.getElementById('categorySelect');
+      let name = input.value.trim();
+      if (!name) {
+        alert('ദയവായി കളിക്കുന്ന കുട്ടിയുടെ പേര് എന്റർ ചെയ്യുക!');
+        return;
+      }
+      currentStage = parseInt(catSelect.value);
+      let newP = { name: name, wins: 0, stage: currentStage };
+      players.push(newP);
+      localStorage.setItem('fruitCatchPlayers', JSON.stringify(players));
+      currentPlayer = newP;
+      input.value = '';
+      startGame();
+    }
+
+    function selectExistingPlayer(index) {
+      currentPlayer = players[index];
+      currentStage = currentPlayer.stage || 1;
+      startGame();
+    }
+
+    function deletePlayer(e, index) {
+      e.stopPropagation();
+      if (confirm(`തീർച്ചയായും ${players[index].name} എന്ന പ്രൊഫൈൽ ഡിലീറ്റ് ചെയ്യണമെന്നുണ്ടോ?`)) {
+        players.splice(index, 1);
+        localStorage.setItem('fruitCatchPlayers', JSON.stringify(players));
+        renderPlayerList();
+      }
+    }
+
+    window.onload = () => {
+      renderPlayerList();
+      setupBasketControls();
+    };
+
+    function setupBasketControls() {
+      const playArea = document.getElementById('playArea');
+      const basket = document.getElementById('basket');
+
+      function moveBasket(clientX) {
+        const rect = playArea.getBoundingClientRect();
+        let x = clientX - rect.left;
+        let minX = basket.offsetWidth / 2;
+        let maxX = rect.width - basket.offsetWidth / 2;
+        if (x < minX) x = minX;
+        if (x > maxX) x = maxX;
+        basket.style.left = x + 'px';
+        basket.style.transform = 'translateX(-50%)';
+      }
+
+      playArea.addEventListener('mousemove', (e) => {
+        if (isPlaying) moveBasket(e.clientX);
+      });
+
+      playArea.addEventListener('touchmove', (e) => {
+        if (isPlaying && e.touches.length > 0) {
+          moveBasket(e.touches[0].clientX);
+        }
+      }, { passive: true });
+    }
+
+    function startGame() {
+      if (!currentPlayer) return;
+      document.getElementById('hudPlayer').innerText = currentPlayer.name;
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('giftModal').style.display = 'none';
+      
+      if (timerInterval) clearInterval(timerInterval);
+      if (gameInterval) clearInterval(gameInterval);
+      if (fruitSpawnInterval) clearInterval(fruitSpawnInterval);
+
+      score = 0;
+      isPlaying = true;
+      fruitsArray.forEach(f => f.element.remove());
+      fruitsArray = [];
+
+      // സ്റ്റേജുകൾ അനുസരിച്ച് ടാർഗറ്റും സമയവും
+      if (currentStage === 1) { targetScore = 10; timeLeft = 30; }
+      else if (currentStage === 2) { targetScore = 15; timeLeft = 35; }
+      else if (currentStage === 3) { targetScore = 20; timeLeft = 40; }
+      else { targetScore = 25; timeLeft = 45; }
+
+      document.getElementById('scoreVal').innerText = `${score}/${targetScore}`;
+      document.getElementById('stageVal').innerText = `${currentStage}/4`;
+      document.getElementById('timerVal').innerText = timeLeft + 'സെ';
+
+      const resArea = document.getElementById('rewardResultArea');
+      resArea.innerHTML = '';
+      resArea.classList.remove('show-reward');
+      document.getElementById('mysteryBoxEl').style.display = 'block';
+      document.getElementById('giftInstruction').style.display = 'block';
+
+      startTimer();
+      startFruitSpawner();
+      startGameLoop();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timerVal').innerText = timeLeft + 'സെ';
+        if (timeLeft <= 0) {
+          stopGame();
+          if (score >= targetScore) {
+            triggerWin();
+          } else {
+            playSound('gameover');
+            triggerGameOver();
+          }
+        }
+      }, 1000);
+    }
+
+    function startFruitSpawner() {
+      let spawnRate = 1000 - (currentStage * 150); // ലെവൽ കൂടുമ്പോൾ വേഗത കൂടും
+      fruitSpawnInterval = setInterval(() => {
+        if (!isPlaying) return;
+        createFruit();
+      }, Math.max(400, spawnRate));
+    }
+
+    function createFruit() {
+      const playArea = document.getElementById('playArea');
+      const fruitEl = document.createElement('div');
+      fruitEl.classList.add('falling-fruit');
+      
+      let randomEmoji = fruitList[Math.floor(Math.random() * fruitList.length)];
+      fruitEl.innerHTML = randomEmoji;
+
+      let maxX = playArea.clientWidth - 40;
+      let startX = Math.random() * maxX;
+      fruitEl.style.left = startX + 'px';
+      fruitEl.style.top = '-40px';
+
+      playArea.appendChild(fruitEl);
+
+      let speed = 2 + (currentStage * 0.8) + Math.random();
+      fruitsArray.push({ element: fruitEl, x: startX, y: -40, speed: speed });
+    }
+
+    function startGameLoop() {
+      gameInterval = setInterval(() => {
+        if (!isPlaying) return;
+
+        const basket = document.getElementById('basket');
+        const playArea = document.getElementById('playArea');
+        const basketRect = basket.getBoundingClientRect();
+        const playRect = playArea.getBoundingClientRect();
+
+        for (let i = fruitsArray.length - 1; i >= 0; i--) {
+          let f = fruitsArray[i];
+          f.y += f.speed;
+          f.element.style.top = f.y + 'px';
+
+          // കൊട്ടയുമായി കൊള്ളുന്നുണ്ടോ എന്ന് പരിശോധിക്കൽ
+          let fruitRect = f.element.getBoundingClientRect();
+          
+          if (
+            fruitRect.bottom >= basketRect.top &&
+            fruitRect.top <= basketRect.bottom &&
+            fruitRect.right >= basketRect.left &&
+            fruitRect.left <= basketRect.right
+          ) {
+            playSound('catch');
+            f.element.remove();
+            fruitsArray.splice(i, 1);
+            score++;
+            document.getElementById('scoreVal').innerText = `${score}/${targetScore}`;
+
+            if (score >= targetScore) {
+              stopGame();
+              triggerWin();
+              break;
+            }
+          } 
+          // താഴെ വീണ് നഷ്ടപ്പെട്ടുപോയാൽ
+          else if (f.y > playRect.height) {
+            f.element.remove();
+            fruitsArray.splice(i, 1);
+          }
+        }
+      }, 20);
+    }
+
+    function stopGame() {
+      isPlaying = false;
+      clearInterval(timerInterval);
+      clearInterval(gameInterval);
+      clearInterval(fruitSpawnInterval);
+      fruitsArray.forEach(f => f.element.remove());
+      fruitsArray = [];
+    }
+
+    function triggerWin() {
+      playSound('win');
+      if (currentPlayer) {
+        currentPlayer.wins = (currentPlayer.wins || 0) + 1;
+        localStorage.setItem('fruitCatchPlayers', JSON.stringify(players));
+      }
+      document.getElementById('winTitleText').innerText = "🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆";
+      document.getElementById('winStatsText').innerText = `സ്റ്റേജ് ${currentStage} വിജയിച്ചു! (പെറുക്കിയത്: ${score} പഴങ്ങൾ)`;
+      document.getElementById('giftModal').style.display = 'flex';
+    }
+
+    function triggerGameOver() {
+      document.getElementById('winTitleText').innerText = "⏰ സമയം കഴിഞ്ഞു! (Game Over)";
+      document.getElementById('winStatsText').innerText = `ലക്ഷ്യത്തിലെത്താൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കൂ!`;
+      document.getElementById('mysteryBoxEl').style.display = 'none';
+      document.getElementById('giftInstruction').style.display = 'none';
+      
+      const resArea = document.getElementById('rewardResultArea');
+      resArea.innerHTML = `
+        <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #ef4444; padding: 12px; border-radius: 14px; box-shadow: 0 10px 25px rgba(239,68,68,0.3);">
+          <h3 style="color: #ef4444; margin: 0 0 3px 0; font-size: 16px;">⏱️ കുറച്ചുകൂടി വേണം!</h3>
+          <p style="color: #cbd5e1; font-size: 12.5px; margin: 0 0 8px 0;">വേഗത്തിൽ പഴങ്ങൾ പെറുക്കാൻ വീണ്ടും ശ്രമിക്കൂ!</p>
+          <div style="display: flex; gap: 8px; justify-content: center;">
+            <button class="action-btn" style="margin-top: 0; padding: 8px 14px; font-size: 13px; background: linear-gradient(135deg, #ef4444, #991b1b);" onclick="startGame()">വീണ്ടും ശ്രമിക്കൂ 🔄</button>
+            <button class="action-btn" style="margin-top: 0; padding: 8px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('giftModal').style.display = 'flex';
+      setTimeout(() => resArea.classList.add('show-reward'), 50);
+    }
+
+    function openMysteryBox(e) {
+      const boxEl = document.getElementById('mysteryBoxEl');
+      boxEl.innerHTML = '💥';
+      document.getElementById('giftInstruction').style.display = 'none';
+
+      const rect = boxEl.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 35; i++) {
+        let particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.innerHTML = ['🧺', '⭐', '🍎', '🎉', '🌟', '🏆'][Math.floor(Math.random() * 6)];
+        
+        let angle = Math.random() * Math.PI * 2;
+        let distance = 80 + Math.random() * 140;
+        let dx = Math.cos(angle) * distance;
+        let dy = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--dx', dx + 'px');
+        particle.style.setProperty('--dy', dy + 'px');
+        particle.style.left = originX + 'px';
+        particle.style.top = originY + 'px';
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 2200);
+      }
+
+      setTimeout(() => {
+        boxEl.style.display = 'none';
+        
+        let nextBtnText = "അടുത്ത സ്റ്റേജ് 🚀";
+        let nextAction = "nextStage()";
+        
+        if (currentStage >= 4) {
+          if (currentPlayer) {
+            currentPlayer.stage = 1;
+            localStorage.setItem('fruitCatchPlayers', JSON.stringify(players));
+          }
+          nextBtnText = "ആദ്യം മുതൽ വീണ്ടും 🔄";
+          nextAction = "resetToStage1();";
+        } else {
+          if (currentPlayer) {
+            currentPlayer.stage = currentStage + 1;
+            localStorage.setItem('fruitCatchPlayers', JSON.stringify(players));
+          }
+        }
+
+        const resArea = document.getElementById('rewardResultArea');
+        resArea.innerHTML = `
+          <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #facc15; padding: 12px; border-radius: 14px; box-shadow: 0 10px 25px rgba(250,204,21,0.3);">
+            <h3 style="color: #facc15; margin: 0 0 3px 0; font-size: 16px;">🎁 സൂപ്പർ ഫ്രൂട്ട് ഹണ്ടർ!</h3>
+            <p style="color: #4ade80; font-size: 12.5px; font-weight: 900; margin: 0 0 8px 0;">${currentPlayer ? currentPlayer.name : 'കുട്ടിക്ക്'} വിജയം സമ്മാനമായി ലഭിച്ചു! ⭐</p>
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button class="action-btn" style="margin-top: 0; padding: 8px 14px; font-size: 13px;" onclick="${nextAction}">${nextBtnText}</button>
+              <button class="action-btn" style="margin-top: 0; padding: 8px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
+            </div>
+          </div>
+        `;
+        setTimeout(() => resArea.classList.add('show-reward'), 50);
+      }, 1500);
+    }
+
+    function nextStage() {
+      if (currentStage < 4) currentStage++;
+      startGame();
+    }
+
+    function resetToStage1() {
+      currentStage = 1;
+      startGame();
+    }
+
+    function backToProfiles() {
+      document.getElementById('giftModal').style.display = 'none';
+      document.getElementById('startScreen').style.display = 'flex';
+      renderPlayerList();
+    }
+  </script>
+</body>
+</html>
