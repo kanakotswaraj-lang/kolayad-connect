@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>മെമ്മറി പസിൽ അഡ്വഞ്ചർ - കോളയാട് കണക്ട്</title>
+  <style>
+    :root {
+      --bg-body: #070b19;
+      --bg-app: #0b1128;
+      --border-color: rgba(59, 130, 246, 0.4);
+      --accent-gold: #facc15;
+    }
+    body {
+      background-color: var(--bg-body);
+      color: #f8fafc;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .header {
+      background: var(--bg-app);
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      z-index: 10;
+    }
+    .back-btn {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #38bdf8;
+      border: 1.5px solid #38bdf8;
+      padding: 5px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+    .game-container {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #070b19 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px;
+    }
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 400px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+      font-size: 12.5px;
+      font-weight: 900;
+      color: var(--accent-gold);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    /* പ്രൊഫൈൽ സ്ക്രീൻ */
+    .start-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      text-align: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .action-btn {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #fff;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 14.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+      margin-top: 10px;
+    }
+    .action-btn:active { transform: scale(0.95); }
+
+    .input-field {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      width: 80%;
+      max-width: 280px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      outline: none;
+    }
+    .player-pill {
+      background: #1e293b;
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      padding: 8px 14px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 88%;
+      max-width: 300px;
+      margin-bottom: 8px;
+    }
+    .del-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* കാർഡ് ഗ്രിഡ് ലേഔട്ട് */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+      perspective: 1000px;
+    }
+    .memory-card {
+      aspect-ratio: 1;
+      background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      user-select: none;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease, background 0.3s;
+    }
+    .memory-card.flipped {
+      background: linear-gradient(145deg, #f59e0b, #d97706);
+      transform: rotateY(180deg);
+    }
+    .memory-card.matched {
+      background: linear-gradient(145deg, #22c55e, #15803d);
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.7);
+      cursor: default;
+      transform: scale(0.95);
+    }
+
+    /* ജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ */
+    .gift-modal {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.96);
+      z-index: 30;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .gift-box-anim {
+      font-size: 75px;
+      cursor: pointer;
+      animation: bounce 0.8s infinite alternate;
+      filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8));
+      user-select: none;
+      margin: 15px 0;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-12px) scale(1.06); }
+    }
+    .particle {
+      position: absolute;
+      font-size: 28px;
+      pointer-events: none;
+      animation: explodeAnimLong 2.5s forwards ease-out;
+      z-index: 35;
+    }
+    @keyframes explodeAnimLong {
+      0% { transform: translate(0, 0) scale(0.4); opacity: 1; }
+      75% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="games.html" class="back-btn">← തിരികെ</a>
+    <h2 style="margin: 0; font-size: 16px; color: #facc15;" id="themeTitle">🧠 മെമ്മറി മാച്ച് പസിൽ</h2>
+  </div>
+
+  <div class="game-container">
+    <div class="hud">
+      <div>കളിക്കാരൻ: <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
+      <div>നീക്കങ്ങൾ: <span id="movesVal">0</span></div>
+      <div>ജോടികൾ: <span id="matchesVal">0</span>/6</div>
+    </div>
+
+    <!-- കാർഡുകൾ കളിക്കുന്ന സ്ഥലം -->
+    <div class="cards-grid" id="cardsGrid"></div>
+
+    <!-- പ്രൊഫൈൽ സ്റ്റാർട്ട് സ്ക്രീൻ -->
+    <div id="startScreen" class="start-screen">
+      <h2 style="color: #facc15; font-size: 21px; margin-bottom: 8px;">മെമ്മറി പസിൽ പ്രൊഫൈൽ 🧠</h2>
+      <p style="color: #94a3b8; font-size: 13px; margin-bottom: 12px;">പുതിയ പേര് നൽകി കളി തുടങ്ങാം അല്ലെങ്കിൽ താഴെ നിന്ന് തിരഞ്ഞെടുക്കാം:</p>
+      
+      <input type="text" id="playerNameInput" class="input-field" placeholder="കളിക്കുന്ന കുട്ടിയുടെ പേര്..." />
+      <button class="action-btn" onclick="createNewPlayerAndStart()">പുതിയ പേരിൽ കളിക്കാം 🚀</button>
+
+      <div style="width: 100%; max-width: 310px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;">
+        <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 8px; font-weight: bold;">നിലവിലുള്ള കളിക്കാർ:</p>
+        <div id="playerListContainer" style="max-height: 160px; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+      </div>
+    </div>
+
+    <!-- വിജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ -->
+    <div id="giftModal" class="gift-modal">
+      <h2 style="color: #facc15; font-size: 21px; margin: 0 0 5px 0;">🎉 അതിഗംഭീരം! ഓർമ്മശക്തി വിജയിച്ചു! 🏆</h2>
+      <p style="color: #4ade80; font-size: 14px; font-weight: 900; margin: 0 0 10px 0;" id="winStatsText">എടുത്ത നീക്കങ്ങൾ: 0</p>
+      
+      <div id="mysteryBoxEl" class="gift-box-anim" onclick="openMysteryBox(event)">🎁</div>
+      <p id="giftInstruction" style="color: #cbd5e1; font-size: 13.5px; margin-top: 8px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
+      
+      <div id="rewardResultArea" style="margin-top: 15px; width: 100%; max-width: 320px;"></div>
+    </div>
+  </div>
+
+  <script>
+    let players = JSON.parse(localStorage.getItem('memoryPuzzlePlayers')) || [];
+    let currentPlayer = null;
+
+    const icons = ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉'];
+    let cardList = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let moves = 0;
+    let isLocked = false;
+
+    function renderPlayerList() {
+      const container = document.getElementById('playerListContainer');
+      if (players.length === 0) {
+        container.innerHTML = '<p style="color: #64748b; font-size: 12px;">കളിക്കാർ ആരുമില്ല.</p>';
+        return;
+      }
+      let html = '';
+      players.forEach((p, index) => {
+        html += `<div class="player-pill">
+          <div onclick="selectExistingPlayer(${index})" style="text-align: left; cursor: pointer; flex: 1;">
+            <div style="color: #f8fafc; font-weight: bold; font-size: 14px;">👤 ${p.name}</div>
+            <div style="color: #94a3b8; font-size: 11.5px;">വിജയങ്ങൾ: <b style="color:#facc15;">${p.wins || 0} 🏆</b></div>
+          </div>
+          <button class="del-btn" onclick="deletePlayer(event, ${index})">ഡിലീറ്റ്</button>
+        </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function createNewPlayerAndStart() {
+      const input = document.getElementById('playerNameInput');
+      let name = input.value.trim();
+      if (!name) {
+        alert('ദയവായി കളിക്കുന്ന കുട്ടിയുടെ പേര് എന്റർ ചെയ്യുക!');
+        return;
+      }
+      let newP = { name: name, wins: 0 };
+      players.push(newP);
+      localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
+      currentPlayer = newP;
+      input.value = '';
+      startGame();
+    }
+
+    function selectExistingPlayer(index) {
+      currentPlayer = players[index];
+      startGame();
+    }
+
+    function deletePlayer(e, index) {
+      e.stopPropagation();
+      if (confirm(`തീർച്ചയായും ${players[index].name} എന്ന പ്രൊഫൈൽ ഡിലീറ്റ് ചെയ്യണമെന്നുണ്ടോ?`)) {
+        players.splice(index, 1);
+        localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
+        renderPlayerList();
+      }
+    }
+
+    window.onload = () => {
+      renderPlayerList();
+    };
+
+    function startGame() {
+      if (!currentPlayer) return;
+      document.getElementById('hudPlayer').innerText = currentPlayer.name;
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('giftModal').style.display = 'none';
+      
+      moves = 0;
+      matchedPairs = 0;
+      document.getElementById('movesVal').innerText = moves;
+      document.getElementById('matchesVal').innerText = matchedPairs + '/6';
+      
+      const resArea = document.getElementById('rewardResultArea');
+      resArea.innerHTML = '';
+      document.getElementById('mysteryBoxEl').style.display = 'block';
+      document.getElementById('giftInstruction').style.display = 'block';
+
+      generateCards();
+    }
+
+    function generateCards() {
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = '';
+      
+      // ഐക്കണുകൾ ഡബിൾ ചെയ്ത് മിക്സ് ചെയ്യുക (Shuffle)
+      cardList = [...icons, ...icons]
+        .sort(() => Math.random() - 0.5)
+        .map((icon, idx) => ({ id: idx, icon: icon, isFlipped: false, isMatched: false }));
+
+      cardList.forEach((card, index) => {
+        const cardEl = document.createElement('div');
+        cardEl.classList.add('memory-card');
+        cardEl.dataset.index = index;
+        cardEl.innerHTML = '❓';
+        cardEl.addEventListener('click', () => flipCard(index, cardEl));
+        grid.appendChild(cardEl);
+      });
+    }
+
+    function flipCard(index, cardEl) {
+      if (isLocked) return;
+      let clickedCard = cardList[index];
+      
+      if (clickedCard.isFlipped || clickedCard.isMatched) return;
+
+      clickedCard.isFlipped = true;
+      cardEl.classList.add('flipped');
+      cardEl.innerHTML = clickedCard.icon;
+      flippedCards.push({ index, icon: clickedCard.icon, element: cardEl });
+
+      if (flippedCards.length === 2) {
+        moves++;
+        document.getElementById('movesVal').innerText = moves;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      
+      if (card1.icon === card2.icon) {
+        cardList[card1.index].isMatched = true;
+        cardList[card2.index].isMatched = true;
+        card1.element.classList.add('matched');
+        card2.element.classList.add('matched');
+        
+        matchedPairs++;
+        document.getElementById('matchesVal').innerText = matchedPairs + '/6';
+        flippedCards = [];
+
+        if (matchedPairs === icons.length) {
+          setTimeout(triggerWin, 500);
+        }
+      } else {
+        isLocked = true;
+        setTimeout(() => {
+          cardList[card1.index].isFlipped = false;
+          cardList[card2.index].isFlipped = false;
+          card1.element.classList.remove('flipped');
+          card2.element.classList.remove('flipped');
+          card1.element.innerHTML = '❓';
+          card2.element.innerHTML = '❓';
+          flippedCards = [];
+          isLocked = false;
+        }, 800);
+      }
+    }
+
+    function triggerWin() {
+      if (currentPlayer) {
+        currentPlayer.wins = (currentPlayer.wins || 0) + 1;
+        localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
+      }
+      document.getElementById('winStatsText').innerText = `ആകെ എടുത്ത നീക്കങ്ങൾ: ${moves}`;
+      document.getElementById('giftModal').style.display = 'flex';
+    }
+
+    function openMysteryBox(e) {
+      const boxEl = document.getElementById('mysteryBoxEl');
+      boxEl.innerHTML = '💥';
+      document.getElementById('giftInstruction').style.display = 'none';
+
+      const rect = boxEl.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 30; i++) {
+        let particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.innerHTML = ['🧠', '⭐', '💎', '🎉', '🌟', '🏆'][Math.floor(Math.random() * 6)];
+        
+        let angle = Math.random() * Math.PI * 2;
+        let distance = 70 + Math.random() * 120;
+        let dx = Math.cos(angle) * distance;
+        let dy = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--dx', dx + 'px');
+        particle.style.setProperty('--dy', dy + 'px');
+        particle.style.left = originX + 'px';
+        particle.style.top = originY + 'px';
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 2500);
+      }
+
+      setTimeout(() => {
+        boxEl.style.display = 'none';
+        document.getElementById('rewardResultArea').innerHTML = `
+          <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #facc15; padding: 15px; border-radius: 14px; box-shadow: 0 10px 25px rgba(250,204,21,0.3);">
+            <h3 style="color: #facc15; margin: 0 0 5px 0; font-size: 17px;">🎁 സൂപ്പർ ഓർമ്മശക്തി!</h3>
+            <p style="color: #4ade80; font-size: 13.5px; font-weight: 900; margin: 0 0 12px 0;">${currentPlayer ? currentPlayer.name : 'കുട്ടിക്ക്'} പ്രത്യേക മെമ്മറി സ്റ്റാർ സമ്മാനമായി ലഭിച്ചു! (വിജയങ്ങൾ: ${currentPlayer ? currentPlayer.wins : 1} 🏆)</p>
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button class="action-btn" style="margin-top: 0; padding: 9px 14px; font-size: 13px;" onclick="startGame()">വീണ്ടും കളിക്കുക 🔄</button>
+              <button class="action-btn" style="margin-top: 0; padding: 9px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
+            </div>
+          </div>
+        `;
+      }, 1500);
+    }
+
+    function backToProfiles() {
+      document.getElementById('giftModal').style.display = 'none';
+      document.getElementById('startScreen').style.display = 'flex';
+      renderPlayerList();
+    }
+  </script>
+</body>
+</html>
