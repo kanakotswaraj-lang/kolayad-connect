@@ -170,12 +170,6 @@
       </div>
 
       <div class="info-group">
-        <div class="info-label">കടയുടെ ഫോട്ടോ (ഓപ്ഷണൽ)</div>
-        <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;">
-        <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ ഇല്ലെങ്കിലും സേവ് ചെയ്യാവുന്നതാണ്.</small>
-      </div>
-
-      <div class="info-group">
         <div class="info-label">സ്ഥലം / വിലാസം</div>
         <input type="text" class="input-field" id="shopAddress" placeholder="സ്ഥലം (ഉദാ: കോളയാട്)...">
       </div>
@@ -184,10 +178,9 @@
     </div>
   </div>
 
-  <!-- Firebase SDK-കൾ -->
+  <!-- Firebase SDK (Firestore) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -202,7 +195,6 @@
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
     function getCurrentLocation() {
       if (navigator.geolocation) {
@@ -229,7 +221,6 @@
       const phoneWhatsapp = document.getElementById('phoneWhatsapp').value.trim();
       const mapLink = document.getElementById('mapLink').value.trim();
       const address = document.getElementById('shopAddress').value.trim();
-      const fileInput = document.getElementById('shopImageFile');
 
       if (!owner || !shop) {
         alert('ദയവായി ഉടമയുടെ പേരും സ്ഥാപനത്തിന്റെ പേരും നൽകുക!');
@@ -238,25 +229,6 @@
 
       alert('വിവരങ്ങൾ ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...');
 
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const imageName = 'shops/' + Date.now() + '_' + file.name;
-        const storageRef = storage.ref().child(imageName);
-
-        storageRef.put(file).then((snapshot) => {
-          snapshot.ref.getDownloadURL().then((downloadURL) => {
-            saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, downloadURL);
-          });
-        }).catch((error) => {
-          console.error(error);
-          saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
-        });
-      } else {
-        saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
-      }
-    }
-
-    function saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, imageUrl) {
       db.collection("businesses").add({
         ownerName: owner,
         shopName: shop,
@@ -265,7 +237,7 @@
         phoneWhatsapp: phoneWhatsapp,
         mapLink: mapLink,
         address: address,
-        imageUrl: imageUrl,
+        imageUrl: '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
