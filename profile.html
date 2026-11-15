@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>പ്രൊഫൈൽ - കോളയാട് കണക്ട്</title>
+  <title>സ്ഥാപനം ചേർക്കുക - കോളയാട് കണക്ട്</title>
   <style>
     :root {
       --bg-body: #070b19;
@@ -45,50 +45,62 @@
     }
     .content-container {
       flex: 1;
-      padding: 20px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
       overflow-y: auto;
       background: radial-gradient(circle at center, #1e1b4b 0%, #070b19 100%);
     }
-    .profile-card {
+    .form-card {
       background: rgba(15, 23, 42, 0.9);
       border: 2px solid rgba(56, 189, 248, 0.4);
       border-radius: 16px;
       padding: 20px;
       width: 100%;
       max-width: 400px;
-      text-align: center;
       box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
     }
-    .profile-avatar {
-      font-size: 60px;
-      margin-bottom: 10px;
-    }
-    .profile-title {
+    .form-title {
       color: var(--accent-gold);
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 900;
       margin-bottom: 15px;
+      text-align: center;
     }
     .info-group {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       text-align: left;
     }
     .info-label {
       color: #94a3b8;
-      font-size: 12.5px;
-      margin-bottom: 5px;
+      font-size: 12px;
+      margin-bottom: 4px;
       font-weight: bold;
     }
-    .info-value {
+    .input-field, .select-field {
+      width: 100%;
       background: #1e293b;
       border: 1px solid #38bdf8;
       color: #fff;
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 10px;
       font-size: 14px;
+      box-sizing: border-box;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      outline: none;
+    }
+    .loc-btn {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
     }
     .action-btn {
       background: linear-gradient(135deg, #22c55e, #15803d);
@@ -100,7 +112,7 @@
       font-size: 14px;
       cursor: pointer;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 15px;
       box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
     }
     .action-btn:active { transform: scale(0.98); }
@@ -110,32 +122,194 @@
 
   <div class="header">
     <a href="index.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 16px; color: #facc15;">👤 ഉപയോക്തൃ പ്രൊഫൈൽ</h2>
+    <h2 style="margin: 0; font-size: 16px; color: #facc15;">🛒 സ്ഥാപനം ചേർക്കുക</h2>
   </div>
 
   <div class="content-container">
-    <div class="profile-card">
-      <div class="profile-avatar">👨‍💻</div>
-      <div class="profile-title">കോളയാട് കണക്ട് പ്രൊഫൈൽ</div>
+    <div class="form-card">
+      <div class="form-title">കച്ചവട സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ</div>
       
       <div class="info-group">
-        <div class="info-label">പേര് / യൂസർ ഐഡി</div>
-        <div class="info-value" id="profileNameDisplay">കോളയാട് റെസിഡന്റ്</div>
+        <div class="info-label">ഉടമയുടെ പേര്</div>
+        <input type="text" class="input-field" id="ownerName" placeholder="പേര് നൽകുക...">
       </div>
 
       <div class="info-group">
-        <div class="info-label">സ്ഥലം</div>
-        <div class="info-value">കോളയാട്, കണ്ണൂർ</div>
+        <div class="info-label">സ്ഥാപനത്തിന്റെ പേര്</div>
+        <input type="text" class="input-field" id="shopName" placeholder="കടയുടെ പേര് നൽകുക...">
       </div>
 
       <div class="info-group">
-        <div class="info-label">ആപ്പ് പതിപ്പ്</div>
-        <div class="info-value">v1.0.0 (ഓഫ്‌ലൈൻ സപ്പോർട്ട്)</div>
+        <div class="info-label">കാറ്റഗറി</div>
+        <select class="select-field" id="shopCategory">
+          <option value="supermarket">പച്ചക്കറി / സൂപ്പർമാർക്കറ്റ്</option>
+          <option value="hotel">ഹോട്ടൽ / ബേക്കറി</option>
+          <option value="hardware">ഹാർഡ്വെയർ / ഇലക്ട്രിക്കൽ</option>
+          <option value="textiles">വസ്ത്രവ്യാപാരം / സിൽക്സ്</option>
+          <option value="others">മറ്റു സേവനങ്ങൾ</option>
+        </select>
       </div>
 
-      <button class="action-btn" onclick="alert('പ്രൊഫൈൽ വിവരങ്ങൾ അപ്ഡേറ്റ് ചെയ്തു!')">വിവരങ്ങൾ മാറ്റുക ✏️</button>
+      <div class="info-group">
+        <div class="info-label">ഫോൺ നമ്പർ 1 (കോൾ ചെയ്യുവാൻ)</div>
+        <input type="tel" class="input-field" id="phoneCall" placeholder="ഫോൺ നമ്പർ...">
+      </div>
+
+      <div class="info-group">
+        <div class="info-label">ഫോൺ നമ്പർ 2 (WhatsApp)</div>
+        <input type="tel" class="input-field" id="phoneWhatsapp" placeholder="വാട്സാപ്പ് നമ്പർ...">
+      </div>
+
+      <div class="info-group">
+        <div class="info-label">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ</div>
+        <input type="url" class="input-field" id="mapLink" placeholder="മാപ്പ് ലിങ്ക് ഇവിടെ വരും അല്ലെങ്കിൽ ഒട്ടിക്കാം...">
+        <button type="button" class="loc-btn" onclick="getCurrentLocation()">📍 എന്റെ നിലവിലെ ലൊക്കേഷൻ എടുക്കുക</button>
+      </div>
+
+      <div class="info-group">
+        <div class="info-label">കടയുടെ ഫോട്ടോ (ചെറിയ സൈസിൽ)</div>
+        <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;">
+        <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ ഓട്ടോമാറ്റിക്കായി കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യപ്പെടും.</small>
+      </div>
+
+      <div class="info-group">
+        <div class="info-label">സ്ഥലം / വിലാസം</div>
+        <input type="text" class="input-field" id="shopAddress" placeholder="സ്ഥലം (ഉദാ: കോളയാട്)...">
+      </div>
+
+      <button class="action-btn" onclick="compressAndUploadBusiness()">വിവരങ്ങൾ സേവ് ചെയ്യുക 💾</button>
     </div>
   </div>
 
+  <!-- Firebase SDK-കൾ -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // ലൊക്കേഷൻ ഓട്ടോമാറ്റിക് ആയി എടുക്കുന്ന ഫംഗ്ഷൻ
+    function getCurrentLocation() {
+      if (navigator.geolocation) {
+        alert('ലൊക്കേഷൻ എടുക്കുന്നു, ദയവായി അലൗ (Allow) ചെയ്യുക...');
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const mapUrl = `https://maps.google.com/?q=${lat},${lon}`;
+          document.getElementById('mapLink').value = mapUrl;
+          alert('ലൊക്കേഷൻ വിജയകരമായി എടുത്തു!');
+        }, (error) => {
+          alert('ലൊക്കേഷൻ എടുക്കാൻ കഴിഞ്ഞില്ല. പെർമിഷൻ പരിശോധിക്കുക: ' + error.message);
+        }, { enableHighAccuracy: true });
+      } else {
+        alert('താങ്കളുടെ ബ്രൗസർ ജിപിഎസ് ലൊക്കേഷൻ സപ്പോർട്ട് ചെയ്യുന്നില്ല.');
+      }
+    }
+
+    // ഫോട്ടോയുടെ സൈസ് കുറയ്ക്കുന്ന (Compress) ഫംഗ്ഷൻ
+    function compressImage(file, maxWidth, maxHeight, quality, callback) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = function () {
+          let canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            callback(blob);
+          }, 'image/jpeg', quality);
+        };
+      };
+    }
+
+    function compressAndUploadBusiness() {
+      const owner = document.getElementById('ownerName').value.trim();
+      const shop = document.getElementById('shopName').value.trim();
+      const category = document.getElementById('shopCategory').value;
+      const phoneCall = document.getElementById('phoneCall').value.trim();
+      const phoneWhatsapp = document.getElementById('phoneWhatsapp').value.trim();
+      const mapLink = document.getElementById('mapLink').value.trim();
+      const address = document.getElementById('shopAddress').value.trim();
+      const fileInput = document.getElementById('shopImageFile');
+
+      if (!owner || !shop) {
+        alert('ദയവായി ഉടമയുടെ പേരും സ്ഥാപനത്തിന്റെ പേരും നൽകുക!');
+        return;
+      }
+
+      alert('വിവരങ്ങൾ സേവ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കുക...');
+
+      if (fileInput.files && fileInput.files[0]) {
+        compressImage(fileInput.files[0], 600, 600, 0.7, (compressedBlob) => {
+          const imageName = 'shops/' + Date.now() + '_' + shop + '.jpg';
+          const storageRef = storage.ref().child(imageName);
+
+          storageRef.put(compressedBlob).then((snapshot) => {
+            snapshot.ref.getDownloadURL().then((downloadURL) => {
+              saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, downloadURL);
+            });
+          }).catch((error) => {
+            alert('ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു: ' + error.message);
+          });
+        });
+      } else {
+        saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
+      }
+    }
+
+    function saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, imageUrl) {
+      db.collection("businesses").add({
+        ownerName: owner,
+        shopName: shop,
+        category: category,
+        phoneCall: phoneCall,
+        phoneWhatsapp: phoneWhatsapp,
+        mapLink: mapLink,
+        address: address,
+        imageUrl: imageUrl,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു!');
+        window.location.href = 'index.html';
+      })
+      .catch((error) => {
+        alert('ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിഴവ്: ' + error.message);
+      });
+    }
+  </script>
 </body>
 </html>
