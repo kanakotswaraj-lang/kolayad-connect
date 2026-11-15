@@ -35,10 +35,10 @@
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #38bdf8;
       border: 1.5px solid #38bdf8;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
       text-decoration: none;
       margin-right: 10px;
@@ -52,22 +52,24 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 10px;
+      padding: 12px;
     }
+    /* സ്കോർബോർഡ് വലുതാക്കി വ്യക്തമാക്കിയിരിക്കുന്നു */
     .hud {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       width: 100%;
-      max-width: 400px;
-      padding: 8px 12px;
+      max-width: 410px;
+      padding: 12px 10px;
       box-sizing: border-box;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 900;
       color: var(--accent-gold);
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
-      margin-bottom: 12px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
     .start-screen {
       position: absolute;
@@ -166,7 +168,7 @@
       cursor: default;
     }
 
-    /* മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ */
+    /* ജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ - മുകളിൽ എഴുത്ത്, നടുവിൽ ബോക്സ്, താഴെ ബട്ടൺ */
     .gift-modal {
       display: none;
       position: absolute;
@@ -175,18 +177,18 @@
       z-index: 30;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 15px;
+      justify-content: space-between;
+      padding: 25px 15px;
       text-align: center;
       overflow-y: auto;
     }
     .gift-box-anim {
-      font-size: 75px;
+      font-size: 80px;
       cursor: pointer;
       animation: bounce 0.8s infinite alternate;
       filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8));
       user-select: none;
-      margin: 10px 0;
+      margin: 15px 0;
     }
     @keyframes bounce {
       0% { transform: translateY(0) scale(1); }
@@ -207,7 +209,6 @@
     #rewardResultArea {
       width: 92%;
       max-width: 340px;
-      margin-top: 10px;
       opacity: 0;
       transform: translateY(15px);
       transition: all 0.5s ease;
@@ -226,11 +227,11 @@
   </div>
 
   <div class="game-container">
+    <!-- വലുതാക്കിയ സ്കോർബോർഡ് (HUD) -->
     <div class="hud">
-      <div>കളിക്കാരൻ: <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
-      <div>സ്റ്റേജ്: <span id="stageVal">1</span>/3</div>
-      <div>സ്കോർ: <span id="scoreVal" style="color:#4ade80;">100</span></div>
-      <div>നീക്കങ്ങൾ: <span id="movesVal">0</span></div>
+      <div>👤 <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
+      <div>🎯 സ്റ്റേജ്: <span id="stageVal" style="color:#facc15;">1</span>/3</div>
+      <div>⭐ സ്കോർ: <span id="scoreVal" style="color:#4ade80;">100</span></div>
     </div>
 
     <!-- കാർഡുകൾ കളിക്കുന്ന സ്ഥലം -->
@@ -250,18 +251,21 @@
       </div>
     </div>
 
-    <!-- വിജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ -->
+    <!-- വിജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ (മുകളിൽ എഴുത്ത്, നടുവിൽ ബോക്സ്, താഴെ ബട്ടൺ) -->
     <div id="giftModal" class="gift-modal">
+      <!-- മുകളിലെ എഴുത്ത് ഭാഗം -->
       <div style="width: 100%; max-width: 340px;">
-        <h2 style="color: #facc15; font-size: 20px; margin: 0 0 4px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
-        <p style="color: #4ade80; font-size: 13.5px; font-weight: 900; margin: 0;" id="winStatsText">ബാക്കി സ്കോർ: 100</p>
+        <h2 style="color: #facc15; font-size: 21px; margin: 0 0 5px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
+        <p style="color: #4ade80; font-size: 14px; font-weight: 900; margin: 0;" id="winStatsText">ആകെ സ്കോർ: 100</p>
       </div>
       
-      <div style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 10px 0;">
+      <!-- നടുവിലുള്ള സമ്മാനപ്പെട്ടി (ഇവിടെയാണ് നക്ഷത്രങ്ങൾ കൃത്യം സെന്ററിൽ നിന്ന് പൊട്ടിത്തെറിക്കുന്നത്) -->
+      <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <div id="mysteryBoxEl" class="gift-box-anim" onclick="openMysteryBox(event)">🎁</div>
-        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
+        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13.5px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
       </div>
       
+      <!-- താഴത്തെ ബട്ടണുകൾ / സമ്മാന വിവരങ്ങൾ -->
       <div id="rewardResultArea"></div>
     </div>
   </div>
@@ -271,7 +275,7 @@
     let currentPlayer = null;
 
     let currentStage = 1;
-    let score = 100; // ഓരോ സ്റ്റാർട്ടിലും 100 പോയിന്റ് ഉണ്ടാകും
+    let score = 100;
     const allIcons = ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉', '🍍', '🥝', '🍒', '🍑'];
     let icons = [];
     let cardList = [];
@@ -342,10 +346,9 @@
       
       moves = 0;
       matchedPairs = 0;
-      score = 100; // കളി തുടങ്ങുമ്പോൾ 100 പോയിന്റ്
+      score = 100;
       document.getElementById('scoreVal').innerText = score;
-      document.getElementById('movesVal').innerText = moves;
-      document.getElementById('stageVal').innerText = currentStage + '/3';
+      document.getElementById('stageVal').innerText = currentStage;
 
       if (currentStage === 1) {
         icons = allIcons.slice(0, 6);
@@ -396,7 +399,6 @@
 
       if (flippedCards.length === 2) {
         moves++;
-        document.getElementById('movesVal').innerText = moves;
         checkMatch();
       }
     }
@@ -417,7 +419,6 @@
           setTimeout(triggerWin, 500);
         }
       } else {
-        // തെറ്റായ ജോടി തുറക്കുമ്പോൾ അനാവശ്യ നീക്കത്തിന് 3 പോയിന്റ് പെനാൽറ്റി കുറയ്ക്കുന്നു!
         score = Math.max(0, score - 3);
         document.getElementById('scoreVal').innerText = score;
 
@@ -445,6 +446,7 @@
       boxEl.innerHTML = '💥';
       document.getElementById('giftInstruction').style.display = 'none';
 
+      // സമ്മാനപ്പെട്ടിയുടെ കൃത്യം സെന്റർ പോയിന്റിൽ നിന്ന് നക്ഷത്രങ്ങൾ പൊട്ടിത്തെറിക്കുന്നു
       const rect = boxEl.getBoundingClientRect();
       const originX = rect.left + rect.width / 2;
       const originY = rect.top + rect.height / 2;
