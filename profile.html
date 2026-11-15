@@ -170,9 +170,9 @@
       </div>
 
       <div class="info-group">
-        <div class="info-label">കടയുടെ ഫോട്ടോ (ചെറിയ സൈസിൽ)</div>
+        <div class="info-label">കടയുടെ ഫോട്ടോ (ഓപ്ഷണൽ)</div>
         <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;">
-        <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ ഓട്ടോമാറ്റിക്കായി കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യപ്പെടും.</small>
+        <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ ഇല്ലെങ്കിലും സേവ് ചെയ്യാവുന്നതാണ്.</small>
       </div>
 
       <div class="info-group">
@@ -180,10 +180,11 @@
         <input type="text" class="input-field" id="shopAddress" placeholder="സ്ഥലം (ഉദാ: കോളയാട്)...">
       </div>
 
-      <button class="action-btn" onclick="compressAndUploadBusiness()">വിവരങ്ങൾ സേവ് ചെയ്യുക 💾</button>
+      <button class="action-btn" onclick="saveBusinessData()">വിവരങ്ങൾ സേവ് ചെയ്യുക 💾</button>
     </div>
   </div>
 
+  <!-- Firebase SDK-കൾ -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
@@ -220,31 +221,7 @@
       }
     }
 
-    function compressImage(file, maxWidth, maxHeight, quality, callback) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function (event) {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = function () {
-          let canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          if (width > height) {
-            if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-          } else {
-            if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          canvas.toBlob((blob) => { callback(blob); }, 'image/jpeg', quality);
-        };
-      };
-    }
-
-    function compressAndUploadBusiness() {
+    function saveBusinessData() {
       const owner = document.getElementById('ownerName').value.trim();
       const shop = document.getElementById('shopName').value.trim();
       const category = document.getElementById('shopCategory').value;
@@ -259,19 +236,20 @@
         return;
       }
 
-      alert('വിവരങ്ങൾ സേവ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കുക...');
+      alert('വിവരങ്ങൾ ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...');
 
       if (fileInput.files && fileInput.files[0]) {
-        compressImage(fileInput.files[0], 600, 600, 0.7, (compressedBlob) => {
-          const imageName = 'shops/' + Date.now() + '_' + shop + '.jpg';
-          const storageRef = storage.ref().child(imageName);
-          storageRef.put(compressedBlob).then((snapshot) => {
-            snapshot.ref.getDownloadURL().then((downloadURL) => {
-              saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, downloadURL);
-            });
-          }).catch((error) => {
-            alert('ഫോട്ടോ അപ്‌ലോഡ് തടസ്സപ്പെട്ടു: ' + error.message);
+        const file = fileInput.files[0];
+        const imageName = 'shops/' + Date.now() + '_' + file.name;
+        const storageRef = storage.ref().child(imageName);
+
+        storageRef.put(file).then((snapshot) => {
+          snapshot.ref.getDownloadURL().then((downloadURL) => {
+            saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, downloadURL);
           });
+        }).catch((error) => {
+          console.error(error);
+          saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
         });
       } else {
         saveToFirestore(owner, shop, category, phoneCall, phoneWhatsapp, mapLink, address, '');
@@ -295,7 +273,7 @@
         window.location.href = 'index.html';
       })
       .catch((error) => {
-        alert('പിഴവ്: ' + error.message);
+        alert('ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിഴവ്: ' + error.message);
       });
     }
   </script>
