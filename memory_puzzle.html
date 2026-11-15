@@ -133,7 +133,6 @@
       cursor: pointer;
     }
 
-    /* കാർഡ് ഗ്രിഡ് ലേഔട്ട് (സ്റ്റേജുകൾ അനുസരിച്ച് മാറുന്നു) */
     .cards-grid {
       display: grid;
       gap: 10px;
@@ -167,7 +166,7 @@
       cursor: default;
     }
 
-    /* ജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ (എഴുത്തുകൾ മുകളിലും താഴെയും) */
+    /* മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ */
     .gift-modal {
       display: none;
       position: absolute;
@@ -176,8 +175,8 @@
       z-index: 30;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 25px 15px;
+      justify-content: center;
+      padding: 15px;
       text-align: center;
       overflow-y: auto;
     }
@@ -197,10 +196,10 @@
       position: absolute;
       font-size: 28px;
       pointer-events: none;
-      animation: explodeAnimLong 2.5s forwards ease-out;
+      animation: explodeAnimCenter 2.2s forwards ease-out;
       z-index: 35;
     }
-    @keyframes explodeAnimLong {
+    @keyframes explodeAnimCenter {
       0% { transform: translate(0, 0) scale(0.4); opacity: 1; }
       75% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 1; }
       100% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 0; }
@@ -208,8 +207,9 @@
     #rewardResultArea {
       width: 92%;
       max-width: 340px;
+      margin-top: 10px;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(15px);
       transition: all 0.5s ease;
     }
     #rewardResultArea.show-reward {
@@ -229,8 +229,8 @@
     <div class="hud">
       <div>കളിക്കാരൻ: <span id="hudPlayer" style="color:#38bdf8;">-</span></div>
       <div>സ്റ്റേജ്: <span id="stageVal">1</span>/3</div>
+      <div>സ്കോർ: <span id="scoreVal" style="color:#4ade80;">100</span></div>
       <div>നീക്കങ്ങൾ: <span id="movesVal">0</span></div>
-      <div>ജോടികൾ: <span id="matchesVal">0</span>/6</div>
     </div>
 
     <!-- കാർഡുകൾ കളിക്കുന്ന സ്ഥലം -->
@@ -250,21 +250,18 @@
       </div>
     </div>
 
-    <!-- വിജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ (മുകളിലും താഴെയും എഴുത്തുകൾ, സെന്ററിൽ ബോക്സ്) -->
+    <!-- വിജയിക്കുമ്പോൾ വരുന്ന മിസ്ട്രി ഗിഫ്റ്റ് മോഡൽ -->
     <div id="giftModal" class="gift-modal">
-      <!-- മുകളിലെ എഴുത്ത് ഭാഗം -->
-      <div>
-        <h2 style="color: #facc15; font-size: 21px; margin: 5px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
-        <p style="color: #4ade80; font-size: 14px; font-weight: 900; margin: 0;" id="winStatsText">ആകെ നീക്കങ്ങൾ: 0</p>
+      <div style="width: 100%; max-width: 340px;">
+        <h2 style="color: #facc15; font-size: 20px; margin: 0 0 4px 0;">🎉 അതിഗംഭീരം! വിജയിച്ചു! 🏆</h2>
+        <p style="color: #4ade80; font-size: 13.5px; font-weight: 900; margin: 0;" id="winStatsText">ബാക്കി സ്കോർ: 100</p>
       </div>
       
-      <!-- സെന്ററിലെ സമ്മാനപ്പെട്ടി (ഇവിടെയാണ് നക്ഷത്രങ്ങൾ പൊട്ടിത്തെറിക്കുന്നത്) -->
-      <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+      <div style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 10px 0;">
         <div id="mysteryBoxEl" class="gift-box-anim" onclick="openMysteryBox(event)">🎁</div>
-        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13.5px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
+        <p id="giftInstruction" style="color: #cbd5e1; font-size: 13px; margin-top: 5px; font-weight: bold;">സമ്മാനം പൊട്ടിത്തെറിച്ച് കാണാൻ സമ്മാനപ്പെട്ടിയിൽ തൊടൂ!</p>
       </div>
       
-      <!-- താഴത്തെ സമ്മാന വിവരങ്ങൾ / ബട്ടൺ ഭാഗം -->
       <div id="rewardResultArea"></div>
     </div>
   </div>
@@ -273,7 +270,8 @@
     let players = JSON.parse(localStorage.getItem('memoryPuzzlePlayers')) || [];
     let currentPlayer = null;
 
-    let currentStage = 1; // സ്റ്റേജ് 1, 2, 3
+    let currentStage = 1;
+    let score = 100; // ഓരോ സ്റ്റാർട്ടിലും 100 പോയിന്റ് ഉണ്ടാകും
     const allIcons = ['🍎', '🍌', '🍇', '🍊', '🍓', '🍉', '🍍', '🥝', '🍒', '🍑'];
     let icons = [];
     let cardList = [];
@@ -344,19 +342,18 @@
       
       moves = 0;
       matchedPairs = 0;
+      score = 100; // കളി തുടങ്ങുമ്പോൾ 100 പോയിന്റ്
+      document.getElementById('scoreVal').innerText = score;
       document.getElementById('movesVal').innerText = moves;
       document.getElementById('stageVal').innerText = currentStage + '/3';
 
-      // സ്റ്റേജുകൾ അനുസരിച്ച് കാർഡുകളുടെ എണ്ണം ക്രമീകരിക്കുന്നു
       if (currentStage === 1) {
-        icons = allIcons.slice(0, 6); // 6 ജോടികൾ (12 കാർഡുകൾ)
+        icons = allIcons.slice(0, 6);
       } else if (currentStage === 2) {
-        icons = allIcons.slice(0, 8); // 8 ജോടികൾ (16 കാർഡുകൾ)
+        icons = allIcons.slice(0, 8);
       } else {
-        icons = allIcons.slice(0, 10); // 10 ജോടികൾ (20 കാർഡുകൾ)
+        icons = allIcons.slice(0, 10);
       }
-
-      document.getElementById('matchesVal').innerText = matchedPairs + '/' + icons.length;
       
       const resArea = document.getElementById('rewardResultArea');
       resArea.innerHTML = '';
@@ -370,7 +367,6 @@
     function generateCards() {
       const grid = document.getElementById('cardsGrid');
       grid.innerHTML = '';
-      
       grid.className = `cards-grid stage-${currentStage}`;
       
       cardList = [...icons, ...icons]
@@ -415,13 +411,16 @@
         card2.element.classList.add('matched');
         
         matchedPairs++;
-        document.getElementById('matchesVal').innerText = matchedPairs + '/' + icons.length;
         flippedCards = [];
 
         if (matchedPairs === icons.length) {
           setTimeout(triggerWin, 500);
         }
       } else {
+        // തെറ്റായ ജോടി തുറക്കുമ്പോൾ അനാവശ്യ നീക്കത്തിന് 3 പോയിന്റ് പെനാൽറ്റി കുറയ്ക്കുന്നു!
+        score = Math.max(0, score - 3);
+        document.getElementById('scoreVal').innerText = score;
+
         isLocked = true;
         setTimeout(() => {
           cardList[card1.index].isFlipped = false;
@@ -437,7 +436,7 @@
     }
 
     function triggerWin() {
-      document.getElementById('winStatsText').innerText = `സ്റ്റേജ് ${currentStage} വിജയകരമായി പൂർത്തിയായി! (നീക്കങ്ങൾ: ${moves})`;
+      document.getElementById('winStatsText').innerText = `സ്റ്റേജ് ${currentStage} വിജയിച്ചു! (ശേഷിക്കുന്ന സ്കോർ: ${score} പോയിന്റ്)`;
       document.getElementById('giftModal').style.display = 'flex';
     }
 
@@ -450,14 +449,13 @@
       const originX = rect.left + rect.width / 2;
       const originY = rect.top + rect.height / 2;
 
-      // സെന്ററിൽ നിന്ന് നക്ഷത്രങ്ങളും കോയിനുകളും പൊട്ടിത്തെറിച്ച് ചിതറുന്നു
-      for (let i = 0; i < 32; i++) {
+      for (let i = 0; i < 35; i++) {
         let particle = document.createElement('div');
         particle.classList.add('particle');
         particle.innerHTML = ['🧠', '⭐', '💎', '🎉', '🌟', '🏆'][Math.floor(Math.random() * 6)];
         
         let angle = Math.random() * Math.PI * 2;
-        let distance = 70 + Math.random() * 130;
+        let distance = 80 + Math.random() * 140;
         let dx = Math.cos(angle) * distance;
         let dy = Math.sin(angle) * distance;
         
@@ -467,25 +465,23 @@
         particle.style.top = originY + 'px';
         
         document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 2500);
+        setTimeout(() => particle.remove(), 2200);
       }
 
-      // പൊട്ടിത്തെറി വ്യക്തമായി കണ്ടതിന് ശേഷം (1.6 സെക്കൻഡിന് ശേഷം) താഴെയായി ബട്ടണുകൾ തെളിയും
       setTimeout(() => {
         boxEl.style.display = 'none';
         
-        // അടുത്ത സ്റ്റേജിലേക്ക് അപ്ഡേറ്റ് ചെയ്യുന്നു
         let nextBtnText = "അടുത്ത സ്റ്റേജ് 🚀";
         let nextAction = "nextStage()";
         
         if (currentStage >= 3) {
           if (currentPlayer) {
             currentPlayer.wins = (currentPlayer.wins || 0) + 1;
-            currentPlayer.stage = 1; // വീണ്ടും സ്റ്റേജ് 1-ലേക്ക്
+            currentPlayer.stage = 1;
             localStorage.setItem('memoryPuzzlePlayers', JSON.stringify(players));
           }
           nextBtnText = "ആദ്യം മുതൽ വീണ്ടും 🔄";
-          nextAction = "resetToStage1()";
+          nextAction = "resetToStage1();";
         } else {
           if (currentPlayer) {
             currentPlayer.stage = currentStage + 1;
@@ -495,17 +491,17 @@
 
         const resArea = document.getElementById('rewardResultArea');
         resArea.innerHTML = `
-          <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #facc15; padding: 15px; border-radius: 14px; box-shadow: 0 10px 25px rgba(250,204,21,0.3);">
-            <h3 style="color: #facc15; margin: 0 0 5px 0; font-size: 17px;">🎁 സൂപ്പർ ഓർമ്മശക്തി!</h3>
-            <p style="color: #4ade80; font-size: 13.5px; font-weight: 900; margin: 0 0 12px 0;">${currentPlayer ? currentPlayer.name : 'കുട്ടിക്ക്'} പ്രത്യേക മെമ്മറി സ്റ്റാർ സമ്മാനമായി ലഭിച്ചു!</p>
+          <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid #facc15; padding: 14px; border-radius: 14px; box-shadow: 0 10px 25px rgba(250,204,21,0.3);">
+            <h3 style="color: #facc15; margin: 0 0 4px 0; font-size: 16.5px;">🎁 സൂപ്പർ ഓർമ്മശക്തി!</h3>
+            <p style="color: #4ade80; font-size: 13px; font-weight: 900; margin: 0 0 10px 0;">${currentPlayer ? currentPlayer.name : 'കുട്ടിക്ക്'} ലഭിച്ച സ്കോർ: ${score} പോയിന്റ്! ⭐</p>
             <div style="display: flex; gap: 8px; justify-content: center;">
-              <button class="action-btn" style="margin-top: 0; padding: 9px 14px; font-size: 13px;" onclick="${nextAction}">${nextBtnText}</button>
-              <button class="action-btn" style="margin-top: 0; padding: 9px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
+              <button class="action-btn" style="margin-top: 0; padding: 8px 14px; font-size: 13px;" onclick="${nextAction}">${nextBtnText}</button>
+              <button class="action-btn" style="margin-top: 0; padding: 8px 12px; font-size: 13px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="backToProfiles()">പ്രൊഫൈൽ മാറ്റുക 👤</button>
             </div>
           </div>
         `;
         setTimeout(() => resArea.classList.add('show-reward'), 50);
-      }, 1600);
+      }, 1500);
     }
 
     function nextStage() {
