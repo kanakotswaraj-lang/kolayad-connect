@@ -1057,13 +1057,13 @@
       }
     }
 
-    function render() {
+     function render() {
       let isAdmin = localStorage.getItem('kolayad_admin') === 'true';
       const list = document.getElementById('listings');
       const q = document.getElementById('searchInput').value.toLowerCase();
       const filtered = shops.filter(s => {
         const matchCat = selectedCat === 'all' || s.cat === selectedCat || s.catLabel === selectedCat;
-        const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.loc.toLowerCase().includes(q);
+        const matchQ = (s.name || '').toLowerCase().includes(q) || (s.desc || '').toLowerCase().includes(q) || (s.loc || '').toLowerCase().includes(q);
         return matchCat && matchQ;
       });
 
@@ -1077,8 +1077,7 @@
         return;
       }
 
-      
-       const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
+      const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
 
       list.innerHTML = filtered.map(s => {
         const catalogButtonHtml = s.catalogLink ? `
@@ -1103,6 +1102,7 @@
             </div>
           `;
         }
+
 
         return `
           <div class="pro-card">
