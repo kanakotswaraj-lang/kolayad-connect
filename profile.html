@@ -192,9 +192,9 @@
         </div>
 
         <div class="info-group">
-          <div class="info-label">കടയുടെ ഫോട്ടോ (ചെറിയ സൈസിൽ)</div>
+          <div class="info-label">കടയുടെ ഫോട്ടോ (ഓപ്ഷണൽ)</div>
           <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;" onchange="previewSelectedImage(event)">
-          <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ ഓട്ടോമാറ്റിക്കായി കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യപ്പെടും.</small>
+          <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ വളരെ ചെറിയ സൈസിലേക്ക് കംപ്രസ് ചെയ്യപ്പെടും.</small>
           
           <div id="imagePreviewContainer" style="display: none; margin-top: 10px; text-align: center;">
             <img id="previewImg" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: zoom-in;" onclick="openZoomModal(this.src)">
@@ -286,8 +286,9 @@
       document.getElementById('imageZoomModal').style.display = 'none';
     }
 
+    // ഫോട്ടോ വളരെ ചെറുതാക്കി കംപ്രസ് ചെയ്യുന്ന ഫങ്ഷൻ
     async function compressImageToString(file) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
@@ -295,24 +296,18 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 700;
+            const MAX_WIDTH = 400; // സൈസ് കുറയ്ക്കാൻ വീതി 400px ആക്കി മാറ്റിയിരിക്കുന്നു
             const scaleSize = MAX_WIDTH / img.width;
             
-            if (scaleSize < 1) {
-              canvas.width = MAX_WIDTH;
-              canvas.height = img.height * scaleSize;
-            } else {
-              canvas.width = img.width;
-              canvas.height = img.height;
-            }
+            canvas.width = MAX_WIDTH;
+            canvas.height = img.height * scaleSize;
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5); // ക്വാളിറ്റി 50%
             resolve(compressedDataUrl);
           };
         };
-        reader.onerror = (error) => reject(error);
       });
     }
 
@@ -331,8 +326,6 @@
         alert('ദയവായി ഉടമയുടെ പേരും സ്ഥാപനത്തിന്റെ പേരും നൽകുക!');
         return;
       }
-
-      alert('വിവരങ്ങൾ ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു, കാത്തിരിക്കൂ...');
 
       try {
         let imageUrl = '';
