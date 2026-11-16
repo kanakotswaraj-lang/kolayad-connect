@@ -185,6 +185,13 @@
           <input type="tel" class="input-field" id="phoneWhatsapp" placeholder="ഫോൺ നമ്പർ 2...">
         </div>
 
+        <!-- 🛒 പുതിയതായി ചേർത്ത വാട്സാപ്പ് കാറ്റലോഗ് ലിങ്ക് ഫീൽഡ് -->
+        <div class="info-group">
+          <div class="info-label">വാട്സാപ്പ് ബിസിനസ് കാറ്റലോഗ് / ചാനൽ ലിങ്ക് (ഓപ്ഷണൽ)</div>
+          <input type="url" class="input-field" id="whatsappCatalog" placeholder="https://wa.me/c/91... അല്ലെങ്കിൽ ലിങ്ക്">
+          <small style="color: #94a3b8; font-size: 10.5px;">കസ്റ്റമർമാർക്ക് വിലകളും ഫോട്ടോകളും കാണാൻ ഇത് സഹായിക്കും.</small>
+        </div>
+
         <div class="info-group">
           <div class="info-label">ഗൂഗിൾ മാപ്പ് ലൊക്കേഷൻ</div>
           <input type="url" class="input-field" id="mapLink" placeholder="മാപ്പ് ലിങ്ക് ഇവിടെ വരും അല്ലെങ്കിൽ ഒട്ടിക്കാം...">
@@ -317,6 +324,7 @@
       const category = document.getElementById('shopCategory').value;
       const phoneCall = document.getElementById('phoneCall').value.trim();
       const phoneWhatsapp = document.getElementById('phoneWhatsapp').value.trim();
+      const whatsappCatalog = document.getElementById('whatsappCatalog').value.trim(); // 🛒 കാറ്റലോഗ് ലിങ്ക് ഇവിടെ എടുത്തു
       const mapLink = document.getElementById('mapLink').value.trim();
       const address = document.getElementById('shopAddress').value.trim();
       const desc = document.getElementById('shopDesc').value.trim() || `${category} സേവനങ്ങൾ ലഭ്യമാണ്`;
@@ -344,6 +352,7 @@
           phone: phoneCall,
           phoneWhatsapp: phoneWhatsapp,
           phone2: phoneWhatsapp,
+          whatsappCatalog: whatsappCatalog, // 🛒 ഫയർബേസിലേക്ക് കാറ്റലോഗ് ലിങ്ക് സേവ് ചെയ്യുന്നു
           mapLink: mapLink,
           address: address,
           loc: address || 'കോളയാട്',
