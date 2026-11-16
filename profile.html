@@ -129,7 +129,6 @@
     }
     .action-btn:active { transform: scale(0.98); }
 
-    /* ഫോട്ടോ സൂം മോഡൽ സ്റ്റൈൽ */
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
     #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
   </style>
@@ -197,7 +196,6 @@
           <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;" onchange="previewSelectedImage(event)">
           <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ ഓട്ടോമാറ്റിക്കായി കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യപ്പെടും.</small>
           
-          <!-- സെലക്ട് ചെയ്ത ഫോട്ടോ പ്രിവ്യൂ ചെയ്യാനും സൂം ചെയ്യാനും ഉള്ള ബോക്സ് -->
           <div id="imagePreviewContainer" style="display: none; margin-top: 10px; text-align: center;">
             <img id="previewImg" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: zoom-in;" onclick="openZoomModal(this.src)">
             <br><small style="color: #c084fc; font-size: 10px;">ഫോട്ടോ വലുതായി കാണാൻ തൊടുക</small>
@@ -219,7 +217,6 @@
     </div>
   </div>
 
-  <!-- ഫോട്ടോ സൂം ചെയ്യാനുള്ള മോഡൽ വിൻഡോ -->
   <div class="modal-bg" id="imageZoomModal" onclick="closeZoomModal(event)">
     <div style="position:relative; width:100%; max-width:450px; text-align:center;">
       <img id="zoomedImage" src="" alt="Zoomed Image">
@@ -230,7 +227,7 @@
   <!-- Firebase Modular SDK Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCedpjN9Urtc4V0bQhsnJof7hVPvEbHjbk",
@@ -262,7 +259,6 @@
       }
     };
 
-    // ഫോട്ടോ സെലക്ട് ചെയ്യുമ്പോൾ പ്രിവ്യൂ കാണിക്കാനുള്ള ഫങ്ഷൻ
     window.previewSelectedImage = function(event) {
       const file = event.target.files[0];
       if (file) {
@@ -275,7 +271,6 @@
       }
     };
 
-    // ഫോട്ടോ സൂം മോഡൽ തുറക്കാനും അടയ്ക്കാനുമുള്ള ഫങ്ഷനുകൾ
     window.openZoomModal = function(imgSrc) {
       document.getElementById('zoomedImage').src = imgSrc;
       document.getElementById('imageZoomModal').style.display = 'flex';
@@ -361,7 +356,7 @@
           loc: address || 'കോളയാട്',
           desc: desc,
           imageUrl: imageUrl,
-          createdAt: serverTimestamp()
+          createdAt: new Date().toISOString()
         });
 
         alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു!');
