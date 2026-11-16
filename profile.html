@@ -245,7 +245,7 @@
       };
     }
 
-    async function saveProfileData() {
+    async function saveShopsData() {
       const owner = document.getElementById('ownerName').value.trim();
       const shop = document.getElementById('shopName').value.trim();
       const category = document.getElementById('shopCategory').value;
@@ -280,7 +280,7 @@
           });
         }
 
-        await addDoc(collection(db, "businesses"), {
+        await addDoc(collection(db, "shops"), {
           ownerName: owner,
           shopName: shop,
           category: category,
