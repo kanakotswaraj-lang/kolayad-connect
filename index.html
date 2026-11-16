@@ -1078,21 +1078,17 @@
       }
 
       const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
-
       list.innerHTML = filtered.map(s => {
-          
-// കാർഡ് ഡിസ്പ്ലേ ചെയ്യുന്ന ഭാഗത്ത് പഴയ catalogButtonHtml മാറ്റി ഇത് നൽകുക:
-const catalogButtonHtml = item.catalogLink ? `
-  <a href="${item.catalogLink}" target="_blank" rel="noopener noreferrer" 
-     style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 10px; padding: 12px 16px; background: linear-gradient(135deg, #25D366 0%, #1DA851 100%); color: #ffffff; font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); text-align: center; box-sizing: border-box;">
-    <span>🛒 വാട്സാപ്പ് കാറ്റലോഗ് / പ്രൊഡക്ട്സ് കാണുക ➔</span>
-  </a>
-` : '';
-
-
-
         let hasImage = s.imageUrl || s.imageUrl2 || s.imageUrl3 || s.imageUrl4;
         let displayImg = s.imageUrl || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
+
+        // വാട്സാപ്പ് കാറ്റലോഗ് ബട്ടൺ കോഡ് ഇവിടെ കൃത്യമായി ചേർക്കുക:
+        const catalogButtonHtml = s.catalogLink ? `
+          <a href="${s.catalogLink}" target="_blank" rel="noopener noreferrer" 
+             style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 10px; padding: 12px 16px; background: linear-gradient(135deg, #25D366 0%, #1DA851 100%); color: #ffffff; font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); text-align: center; box-sizing: border-box;">
+            <span>🛒 വാട്സാപ്പ് കാറ്റലോഗ് / പ്രൊഡക്ട്സ് കാണുക ➔</span>
+          </a>
+        ` : '';
 
         let extraRowHtml = '';
         if (s.mapLink || s.phone2) {
@@ -1130,8 +1126,7 @@ const catalogButtonHtml = item.catalogLink ? `
 
                 ${extraRowHtml}
                 
-// കാർഡ് ഡിസ്പ്ലേ ചെയ്യുന്ന HTML ഭാഗത്ത് ഇത് ചേർക്കുക:
-${catalogButtonHtml}
+                ${catalogButtonHtml}
 
                 ${isAdmin ? `
                   <div style="display:flex; gap:6px; margin-top:6px;">
@@ -1150,7 +1145,8 @@ ${catalogButtonHtml}
           </div>
         `;
       }).join('');
-    }
+
+      
 
     function openEditShop(id) {
       const s = shops.find(x => x.id === id);
