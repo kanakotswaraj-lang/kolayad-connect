@@ -1080,6 +1080,16 @@
       const defaultWaMsg = encodeURIComponent("ഹലോ, കോളയാട് കണക്ട് (Kolayad Connect) വഴി നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച് അറിയാൻ മെസ്സേജ് അയച്ചതാണ്.");
 
       list.innerHTML = filtered.map(s => {
+          // 🛒 വാട്സാപ്പ് കാറ്റലോഗ് ബട്ടൺ
+  let catalogButtonHtml = '';
+  if (s.whatsappCatalog && s.whatsappCatalog.trim() !== '') {
+    catalogButtonHtml = `
+      <a href="${s.whatsappCatalog}" target="_blank" style="display: block; text-align: center; background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color: #ffffff !important; padding: 8px; border-radius: 9px; text-decoration: none; font-weight: bold; font-size: 11.5px; margin-top: 6px; box-shadow: 0 3px 10px rgba(13, 148, 136, 0.4);">
+        🛒 വാട്സാപ്പ് കാറ്റലോഗ് / പ്രൊഡക്ട്സ് കാണുക ➔
+      </a>
+    `;
+  }
+
         let hasImage = s.imageUrl || s.imageUrl2 || s.imageUrl3 || s.imageUrl4;
         let displayImg = s.imageUrl || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80';
 
@@ -1118,6 +1128,9 @@
                 </div>
 
                 ${extraRowHtml}
+                
+// കാർഡ് ഡിസ്പ്ലേ ചെയ്യുന്ന HTML ഭാഗത്ത് ഇത് ചേർക്കുക:
+${catalogButtonHtml}
 
                 ${isAdmin ? `
                   <div style="display:flex; gap:6px; margin-top:6px;">
