@@ -1115,10 +1115,11 @@
 
       list.innerHTML = filtered.map(s => {
         const catalogButtonHtml = s.catalogLink ? `
-    <a href="${s.catalogLink}" target="_blank" class="compact-catalog-btn">
+    <a href="${s.catalogLink}" target="_blank" class="compact-catalog-btn" style="background: linear-gradient(135deg, #ff8c00 0%, #ff6f00 100%); color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13.5px; width: 100%; box-sizing: border-box; text-align: center;">
         🛒 വാട്സാപ്പ് കാറ്റലോഗ് / പ്രൊഡക്ട്സ് കാണുക
     </a>
 ` : '';
+
 
 
         let hasImage = s.imageUrl || s.imageUrl2 || s.imageUrl3 || s.imageUrl4;
