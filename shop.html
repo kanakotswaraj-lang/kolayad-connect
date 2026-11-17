@@ -27,7 +27,6 @@
 
       .upload-box { background: #f8fafc; border: 2px dashed #3b82f6; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; display: none; }
       
-      /* പുതിയ ഫീച്ചറുകൾക്കായുള്ള സ്റ്റൈലുകൾ */
       .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
       .info-title { font-weight: bold; color: #1e3a8a; margin-bottom: 4px; font-size: 14px; display: flex; align-items: center; gap: 6px; }
       .admin-edit-section { background: #fffbeb; border: 1.5px solid #f59e0b; padding: 15px; border-radius: 12px; margin-top: 20px; display: none; }
@@ -55,10 +54,14 @@
             <label style="font-size: 13px; font-weight: bold; color: #333;">വാട്സാപ്പ് കാറ്റലോഗ് ലിങ്ക്:</label>
             <input type="url" id="editCatalog" class="admin-input" placeholder="https://wa.me/c/...">
 
-            <label style="font-size: 13px; font-weight: bold; color: #333;">സോഷ്യൽ മീഡിയ / ഫേസ്ബുക്ക് ലിങ്ക്:</label>
+            <label style="font-size: 13px; font-weight: bold; color: #333;">ഫേസ്ബുക്ക് പേജ് ലിങ്ക്:</label>
             <input type="url" id="editSocial" class="admin-input" placeholder="https://facebook.com/...">
 
-            <label style="font-size: 13px; font-weight: bold; color: #333;">ప్రత్యേക ഓഫറുകൾ / അറിയിപ്പുകൾ (Special Offers):</label>
+            <!-- 👇 പുതിയതായി ചേർഡ ഇൻസ്റ്റാഗ്രാം ലിങ്ക് ബോക്സ് -->
+            <label style="font-size: 13px; font-weight: bold; color: #333;">ഇൻസ്റ്റാഗ്രാം പേജ് ലിങ്ക്:</label>
+            <input type="url" id="editInstagram" class="admin-input" placeholder="https://instagram.com/...">
+
+            <label style="font-size: 13px; font-weight: bold; color: #333;">പ്രത്യേക ഓഫറുകൾ / അറിയിപ്പുകൾ (Special Offers):</label>
             <textarea id="editOffer" class="admin-input" rows="2" placeholder="ഇന്നത്തെ പ്രത്യേക ഓഫറുകൾ ഇവിടെ എഴുതുക..."></textarea>
 
             <button onclick="saveShopExtraInfo()" style="background: #f59e0b; color: #0f172a; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
@@ -131,6 +134,7 @@
                         document.getElementById('editHours').value = currentShopData.businessHours || '';
                         document.getElementById('editCatalog').value = currentShopData.catalogLink || '';
                         document.getElementById('editSocial').value = currentShopData.socialLink || '';
+                        document.getElementById('editInstagram').value = currentShopData.instagramLink || ''; // ഇൻസ്റ്റാഗ്രാം ലോഡ് ചെയ്യാൻ
                         document.getElementById('editOffer').value = currentShopData.specialOffer || '';
                     }
                 } else {
@@ -174,7 +178,6 @@
                 `;
             }
 
-            // പ്രത്യേക ഓഫർ ബോക്സ് (ഉണ്ടെങ്കിൽ മാത്രം കാണിക്കും)
             let offerHtml = shop.specialOffer ? `
                 <div style="background: #fef2f2; border: 1.5px solid #f87171; border-radius: 10px; padding: 12px; margin-bottom: 15px;">
                     <div style="font-weight: bold; color: #dc2626; margin-bottom: 4px; font-size: 14px;">🔥 പ്രത്യേക ഓഫറുകൾ & അറിയിപ്പുകൾ:</div>
@@ -182,7 +185,6 @@
                 </div>
             ` : '';
 
-            // പ്രവർത്തന സമയം
             let hoursHtml = shop.businessHours ? `
                 <div class="info-card">
                     <div class="info-title">⏰ പ്രവർത്തന സമയങ്ങൾ:</div>
@@ -190,17 +192,22 @@
                 </div>
             ` : '';
 
-            // വാട്സാപ്പ് കാറ്റലോഗ് ബട്ടൺ
             let catalogHtml = shop.catalogLink ? `
                 <a href="${shop.catalogLink}" target="_blank" style="display: block; text-align: center; background: linear-gradient(135deg, #25D366 0%, #1DA851 100%); color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);">
                     🛒 വാട്സാപ്പ് കാറ്റലോഗ് / പ്രൊഡക്ട്സ് കാണുക ➔
                 </a>
             ` : '';
 
-            // സോഷ്യൽ മീഡിയ / മാപ്പ് ലിങ്ക്
             let socialHtml = shop.socialLink ? `
                 <a href="${shop.socialLink}" target="_blank" style="display: block; text-align: center; background: #3b82f6; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 10px;">
-                    🌐 സോഷ്യൽ മീഡിയ / ഫേസ്ബുക്ക് പേജ് സന്ദർശിക്കുക
+                    🌐 ഫേസ്ബുക്ക് പേജ് സന്ദർശിക്കുക
+                </a>
+            ` : '';
+
+            // ഇൻസ്റ്റാഗ്രാം ബട്ടൺ
+            let instagramHtml = shop.instagramLink ? `
+                <a href="${shop.instagramLink}" target="_blank" style="display: block; text-align: center; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);">
+                    📸 ഇൻസ്റ്റാഗ്രാം പേജ് സന്ദർശിക്കുക
                 </a>
             ` : '';
 
@@ -215,6 +222,7 @@
                 ${hoursHtml}
                 ${catalogHtml}
                 ${socialHtml}
+                ${instagramHtml}
 
                 <div style="margin-top: 15px; display: flex; gap: 10px;">
                     <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
@@ -243,12 +251,14 @@
             const businessHours = document.getElementById('editHours').value;
             const catalogLink = document.getElementById('editCatalog').value;
             const socialLink = document.getElementById('editSocial').value;
+            const instagramLink = document.getElementById('editInstagram').value; // ഇൻസ്റ്റാഗ്രാം ലിങ്ക് എടുക്കാൻ
             const specialOffer = document.getElementById('editOffer').value;
 
             db.collection("shops").doc(shopId).update({
                 businessHours: businessHours,
                 catalogLink: catalogLink,
                 socialLink: socialLink,
+                instagramLink: instagramLink, // ഫയർബേസിൽ സേവ് ചെയ്യാൻ
                 specialOffer: specialOffer
             }).then(() => {
                 alert('വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
