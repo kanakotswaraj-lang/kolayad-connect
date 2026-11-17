@@ -16,26 +16,27 @@
       .shop-thumb-container { min-width: 100%; scroll-snap-align: center; text-align: center; }
       .shop-thumb-img { width: 100%; height: 300px; border-radius: 14px; object-fit: cover; border: 1px solid #ddd; cursor: zoom-in; }
       
-      /* വ്യക്തമായി കാണുന്ന ഡിലീറ്റ് ബട്ടൺ സ്റ്റൈൽ (ഫോട്ടോയ്ക്ക് താഴെ) */
       .delete-photo-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 14px; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-      /* സ്ലൈഡർ ഇൻഡിക്കേറ്റർ ഡോട്സ് */
       .slider-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
       .dot { width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%; transition: 0.3s; }
       .dot.active { background: #2563eb; width: 22px; border-radius: 4px; }
 
-      /* സൂം മോഡൽ സ്റ്റൈൽ */
       .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
       #zoomedImage { width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
 
-      /* അഡ്മിൻ അപ്‌ലോഡ് സെക്ഷൻ */
       .upload-box { background: #f8fafc; border: 2px dashed #3b82f6; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; display: none; }
+      
+      /* പുതിയ ഫീച്ചറുകൾക്കായുള്ള സ്റ്റൈലുകൾ */
+      .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+      .info-title { font-weight: bold; color: #1e3a8a; margin-bottom: 4px; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+      .admin-edit-section { background: #fffbeb; border: 1.5px solid #f59e0b; padding: 15px; border-radius: 12px; margin-top: 20px; display: none; }
+      .admin-input { width: 100%; padding: 8px 10px; margin-top: 5px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- സ്റ്റൈലിഷ് ബാക്ക് ബട്ടൺ -->
         <a href="index.html" class="back-btn">
             <span>🏠</span> ഹോം പേജിലേക്ക് മടങ്ങുക
         </a>
@@ -44,12 +45,30 @@
             <p style="text-align: center; color: #666;">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</p>
         </div>
 
-        <!-- അഡ്മിൻ ലോഗിൻ ചെയ്താൽ മാത്രം കാണുന്ന ഫോട്ടോ അപ്‌ലോഡ് ബോക്സ് -->
-        <div id="adminUploadSection" class="upload-box">
-            <h4 style="margin: 0 0 10px 0; color: #1e3a8a; font-size: 16px;">➕ ഈ പേജിലേക്ക് കൂടുതൽ ഫോട്ടോകൾ ചേർക്കുക</h4>
+        <!-- അഡ്മിൻ എഡിറ്റിംഗ് & ഫോട്ടോ അപ്‌ലോഡ് സെക്ഷൻ -->
+        <div id="adminEditSection" class="admin-edit-section">
+            <h4 style="margin: 0 0 12px 0; color: #d97706; font-size: 16px; text-align: center;">⚙️ അഡ്മിൻ മാനേജ്‌മെന്റ് പാനൽ</h4>
+            
+            <label style="font-size: 13px; font-weight: bold; color: #333;">പ്രവർത്തന സമയങ്ങൾ (Business Hours):</label>
+            <input type="text" id="editHours" class="admin-input" placeholder="ഉദാ: രാവിലെ 8 മണി മുതൽ രാത്രി 9 മണി വരെ">
+
+            <label style="font-size: 13px; font-weight: bold; color: #333;">വാട്സാപ്പ് കാറ്റലോഗ് ലിങ്ക്:</label>
+            <input type="url" id="editCatalog" class="admin-input" placeholder="https://wa.me/c/...">
+
+            <label style="font-size: 13px; font-weight: bold; color: #333;">സോഷ്യൽ മീഡിയ / ഫേസ്ബുക്ക് ലിങ്ക്:</label>
+            <input type="url" id="editSocial" class="admin-input" placeholder="https://facebook.com/...">
+
+            <label style="font-size: 13px; font-weight: bold; color: #333;">ప్రత్యേക ഓഫറുകൾ / അറിയിപ്പുകൾ (Special Offers):</label>
+            <textarea id="editOffer" class="admin-input" rows="2" placeholder="ഇന്നത്തെ പ്രത്യേക ഓഫറുകൾ ഇവിടെ എഴുതുക..."></textarea>
+
+            <button onclick="saveShopExtraInfo()" style="background: #f59e0b; color: #0f172a; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px;">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</button>
+
+            <hr style="border: 0; border-top: 1px solid #fde68a; margin-bottom: 15px;">
+
+            <h4 style="margin: 0 0 10px 0; color: #1e3a8a; font-size: 15px;">➕ ഈ പേജിലേക്ക് ഫോട്ടോകൾ ചേർക്കുക</h4>
             <input type="file" id="newShopPhoto" accept="image/*" style="margin-bottom: 10px; width: 100%; padding: 6px; background: white; border-radius: 6px; border: 1px solid #cbd5e1;">
-            <button onclick="uploadNewPhoto()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;">ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുക</button>
-            <p id="uploadStatus" style="font-size: 13px; margin-top: 8px; color: #059669; font-weight: bold;"></p>
+            <button onclick="uploadNewPhoto()" style="background: #2563eb; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;">ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുക</button>
+            <p id="uploadStatus" style="font-size: 13px; margin-top: 8px; color: #059669; font-weight: bold; text-align: center;"></p>
         </div>
     </div>
 
@@ -108,7 +127,11 @@
                     renderShopDetails(currentShopData);
 
                     if (isAdmin) {
-                        document.getElementById('adminUploadSection').style.display = 'block';
+                        document.getElementById('adminEditSection').style.display = 'block';
+                        document.getElementById('editHours').value = currentShopData.businessHours || '';
+                        document.getElementById('editCatalog').value = currentShopData.catalogLink || '';
+                        document.getElementById('editSocial').value = currentShopData.socialLink || '';
+                        document.getElementById('editOffer').value = currentShopData.specialOffer || '';
                     }
                 } else {
                     shopDetailsDiv.innerHTML = `<p style="color: red; text-align: center;">ഈ സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ ലഭ്യവല്ല.</p>`;
@@ -151,15 +174,50 @@
                 `;
             }
 
+            // പ്രത്യേക ഓഫർ ബോക്സ് (ഉണ്ടെങ്കിൽ മാത്രം കാണിക്കും)
+            let offerHtml = shop.specialOffer ? `
+                <div style="background: #fef2f2; border: 1.5px solid #f87171; border-radius: 10px; padding: 12px; margin-bottom: 15px;">
+                    <div style="font-weight: bold; color: #dc2626; margin-bottom: 4px; font-size: 14px;">🔥 പ്രത്യേക ഓഫറുകൾ & അറിയിപ്പുകൾ:</div>
+                    <div style="color: #b91c1c; font-size: 13.5px; line-height: 1.4;">${shop.specialOffer}</div>
+                </div>
+            ` : '';
+
+            // പ്രവർത്തന സമയം
+            let hoursHtml = shop.businessHours ? `
+                <div class="info-card">
+                    <div class="info-title">⏰ പ്രവർത്തന സമയങ്ങൾ:</div>
+                    <div style="color: #475569; font-size: 13.5px;">${shop.businessHours}</div>
+                </div>
+            ` : '';
+
+            // വാട്സാപ്പ് കാറ്റലോഗ് ബട്ടൺ
+            let catalogHtml = shop.catalogLink ? `
+                <a href="${shop.catalogLink}" target="_blank" style="display: block; text-align: center; background: linear-gradient(135deg, #25D366 0%, #1DA851 100%); color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);">
+                    🛒 വാട്സാപ്പ് കാറ്റലോഗ് / പ്രൊഡക്ട്സ് കാണുക ➔
+                </a>
+            ` : '';
+
+            // സോഷ്യൽ മീഡിയ / മാപ്പ് ലിങ്ക്
+            let socialHtml = shop.socialLink ? `
+                <a href="${shop.socialLink}" target="_blank" style="display: block; text-align: center; background: #3b82f6; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 10px;">
+                    🌐 സോഷ്യൽ മീഡിയ / ഫേസ്ബുക്ക് പേജ് സന്ദർശിക്കുക
+                </a>
+            ` : '';
+
             shopDetailsDiv.innerHTML = `
                 ${photosHtml}
                 ${dotsHtml}
+                ${offerHtml}
                 <h1 style="color: #333; font-size: 24px; margin-bottom: 5px;">${shop.name || 'പേരില്ല'}</h1>
                 <p style="color: #2563eb; font-weight: bold; margin-bottom: 15px;">📍 ${shop.loc || shop.location || 'ലൊക്കേഷൻ ലഭ്യമല്ല'}</p>
                 <p style="color: #444; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">${shop.desc || shop.description || 'വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.'}</p>
                 
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
-                    <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
+                ${hoursHtml}
+                ${catalogHtml}
+                ${socialHtml}
+
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <a href="tel:${shop.phone}" style="flex: 1; text-align: center; background: #007bff; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">📞 കോൾ ചെയ്യുക</a>
                 </div>
             `;
         }
@@ -178,6 +236,26 @@
                 } else {
                     dot.classList.remove('active');
                 }
+            });
+        }
+
+        function saveShopExtraInfo() {
+            const businessHours = document.getElementById('editHours').value;
+            const catalogLink = document.getElementById('editCatalog').value;
+            const socialLink = document.getElementById('editSocial').value;
+            const specialOffer = document.getElementById('editOffer').value;
+
+            db.collection("shops").doc(shopId).update({
+                businessHours: businessHours,
+                catalogLink: catalogLink,
+                socialLink: socialLink,
+                specialOffer: specialOffer
+            }).then(() => {
+                alert('വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
+                location.reload();
+            }).catch((error) => {
+                console.error("Error updating extra info: ", error);
+                alert('അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.');
             });
         }
 
@@ -204,7 +282,7 @@
             });
         }
 
-                function uploadNewPhoto() {
+        function uploadNewPhoto() {
             const fileInput = document.getElementById('newShopPhoto');
             const statusText = document.getElementById('uploadStatus');
             if (fileInput.files.length === 0) {
@@ -221,15 +299,13 @@
                 img.src = e.target.result;
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600; // സൈസ് കൂടുതൽ കുറയ്ക്കാൻ വീതി 600 ആക്കി മാറ്റിയിരിക്കുന്നു
+                    const MAX_WIDTH = 600;
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
 
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    // ക്വാളിറ്റി 0.5 ആയി കുറച്ച് എം.ബി വളരെ കുറയ്ക്കുന്നു
                     const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5);
 
                     statusText.innerText = 'ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു...';
@@ -262,7 +338,6 @@
             };
             reader.readAsDataURL(file);
         }
-
     </script>
 </body>
 </html>
