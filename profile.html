@@ -185,7 +185,6 @@
           <input type="tel" class="input-field" id="phoneWhatsapp" placeholder="ഫോൺ നമ്പർ 2...">
         </div>
 
-        <!-- 🛒 പുതിയതായി ചേർത്ത വാട്സാപ്പ് കാറ്റലോഗ് ലിങ്ക് ഫീൽഡ് -->
         <div class="info-group">
           <div class="info-label">വാട്സാപ്പ് ബിസിനസ് കാറ്റലോഗ് / ചാനൽ ലിങ്ക് (ഓപ്ഷണൽ)</div>
           <input type="url" class="input-field" id="whatsappCatalog" placeholder="https://wa.me/c/91... അല്ലെങ്കിൽ ലിങ്ക്">
@@ -198,14 +197,21 @@
           <button type="button" class="loc-btn" onclick="getCurrentLocation()">📍 എന്റെ നിലവിലെ ലൊക്കേഷൻ എടുക്കുക</button>
         </div>
 
+        <!-- 📸 ഒന്നാമത്തെ ഫോട്ടോ -->
         <div class="info-group">
-          <div class="info-label">കടയുടെ ഫോട്ടോ (ഓപ്ഷണൽ)</div>
-          <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;" onchange="previewSelectedImage(event)">
-          <small style="color: #94a3b8; font-size: 11px;">ഫോട്ടോ വളരെ ചെറിയ സൈസിലേക്ക് കംപ്രസ് ചെയ്യപ്പെടും.</small>
-          
-          <div id="imagePreviewContainer" style="display: none; margin-top: 10px; text-align: center;">
-            <img id="previewImg" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: zoom-in;" onclick="openZoomModal(this.src)">
-            <br><small style="color: #c084fc; font-size: 10px;">ഫോട്ടോ വലുതായി കാണാൻ തൊടുക</small>
+          <div class="info-label">ഒന്നാമത്തെ ഫോട്ടോ (ഓപ്ഷണൽ)</div>
+          <input type="file" class="input-field" id="shopImageFile" accept="image/*" style="padding: 7px;" onchange="previewSelectedImage(event, 'previewImg', 'imagePreviewContainer')">
+          <div id="imagePreviewContainer" style="display: none; margin-top: 8px; text-align: center;">
+            <img id="previewImg" src="" alt="Preview 1" style="max-height: 110px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: zoom-in;" onclick="openZoomModal(this.src)">
+          </div>
+        </div>
+
+        <!-- 📸 രണ്ടാമത്തെ ഫോട്ടോ (പുതിയതായി ചേർത്തത്) -->
+        <div class="info-group">
+          <div class="info-label">രണ്ടാമത്തെ ഫോട്ടോ (ഓപ്ഷണൽ)</div>
+          <input type="file" class="input-field" id="shopImageFile2" accept="image/*" style="padding: 7px;" onchange="previewSelectedImage(event, 'previewImg2', 'imagePreviewContainer2')">
+          <div id="imagePreviewContainer2" style="display: none; margin-top: 8px; text-align: center;">
+            <img id="previewImg2" src="" alt="Preview 2" style="max-height: 110px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: zoom-in;" onclick="openZoomModal(this.src)">
           </div>
         </div>
 
@@ -231,7 +237,6 @@
     </div>
   </div>
 
-  <!-- Firebase Modular SDK Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -266,13 +271,13 @@
       }
     };
 
-    window.previewSelectedImage = function(event) {
+    window.previewSelectedImage = function(event, imgId, containerId) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          document.getElementById('previewImg').src = e.target.result;
-          document.getElementById('imagePreviewContainer').style.display = 'block';
+          document.getElementById(imgId).src = e.target.result;
+          document.getElementById(containerId).style.display = 'block';
         }
         reader.readAsDataURL(file);
       }
@@ -293,7 +298,6 @@
       document.getElementById('imageZoomModal').style.display = 'none';
     }
 
-    // ഫോട്ടോ വളരെ ചെറുതാക്കി കംപ്രസ് ചെയ്യുന്ന ഫങ്ഷൻ
     async function compressImageToString(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -303,7 +307,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400; // സൈസ് കുറയ്ക്കാൻ വീതി 400px ആക്കി മാറ്റിയിരിക്കുന്നു
+            const MAX_WIDTH = 400;
             const scaleSize = MAX_WIDTH / img.width;
             
             canvas.width = MAX_WIDTH;
@@ -311,7 +315,7 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5); // ക്വാളിറ്റി 50%
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5);
             resolve(compressedDataUrl);
           };
         };
@@ -324,11 +328,12 @@
       const category = document.getElementById('shopCategory').value;
       const phoneCall = document.getElementById('phoneCall').value.trim();
       const phoneWhatsapp = document.getElementById('phoneWhatsapp').value.trim();
-      const whatsappCatalog = document.getElementById('whatsappCatalog').value.trim(); // 🛒 കാറ്റലോഗ് ലിങ്ക് ഇവിടെ എടുത്തു
+      const whatsappCatalog = document.getElementById('whatsappCatalog').value.trim();
       const mapLink = document.getElementById('mapLink').value.trim();
       const address = document.getElementById('shopAddress').value.trim();
       const desc = document.getElementById('shopDesc').value.trim() || `${category} സേവനങ്ങൾ ലഭ്യമാണ്`;
       const fileInput = document.getElementById('shopImageFile');
+      const fileInput2 = document.getElementById('shopImageFile2');
 
       if (!ownerName || !shopName) {
         alert('ദയവായി ഉടമയുടെ പേരും സ്ഥാപനത്തിന്റെ പേരും നൽകുക!');
@@ -337,11 +342,18 @@
 
       try {
         let imageUrl = '';
+        let imageUrl2 = '';
+
         if (fileInput.files && fileInput.files[0]) {
+          alert('ഒന്നാമത്തെ ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു...');
           imageUrl = await compressImageToString(fileInput.files[0]);
         }
+        if (fileInput2.files && fileInput2.files[0]) {
+          alert('രണ്ടാമത്തെ ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു...');
+          imageUrl2 = await compressImageToString(fileInput2.files[0]);
+        }
 
-        await addDoc(collection(db, "shops"), {
+        const docRef = await addDoc(collection(db, "shops"), {
           shopName: shopName,
           name: shopName,
           ownerName: ownerName,
@@ -352,14 +364,20 @@
           phone: phoneCall,
           phoneWhatsapp: phoneWhatsapp,
           phone2: phoneWhatsapp,
-          whatsappCatalog: whatsappCatalog, // 🛒 ഫയർബേസിലേക്ക് കാറ്റലോഗ് ലിങ്ക് സേവ് ചെയ്യുന്നു
+          whatsappCatalog: whatsappCatalog,
           mapLink: mapLink,
           address: address,
           loc: address || 'കോളയാട്',
           desc: desc,
           imageUrl: imageUrl,
+          imageUrl2: imageUrl2, // 📸 രണ്ടാമത്തെ ഫോട്ടോയുടെ ലിങ്ക് ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു
           createdAt: new Date().toISOString()
         });
+
+        // 🛒 കച്ചവടക്കാരൻ സ്വന്തം ഫോണിൽ ഈ കട എഡിറ്റ് ചെയ്യാൻ അനുമതി നൽകാൻ ID സേവ് ചെയ്യുന്നു
+        let myShops = JSON.parse(localStorage.getItem('kolayad_my_shops') || '[]');
+        myShops.push(docRef.id);
+        localStorage.setItem('kolayad_my_shops', JSON.stringify(myShops));
 
         alert('സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു!');
         window.location.href = 'index.html';
