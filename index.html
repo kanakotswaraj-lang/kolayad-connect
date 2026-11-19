@@ -271,32 +271,30 @@
     }
     body.light-mode .pro-card { background: #ffffff; border-color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 
-    .pro-card-left {
-      width: 112px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+    
 
-    .pro-card-left.two-images {
+    .pro-card-left {
+  width: 105px;
+  min-width: 105px;
+  max-width: 105px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px; /* രണ്ട് ഫോട്ടോകൾക്കിടയിൽ ചെറിയൊരു വിടവ് മാത്രം */
-  justify-content: flex-start; /* താഴേക്ക് വലിച്ചുനീട്ടാതെ മുകളിൽ തന്നെ അടുപ്പിച്ചു നിർത്താൻ */
+  gap: 4px;
+  overflow: hidden;
 }
 
-.shop-thumb-img-half {
-  width: 100%;
-  height: 110px; /* ആവശ്യാനുസരണം കൂട്ടുകയോ കുറയ്ക്കുകയോ ചെയ്യാം */
-  object-fit: cover;
-  object-position: center;
-  border-radius: 10px;
-  border: 1.5px solid rgba(168, 85, 247, 0.4);
-  cursor: zoom-in;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+.shop-thumb-img { 
+  width: 105px;
+  height: 150px;
+  object-fit: cover; 
+  object-position: center; 
+  border-radius: 10px; 
+  border: 1.5px solid rgba(168, 85, 247, 0.4); 
+  cursor: zoom-in; 
+  display: block;
 }
+
 
     body.light-mode .shop-thumb-img { border-color: #cbd5e1; }
 
