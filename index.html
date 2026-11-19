@@ -271,29 +271,32 @@
     }
     body.light-mode .pro-card { background: #ffffff; border-color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 
-    
-
-    .pro-card-left {
+    .pro-card-left.two-images {
   width: 105px;
   min-width: 105px;
   max-width: 105px;
   flex-shrink: 0;
+  align-self: stretch; /* വലതുവശത്തെ ഡീറ്റെയിൽസിന്റെ അതേ ഉയരത്തിലേക്ക് എത്താൻ */
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   overflow: hidden;
 }
 
-.shop-thumb-img { 
-  width: 105px;
-  height: 150px;
-  object-fit: cover; 
-  object-position: center; 
-  border-radius: 10px; 
-  border: 1.5px solid rgba(168, 85, 247, 0.4); 
-  cursor: zoom-in; 
+.shop-thumb-img-half {
+  width: 100%;
+  flex: 1; /* ബാക്കിയുള്ള മുഴുവൻ ഉയരവും രണ്ട് ഫോട്ടോകളും തുല്യമായി പങ്കിട്ടെടുക്കാൻ */
+  min-height: 100px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  border: 1.5px solid rgba(168, 85, 247, 0.4);
+  cursor: zoom-in;
   display: block;
 }
+
+
+    
 
 
     body.light-mode .shop-thumb-img { border-color: #cbd5e1; }
