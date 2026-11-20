@@ -388,6 +388,7 @@
     let mode = 'ai';
     let selectedSq = null;
     let lastMoveInfo = null;
+    let lastAIMoveInfo = null;
     let whiteCaptured = [];
     let blackCaptured = [];
     let aiThinking = false;
@@ -429,6 +430,7 @@
       chess = new Chess();
       selectedSq = null;
       lastMoveInfo = null;
+      lastAIMoveInfo = null;
       whiteCaptured = [];
       blackCaptured = [];
       aiThinking = false;
@@ -576,16 +578,17 @@
             const exec = chess.move(aiMove);
             if (exec) {
               lastMoveInfo = { from: exec.from, to: exec.to };
+              lastAIMoveInfo = { from: exec.from, to: exec.to };
               if (exec.captured) blackCaptured.push(exec.captured);
             }
           }
           aiThinking = false;
           renderAll();
-        }, 260);
+        }, 220);
       }
     }
 
-    // Maximum Strength Ultra Hard Chess AI Engine
+    // Corrected & Aggressive Tactical Chess AI (Black = Maximizer)
     const kingEndPST = [
       [-50,-40,-30,-20,-20,-30,-40,-50],
       [-30,-20,-10,  0,  0,-10,-20,-30],
@@ -596,8 +599,6 @@
       [-30,-30,  0,  0,  0,  0,-30,-30],
       [-50,-30,-30,-30,-30,-30,-30,-50]
     ];
-
-    const ttCache = new Map();
 
     function getPieceVal(type) {
       if (type === 'p') return 100;
@@ -758,45 +759,10 @@
       return false;
     }
 
-    function evaluatePawnAndRookStructure(b) {
-      let structScore = 0;
-      const blackPawnsInCol = Array(8).fill(0);
-      const whitePawnsInCol = Array(8).fill(0);
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = b[r][c];
-          if (!p) continue;
-          if (p.type === 'p') {
-            if (p.color === 'b') blackPawnsInCol[c]++;
-            else whitePawnsInCol[c]++;
-          }
-        }
-      }
-
-      for (let c = 0; c < 8; c++) {
-        if (blackPawnsInCol[c] > 1) structScore -= (blackPawnsInCol[c] - 1) * 18;
-        if (whitePawnsInCol[c] > 1) structScore += (whitePawnsInCol[c] - 1) * 18;
-      }
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = b[r][c];
-          if (p && p.type === 'r') {
-            const totalInCol = blackPawnsInCol[c] + whitePawnsInCol[c];
-            if (totalInCol === 0) {
-              structScore += p.color === 'b' ? 22 : -22;
-            }
-          }
-        }
-      }
-
-      return structScore;
-    }
-
     function evaluateBoard() {
       if (chess.in_checkmate()) {
-        return chess.turn() === 'w' ? 2500000 : -2500000;
+        // turn() === 'w' means White is checkmated -> Black (AI) wins!
+        return chess.turn() === 'w' ? 5000000 : -5000000;
       }
       if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
         const b = chess.board();
@@ -809,14 +775,14 @@
             }
           }
         }
-        if (mat > 100) return -1800000;
-        if (mat < -100) return 1800000;
+        if (mat > 120) return -2500000;
+        if (mat < -120) return 2500000;
         return 0;
       }
 
       const b = chess.board();
       const endgame = isEndgameBoard(b);
-      let score = evaluatePawnAndRookStructure(b);
+      let score = 0;
 
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
@@ -827,12 +793,12 @@
 
           if (p.color === 'b') {
             if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'w')) {
-              val -= Math.floor(getPieceVal(p.type) * 0.75);
+              val -= Math.floor(getPieceVal(p.type) * 0.7);
             }
             score += val;
           } else {
             if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'b')) {
-              val -= Math.floor(getPieceVal(p.type) * 0.6);
+              val -= Math.floor(getPieceVal(p.type) * 0.65);
             }
             score -= val;
           }
@@ -840,7 +806,7 @@
       }
 
       if (chess.in_check()) {
-        score += chess.turn() === 'w' ? 95 : -95;
+        score += chess.turn() === 'w' ? 110 : -110;
       }
 
       return score;
@@ -849,13 +815,17 @@
     function scoreMoveForOrdering(m) {
       let s = 0;
       if (m.captured) {
-        s += getPieceVal(m.captured) * 14 - getPieceVal(m.piece);
+        s += getPieceVal(m.captured) * 15 - getPieceVal(m.piece);
       }
       if (m.promotion) {
         s += getPieceVal(m.promotion) * 12;
       }
       if (m.san && m.san.includes('+')) {
-        s += 180;
+        s += 220;
+      }
+      // Penalize moving the same piece straight back to where it just came from
+      if (lastAIMoveInfo && m.from === lastAIMoveInfo.to && m.to === lastAIMoveInfo.from) {
+        s -= 250;
       }
       return s;
     }
@@ -907,14 +877,9 @@
         return quiescence(alpha, beta, isMax, deadline);
       }
 
-      const key = `${chess.fen()}|${depth}|${isMax ? 1 : 0}`;
-      const cached = ttCache.get(key);
-      if (cached !== undefined) return cached;
-
       const moves = orderMoves(chess.moves({ verbose: true }));
       if (!moves.length) return evaluateBoard();
 
-      let result;
       if (isMax) {
         let maxEval = -Infinity;
         for (const m of moves) {
@@ -925,7 +890,7 @@
           if (ev > alpha) alpha = ev;
           if (beta <= alpha) break;
         }
-        result = maxEval;
+        return maxEval;
       } else {
         let minEval = Infinity;
         for (const m of moves) {
@@ -936,18 +901,15 @@
           if (ev < beta) beta = ev;
           if (beta <= alpha) break;
         }
-        result = minEval;
+        return minEval;
       }
-
-      if (ttCache.size > 40000) ttCache.clear();
-      ttCache.set(key, result);
-      return result;
     }
 
     function pickBestAIMove() {
       const rootMoves = orderMoves(chess.moves({ verbose: true }));
       if (!rootMoves.length) return null;
 
+      // Immediate checkmate first
       for (const m of rootMoves) {
         chess.move(m);
         const mateNow = chess.in_checkmate();
@@ -956,8 +918,8 @@
       }
 
       let bestMove = rootMoves[0];
-      const maxDepth = 5;
-      const timeBudgetMs = 1400;
+      const maxDepth = 4;
+      const timeBudgetMs = 1100;
       const deadline = Date.now() + timeBudgetMs;
 
       for (let currentDepth = 3; currentDepth <= maxDepth; currentDepth++) {
@@ -971,7 +933,17 @@
             break;
           }
           chess.move(m);
-          const score = alphaBeta(currentDepth - 1, -Infinity, Infinity, false, deadline);
+          let score = alphaBeta(currentDepth - 1, -Infinity, Infinity, false, deadline);
+
+          // Discourage back-and-forth shunting
+          if (lastAIMoveInfo && m.from === lastAIMoveInfo.to && m.to === lastAIMoveInfo.from) {
+            score -= 65;
+          }
+          // Discourage threefold repetition when winning
+          if (chess.in_threefold_repetition() && score > 0) {
+            score -= 400;
+          }
+
           chess.undo();
 
           if (score > currentBestScore) {
@@ -1004,6 +976,7 @@
       }
       selectedSq = null;
       lastMoveInfo = null;
+      lastAIMoveInfo = null;
       renderAll();
     }
 
