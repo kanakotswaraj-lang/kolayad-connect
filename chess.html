@@ -68,7 +68,7 @@
       gap: 8px;
     }
 
-    /* മോഡ് സ്വിച്ചർ & സ്റ്റാറ്റസ് */
+    /* മോഡ് സ്വിച്ചർ */
     .mode-bar {
       display: flex;
       gap: 8px;
@@ -94,6 +94,41 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
     }
 
+    /* ലെവൽ ബാർ (ഇതിന്റെ അകത്തുതന്നെ അടുത്ത ലെവൽ) */
+    .level-bar {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 12px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .level-info {
+      font-size: 13px;
+      font-weight: 800;
+      color: #e2e8f0;
+    }
+    .level-badge {
+      color: #facc15;
+      font-weight: 900;
+    }
+    .next-level-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0f172a;
+      border: none;
+      border-radius: 9px;
+      padding: 6px 11px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+    }
+
     .status-banner {
       width: 100%;
       background: rgba(15, 23, 42, 0.94);
@@ -104,6 +139,13 @@
       font-size: 14.5px;
       font-weight: 900;
       color: var(--accent-gold);
+      transition: all 0.2s ease;
+    }
+    .status-banner.in-check {
+      background: rgba(127, 29, 29, 0.92);
+      border-color: #ef4444;
+      color: #fecaca;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
     }
 
     /* ബോർഡിന്റെ മുകളിലും താഴെയുമുള്ള വലിയ കരുക്കളുടെ ട്രേ */
@@ -219,6 +261,11 @@
     .sq.last-move {
       box-shadow: inset 0 0 0 2.5px rgba(56, 189, 248, 0.85);
     }
+    /* ചെക്ക് കിട്ടുന്ന രാജാവിന്റെ കള്ളിയിൽ ചുവപ്പ് കളർ */
+    .sq.king-in-check {
+      background: radial-gradient(circle, #ef4444 0%, #991b1b 100%) !important;
+      box-shadow: inset 0 0 0 3px #fecaca, 0 0 16px rgba(239, 68, 68, 0.95) !important;
+    }
     .sq.move-dot::after {
       content: "";
       position: absolute;
@@ -329,6 +376,14 @@
       <button type="button" class="mode-btn active" id="modeAiBtn" onclick="switchMode('ai')">🤖 കമ്പ്യൂട്ടർ (AI)</button>
     </div>
 
+    <!-- ഇതിന്റെ അകത്തുതന്നെ അടുത്ത ലെവൽ -->
+    <div class="level-bar" id="levelBar">
+      <div class="level-info">
+        ലെവൽ: <span class="level-badge" id="levelLabel">ലെവൽ 1 (ചലഞ്ച്)</span>
+      </div>
+      <button type="button" class="next-level-btn" id="nextLevelBtn" onclick="goNextLevel()">അടുത്ത ലെവൽ →</button>
+    </div>
+
     <div class="status-banner" id="statusText">നിങ്ങളുടെ ടേൺ (White)</div>
 
     <!-- മുകൾ ഭാഗത്ത്: വെട്ടിയെടുത്ത കരുക്കൾ (Black Captured) -->
@@ -384,8 +439,15 @@
       'a1','b1','c1','d1','e1','f1','g1','h1'
     ];
 
+    const aiLevels = [
+      { level: 1, name: 'ലെവൽ 1 (ചലഞ്ച്)', skill: 14, movetime: 900 },
+      { level: 2, name: 'ലെവൽ 2 (അടുത്ത ലെവൽ)', skill: 17, movetime: 1200 },
+      { level: 3, name: 'ലെവൽ 3 (മാസ്റ്റർ)', skill: 20, movetime: 1500 }
+    ];
+
     let chess = new Chess();
     let mode = 'ai';
+    let currentLevelIndex = 0;
     let selectedSq = null;
     let lastMoveInfo = null;
     let whiteCaptured = [];
@@ -393,10 +455,18 @@
     let aiThinking = false;
     let gameOverShown = false;
 
-    // Stockfish Web Worker (fallback to strong minimax if CDN blocked)
+    // Stockfish Web Worker
     let engine = null;
     let engineReady = false;
     let pendingMoveResolver = null;
+
+    function applyStockfishSkill() {
+      if (engine && engineReady) {
+        const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
+        engine.postMessage('setoption name Skill Level value ' + cfg.skill);
+        engine.postMessage('isready');
+      }
+    }
 
     function initStockfish() {
       try {
@@ -412,8 +482,7 @@
             engine.onmessage = function (e) {
               const line = typeof e.data === 'string' ? e.data : '';
               if (line === 'uciok') {
-                engine.postMessage('setoption name Skill Level value 14');
-                engine.postMessage('isready');
+                applyStockfishSkill();
               } else if (line === 'readyok') {
                 engineReady = true;
               } else if (line.startsWith('bestmove ')) {
@@ -436,7 +505,7 @@
       }
     }
 
-    function queryStockfishBestMove(fen, movetimeMs = 900) {
+    function queryStockfishBestMove(fen, movetimeMs) {
       return new Promise((resolve) => {
         if (!engine || !engineReady) {
           resolve(null);
@@ -457,11 +526,29 @@
       });
     }
 
+    function syncLevelUI() {
+      const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
+      const nextIndex = (currentLevelIndex + 1) % aiLevels.length;
+      const nextCfg = aiLevels[nextIndex];
+      document.getElementById('levelLabel').innerText = cfg.name;
+      document.getElementById('nextLevelBtn').innerText = `അടുത്ത ലെവൽ (${nextCfg.level}) →`;
+      document.getElementById('levelBar').style.display = (mode === 'ai') ? 'flex' : 'none';
+      applyStockfishSkill();
+    }
+
+    function goNextLevel() {
+      if (aiThinking) return;
+      currentLevelIndex = (currentLevelIndex + 1) % aiLevels.length;
+      syncLevelUI();
+      resetGame();
+    }
+
     function detectInitialMode() {
       const params = new URLSearchParams(window.location.search);
       const m = params.get('mode');
       mode = (m === '2p') ? '2p' : 'ai';
       syncModeButtons();
+      syncLevelUI();
     }
 
     function syncModeButtons() {
@@ -470,6 +557,7 @@
       document.getElementById('pageTitle').innerText = mode === 'ai' ? '🔥 3D ചെസ്സ് Vs AI' : '♟️ 3D ചെസ്സ് (2P)';
       document.getElementById('topTrayLabel').innerText = mode === 'ai' ? '🤖 ബോട്ട് വെട്ടിയവ:' : '♚ കറുപ്പ് വെട്ടിയവ:';
       document.getElementById('bottomTrayLabel').innerText = mode === 'ai' ? '♔ നിങ്ങൾ വെട്ടിയവ:' : '♔ വെളുപ്പ് വെട്ടിയവ:';
+      document.getElementById('levelBar').style.display = (mode === 'ai') ? 'flex' : 'none';
     }
 
     function switchMode(newMode) {
@@ -493,6 +581,7 @@
       if (engine && engineReady) {
         engine.postMessage('stop');
         engine.postMessage('ucinewgame');
+        applyStockfishSkill();
       }
       pendingMoveResolver = null;
       chess = new Chess();
@@ -519,12 +608,26 @@
         : `<span style="font-size:12px;color:#64748b;">—</span>`;
     }
 
+    function findKingSquare(color) {
+      const grid = chess.board();
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = grid[r][c];
+          if (p && p.color === color && p.type === 'k') {
+            return squareNames[r * 8 + c];
+          }
+        }
+      }
+      return null;
+    }
+
     function renderBoard() {
       const boardEl = document.getElementById('board');
       const grid = chess.board();
       const legalTargets = selectedSq
         ? chess.moves({ square: selectedSq, verbose: true }).map(m => m.to)
         : [];
+      const checkedKingSq = chess.in_check() ? findKingSquare(chess.turn()) : null;
 
       let html = '';
       for (let r = 0; r < 8; r++) {
@@ -535,10 +638,12 @@
           const isSelected = selectedSq === sqName;
           const isLegal = legalTargets.includes(sqName);
           const isLast = lastMoveInfo && (lastMoveInfo.from === sqName || lastMoveInfo.to === sqName);
+          const isKingCheck = checkedKingSq === sqName;
 
           let cls = `sq ${isDark ? 'dark' : 'light'}`;
-          if (isSelected) cls += ' selected';
           if (isLast) cls += ' last-move';
+          if (isSelected) cls += ' selected';
+          if (isKingCheck) cls += ' king-in-check';
           if (isLegal) cls += piece ? ' move-capture' : ' move-dot';
 
           let pieceHtml = '';
@@ -556,8 +661,12 @@
 
     function updateStatus() {
       const statusEl = document.getElementById('statusText');
+      const isCheck = chess.in_check() && !chess.in_checkmate();
+      statusEl.classList.toggle('in-check', isCheck);
+
       if (aiThinking) {
-        statusEl.innerText = '🤖 കമ്പ്യൂട്ടർ നീക്കം ആലോചിക്കുന്നു...';
+        const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
+        statusEl.innerText = `🤖 കമ്പ്യൂട്ടർ (${cfg.name}) ആലോചിക്കുന്നു...`;
         return;
       }
       if (chess.in_checkmate()) {
@@ -589,7 +698,10 @@
         ? (mode === 'ai' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ')
         : 'കറുപ്പ് (Black) കളിക്കാരുടെ ടേൺ';
 
-      if (chess.in_check()) turnMsg += ' — ⚠️ ചെക്ക്!';
+      if (chess.in_check()) {
+        const whoChecked = chess.turn() === 'w' ? 'നിങ്ങളുടെ രാജാവിന്' : 'കറുത്ത രാജാവിന്';
+        turnMsg += ` — 🔴 ചെക്ക്! (${whoChecked})`;
+      }
       statusEl.innerText = turnMsg;
     }
 
@@ -599,7 +711,6 @@
       updateStatus();
     }
 
-    // Fallback engine if Stockfish worker is unavailable
     function fallbackBestMove() {
       const moves = chess.moves({ verbose: true });
       if (!moves.length) return null;
@@ -667,8 +778,9 @@
         aiThinking = true;
         updateStatus();
 
+        const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
         const currentFen = chess.fen();
-        let chosen = await queryStockfishBestMove(currentFen, 900);
+        let chosen = await queryStockfishBestMove(currentFen, cfg.movetime);
         if (!chosen) {
           chosen = fallbackBestMove();
         }
