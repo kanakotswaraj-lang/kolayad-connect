@@ -588,7 +588,26 @@
       }
     }
 
-    // Corrected & Aggressive Tactical Chess AI (Black = Maximizer)
+    // Opening Book + Endgame Mop-Up + Aggressive Tactical Chess AI (Black = Maximizer)
+    const openingBookBlack = {
+      // White plays 1. e4
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -': ['e5', 'c5', 'e6', 'c6'],
+      // White plays 1. d4
+      'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -': ['Nf6', 'd5', 'e6'],
+      // White plays 1. Nf3 or 1. c4
+      'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq -': ['d5', 'Nf6', 'c5'],
+      'rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq -': ['e5', 'Nf6', 'c5'],
+      // After 1. e4 e5
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -': [],
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -': ['Nc6', 'Nf6'],
+      // After 1. e4 c5 (Sicilian)
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -': [],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -': ['d6', 'Nc6', 'e6'],
+      // After 1. d4 Nf6
+      'rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -': [],
+      'rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -': ['g6', 'e6', 'c5']
+    };
+
     const kingEndPST = [
       [-50,-40,-30,-20,-20,-30,-40,-50],
       [-30,-20,-10,  0,  0,-10,-20,-30],
@@ -604,18 +623,18 @@
       if (type === 'p') return 100;
       if (type === 'n') return 330;
       if (type === 'b') return 345;
-      if (type === 'r') return 530;
-      if (type === 'q') return 960;
+      if (type === 'r') return 540;
+      if (type === 'q') return 980;
       if (type === 'k') return 25000;
       return 0;
     }
 
     const pawnPST = [
       [0,  0,  0,  0,  0,  0,  0,  0],
-      [50, 50, 50, 50, 50, 50, 50, 50],
-      [10, 10, 20, 30, 30, 20, 10, 10],
-      [5,  5, 10, 25, 25, 10,  5,  5],
-      [0,  0,  0, 20, 20,  0,  0,  0],
+      [60, 60, 60, 60, 60, 60, 60, 60],
+      [15, 15, 25, 35, 35, 25, 15, 15],
+      [8,  8, 12, 28, 28, 12,  8,  8],
+      [0,  0,  0, 22, 22,  0,  0,  0],
       [5, -5,-10,  0,  0,-10, -5,  5],
       [5, 10, 10,-20,-20, 10, 10,  5],
       [0,  0,  0,  0,  0,  0,  0,  0]
@@ -624,44 +643,44 @@
     const knightPST = [
       [-50,-40,-30,-30,-30,-30,-40,-50],
       [-40,-20,  0,  0,  0,  0,-20,-40],
-      [-30,  0, 10, 15, 15, 10,  0,-30],
-      [-30,  5, 15, 20, 20, 15,  5,-30],
-      [-30,  0, 15, 20, 20, 15,  0,-30],
-      [-30,  5, 10, 15, 15, 10,  5,-30],
-      [-40,-20,  0,  5,  5,  0,-20,-40],
+      [-30,  0, 12, 18, 18, 12,  0,-30],
+      [-30,  5, 18, 24, 24, 18,  5,-30],
+      [-30,  0, 18, 24, 24, 18,  0,-30],
+      [-30,  5, 12, 18, 18, 12,  5,-30],
+      [-40,-20,  0,  6,  6,  0,-20,-40],
       [-50,-40,-30,-30,-30,-30,-40,-50]
     ];
 
     const bishopPST = [
       [-20,-10,-10,-10,-10,-10,-10,-20],
       [-10,  0,  0,  0,  0,  0,  0,-10],
-      [-10,  0,  5, 10, 10,  5,  0,-10],
-      [-10,  5,  5, 10, 10,  5,  5,-10],
-      [-10,  0, 10, 10, 10, 10,  0,-10],
-      [-10, 10, 10, 10, 10, 10, 10,-10],
-      [-10,  5,  0,  0,  0,  0,  5,-10],
+      [-10,  0,  6, 12, 12,  6,  0,-10],
+      [-10,  6,  6, 12, 12,  6,  6,-10],
+      [-10,  0, 12, 12, 12, 12,  0,-10],
+      [-10, 12, 12, 12, 12, 12, 12,-10],
+      [-10,  6,  0,  0,  0,  0,  6,-10],
       [-20,-10,-10,-10,-10,-10,-10,-20]
     ];
 
     const rookPST = [
       [0,  0,  0,  0,  0,  0,  0,  0],
-      [5, 10, 10, 10, 10, 10, 10,  5],
+      [8, 14, 14, 14, 14, 14, 14,  8],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
-      [0,  0,  0,  5,  5,  0,  0,  0]
+      [0,  0,  0,  6,  6,  0,  0,  0]
     ];
 
     const queenPST = [
       [-20,-10,-10, -5, -5,-10,-10,-20],
       [-10,  0,  0,  0,  0,  0,  0,-10],
-      [-10,  0,  5,  5,  5,  5,  0,-10],
-      [ -5,  0,  5,  5,  5,  5,  0, -5],
-      [  0,  0,  5,  5,  5,  5,  0, -5],
-      [-10,  5,  5,  5,  5,  5,  0,-10],
-      [-10,  0,  5,  0,  0,  0,  0,-10],
+      [-10,  0,  6,  6,  6,  6,  0,-10],
+      [ -5,  0,  6,  6,  6,  6,  0, -5],
+      [  0,  0,  6,  6,  6,  6,  0, -5],
+      [-10,  6,  6,  6,  6,  6,  0,-10],
+      [-10,  0,  6,  0,  0,  0,  0,-10],
       [-20,-10,-10, -5, -5,-10,-10,-20]
     ];
 
@@ -687,6 +706,10 @@
         }
       }
       return count <= 6;
+    }
+
+    function isOpeningPhase() {
+      return chess.history().length <= 8;
     }
 
     function getPosBonus(piece, r, c, endgame) {
@@ -759,10 +782,34 @@
       return false;
     }
 
+    // എൻഡ്-ഗെയിമിൽ White രാജാവിനെ മൂലയിലേക്ക് ഒതുക്കാൻ സഹായിക്കുന്ന സ്കോർ
+    function evaluateEndgameMopUp(b) {
+      let wKing = null, bKing = null;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = b[r][c];
+          if (p && p.type === 'k') {
+            if (p.color === 'w') wKing = { r, c };
+            else bKing = { r, c };
+          }
+        }
+      }
+      if (!wKing || !bKing) return 0;
+
+      const distFromCenterR = Math.abs(3.5 - wKing.r);
+      const distFromCenterC = Math.abs(3.5 - wKing.c);
+      const cornerPushBonus = (distFromCenterR + distFromCenterC) * 18;
+
+      const kingDist = Math.abs(bKing.r - wKing.r) + Math.abs(bKing.c - wKing.c);
+      const closenessBonus = (14 - kingDist) * 10;
+
+      return cornerPushBonus + closenessBonus;
+    }
+
     function evaluateBoard() {
       if (chess.in_checkmate()) {
         // turn() === 'w' means White is checkmated -> Black (AI) wins!
-        return chess.turn() === 'w' ? 5000000 : -5000000;
+        return chess.turn() === 'w' ? 9000000 : -9000000;
       }
       if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
         const b = chess.board();
@@ -775,13 +822,14 @@
             }
           }
         }
-        if (mat > 120) return -2500000;
-        if (mat < -120) return 2500000;
+        if (mat > 100) return -4000000;
+        if (mat < -100) return 4000000;
         return 0;
       }
 
       const b = chess.board();
       const endgame = isEndgameBoard(b);
+      const opening = isOpeningPhase();
       let score = 0;
 
       for (let r = 0; r < 8; r++) {
@@ -791,22 +839,35 @@
 
           let val = getPieceVal(p.type) + getPosBonus(p, r, c, endgame);
 
+          // ഓപ്പണിംഗിൽ മന്ത്രിയെ നേരത്തെ പുറത്തിറക്കുന്നത് ഒഴിവാക്കാനും കുതിര/ആന വികസനം പ്രോത്സാഹിപ്പിക്കാനും
+          if (opening && p.type === 'q') {
+            val -= p.color === 'b' ? 35 : -35;
+          }
+          if (opening && (p.type === 'n' || p.type === 'b')) {
+            const developed = p.color === 'b' ? (r > 0) : (r < 7);
+            if (developed) val += p.color === 'b' ? 18 : -18;
+          }
+
           if (p.color === 'b') {
             if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'w')) {
-              val -= Math.floor(getPieceVal(p.type) * 0.7);
+              val -= Math.floor(getPieceVal(p.type) * 0.65);
             }
             score += val;
           } else {
             if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'b')) {
-              val -= Math.floor(getPieceVal(p.type) * 0.65);
+              val -= Math.floor(getPieceVal(p.type) * 0.7);
             }
             score -= val;
           }
         }
       }
 
+      if (endgame) {
+        score += evaluateEndgameMopUp(b);
+      }
+
       if (chess.in_check()) {
-        score += chess.turn() === 'w' ? 110 : -110;
+        score += chess.turn() === 'w' ? 150 : -150;
       }
 
       return score;
@@ -815,17 +876,19 @@
     function scoreMoveForOrdering(m) {
       let s = 0;
       if (m.captured) {
-        s += getPieceVal(m.captured) * 15 - getPieceVal(m.piece);
+        s += getPieceVal(m.captured) * 16 - getPieceVal(m.piece);
       }
       if (m.promotion) {
-        s += getPieceVal(m.promotion) * 12;
+        s += getPieceVal(m.promotion) * 14;
       }
       if (m.san && m.san.includes('+')) {
-        s += 220;
+        s += 260;
       }
-      // Penalize moving the same piece straight back to where it just came from
+      if (m.san && (m.san === 'O-O' || m.san === 'O-O-O')) {
+        s += 90;
+      }
       if (lastAIMoveInfo && m.from === lastAIMoveInfo.to && m.to === lastAIMoveInfo.from) {
-        s -= 250;
+        s -= 300;
       }
       return s;
     }
@@ -905,11 +968,24 @@
       }
     }
 
+    function pickOpeningMove(moves) {
+      const fenParts = chess.fen().split(' ');
+      const positionKey = fenParts.slice(0, 4).join(' ');
+      const candidates = openingBookBlack[positionKey];
+      if (!candidates || !candidates.length) return null;
+
+      for (const sanMove of candidates) {
+        const found = moves.find(m => m.san === sanMove);
+        if (found) return found;
+      }
+      return null;
+    }
+
     function pickBestAIMove() {
       const rootMoves = orderMoves(chess.moves({ verbose: true }));
       if (!rootMoves.length) return null;
 
-      // Immediate checkmate first
+      // ഉടൻ ചെക്ക്മേറ്റ് ആകുന്ന നീക്കം ഉണ്ടെങ്കിൽ ഉടൻ തിരഞ്ഞെടുക്കുക
       for (const m of rootMoves) {
         chess.move(m);
         const mateNow = chess.in_checkmate();
@@ -917,9 +993,13 @@
         if (mateNow) return m;
       }
 
+      // ഓപ്പണിംഗ് ബുക്ക് നീക്കം ലഭ്യമാണെങ്കിൽ തിരഞ്ഞെടുക്കുക
+      const bookMove = pickOpeningMove(rootMoves);
+      if (bookMove) return bookMove;
+
       let bestMove = rootMoves[0];
       const maxDepth = 4;
-      const timeBudgetMs = 1100;
+      const timeBudgetMs = 1250;
       const deadline = Date.now() + timeBudgetMs;
 
       for (let currentDepth = 3; currentDepth <= maxDepth; currentDepth++) {
@@ -935,13 +1015,11 @@
           chess.move(m);
           let score = alphaBeta(currentDepth - 1, -Infinity, Infinity, false, deadline);
 
-          // Discourage back-and-forth shunting
           if (lastAIMoveInfo && m.from === lastAIMoveInfo.to && m.to === lastAIMoveInfo.from) {
-            score -= 65;
+            score -= 80;
           }
-          // Discourage threefold repetition when winning
           if (chess.in_threefold_repetition() && score > 0) {
-            score -= 400;
+            score -= 500;
           }
 
           chess.undo();
