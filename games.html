@@ -11,7 +11,7 @@
       --bg-body: #070b19;
       --bg-app: #0b1128;
       --bg-card: #131c3f;
-      --border-color: rgba(59, 130, 246, 0.3);
+      --border-color: rgba(59, 130, 246, 0.32);
       --primary-blue: #2563eb;
       --accent-gold: #facc15;
     }
@@ -24,7 +24,8 @@
       overflow-x: hidden;
     }
     .header {
-      background: var(--bg-app);
+      background: rgba(11, 17, 40, 0.96);
+      backdrop-filter: blur(10px);
       padding: 12px 15px;
       display: flex;
       align-items: center;
@@ -40,45 +41,110 @@
       padding: 6px 14px;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       text-decoration: none;
       margin-right: 12px;
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+      white-space: nowrap;
     }
     .back-btn:active { transform: scale(0.95); }
 
     .container {
-      padding: 15px;
+      padding: 16px 14px 40px 14px;
       max-width: 480px;
       margin: 0 auto;
-      text-align: center;
     }
+    .arena-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(124, 58, 237, 0.18));
+      border: 1.5px solid rgba(250, 204, 21, 0.35);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+    .arena-banner p {
+      color: #cbd5e1;
+      font-size: 13px;
+      margin: 0;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* ഏകീകൃത ഗെയിം കാർഡ് ലേഔട്ട് */
     .game-card {
-      background: linear-gradient(145deg, rgba(19, 28, 63, 0.95), rgba(23, 35, 77, 0.75));
+      background: linear-gradient(145deg, rgba(19, 28, 63, 0.96), rgba(15, 23, 42, 0.92));
       border: 1.5px solid var(--border-color);
-      padding: 16px;
+      padding: 14px 15px;
       border-radius: 16px;
       margin-bottom: 12px;
       text-align: left;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      gap: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+    .game-card:hover {
+      border-color: rgba(250, 204, 21, 0.55);
+    }
+    .game-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+    .game-icon-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .game-card-info {
+      min-width: 0;
+      flex: 1;
+    }
+    .game-card-info h3 {
+      margin: 0 0 3px 0;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.3;
+    }
+    .game-card-info p {
+      margin: 0;
+      font-size: 12px;
+      color: #cbd5e1;
+      font-weight: 600;
+      line-height: 1.4;
     }
     .play-btn {
       background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #ffffff;
       border: none;
-      padding: 9px 18px;
+      padding: 9px 15px;
       border-radius: 10px;
-      font-weight: bold;
+      font-weight: 800;
       cursor: pointer;
-      font-size: 14px;
-      box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
+    .play-btn:active { transform: scale(0.96); }
+
     #gameArea {
       position: fixed;
       inset: 0;
@@ -107,7 +173,7 @@
       border-color: #38bdf8;
     }
 
-    /* 🌟 EXTERNAL PLAYERS STATUS BAR (വലിയ വ്യക്തമായ അക്ഷരങ്ങൾ) */
+    /* 🌟 EXTERNAL PLAYERS STATUS BAR */
     .external-status-panel {
       display: flex;
       justify-content: center;
@@ -134,7 +200,7 @@
       border: 1.5px solid rgba(255,255,255,0.2);
     }
 
-    /* 🌟 3D SNAKES & LADDERS & LUDO PRO STYLES (കൂടുതൽ വലിയ അക്കങ്ങൾ) */
+    /* 🌟 3D SNAKES & LADDERS & LUDO PRO STYLES */
     .snake-3d-stage {
       perspective: 900px;
       width: 100%;
@@ -174,7 +240,7 @@
       position: relative;
       box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), 0 3px 0 rgba(0,0,0,0.5);
       font-weight: 900;
-      font-size: 16px; /* അക്കങ്ങളുടെ വലിപ്പം നന്നായി കൂട്ടിയിരിക്കുന്നു */
+      font-size: 16px;
     }
     .snake-3d-overlay {
       position: absolute;
@@ -265,116 +331,144 @@
   <!-- ഹെഡർ ഭാഗം -->
   <div class="header">
     <a href="index.html" class="back-btn">← തിരികെ</a>
-    <h2 style="margin: 0; font-size: 18px; color: #facc15; font-weight: 900;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
+    <h2 style="margin: 0; font-size: 17px; color: #facc15; font-weight: 900;">🎮 നാട്ടുകൂട്ടം ഗെയിംസ് അരീന</h2>
   </div>
 
   <!-- പ്രധാന ഗെയിംസ് മെനു -->
   <div class="container" id="mainMenu">
-    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 18px; font-weight: 700;">സുഹൃത്തുക്കൾക്കൊപ്പമോ കമ്പ്യൂട്ടറിനെതിരെയോ കളിക്കാം!</p>
-    
+    <div class="arena-banner">
+      <p>സുഹൃത്തുക്കൾക്കൊപ്പമോ കമ്പ്യൂട്ടറിനെതിരെയോ കളിക്കാം — ഒപ്പം ചെസ്സ് നിയമങ്ങളും തന്ത്രങ്ങളും പഠിക്കാം!</p>
+    </div>
+
     <div class="game-card">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #facc15; font-size: 16px; font-weight: 900;">🎲 ലൂഡോ (Ludo Pro 3D)</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">3D രൂപകൽപ്പനയും കിടിലൻ ഡൈസ് അനുഭവവും</p>
+      <div class="game-card-left">
+        <div class="game-icon-badge">🎲</div>
+        <div class="game-card-info">
+          <h3 style="color: #facc15;">ലൂഡോ (Ludo Pro 3D)</h3>
+          <p>3D രൂപകൽപ്പനയും കിടിലൻ ഡൈസ് അനുഭവവും</p>
+        </div>
       </div>
       <button class="play-btn" onclick="openSetup('ludo')">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #38bdf8; font-size: 16px; font-weight: 900;">♟️ ചെസ്സ് (3D 2-Player Local)</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">ഔദ്യോഗിക നിയമങ്ങളും 3D കരിക്കളും</p>
+      <div class="game-card-left">
+        <div class="game-icon-badge">♟️</div>
+        <div class="game-card-info">
+          <h3 style="color: #38bdf8;">ചെസ്സ് (3D 2-Player Local)</h3>
+          <p>ഔദ്യോഗിക നിയമങ്ങളും 3D കരിക്കളും</p>
+        </div>
       </div>
       <button class="play-btn" onclick="openGame('chess')">കളിക്കുക</button>
     </div>
 
     <div class="game-card">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #f87171; font-size: 16px; font-weight: 900;">🔥 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (3D AI)</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">10 നീക്കങ്ങൾ മുന്നിൽ കാണുന്ന അൾട്രാ-ഹാർഡ് ബോട്ട്</p>
+      <div class="game-card-left">
+        <div class="game-icon-badge">🔥</div>
+        <div class="game-card-info">
+          <h3 style="color: #f87171;">ചെസ്സ് Vs കമ്പ്യൂട്ടർ (3D AI)</h3>
+          <p>മുന്നിൽ കാണുന്ന തന്ത്രശാലിയായ ബോട്ട്</p>
+        </div>
       </div>
       <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #dc2626, #991b1b);">കളിക്കുക</button>
     </div>
 
+    <div class="game-card" style="border-color: rgba(224, 138, 75, 0.55);">
+      <div class="game-card-left">
+        <div class="game-icon-badge">📖</div>
+        <div class="game-card-info">
+          <h3 style="color: #fb923c;">ചെസ്സ് കളി പഠിക്കാം (സ്ലൈഡുകൾ)</h3>
+          <p>നിയമങ്ങൾ, നേട്ടങ്ങൾ, ഇന്ററാക്ടീവ് ചലന ഡെമോ</p>
+        </div>
+      </div>
+      <a href="chess-guide.html" class="play-btn" style="background: linear-gradient(135deg, #ea580c, #c2410c);">പഠിക്കാം</a>
+    </div>
+
     <div class="game-card">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #4ade80; font-size: 16px; font-weight: 900;">🐍 3D ഏണിയും പാമ്പും</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">3D പശ്ചാത്തലവും വലിയ അക്കങ്ങളും</p>
+      <div class="game-card-left">
+        <div class="game-icon-badge">🐍</div>
+        <div class="game-card-info">
+          <h3 style="color: #4ade80;">3D ഏണിയും പാമ്പും</h3>
+          <p>3D പശ്ചാത്തലവും വലിയ അക്കങ്ങളും</p>
+        </div>
       </div>
       <button class="play-btn" onclick="openSetup('snakes')">കളിക്കുക</button>
     </div>
+
     <div class="game-card">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #38bdf8; font-size: 16px; font-weight: 900;">♟️ ചെസ്സ് (2-Player Local)</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">ഔദ്യോഗിക നിയമങ്ങളും പ്രത്യേക ചെസ്സ് പേജും</p>
+      <div class="game-card-left">
+        <div class="game-icon-badge">♟️</div>
+        <div class="game-card-info">
+          <h3 style="color: #38bdf8;">ചെസ്സ് (2-Player Local)</h3>
+          <p>ഔദ്യോഗിക നിയമങ്ങളും പ്രത്യേക ചെസ്സ് പേജും</p>
+        </div>
       </div>
       <a href="chess.html?mode=2p" class="play-btn">കളിക്കുക</a>
     </div>
 
     <div class="game-card">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #f87171; font-size: 16px; font-weight: 900;">🔥 ചെസ്സ് Vs കമ്പ്യൂട്ടർ (AI)</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">കരുത്തുറ്റ AI ലെവലുകൾ (Easy / Medium / Risk Pro)</p>
+      <div class="game-card-left">
+        <div class="game-icon-badge">🤖</div>
+        <div class="game-card-info">
+          <h3 style="color: #f87171;">ചെസ്സ് Vs കമ്പ്യൂട്ടർ (AI)</h3>
+          <p>കരുത്തുറ്റ AI ലെവലുകൾ (Easy / Medium / Risk Pro)</p>
+        </div>
       </div>
       <a href="chess.html?mode=ai" class="play-btn" style="background: linear-gradient(135deg, #dc2626, #991b1b);">കളിക്കുക</a>
     </div>
 
-    
-    <!-- മോളുടെ സർപ്രൈസ് ഗിഫ്റ്റ് ബോക്സ് ഗെയിം ലിങ്ക് -->
-    <div class="game-card" style="border-color: #facc15;">
-      <div>
-        <h3 style="margin: 0 0 4px 0; color: #facc15; font-size: 16px; font-weight: 900;">🎁 മിസ്ട്രി സമ്മാനപ്പെട്ടി</h3>
-        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 600;">പെട്ടി തുറന്ന് കോയിനുകളും സമ്മാനങ്ങളും നേടാം!</p>
+    <div class="game-card" style="border-color: rgba(250, 204, 21, 0.55);">
+      <div class="game-card-left">
+        <div class="game-icon-badge">🎁</div>
+        <div class="game-card-info">
+          <h3 style="color: #facc15;">മിസ്ട്രി സമ്മാനപ്പെട്ടി</h3>
+          <p>പെട്ടി തുറന്ന് കോയിനുകളും സമ്മാനങ്ങളും നേടാം!</p>
+        </div>
       </div>
       <a href="prize_box.html" class="play-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a;">തുടരുക</a>
     </div>
-  </div>
-  <a href="memory_puzzle.html" style="text-decoration: none;">
-  <div style="background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #38bdf8; padding: 15px 20px; border-radius: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);">
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <span style="font-size: 32px;">🧠</span>
-      <div>
-        <h3 style="color: #facc15; margin: 0 0 4px 0; font-size: 16px;">മെമ്മറി മാച്ച് പസിൽ</h3>
-        <p style="color: #94a3b8; margin: 0; font-size: 12.5px;">ഓർമ്മശക്തിയും ഏകാഗ്രതയും കൂട്ടാനുള്ള കിടിലൻ ഗെയിം!</p>
-      </div>
-    </div>
-    <span style="color: #38bdf8; font-size: 18px; font-weight: bold;">▶</span>
-  </div>
-</a>
-  
-<a href="alphabet_puzzle.html" style="text-decoration: none;">
-  <div style="background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #7c3aed; padding: 15px 20px; border-radius: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);">
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <span style="font-size: 32px;">🔤</span>
-      <div>
-        <h3 style="color: #facc15; margin: 0 0 4px 0; font-size: 16px;">അക്ഷരമാല & പദ പസിൽ</h3>
-        <p style="color: #94a3b8; margin: 0; font-size: 12.5px;">മലയാളം അക്ഷരങ്ങളും വാക്കുകളും പഠിക്കാം, കളിക്കാം!</p>
-      </div>
-    </div>
-    <span style="color: #38bdf8; font-size: 18px; font-weight: bold;">▶</span>
-  </div>
-</a>
 
-<a href="fruit_catch.html" style="text-decoration: none;">
-  <div style="background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #22c55e; padding: 15px 20px; border-radius: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);">
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <span style="font-size: 32px;">🧺</span>
-      <div>
-        <h3 style="color: #facc15; margin: 0 0 4px 0; font-size: 16px;">ഫ്രൂട്ട് ക്യാച്ച് ഗെയിം</h3>
-        <p style="color: #94a3b8; margin: 0; font-size: 12.5px;">മുകളിൽ നിന്ന് വീഴുന്ന പഴങ്ങൾ കൊട്ടയിലാക്കാം!</p>
+    <div class="game-card" style="border-color: rgba(56, 189, 248, 0.45);">
+      <div class="game-card-left">
+        <div class="game-icon-badge">🧠</div>
+        <div class="game-card-info">
+          <h3 style="color: #facc15;">മെമ്മറി മാച്ച് പസിൽ</h3>
+          <p>ഓർമ്മശക്തിയും ഏകാഗ്രതയും കൂട്ടാനുള്ള കിടിലൻ ഗെയിം!</p>
+        </div>
       </div>
+      <a href="memory_puzzle.html" class="play-btn">കളിക്കുക</a>
     </div>
-    <span style="color: #38bdf8; font-size: 18px; font-weight: bold;">▶</span>
+
+    <div class="game-card" style="border-color: rgba(168, 85, 247, 0.45);">
+      <div class="game-card-left">
+        <div class="game-icon-badge">🔤</div>
+        <div class="game-card-info">
+          <h3 style="color: #facc15;">അക്ഷരമാല & പദ പസിൽ</h3>
+          <p>മലയാളം അക്ഷരങ്ങളും വാക്കുകളും പഠിക്കാം, കളിക്കാം!</p>
+        </div>
+      </div>
+      <a href="alphabet_puzzle.html" class="play-btn">കളിക്കുക</a>
+    </div>
+
+    <div class="game-card" style="border-color: rgba(34, 197, 94, 0.45);">
+      <div class="game-card-left">
+        <div class="game-icon-badge">🧺</div>
+        <div class="game-card-info">
+          <h3 style="color: #facc15;">ഫ്രൂട്ട് ക്യാച്ച് ഗെയിം</h3>
+          <p>മുകളിൽ നിന്ന് വീഴുന്ന പഴങ്ങൾ കൊട്ടയിലാക്കാം!</p>
+        </div>
+      </div>
+      <a href="fruit_catch.html" class="play-btn">കളിക്കുക</a>
+    </div>
   </div>
-</a>
 
   <!-- പ്ലെയർ സെലക്ഷൻ ഡയലോഗ് -->
   <div id="setupArea" style="position: fixed; inset: 0; background: var(--bg-app); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
     <h3 id="setupTitle" style="color: #facc15; margin-bottom: 15px; font-size: 18px; font-weight: 900;">കളിക്കാരുടെ എണ്ണം തിരഞ്ഞെടുക്കുക</h3>
     <div style="display: flex; gap: 10px; margin-bottom: 25px;" id="playerCountBtns">
-      <button class="player-select-btn" onclick="setPlayerCount(2)">2 പ്ലെയർ</button>
-      <button class="player-select-btn" onclick="setPlayerCount(3)">3 പ്ലെയർ</button>
-      <button class="player-select-btn active" onclick="setPlayerCount(4)">4 പ്ലെയർ</button>
+      <button class="player-select-btn" onclick="setPlayerCount(2, this)">2 പ്ലെയർ</button>
+      <button class="player-select-btn" onclick="setPlayerCount(3, this)">3 പ്ലെയർ</button>
+      <button class="player-select-btn active" onclick="setPlayerCount(4, this)">4 പ്ലെയർ</button>
     </div>
     <div style="display: flex; gap: 12px;">
       <button onclick="startConfiguredGame()" style="background: #22c55e; color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 15px;">തുടരുക ➔</button>
@@ -402,10 +496,10 @@
       document.getElementById('setupArea').style.display = 'flex';
     }
 
-    function setPlayerCount(count) {
+    function setPlayerCount(count, elem) {
       selectedPlayerCount = count;
       document.querySelectorAll('.player-select-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      if (elem) elem.classList.add('active');
     }
 
     function closeSetup() {
@@ -715,10 +809,6 @@
     let aiGame = null;
     let aiSelectedSquare = null;
     let lastAIMoveSquares = [];
-
-    const pawnEvalWhite = [[0,0,0,0,0,0,0,0],[5,5,5,5,5,5,5,5],[1,1,2,3,3,2,1,1],[0.5,0.5,1,2.5,2.5,1,0.5,0.5],[0,0,0,2,2,0,0,0],[0.5,-0.5,-1,0,0,-1,-0.5,0.5],[0.5,1,1,-2,-2,1,1,0.5],[0,0,0,0,0,0,0,0]];
-    const pawnEvalBlack = pawnEvalWhite.slice().reverse();
-    const knightEval = [[-5,-4,-3,-3,-3,-3,-4,-5],[-4,-2,0,0,0,0,-2,-4],[-3,0,1,1.5,1.5,1,0,-3],[-3,0.5,1.5,2,2,1.5,0.5,-3],[-3,0,1.5,2,2,1.5,0,-3],[-3,0.5,1,1.5,1.5,1,0.5,-3],[-4,-2,0,0.5,0.5,0,-2,-4],[-5,-4,-3,-3,-3,-3,-4,-5]];
 
     function getPieceValue(piece, x, y) {
       if (!piece) return 0;
