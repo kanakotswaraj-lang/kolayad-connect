@@ -146,6 +146,7 @@
       user-select: none;
       transition: transform 0.12s ease, background-color 0.12s ease;
       text-shadow: 0 3px 6px rgba(0, 0, 0, 0.65);
+      position: relative;
     }
     .chess-sq:active { transform: scale(0.92); }
     .chess-sq.selected {
@@ -162,7 +163,6 @@
       font-size: 18px;
       pointer-events: none;
     }
-    .chess-sq { position: relative; }
     .controls-row {
       display: flex;
       gap: 8px;
@@ -196,7 +196,7 @@
     <div id="aiLevelBar" class="level-bar show">
       <button class="level-btn" onclick="setAILevel('easy', this)">സാധാരണം (Depth 2)</button>
       <button class="level-btn" onclick="setAILevel('medium', this)">കടുപ്പം (Depth 3)</button>
-      <button class="level-btn active" onclick="setAILevel('hard', this)">🔥 റിസ്ക് / പ്രോ (Depth 4)</button>
+      <button class="level-btn active" onclick="setAILevel('hard', this)">🔥 റിസ്ക് / പ്രോ (Depth 4-5)</button>
     </div>
 
     <div id="chessStatus" class="status-box">നിങ്ങളുടെ ടേൺ (White)</div>
@@ -225,7 +225,6 @@
       'a1','b1','c1','d1','e1','f1','g1','h1'
     ];
 
-    // Position tables (from White's perspective, row 0 = rank 8, row 7 = rank 1)
     const pawnPST = [
       [0,  0,  0,  0,  0,  0,  0,  0],
       [5,  5,  5,  5,  5,  5,  5,  5],
@@ -292,6 +291,18 @@
       [2,  3,  1,  0,  0,  1,  3,  2]
     ];
 
+    // Endgame king favors active central squares and opposing the enemy king
+    const kingEndPST = [
+      [-5,-3,-3,-3,-3,-3,-3,-5],
+      [-3,-1, 0, 0, 0, 0,-1,-3],
+      [-3, 0, 2, 2.5,2.5,2, 0,-3],
+      [-3, 0, 2.5,3.5,3.5,2.5,0,-3],
+      [-3, 0, 2.5,3.5,3.5,2.5,0,-3],
+      [-3, 0, 2, 2.5,2.5,2, 0,-3],
+      [-3,-1, 0, 0, 0, 0,-1,-3],
+      [-5,-3,-3,-3,-3,-3,-3,-5]
+    ];
+
     const pieceBaseValues = {
       'p': 10,
       'n': 32,
@@ -302,14 +313,32 @@
     };
 
     let chessGame = null;
-    let gameMode = 'ai'; // 'ai' or '2p'
-    let aiLevel = 'hard'; // 'easy', 'medium', 'hard'
+    let gameMode = 'ai';
+    let aiLevel = 'hard';
     let selectedSq = null;
     let legalTargets = [];
     let lastMove = null;
     let aiThinking = false;
 
-    function getPSTValue(piece, r, c) {
+    const urlMode = new URLSearchParams(window.location.search).get('mode');
+    if (urlMode === '2p' || urlMode === 'ai') {
+      gameMode = urlMode;
+    }
+
+    function isEndgame(board) {
+      let nonPawnMaterial = 0;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = board[r][c];
+          if (!p || p.type === 'p' || p.type === 'k') continue;
+          nonPawnMaterial += pieceBaseValues[p.type] || 0;
+        }
+      }
+      // Endgame when major/minor pieces left are limited (e.g., <= 130 points total)
+      return nonPawnMaterial <= 130;
+    }
+
+    function getPSTValue(piece, r, c, endgame) {
       const row = piece.color === 'w' ? r : 7 - r;
       switch (piece.type) {
         case 'p': return pawnPST[row][c];
@@ -317,12 +346,12 @@
         case 'b': return bishopPST[row][c];
         case 'r': return rookPST[row][c];
         case 'q': return queenPST[row][c];
-        case 'k': return kingMidPST[row][c];
+        case 'k': return endgame ? kingEndPST[row][c] : kingMidPST[row][c];
         default: return 0;
       }
     }
 
-    // Returns score from White's perspective
+    // Score from White's perspective
     function evaluatePosition(instance) {
       if (instance.in_checkmate()) {
         return instance.turn() === 'w' ? -99999 : 99999;
@@ -332,40 +361,111 @@
       }
 
       const board = instance.board();
+      const endgame = isEndgame(board);
       let score = 0;
+      let whiteKingPos = null;
+      let blackKingPos = null;
 
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           const piece = board[r][c];
           if (!piece) continue;
+
+          if (piece.type === 'k') {
+            if (piece.color === 'w') whiteKingPos = { r, c };
+            else blackKingPos = { r, c };
+          }
+
           const base = pieceBaseValues[piece.type] || 0;
-          const posBonus = getPSTValue(piece, r, c);
+          const posBonus = getPSTValue(piece, r, c, endgame);
           const total = base + posBonus;
           score += piece.color === 'w' ? total : -total;
         }
       }
 
-      // Risk / pressure bonus when opponent king is in check
+      // In endgame, push enemy king toward edges/corners and bring own king closer
+      if (endgame && whiteKingPos && blackKingPos) {
+        const wEdgeDist = Math.min(whiteKingPos.r, 7 - whiteKingPos.r) + Math.min(whiteKingPos.c, 7 - whiteKingPos.c);
+        const bEdgeDist = Math.min(blackKingPos.r, 7 - blackKingPos.r) + Math.min(blackKingPos.c, 7 - blackKingPos.c);
+        const kingDist = Math.abs(whiteKingPos.r - blackKingPos.r) + Math.abs(whiteKingPos.c - blackKingPos.c);
+
+        // Smaller edge distance means king is closer to edge (more vulnerable to mate)
+        score += (4 - bEdgeDist) * 1.4;
+        score -= (4 - wEdgeDist) * 1.4;
+        score += (14 - kingDist) * 0.45;
+      }
+
       if (instance.in_check()) {
-        score += instance.turn() === 'w' ? -2.5 : 2.5;
+        score += instance.turn() === 'w' ? -3 : 3;
       }
 
       return score;
     }
 
-    // Order moves so captures & checks are evaluated first for better alpha-beta pruning
     function orderMoves(moves) {
       return moves.sort((a, b) => {
-        const scoreA = (a.captured ? (pieceBaseValues[a.captured] || 1) * 10 : 0) + (a.san.includes('+') || a.san.includes('#') ? 25 : 0) + (a.promotion ? 40 : 0);
-        const scoreB = (b.captured ? (pieceBaseValues[b.captured] || 1) * 10 : 0) + (b.san.includes('+') || b.san.includes('#') ? 25 : 0) + (b.promotion ? 40 : 0);
+        const scoreA =
+          (a.captured ? (pieceBaseValues[a.captured] || 1) * 12 : 0) +
+          (a.san.includes('+') || a.san.includes('#') ? 25 : 0) +
+          (a.promotion ? 45 : 0);
+        const scoreB =
+          (b.captured ? (pieceBaseValues[b.captured] || 1) * 12 : 0) +
+          (b.san.includes('+') || b.san.includes('#') ? 25 : 0) +
+          (b.promotion ? 45 : 0);
         return scoreB - scoreA;
       });
     }
 
+    // Quiescence search on capture moves to avoid horizon blunders
+    function quiescenceAI(instance, alpha, beta, isBlackTurn, qDepth) {
+      const standPat = -evaluatePosition(instance);
+      if (qDepth <= 0 || instance.game_over()) {
+        return standPat;
+      }
+
+      if (isBlackTurn) {
+        if (standPat >= beta) return beta;
+        if (standPat > alpha) alpha = standPat;
+
+        const captures = orderMoves(
+          instance.moves({ verbose: true }).filter(m => m.captured || m.promotion)
+        );
+
+        for (let i = 0; i < captures.length; i++) {
+          instance.move(captures[i]);
+          const score = quiescenceAI(instance, alpha, beta, false, qDepth - 1);
+          instance.undo();
+          if (score >= beta) return beta;
+          if (score > alpha) alpha = score;
+        }
+        return alpha;
+      } else {
+        const whiteStandPat = evaluatePosition(instance);
+        if (whiteStandPat <= alpha) return alpha;
+        if (whiteStandPat < beta) beta = whiteStandPat;
+
+        const captures = orderMoves(
+          instance.moves({ verbose: true }).filter(m => m.captured || m.promotion)
+        );
+
+        for (let i = 0; i < captures.length; i++) {
+          instance.move(captures[i]);
+          const score = -quiescenceAI(instance, -beta, -alpha, true, qDepth - 1);
+          instance.undo();
+          if (score <= alpha) return alpha;
+          if (score < beta) beta = score;
+        }
+        return beta;
+      }
+    }
+
     // Minimax from AI (Black) perspective: higher score = better for Black
     function minimaxAI(depth, instance, alpha, beta, isBlackTurn) {
-      if (depth === 0 || instance.game_over()) {
+      if (instance.game_over()) {
         return -evaluatePosition(instance);
+      }
+      if (depth === 0) {
+        return quiescenceAI(instance, alpha, beta, isBlackTurn, 3);
       }
 
       const moves = orderMoves(instance.moves({ verbose: true }));
@@ -398,6 +498,10 @@
     function getDepthForLevel() {
       if (aiLevel === 'easy') return 2;
       if (aiLevel === 'medium') return 3;
+      // In hard mode, go slightly deeper in endgame when fewer moves exist
+      const endgame = isEndgame(chessGame.board());
+      const moveCount = chessGame.moves().length;
+      if (endgame && moveCount <= 22) return 5;
       return 4;
     }
 
@@ -567,7 +671,6 @@
     function undoMove() {
       if (aiThinking) return;
       if (gameMode === 'ai') {
-        // Undo AI move and player move if possible
         if (chessGame.turn() === 'w' && chessGame.history().length >= 2) {
           chessGame.undo();
           chessGame.undo();
@@ -590,6 +693,10 @@
       legalTargets = [];
       lastMove = null;
       aiThinking = false;
+      document.getElementById('modeAIBtn').classList.toggle('active', gameMode === 'ai');
+      document.getElementById('mode2PBtn').classList.toggle('active', gameMode === '2p');
+      document.getElementById('aiLevelBar').classList.toggle('show', gameMode === 'ai');
+      document.getElementById('chessBoard').classList.toggle('ai-border', gameMode === 'ai');
       renderBoard();
       updateStatus();
     }
