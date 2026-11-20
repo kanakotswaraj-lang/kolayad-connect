@@ -585,14 +585,27 @@
       }
     }
 
-    // Ultra Hard Chess AI Engine
+    // Maximum Strength Ultra Hard Chess AI Engine
+    const kingEndPST = [
+      [-50,-40,-30,-20,-20,-30,-40,-50],
+      [-30,-20,-10,  0,  0,-10,-20,-30],
+      [-30,-10, 20, 30, 30, 20,-10,-30],
+      [-30,-10, 30, 40, 40, 30,-10,-30],
+      [-30,-10, 30, 40, 40, 30,-10,-30],
+      [-30,-10, 20, 30, 30, 20,-10,-30],
+      [-30,-30,  0,  0,  0,  0,-30,-30],
+      [-50,-30,-30,-30,-30,-30,-30,-50]
+    ];
+
+    const ttCache = new Map();
+
     function getPieceVal(type) {
       if (type === 'p') return 100;
-      if (type === 'n') return 320;
-      if (type === 'b') return 330;
-      if (type === 'r') return 500;
-      if (type === 'q') return 900;
-      if (type === 'k') return 20000;
+      if (type === 'n') return 330;
+      if (type === 'b') return 345;
+      if (type === 'r') return 530;
+      if (type === 'q') return 960;
+      if (type === 'k') return 25000;
       return 0;
     }
 
@@ -662,53 +675,187 @@
       [ 20, 30, 10,  0,  0, 10, 30, 20]
     ];
 
-    function getPosBonus(piece, r, c) {
+    function isEndgameBoard(b) {
+      let count = 0;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = b[r][c];
+          if (p && (p.type === 'q' || p.type === 'r' || p.type === 'b' || p.type === 'n')) {
+            count++;
+          }
+        }
+      }
+      return count <= 6;
+    }
+
+    function getPosBonus(piece, r, c, endgame) {
       const row = piece.color === 'w' ? r : 7 - r;
       if (piece.type === 'p') return pawnPST[row][c];
       if (piece.type === 'n') return knightPST[row][c];
       if (piece.type === 'b') return bishopPST[row][c];
       if (piece.type === 'r') return rookPST[row][c];
       if (piece.type === 'q') return queenPST[row][c];
-      if (piece.type === 'k') return kingMidPST[row][c];
+      if (piece.type === 'k') return endgame ? kingEndPST[row][c] : kingMidPST[row][c];
       return 0;
     }
 
-    function evaluateBoard() {
-      if (chess.in_checkmate()) {
-        return chess.turn() === 'w' ? 1000000 : -1000000;
-      }
-      if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
-        return 0;
+    function isSquareAttackedBy(b, targetR, targetC, attackerColor) {
+      const dirsRook = [[-1,0],[1,0],[0,-1],[0,1]];
+      for (const [dr, dc] of dirsRook) {
+        let nr = targetR + dr, nc = targetC + dc;
+        while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+          const p = b[nr][nc];
+          if (p) {
+            if (p.color === attackerColor && (p.type === 'r' || p.type === 'q')) return true;
+            break;
+          }
+          nr += dr; nc += dc;
+        }
       }
 
-      const b = chess.board();
-      let score = 0;
+      const dirsBishop = [[-1,-1],[-1,1],[1,-1],[1,1]];
+      for (const [dr, dc] of dirsBishop) {
+        let nr = targetR + dr, nc = targetC + dc;
+        while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+          const p = b[nr][nc];
+          if (p) {
+            if (p.color === attackerColor && (p.type === 'b' || p.type === 'q')) return true;
+            break;
+          }
+          nr += dr; nc += dc;
+        }
+      }
+
+      const knightJumps = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
+      for (const [dr, dc] of knightJumps) {
+        const nr = targetR + dr, nc = targetC + dc;
+        if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+          const p = b[nr][nc];
+          if (p && p.color === attackerColor && p.type === 'n') return true;
+        }
+      }
+
+      const pawnDir = attackerColor === 'w' ? 1 : -1;
+      for (const dc of [-1, 1]) {
+        const nr = targetR + pawnDir, nc = targetC + dc;
+        if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+          const p = b[nr][nc];
+          if (p && p.color === attackerColor && p.type === 'p') return true;
+        }
+      }
+
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue;
+          const nr = targetR + dr, nc = targetC + dc;
+          if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+            const p = b[nr][nc];
+            if (p && p.color === attackerColor && p.type === 'k') return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    function evaluatePawnAndRookStructure(b) {
+      let structScore = 0;
+      const blackPawnsInCol = Array(8).fill(0);
+      const whitePawnsInCol = Array(8).fill(0);
 
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           const p = b[r][c];
           if (!p) continue;
-          const val = getPieceVal(p.type) + getPosBonus(p, r, c);
-          score += p.color === 'b' ? val : -val;
+          if (p.type === 'p') {
+            if (p.color === 'b') blackPawnsInCol[c]++;
+            else whitePawnsInCol[c]++;
+          }
+        }
+      }
+
+      for (let c = 0; c < 8; c++) {
+        if (blackPawnsInCol[c] > 1) structScore -= (blackPawnsInCol[c] - 1) * 18;
+        if (whitePawnsInCol[c] > 1) structScore += (whitePawnsInCol[c] - 1) * 18;
+      }
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = b[r][c];
+          if (p && p.type === 'r') {
+            const totalInCol = blackPawnsInCol[c] + whitePawnsInCol[c];
+            if (totalInCol === 0) {
+              structScore += p.color === 'b' ? 22 : -22;
+            }
+          }
+        }
+      }
+
+      return structScore;
+    }
+
+    function evaluateBoard() {
+      if (chess.in_checkmate()) {
+        return chess.turn() === 'w' ? 2500000 : -2500000;
+      }
+      if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
+        const b = chess.board();
+        let mat = 0;
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const p = b[r][c];
+            if (p && p.type !== 'k') {
+              mat += p.color === 'b' ? getPieceVal(p.type) : -getPieceVal(p.type);
+            }
+          }
+        }
+        if (mat > 100) return -1800000;
+        if (mat < -100) return 1800000;
+        return 0;
+      }
+
+      const b = chess.board();
+      const endgame = isEndgameBoard(b);
+      let score = evaluatePawnAndRookStructure(b);
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = b[r][c];
+          if (!p) continue;
+
+          let val = getPieceVal(p.type) + getPosBonus(p, r, c, endgame);
+
+          if (p.color === 'b') {
+            if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'w')) {
+              val -= Math.floor(getPieceVal(p.type) * 0.75);
+            }
+            score += val;
+          } else {
+            if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'b')) {
+              val -= Math.floor(getPieceVal(p.type) * 0.6);
+            }
+            score -= val;
+          }
         }
       }
 
       if (chess.in_check()) {
-        score += chess.turn() === 'w' ? 45 : -45;
+        score += chess.turn() === 'w' ? 95 : -95;
       }
+
       return score;
     }
 
     function scoreMoveForOrdering(m) {
       let s = 0;
       if (m.captured) {
-        s += getPieceVal(m.captured) * 10 - getPieceVal(m.piece);
+        s += getPieceVal(m.captured) * 14 - getPieceVal(m.piece);
       }
       if (m.promotion) {
-        s += getPieceVal(m.promotion) * 8;
+        s += getPieceVal(m.promotion) * 12;
       }
       if (m.san && m.san.includes('+')) {
-        s += 120;
+        s += 180;
       }
       return s;
     }
@@ -760,9 +907,14 @@
         return quiescence(alpha, beta, isMax, deadline);
       }
 
+      const key = `${chess.fen()}|${depth}|${isMax ? 1 : 0}`;
+      const cached = ttCache.get(key);
+      if (cached !== undefined) return cached;
+
       const moves = orderMoves(chess.moves({ verbose: true }));
       if (!moves.length) return evaluateBoard();
 
+      let result;
       if (isMax) {
         let maxEval = -Infinity;
         for (const m of moves) {
@@ -773,7 +925,7 @@
           if (ev > alpha) alpha = ev;
           if (beta <= alpha) break;
         }
-        return maxEval;
+        result = maxEval;
       } else {
         let minEval = Infinity;
         for (const m of moves) {
@@ -784,8 +936,12 @@
           if (ev < beta) beta = ev;
           if (beta <= alpha) break;
         }
-        return minEval;
+        result = minEval;
       }
+
+      if (ttCache.size > 40000) ttCache.clear();
+      ttCache.set(key, result);
+      return result;
     }
 
     function pickBestAIMove() {
@@ -800,11 +956,11 @@
       }
 
       let bestMove = rootMoves[0];
-      const maxDepth = 4;
-      const timeBudgetMs = 850;
+      const maxDepth = 5;
+      const timeBudgetMs = 1400;
       const deadline = Date.now() + timeBudgetMs;
 
-      for (let currentDepth = 2; currentDepth <= maxDepth; currentDepth++) {
+      for (let currentDepth = 3; currentDepth <= maxDepth; currentDepth++) {
         let currentBestMove = bestMove;
         let currentBestScore = -Infinity;
         let completedFullDepth = true;
@@ -824,7 +980,7 @@
           }
         }
 
-        if (completedFullDepth || currentDepth === 2) {
+        if (completedFullDepth || currentDepth === 3) {
           bestMove = currentBestMove;
         }
         if (Date.now() > deadline) break;
