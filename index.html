@@ -686,6 +686,7 @@
           <div class="cat-box" onclick="setCat('emergency', this)"><div class="cat-box-icon">🚨</div><div class="cat-box-title">പ്രധാന നമ്പറുകൾ</div></div>
           <div class="cat-box" onclick="setCat('nursery', this)"><div class="cat-box-icon">🌱</div><div class="cat-box-title">നഴ്സറി</div></div>
           <div class="cat-box" onclick="setCat('society', this)"><div class="cat-box-icon">🤝</div><div class="cat-box-title">സൊസൈറ്റി / സംഘങ്ങൾ</div></div>
+          <div class="cat-box" onclick="setCat('driving', this)"><div class="cat-box-icon">🚗</div><div class="cat-box-title">ഡ്രൈവിംഗ് സ്കൂൾ</div></div>
         </div>
       </div>
 
@@ -826,6 +827,39 @@
         </div>
 
         <div>
+          <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">കാറ്റഗറി (Category):</label>
+          <select id="editShopCat" class="search-input-box" style="padding: 10px 12px; font-size: 12.5px;">
+            <option value="driving|ഡ്രൈവിംഗ് സ്കൂൾ">ഡ്രൈവിംഗ് സ്കൂൾ</option>
+            <option value="hospital|ആശുപത്രികൾ">ആശുപത്രികൾ</option>
+            <option value="bank|ബാങ്കുകൾ">ബാങ്കുകൾ</option>
+            <option value="cooperative|സഹകരണ സംഘങ്ങൾ">സഹകരണ സംഘങ്ങൾ</option>
+            <option value="worker|തൊഴിലാളികൾ">തൊഴിലാളികൾ</option>
+            <option value="catering|കാറ്ററിംഗ്">കാറ്ററിംഗ്</option>
+            <option value="supermarket|സൂപ്പർമാർക്കറ്റ്">സൂപ്പർമാർക്കറ്റ്</option>
+            <option value="hotel|ഹോട്ടൽ">ഹോട്ടൽ</option>
+            <option value="bakery|ബേക്കറി">ബേക്കറി</option>
+            <option value="textiles|ടെക്സ്റ്റൈൽസ്">ടെക്സ്റ്റൈൽസ്</option>
+            <option value="tailor|തയ്യൽക്കട">തയ്യൽക്കട</option>
+            <option value="mobile|മൊബൈൽ ഷോപ്പ്">മൊബൈൽ ഷോപ്പ്</option>
+            <option value="fish|മത്സ്യ മാർക്കറ്റ്">മത്സ്യ മാർക്കറ്റ്</option>
+            <option value="meat|ഇറച്ചിക്കടകൾ">ഇറച്ചിക്കടകൾ</option>
+            <option value="watch|വാച്ച് റിപ്പയർ">വാച്ച് റിപ്പയർ</option>
+            <option value="lottery|ലോട്ടറി സ്റ്റാൾ">ലോട്ടറി സ്റ്റാൾ</option>
+            <option value="csc|സിഎസ്സി സെന്റർ">സിഎസ്സി സെന്റർ</option>
+            <option value="mill|ധാന്യപ്പൊടി മില്ല്">ധാന്യപ്പൊടി മില്ല്</option>
+            <option value="workshop|വർക്ക്‌ഷോപ്പ്">വർക്ക്‌ഷോപ്പ്</option>
+            <option value="ayurveda|ആയുർവേദ ഷോപ്പ്">ആയുർവേദ ഷോപ്പ്</option>
+            <option value="stationery|സ്റ്റേഷനറി കട">സ്റ്റേഷനറി കട</option>
+            <option value="fruits|ഫ്രൂട്ട്സ് കട">ഫ്രൂട്ട്സ് കട</option>
+            <option value="auto|ഓട്ടോ / ടാക്സി">ഓട്ടോ / ടാക്സി</option>
+            <option value="emergency|പ്രധാന നമ്പറുകൾ">പ്രധാന നമ്പറുകൾ</option>
+            <option value="nursery|നഴ്സറി">നഴ്സറി</option>
+            <option value="society|സൊസൈറ്റി / സംഘങ്ങൾ">സൊസൈറ്റി / സംഘങ്ങൾ</option>
+            <option value="other|മറ്റു സേവനങ്ങൾ">മറ്റു സേവനങ്ങൾ</option>
+          </select>
+        </div>
+
+        <div>
           <label style="font-size:11px; color:var(--text-sub); font-weight:700; display: block; margin-bottom: 3px;">വിവരങ്ങൾ / സേവനങ്ങൾ:</label>
           <textarea id="editShopDesc" class="search-input-box" rows="3" style="padding: 10px 12px; font-size: 12.5px; resize: none;" required></textarea>
         </div>
@@ -901,6 +935,26 @@
       if(btn) btn.innerText = '🌙';
     }
 
+    function ensureEditCategoryOption(catKey, catLabel) {
+      const selectEl = document.getElementById('editShopCat');
+      if (!selectEl) return;
+      const key = (catKey || '').trim();
+      const label = (catLabel || key || '').trim();
+      if (!key && !label) return;
+
+      const exists = Array.from(selectEl.options).some(opt => {
+        const [optKey, optLabel] = opt.value.split('|');
+        return optKey === key || optLabel === label || opt.textContent.trim() === label;
+      });
+
+      if (!exists) {
+        const opt = document.createElement('option');
+        opt.value = `${key || label}|${label || key}`;
+        opt.textContent = label || key;
+        selectEl.appendChild(opt);
+      }
+    }
+
     async function loadAppSettings() {
       try {
         if (!window.db) {
@@ -944,6 +998,7 @@
               const cData = docSnap.data();
               const catName = cData.name || docSnap.id;
               if (catName) {
+                ensureEditCategoryOption(docSnap.id, catName);
                 const exists = Array.from(gridContainer.querySelectorAll('.cat-box-title')).some(el => el.innerText === catName);
                 if (!exists) {
                   const newBox = document.createElement('div');
@@ -1248,6 +1303,23 @@
       document.getElementById('editShopDesc').value = s.desc || '';
       document.getElementById('editShopImageFile').value = ''; 
       document.getElementById('editShopImageFile2').value = ''; 
+
+      ensureEditCategoryOption(s.cat, s.catLabel);
+      const catSelect = document.getElementById('editShopCat');
+      if (catSelect) {
+        let matched = false;
+        for (let i = 0; i < catSelect.options.length; i++) {
+          const [optKey, optLabel] = catSelect.options[i].value.split('|');
+          if ((s.cat && optKey === s.cat) || (s.catLabel && optLabel === s.catLabel)) {
+            catSelect.selectedIndex = i;
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          catSelect.value = 'other|മറ്റു സേവനങ്ങൾ';
+        }
+      }
       
       toggleModal('editShopModal');
       history.pushState({ modalOpen: true }, '');
@@ -1292,12 +1364,14 @@
       const phone2 = document.getElementById('editShopPhone2').value;
       const mapLink = document.getElementById('editShopMap').value;
       const catalogLink = document.getElementById('editShopCatalog').value;
+      const catRaw = document.getElementById('editShopCat').value || 'other|മറ്റു സേവനങ്ങൾ';
+      const [cat, catLabel] = catRaw.split('|');
       const desc = document.getElementById('editShopDesc').value;
       const imageFile = document.getElementById('editShopImageFile').files[0];
       const imageFile2 = document.getElementById('editShopImageFile2').files[0];
 
       try {
-        let updateData = { name, loc, phone, phone2, mapLink, catalogLink, desc };
+        let updateData = { name, loc, phone, phone2, mapLink, catalogLink, cat, catLabel, desc };
 
         if (imageFile || imageFile2) {
           alert('ഫോട്ടോ കംപ്രസ് ചെയ്ത് അപ്‌ലോഡ് ചെയ്യുന്നു, ദയവായി കാത്തിരിക്കൂ...');
