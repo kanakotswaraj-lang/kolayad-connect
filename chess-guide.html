@@ -9,9 +9,9 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html {
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
       overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
       height: 100%;
     }
     body {
@@ -30,7 +30,6 @@
       overflow-x: hidden;
       box-sizing: border-box;
       scroll-snap-align: start;
-      scroll-snap-stop: always;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -352,78 +351,11 @@
       background: #d5dfd9;
     }
 
-    /* നേരിട്ട് HTML ഫയൽ ഡൗൺലോഡ് ചെയ്യാനുള്ള ഫ്ലോട്ടിംഗ് ബട്ടൺ */
-    .floating-download-btn {
-      position: fixed;
-      left: 18px;
-      bottom: 18px;
-      z-index: 65;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(250, 248, 244, 0.22);
-      background: #1b5e43;
-      color: #faf8f4;
-      font-family: 'Noto Sans Malayalam', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-      transition: transform 0.18s ease, background-color 0.2s ease;
-    }
-    .floating-download-btn:hover {
-      background: #c86d2d;
-      transform: translateY(-2px);
-    }
-    .floating-download-btn:active {
-      transform: scale(0.97);
-    }
-
-    /* ഡൗൺലോഡ് തടയപ്പെട്ടാൽ കോഡ് എളുപ്പത്തിൽ കോപ്പി ചെയ്യാനും സേവ് ചെയ്യാനുമുള്ള മോഡൽ */
-    .html-export-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 90;
-      background: rgba(10, 18, 14, 0.78);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-    .html-export-modal.open {
-      display: flex;
-    }
-    .html-export-card {
-      width: 100%;
-      max-width: 720px;
-      background: #faf8f4;
-      color: #17221d;
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .html-export-textarea {
-      width: 100%;
-      height: 240px;
-      border-radius: 10px;
-      border: 1.5px solid #c5d1ca;
-      background: #14211b;
-      color: #e9f3ee;
-      font-family: monospace;
-      font-size: 12px;
-      padding: 12px;
-      resize: vertical;
-    }
-
     @media (max-width: 960px) {
       .slide-container {
-        padding: 36px 24px 72px 24px;
+        min-height: auto;
+        justify-content: flex-start;
+        padding: 32px 20px 64px 20px;
       }
       .cards-grid-3,
       .cards-grid-2 {
@@ -441,12 +373,6 @@
         right: 8px;
         padding: 8px 5px;
       }
-      .floating-download-btn {
-        left: 12px;
-        bottom: 12px;
-        padding: 9px 14px;
-        font-size: 13px;
-      }
     }
   </style>
 </head>
@@ -454,13 +380,13 @@
 
   <!-- സ്ലൈഡ് 1: ആമുഖം -->
   <section class="slide-container slide-dark" id="slide1">
-    <p contenteditable="true" style="font-size:16px;font-weight:700;color:#e08a4b;margin:0 0 18px 0;">
+    <p style="font-size:16px;font-weight:700;color:#e08a4b;margin:0 0 18px 0;">
       അടിസ്ഥാന തന്ത്രങ്ങൾ • കുത്തനെയുള്ള അവതരണം
     </p>
-    <h1 contenteditable="true" style="font-family:'Noto Serif Malayalam',serif;font-size:clamp(38px,5vw,58px);font-weight:700;color:#faf8f4;line-height:1.2;max-width:820px;margin:0;">
+    <h1 style="font-family:'Noto Serif Malayalam',serif;font-size:clamp(38px,5vw,58px);font-weight:700;color:#faf8f4;line-height:1.2;max-width:820px;margin:0;">
       ചെസ്സ് കളി പഠിക്കാം
     </h1>
-    <p contenteditable="true" style="font-size:20px;color:#c9d4ce;margin:20px 0 0 0;max-width:740px;line-height:1.6;">
+    <p style="font-size:20px;color:#c9d4ce;margin:20px 0 0 0;max-width:740px;line-height:1.6;">
       കരുക്കൾ, വിലകൾ, നിയമങ്ങൾ, എന്തിന് ചെസ്സ് ഉപയോഗിക്കുന്നു, ലഭിക്കുന്ന നേട്ടങ്ങൾ എന്നിവ ലളിതമായി പഠിക്കാം — താഴേക്ക് സ്ക്രോൾ ചെയ്യുക അല്ലെങ്കിൽ വലതുവശത്തെ അമ്പടയാളങ്ങൾ ഉപയോഗിക്കുക.
     </p>
     <div class="accent-bar-pop" style="margin:32px 0 0 0;"></div>
@@ -469,35 +395,35 @@
   <!-- സ്ലൈഡ് 2: ചെസ്സ് എന്തിന് ഉപയോഗിക്കുന്നു? -->
   <section class="slide-container slide-light" id="slide2">
     <div class="slide-kicker">ഉദ്ദേശ്യവും ഉപയോഗവും</div>
-    <h2 contenteditable="true" class="slide-title">ചെസ്സ് നമ്മൾ എന്തിന് ഉപയോഗിക്കുന്നു?</h2>
-    <p contenteditable="true" class="slide-subtitle">
+    <h2 class="slide-title">ചെസ്സ് നമ്മൾ എന്തിന് ഉപയോഗിക്കുന്നു?</h2>
+    <p class="slide-subtitle">
       കേവലം ഒരു വിനോദത്തിനപ്പുറം, ചിന്താശേഷിയും ആസൂത്രണവും പരിശീലിപ്പിക്കുന്ന ഒരു ബൗദ്ധിക ഉപകരണമായാണ് ചെസ്സ് ഉപയോഗിക്കുന്നത്.
     </p>
     <div class="cards-grid-3">
       <div class="info-card">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="feature-icon-box"><i class="fa-solid fa-chess-knight"></i></div>
-          <h3 contenteditable="true">തന്ത്രപരമായ ചിന്ത</h3>
+          <h3>തന്ത്രപരമായ ചിന്ത</h3>
         </div>
-        <p contenteditable="true">
+        <p>
           ഓരോ നീക്കത്തിനും മുൻപ് എതിരാളിയുടെ സാധ്യമായ മറുനീക്കങ്ങൾ മുൻകൂട്ടി കാണാനും ദീർഘകാല പദ്ധതികൾ തയ്യാറാക്കാനും പഠിപ്പിക്കുന്നു.
         </p>
       </div>
       <div class="info-card">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="feature-icon-box"><i class="fa-solid fa-scale-balanced"></i></div>
-          <h3 contenteditable="true">തീരുമാനമെടുക്കൽ</h3>
+          <h3>തീരുമാനമെടുക്കൽ</h3>
         </div>
-        <p contenteditable="true">
+        <p>
           സമയപരിധിക്കുള്ളിൽ ലഭ്യമായ വിവരങ്ങൾ വിലയിരുത്തി ഏറ്റവും ശരിയായ തീരുമാനം എടുക്കാനുള്ള കഴിവ് വളർത്തുന്നു.
         </p>
       </div>
       <div class="info-card">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="feature-icon-box"><i class="fa-solid fa-graduation-cap"></i></div>
-          <h3 contenteditable="true">വിദ്യാഭ്യാസവും വിനോദവും</h3>
+          <h3>വിദ്യാഭ്യാസവും വിനോദവും</h3>
         </div>
-        <p contenteditable="true">
+        <p>
           കുട്ടികൾക്കും മുതിർന്നവർക്കും ഒരുപോലെ രസകരമായ വിനോദവും ഗണിത-യുക്തി ചിന്തകൾക്ക് മികച്ച പരിശീലനവും നൽകുന്നു.
         </p>
       </div>
@@ -507,35 +433,35 @@
   <!-- സ്ലൈഡ് 3: ചെസ്സ് കളിക്കുന്നതിലൂടെ ലഭിക്കുന്ന നേട്ടങ്ങൾ -->
   <section class="slide-container slide-dark" id="slide3">
     <div class="slide-kicker">പ്രധാന ഗുണങ്ങൾ</div>
-    <h2 contenteditable="true" class="slide-title" style="color:#faf8f4;">ചെസ്സ് കളിക്കുന്നതിന്റെ നേട്ടങ്ങൾ</h2>
-    <p contenteditable="true" class="slide-subtitle" style="color:#c9d4ce;">
+    <h2 class="slide-title" style="color:#faf8f4;">ചെസ്സ് കളിക്കുന്നതിന്റെ നേട്ടങ്ങൾ</h2>
+    <p class="slide-subtitle" style="color:#c9d4ce;">
       പതിവായി ചെസ്സ് കളിക്കുന്നത് തലച്ചോറിന്റെ പ്രവർത്തനക്ഷമതയും വ്യക്തിത്വ ഗുണങ്ങളും മെച്ചപ്പെടുത്തുന്നു.
     </p>
     <div class="cards-grid-3">
       <div class="info-card">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="feature-icon-box"><i class="fa-solid fa-brain"></i></div>
-          <h3 contenteditable="true">ഓർമ്മശക്തിയും ഏകാഗ്രതയും</h3>
+          <h3>ഓർമ്മശക്തിയും ഏകാഗ്രതയും</h3>
         </div>
-        <p contenteditable="true">
+        <p>
           ബോർഡിലെ കരുക്കളുടെ സ്ഥാനവും മുൻ നീക്കങ്ങളും ഓർത്തിരിക്കുന്നത് ശ്രദ്ധയും ഏകാഗ്രതയും (Focus) വർദ്ധിപ്പിക്കുന്നു.
         </p>
       </div>
       <div class="info-card">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="feature-icon-box"><i class="fa-solid fa-puzzle-piece"></i></div>
-          <h3 contenteditable="true">പ്രശ്നപരിഹാര ശേഷി</h3>
+          <h3>പ്രശ്നപരിഹാര ശേഷി</h3>
         </div>
-        <p contenteditable="true">
+        <p>
           പ്രതിസന്ധി ഘട്ടങ്ങളിൽ പതറാതെ ബദൽ വഴികൾ കണ്ടെത്തി പ്രശ്നങ്ങൾ പരിഹരിക്കാൻ സഹായിക്കുന്നു.
         </p>
       </div>
       <div class="info-card">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="feature-icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
-          <h3 contenteditable="true">ക്ഷമയും ആത്മവിശ്വാസവും</h3>
+          <h3>ക്ഷമയും ആത്മവിശ്വാസവും</h3>
         </div>
-        <p contenteditable="true">
+        <p>
           തോൽവികളിൽ നിന്ന് പാഠം ഉൾക്കൊണ്ട് ക്ഷമയോടെ കാത്തിരുന്ന് അവസരം മുതലെടുക്കാനുള്ള ആത്മവിശ്വാസം നൽകുന്നു.
         </p>
       </div>
@@ -545,8 +471,8 @@
   <!-- സ്ലൈഡ് 4: കരുക്കളുടെ വിലയും പ്രത്യേകതകളും (ഭാഗം 1) -->
   <section class="slide-container slide-light" id="slide4">
     <div class="slide-kicker">കരുക്കളുടെ മൂല്യം (Piece Values)</div>
-    <h2 contenteditable="true" class="slide-title">പ്രധാന കരുക്കളുടെ വിലയും ശക്തിയും</h2>
-    <p contenteditable="true" class="slide-subtitle">
+    <h2 class="slide-title">പ്രധാന കരുക്കളുടെ വിലയും ശക്തിയും</h2>
+    <p class="slide-subtitle">
       കരുക്കൾ വെട്ടുമ്പോൾ ഏത് കരുവാണ് കൂടുതൽ വിലപ്പെട്ടതെന്ന് അറിയുന്നത് തന്ത്രങ്ങൾക്ക് വളരെ പ്രധാനമാണ്.
     </p>
     <div class="cards-grid-3">
@@ -555,8 +481,8 @@
           <span class="piece-badge-symbol">♛</span>
           <span class="points-pill">9 പോയിന്റ്</span>
         </div>
-        <h3 contenteditable="true">മന്ത്രി (Queen)</h3>
-        <p contenteditable="true">
+        <h3>മന്ത്രി (Queen)</h3>
+        <p>
           ബോർഡിലെ ഏറ്റവും ശക്തമായ കരു. നേർരേഖയിലും ചെരിവിലും ഏത് ദിശയിലേക്കും എത്ര കള്ളികൾ വേണമെങ്കിലും നീങ്ങാം.
         </p>
       </div>
@@ -565,8 +491,8 @@
           <span class="piece-badge-symbol">♜</span>
           <span class="points-pill">5 പോയിന്റ്</span>
         </div>
-        <h3 contenteditable="true">തേര് / കോട്ട (Rook)</h3>
-        <p contenteditable="true">
+        <h3>തേര് / കോട്ട (Rook)</h3>
+        <p>
           മുന്നോട്ടും പിന്നോട്ടും ഇടത്തോട്ടും വലത്തോട്ടും നേർരേഖയിൽ നീങ്ങുന്നു. കളിയുടെ അവസാന ഘട്ടത്തിൽ വലിയ ശക്തിയാണ്.
         </p>
       </div>
@@ -575,8 +501,8 @@
           <span class="piece-badge-symbol">♝</span>
           <span class="points-pill">3 പോയിന്റ്</span>
         </div>
-        <h3 contenteditable="true">ആന (Bishop)</h3>
-        <p contenteditable="true">
+        <h3>ആന (Bishop)</h3>
+        <p>
           ചെരിഞ്ഞ കള്ളികളിലൂടെ (Diagonal) നീങ്ങുന്നു. ഓരോ കളിക്കാരനും ഒരു വെളുത്ത കള്ളി ആനയും ഒരു കറുത്ത കള്ളി ആനയും ഉണ്ടാകും.
         </p>
       </div>
@@ -586,8 +512,8 @@
   <!-- സ്ലൈഡ് 5: കരുക്കളുടെ വിലയും പ്രത്യേകതകളും (ഭാഗം 2) -->
   <section class="slide-container slide-light" id="slide5">
     <div class="slide-kicker">കരുക്കളുടെ മൂല്യം (Piece Values)</div>
-    <h2 contenteditable="true" class="slide-title">കുതിര, കാലാൾ, രാജാവ്</h2>
-    <p contenteditable="true" class="slide-subtitle">
+    <h2 class="slide-title">കുതിര, കാലാൾ, രാജാവ്</h2>
+    <p class="slide-subtitle">
       ചെറിയ കരുക്കളും രാജാവും കളിയുടെ ഗതി മാറ്റുന്നതിൽ നിർണ്ണായക പങ്കുവഹിക്കുന്നു.
     </p>
     <div class="cards-grid-3">
@@ -596,8 +522,8 @@
           <span class="piece-badge-symbol">♞</span>
           <span class="points-pill">3 പോയിന്റ്</span>
         </div>
-        <h3 contenteditable="true">കുതിര (Knight)</h3>
-        <p contenteditable="true">
+        <h3>കുതിര (Knight)</h3>
+        <p>
           'L' ആകൃതിയിൽ ചാടുന്നു. മറ്റ് കരുക്കളുടെ മുകളിലൂടെ ചാടാൻ കഴിയുന്ന ഏക കരുവായതിനാൽ അടച്ച നിരകളിൽ വളരെ അപകടകാരിയാണ്.
         </p>
       </div>
@@ -606,8 +532,8 @@
           <span class="piece-badge-symbol">♟</span>
           <span class="points-pill">1 പോയിന്റ്</span>
         </div>
-        <h3 contenteditable="true">കാലാൾ (Pawn)</h3>
-        <p contenteditable="true">
+        <h3>കാലാൾ (Pawn)</h3>
+        <p>
           മുന്നോട്ട് നീങ്ങുന്നു, ചെരിവിലാണ് വെട്ടുന്നത്. എതിർ വശത്തെ അവസാന നിരയിൽ എത്തിയാൽ മന്ത്രിയായോ മറ്റേതെങ്കിലും കരുവായോ മാറാം.
         </p>
       </div>
@@ -616,8 +542,8 @@
           <span class="piece-badge-symbol">♚</span>
           <span class="points-pill">അമൂല്യം (കളിയുടെ ജീവൻ)</span>
         </div>
-        <h3 contenteditable="true">രാജാവ് (King)</h3>
-        <p contenteditable="true">
+        <h3>രാജാവ് (King)</h3>
+        <p>
           ഏത് ദിശയിലേക്കും ഒരൊറ്റ കള്ളി മാത്രം നീങ്ങുന്നു. രാജാവിനെ സംരക്ഷിക്കുന്നതാണ് പ്രധാന ലക്ഷ്യം; രാജാവ് കുടുങ്ങിയാൽ കളി അവസാനിക്കും.
         </p>
       </div>
@@ -627,32 +553,32 @@
   <!-- സ്ലൈഡ് 6: അടിസ്ഥാന നിയമങ്ങൾ -->
   <section class="slide-container slide-dark" id="slide6">
     <div class="slide-kicker">അടിസ്ഥാന നിയമങ്ങൾ</div>
-    <h2 contenteditable="true" class="slide-title" style="color:#faf8f4;">കളി തുടങ്ങുമ്പോൾ അറിയേണ്ട നിയമങ്ങൾ</h2>
-    <p contenteditable="true" class="slide-subtitle" style="color:#c9d4ce;">
+    <h2 class="slide-title" style="color:#faf8f4;">കളി തുടങ്ങുമ്പോൾ അറിയേണ്ട നിയമങ്ങൾ</h2>
+    <p class="slide-subtitle" style="color:#c9d4ce;">
       ഓരോ കളിയിലും പാലിക്കേണ്ട പ്രധാന പൊതുനിയമങ്ങൾ താഴെ നൽകുന്നു.
     </p>
     <div class="cards-grid-2">
       <div class="info-card">
-        <h3 contenteditable="true">1. ആദ്യ നീക്കം വെളുപ്പിന്</h3>
-        <p contenteditable="true">
+        <h3>1. ആദ്യ നീക്കം വെളുപ്പിന്</h3>
+        <p>
           വെളുത്ത കരുക്കൾ കൈകാര്യം ചെയ്യുന്ന കളിക്കാരനാണ് എപ്പോഴും ആദ്യം നീക്കം നടത്തുന്നത്. തുടർന്ന് ഇരുവരും മാറിമാറി നീങ്ങുന്നു.
         </p>
       </div>
       <div class="info-card">
-        <h3 contenteditable="true">2. കരുക്കൾ വെട്ടുന്ന രീതി</h3>
-        <p contenteditable="true">
+        <h3>2. കരുക്കൾ വെട്ടുന്ന രീതി</h3>
+        <p>
           നീങ്ങാൻ കഴിയുന്ന കള്ളിയിൽ എതിരാളിയുടെ കരു ഉണ്ടെങ്കിൽ അത് വെട്ടി മാറ്റി ആ കള്ളിയിൽ ഇരിക്കാം. (കാലാൾ നേരെയല്ല, ചെരിവിലാണ് വെട്ടുന്നത്).
         </p>
       </div>
       <div class="info-card">
-        <h3 contenteditable="true">3. തൊട്ടാൽ നീക്കണം (Touch-Move)</h3>
-        <p contenteditable="true">
+        <h3>3. തൊട്ടാൽ നീക്കണം (Touch-Move)</h3>
+        <p>
           ഒരു കരുവിൽ തൊട്ടാൽ അത് നീക്കാൻ സാധിക്കുമെങ്കിൽ ആ കരു തന്നെ നീക്കണം. എതിരാളിയുടെ കരുവിൽ തൊട്ടാൽ അത് വെട്ടാൻ സാധിക്കുമെങ്കിൽ വെട്ടണം.
         </p>
       </div>
       <div class="info-card">
-        <h3 contenteditable="true">4. സമനില (Draw / Stalemate)</h3>
-        <p contenteditable="true">
+        <h3>4. സമനില (Draw / Stalemate)</h3>
+        <p>
           ചെക്ക് ഏൽക്കാത്ത അവസ്ഥയിൽ ഒരു കളിക്കാരന് നിയമപരമായ ഒരു നീക്കവും ബാക്കിയില്ലെങ്കിൽ അത് സ്റ്റെയ്ൽമേറ്റ് (സമനില) ആയി കണക്കാക്കുന്നു.
         </p>
       </div>
@@ -662,32 +588,32 @@
   <!-- സ്ലൈഡ് 7: പ്രത്യേക നിയമങ്ങൾ — ചെക്ക്, ചെക്ക്മേറ്റ്, കാസലിംഗ്, എൻ പാസന്റ് -->
   <section class="slide-container slide-light" id="slide7">
     <div class="slide-kicker">പ്രത്യേക നിയമങ്ങൾ (Special Rules)</div>
-    <h2 contenteditable="true" class="slide-title">ചെക്ക്, ചെക്ക്മേറ്റ്, കാസലിംഗ്, എൻ പാസന്റ്</h2>
-    <p contenteditable="true" class="slide-subtitle">
+    <h2 class="slide-title">ചെക്ക്, ചെക്ക്മേറ്റ്, കാസലിംഗ്, എൻ പാസന്റ്</h2>
+    <p class="slide-subtitle">
       ചെസ്സ് കളിയെ കൂടുതൽ ആവേശകരമാക്കുന്ന നാല് പ്രധാന പ്രത്യേക നിയമങ്ങൾ പരിചയപ്പെടാം.
     </p>
     <div class="cards-grid-2">
       <div class="info-card">
-        <h3 contenteditable="true">⚡ ചെക്ക് (Check)</h3>
-        <p contenteditable="true">
+        <h3>⚡ ചെക്ക് (Check)</h3>
+        <p>
           എതിരാളിയുടെ രാജാവിനെ നേരിട്ട് ആക്രമിക്കുന്ന അവസ്ഥയാണ് ചെക്ക്. ചെക്ക് കിട്ടിയാൽ രാജാവിനെ രക്ഷിക്കാൻ നീക്കം നടത്തണം (നീങ്ങുക, കരു വെട്ടുക, അല്ലെങ്കിൽ ഇടയിൽ കരു വെച്ച് തടയുക).
         </p>
       </div>
       <div class="info-card">
-        <h3 contenteditable="true">👑 ചെക്ക്മേറ്റ് (Checkmate)</h3>
-        <p contenteditable="true">
+        <h3>👑 ചെക്ക്മേറ്റ് (Checkmate)</h3>
+        <p>
           രാജാവിന് ചെക്ക് ഏൽക്കുകയും രക്ഷപ്പെടാൻ യാതൊരു മാർഗ്ഗവുമില്ലാതിരിക്കുകയും ചെയ്യുന്ന അവസ്ഥയാണ് ചെക്ക്മേറ്റ്. ഇതോടെ കളി വിജയകരമായി അവസാനിക്കുന്നു.
         </p>
       </div>
       <div class="info-card">
-        <h3 contenteditable="true">🏰 കാസലിംഗ് (Castling)</h3>
-        <p contenteditable="true">
+        <h3>🏰 കാസലിംഗ് (Castling)</h3>
+        <p>
           രാജാവിനെയും തേരിനെയും ഒരേ സമയം സുരക്ഷിത സ്ഥാനത്തേക്ക് മാറ്റുന്ന പ്രത്യേക നീക്കമാണിത്. രാജാവ് രണ്ട് കള്ളി തേരിന്റെ ഭാഗത്തേക്ക് നീങ്ങുമ്പോൾ തേര് രാജാവിന്റെ മറുവശത്ത് വരുന്നു. (ഇരു കരുക്കളും മുൻപ് നീങ്ങിയിട്ടുണ്ടാകരുത്, രാജാവിന് ചെക്ക് ഉണ്ടാകരുത്).
         </p>
       </div>
       <div class="info-card">
-        <h3 contenteditable="true">♟️ എൻ പാസന്റ് (En Passant)</h3>
-        <p contenteditable="true">
+        <h3>♟️ എൻ പാസന്റ് (En Passant)</h3>
+        <p>
           തുടക്കത്തിൽ കാലാൾ രണ്ട് കള്ളി മുന്നോട്ട് നീങ്ങുമ്പോൾ എതിരാളിയുടെ കാലാൾ തൊട്ടടുത്ത നിരയിലുണ്ടെങ്കിൽ, അത് ഒരു കള്ളി മാത്രം നീങ്ങിയതായി കണ്ട് ഉടൻ അടുത്ത നീക്കത്തിൽ വെട്ടിയെടുക്കാവുന്ന പ്രത്യേക കാലാൾ നിയമമാണിത്.
         </p>
       </div>
@@ -701,7 +627,7 @@
         <p style="font-size:14px;font-weight:700;color:#c86d2d;margin:0 0 4px 0;">
           തത്സമയ ചലന ഡെമോ
         </p>
-        <h2 contenteditable="true" style="font-family:'Noto Serif Malayalam',serif;font-size:32px;font-weight:700;color:#17221d;margin:0;">
+        <h2 style="font-family:'Noto Serif Malayalam',serif;font-size:32px;font-weight:700;color:#17221d;margin:0;">
           കരുക്കൾ നീങ്ങുന്നത് കാണാം
         </h2>
       </div>
@@ -767,14 +693,14 @@
 
   <!-- സ്ലൈഡ് 9: സമാപനം -->
   <section class="slide-container slide-dark" id="slide9" style="align-items:center;text-align:center;">
-    <p contenteditable="true" style="font-size:15px;font-weight:700;color:#e08a4b;margin:0 0 12px 0;">
+    <p style="font-size:15px;font-weight:700;color:#e08a4b;margin:0 0 12px 0;">
       പരിശീലനവും തുടർച്ചയും
     </p>
-    <h2 contenteditable="true" style="font-family:'Noto Serif Malayalam',serif;font-size:clamp(30px,4vw,44px);font-weight:700;color:#faf8f4;max-width:760px;margin:0 0 16px 0;">
+    <h2 style="font-family:'Noto Serif Malayalam',serif;font-size:clamp(30px,4vw,44px);font-weight:700;color:#faf8f4;max-width:760px;margin:0 0 16px 0;">
       ഓരോ കളിയും പുതിയ പാഠമാണ്
     </h2>
-    <p contenteditable="true" style="font-size:18px;color:#c9d4ce;max-width:680px;line-height:1.6;">
-      അടിസ്ഥാന നിയമങ്ങൾ മനസ്സിലാക്കി പതിവായി പരിശീലിച്ചാൽ ചെസ്സിൽ മികച്ച മുന്നേറ്റം ഉണ്ടാക്കാം. താഴെ ഇടതുവശത്തെ ബട്ടൺ ഉപയോഗിച്ച് ഈ സ്ലൈഡ് പേജ് <strong>.html</strong> ഫയലായി സേവ് ചെയ്യാം.
+    <p style="font-size:18px;color:#c9d4ce;max-width:680px;line-height:1.6;">
+      അടിസ്ഥാന നിയമങ്ങൾ മനസ്സിലാക്കി പതിവായി പരിശീലിച്ചാൽ ചെസ്സിൽ മികച്ച മുന്നേറ്റം ഉണ്ടാക്കാം. ഗെയിംസ് അരീനയിലേക്ക് മടങ്ങി കളി തുടങ്ങാം.
     </p>
     <div class="accent-bar-pop" style="margin:28px 0 0 0;"></div>
   </section>
@@ -791,136 +717,8 @@
     <span class="deck-counter" id="deck-counter">1 / 9</span>
   </nav>
 
-  <!-- HTML ഫയലായി ഡൗൺലോഡ് ചെയ്യാനുള്ള ബട്ടൺ -->
-  <button type="button" id="download-html-btn" class="floating-download-btn" title="HTML ഫയലായി ഡൗൺലോഡ് ചെയ്യുക" aria-label="HTML ഫയലായി ഡൗൺലോഡ് ചെയ്യുക">
-    <i class="fa-solid fa-download"></i> ഡൗൺലോഡ് (.html)
-  </button>
-
-  <!-- നേരിട്ടുള്ള ഫയൽ ഡൗൺലോഡ് പ്രിവ്യൂവിൽ തടയപ്പെട്ടാൽ കോപ്പി/സേവ് ചെയ്യാനുള്ള വിൻഡോ -->
-  <div id="html-export-modal" class="html-export-modal" role="dialog" aria-modal="true" aria-labelledby="export-modal-title">
-    <div class="html-export-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-        <div>
-          <h3 id="export-modal-title" style="font-size:20px;font-weight:800;margin:0;">HTML കോഡ് സേവ് ചെയ്യാം</h3>
-          <p style="font-size:14px;color:#2b3a33;margin:4px 0 0 0;">
-            ബ്രൗസർ പ്രിവ്യൂവിൽ നേരിട്ട് ഡൗൺലോഡ് തടയപ്പെട്ടാൽ താഴെയുള്ള കോഡ് കോപ്പി ചെയ്ത് <strong>chess.html</strong> എന്ന് പേരിട്ട് സേവ് ചെയ്യുക.
-          </p>
-        </div>
-        <button type="button" id="close-export-modal-btn" class="demo-action-btn demo-btn-ghost" aria-label="അടയ്ക്കുക">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <textarea id="html-export-textarea" class="html-export-textarea" readonly=""></textarea>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;">
-        <span id="copy-status-msg" style="margin-right:auto;font-size:14px;font-weight:700;color:#1b5e43;align-self:center;"></span>
-        <button type="button" id="copy-html-code-btn" class="demo-action-btn demo-btn-primary">
-          <i class="fa-solid fa-copy"></i> കോഡ് കോപ്പി ചെയ്യുക
-        </button>
-        <button type="button" id="retry-blob-download-btn" class="demo-action-btn demo-btn-accent">
-          <i class="fa-solid fa-file-arrow-down"></i> വീണ്ടും ഡൗൺലോഡ് ശ്രമിക്കുക
-        </button>
-      </div>
-    </div>
-  </div>
-
   <script>
     (function () {
-      const downloadBtn = document.getElementById('download-html-btn');
-      const exportModal = document.getElementById('html-export-modal');
-      const exportTextarea = document.getElementById('html-export-textarea');
-      const closeModalBtn = document.getElementById('close-export-modal-btn');
-      const copyCodeBtn = document.getElementById('copy-html-code-btn');
-      const retryDownloadBtn = document.getElementById('retry-blob-download-btn');
-      const copyStatusMsg = document.getElementById('copy-status-msg');
-
-      function getCleanHtmlSource() {
-        const clone = document.documentElement.cloneNode(true);
-        const modalInClone = clone.querySelector('#html-export-modal');
-        if (modalInClone) {
-          modalInClone.classList.remove('open');
-        }
-        return '<!DOCTYPE html>\n' + clone.outerHTML;
-      }
-
-      function openExportModal(noteText) {
-        if (!exportModal || !exportTextarea) return;
-        exportTextarea.value = getCleanHtmlSource();
-        if (copyStatusMsg) {
-          copyStatusMsg.textContent = noteText || '';
-        }
-        exportModal.classList.add('open');
-      }
-
-      function triggerHtmlDownload() {
-        const htmlContent = getCleanHtmlSource();
-        let autoCopied = false;
-
-        try {
-          if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-            navigator.clipboard.writeText(htmlContent).catch(() => {});
-          }
-        } catch (e) {}
-
-        openExportModal('കോഡ് തയ്യാറാണ്! താഴെ നിന്ന് കോപ്പി ചെയ്ത് chess.html എന്ന് സേവ് ചെയ്യാം.');
-
-        if (exportTextarea) {
-          try {
-            exportTextarea.focus();
-            exportTextarea.select();
-            exportTextarea.setSelectionRange(0, exportTextarea.value.length);
-            autoCopied = document.execCommand('copy');
-          } catch (e) {
-            autoCopied = false;
-          }
-        }
-
-        if (copyStatusMsg && autoCopied) {
-          copyStatusMsg.textContent = 'കോഡ് കോപ്പി ചെയ്തു! ഇനി Text Editor തുറന്ന് Paste ചെയ്ത് chess.html എന്ന് സേവ് ചെയ്യുക.';
-        }
-
-        try {
-          const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = 'chess_malayalam_slides.html';
-          link.rel = 'noopener';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          setTimeout(() => URL.revokeObjectURL(url), 1500);
-        } catch (err) {}
-      }
-
-      if (downloadBtn) downloadBtn.addEventListener('click', triggerHtmlDownload);
-      if (retryDownloadBtn) retryDownloadBtn.addEventListener('click', triggerHtmlDownload);
-      if (closeModalBtn && exportModal) {
-        closeModalBtn.addEventListener('click', () => exportModal.classList.remove('open'));
-      }
-      if (exportModal) {
-        exportModal.addEventListener('click', (e) => {
-          if (e.target === exportModal) exportModal.classList.remove('open');
-        });
-      }
-      if (copyCodeBtn && exportTextarea) {
-        copyCodeBtn.addEventListener('click', () => {
-          exportTextarea.select();
-          exportTextarea.setSelectionRange(0, exportTextarea.value.length);
-          let copied = false;
-          try {
-            copied = document.execCommand('copy');
-          } catch (e) {
-            copied = false;
-          }
-          if (copyStatusMsg) {
-            copyStatusMsg.textContent = copied
-              ? 'കോഡ് കോപ്പി ചെയ്തു! ഇനി chess.html എന്ന പേരിൽ സേവ് ചെയ്യാം.'
-              : 'കോഡ് സെലക്ട് ചെയ്തിട്ടുണ്ട് — Ctrl+C / Cmd+C അമർത്തി കോപ്പി ചെയ്യുക.';
-          }
-        });
-      }
-
-      // സ്ലൈഡ് നാവിഗേഷൻ
       const slides = Array.from(document.querySelectorAll('.slide-container'));
       const dotsContainer = document.getElementById('deck-dots');
       const counterEl = document.getElementById('deck-counter');
