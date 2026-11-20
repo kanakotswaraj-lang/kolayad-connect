@@ -588,7 +588,7 @@
       }
     }
 
-    // Reactive Counter-Attack & Tactical Chess AI (Black = Maximizer)
+    // Latest Aggressive Counter-Attack AI (Black = Maximizer)
     const kingEndPST = [
       [-50,-40,-30,-20,-20,-30,-40,-50],
       [-30,-20,-10,  0,  0,-10,-20,-30],
@@ -602,20 +602,20 @@
 
     function getPieceVal(type) {
       if (type === 'p') return 100;
-      if (type === 'n') return 330;
-      if (type === 'b') return 345;
-      if (type === 'r') return 535;
-      if (type === 'q') return 970;
+      if (type === 'n') return 335;
+      if (type === 'b') return 350;
+      if (type === 'r') return 540;
+      if (type === 'q') return 980;
       if (type === 'k') return 25000;
       return 0;
     }
 
     const pawnPST = [
       [0,  0,  0,  0,  0,  0,  0,  0],
-      [55, 55, 55, 55, 55, 55, 55, 55],
-      [12, 12, 22, 32, 32, 22, 12, 12],
-      [6,  6, 10, 26, 26, 10,  6,  6],
-      [0,  0,  0, 20, 20,  0,  0,  0],
+      [60, 60, 60, 60, 60, 60, 60, 60],
+      [14, 14, 24, 34, 34, 24, 14, 14],
+      [8,  8, 14, 28, 28, 14,  8,  8],
+      [2,  2,  6, 22, 22,  6,  2,  2],
       [5, -5,-10,  0,  0,-10, -5,  5],
       [5, 10, 10,-20,-20, 10, 10,  5],
       [0,  0,  0,  0,  0,  0,  0,  0]
@@ -624,44 +624,44 @@
     const knightPST = [
       [-50,-40,-30,-30,-30,-30,-40,-50],
       [-40,-20,  0,  0,  0,  0,-20,-40],
-      [-30,  0, 12, 18, 18, 12,  0,-30],
-      [-30,  5, 18, 22, 22, 18,  5,-30],
-      [-30,  0, 18, 22, 22, 18,  0,-30],
-      [-30,  5, 12, 18, 18, 12,  5,-30],
-      [-40,-20,  0,  5,  5,  0,-20,-40],
+      [-30,  0, 15, 22, 22, 15,  0,-30],
+      [-30,  8, 22, 28, 28, 22,  8,-30],
+      [-30,  0, 22, 28, 28, 22,  0,-30],
+      [-30,  8, 15, 22, 22, 15,  8,-30],
+      [-40,-20,  0,  8,  8,  0,-20,-40],
       [-50,-40,-30,-30,-30,-30,-40,-50]
     ];
 
     const bishopPST = [
       [-20,-10,-10,-10,-10,-10,-10,-20],
       [-10,  0,  0,  0,  0,  0,  0,-10],
-      [-10,  0,  6, 10, 10,  6,  0,-10],
-      [-10,  5,  6, 10, 10,  6,  5,-10],
-      [-10,  0, 10, 10, 10, 10,  0,-10],
-      [-10, 10, 10, 10, 10, 10, 10,-10],
-      [-10,  5,  0,  0,  0,  0,  5,-10],
+      [-10,  0, 10, 14, 14, 10,  0,-10],
+      [-10,  8, 10, 14, 14, 10,  8,-10],
+      [-10,  0, 14, 14, 14, 14,  0,-10],
+      [-10, 14, 14, 14, 14, 14, 14,-10],
+      [-10,  8,  0,  0,  0,  0,  8,-10],
       [-20,-10,-10,-10,-10,-10,-10,-20]
     ];
 
     const rookPST = [
       [0,  0,  0,  0,  0,  0,  0,  0],
-      [6, 12, 12, 12, 12, 12, 12,  6],
+      [8, 14, 14, 14, 14, 14, 14,  8],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
       [-5,  0,  0,  0,  0,  0,  0, -5],
-      [0,  0,  0,  5,  5,  0,  0,  0]
+      [0,  0,  0,  6,  6,  0,  0,  0]
     ];
 
     const queenPST = [
       [-20,-10,-10, -5, -5,-10,-10,-20],
       [-10,  0,  0,  0,  0,  0,  0,-10],
-      [-10,  0,  5,  5,  5,  5,  0,-10],
-      [ -5,  0,  5,  5,  5,  5,  0, -5],
-      [  0,  0,  5,  5,  5,  5,  0, -5],
-      [-10,  5,  5,  5,  5,  5,  0,-10],
-      [-10,  0,  5,  0,  0,  0,  0,-10],
+      [-10,  0,  8,  8,  8,  8,  0,-10],
+      [ -5,  0,  8,  8,  8,  8,  0, -5],
+      [  0,  0,  8,  8,  8,  8,  0, -5],
+      [-10,  8,  8,  8,  8,  8,  0,-10],
+      [-10,  0,  8,  0,  0,  0,  0,-10],
       [-20,-10,-10, -5, -5,-10,-10,-20]
     ];
 
@@ -689,12 +689,22 @@
       return count <= 6;
     }
 
-    function getPosBonus(piece, r, c, endgame) {
+    function isOpeningMoveCount() {
+      return chess.history().length <= 8;
+    }
+
+    function getPosBonus(piece, r, c, endgame, opening) {
       const row = piece.color === 'w' ? r : 7 - r;
       if (piece.type === 'p') return pawnPST[row][c];
       if (piece.type === 'n') return knightPST[row][c];
       if (piece.type === 'b') return bishopPST[row][c];
-      if (piece.type === 'r') return rookPST[row][c];
+      if (piece.type === 'r') {
+        if (opening && piece.color === 'b') {
+          const isHomeCorner = (r === 0 && (c === 0 || c === 7));
+          return isHomeCorner ? 0 : -140;
+        }
+        return rookPST[row][c];
+      }
       if (piece.type === 'q') return queenPST[row][c];
       if (piece.type === 'k') return endgame ? kingEndPST[row][c] : kingMidPST[row][c];
       return 0;
@@ -759,28 +769,41 @@
       return false;
     }
 
-    // എതിരാളിയുടെ നീക്കം (White-ന്റെ അവസാന നീക്കം) തിരിച്ചറിഞ്ഞ് കൗണ്ടർ നൽകുന്ന ബോണസ്
-    function evaluateCounterToOpponentMove(b) {
-      if (!lastMoveInfo) return 0;
-      let counterBonus = 0;
+    // White-ന്റെ കരുക്കൾക്ക് Black ആക്രമണ ഭീഷണി ഉയർത്തുമ്പോൾ ആവേശകരമായ കൗണ്ടർ സ്കോർ
+    function evaluateAggressiveCounter(b) {
+      let pressureScore = 0;
 
-      const toIdx = squareNames.indexOf(lastMoveInfo.to);
-      if (toIdx !== -1) {
-        const r = Math.floor(toIdx / 8);
-        const c = toIdx % 8;
-        const movedPiece = b[r][c];
-        if (movedPiece && movedPiece.color === 'w' && movedPiece.type !== 'k') {
-          if (isSquareAttackedBy(b, r, c, 'b')) {
-            counterBonus += Math.floor(getPieceVal(movedPiece.type) * 0.3);
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = b[r][c];
+          if (p && p.color === 'w' && p.type !== 'k') {
+            if (isSquareAttackedBy(b, r, c, 'b')) {
+              pressureScore += Math.floor(getPieceVal(p.type) * 0.22);
+            }
           }
         }
       }
-      return counterBonus;
+
+      if (lastMoveInfo) {
+        const toIdx = squareNames.indexOf(lastMoveInfo.to);
+        if (toIdx !== -1) {
+          const r = Math.floor(toIdx / 8);
+          const c = toIdx % 8;
+          const movedPiece = b[r][c];
+          if (movedPiece && movedPiece.color === 'w' && movedPiece.type !== 'k') {
+            if (isSquareAttackedBy(b, r, c, 'b')) {
+              pressureScore += Math.floor(getPieceVal(movedPiece.type) * 0.25);
+            }
+          }
+        }
+      }
+
+      return pressureScore;
     }
 
     function evaluateBoard() {
       if (chess.in_checkmate()) {
-        return chess.turn() === 'w' ? 7500000 : -7500000;
+        return chess.turn() === 'w' ? 8500000 : -8500000;
       }
       if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
         const b = chess.board();
@@ -793,13 +816,14 @@
             }
           }
         }
-        if (mat > 110) return -3200000;
-        if (mat < -110) return 3200000;
+        if (mat > 100) return -3800000;
+        if (mat < -100) return 3800000;
         return 0;
       }
 
       const b = chess.board();
       const endgame = isEndgameBoard(b);
+      const opening = isOpeningMoveCount();
       let score = 0;
 
       for (let r = 0; r < 8; r++) {
@@ -807,26 +831,30 @@
           const p = b[r][c];
           if (!p) continue;
 
-          let val = getPieceVal(p.type) + getPosBonus(p, r, c, endgame);
+          let val = getPieceVal(p.type) + getPosBonus(p, r, c, endgame, opening);
+
+          if (opening && p.color === 'b' && (p.type === 'n' || p.type === 'b')) {
+            if (r > 0) val += 30;
+          }
 
           if (p.color === 'b') {
             if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'w')) {
-              val -= Math.floor(getPieceVal(p.type) * 0.68);
+              val -= Math.floor(getPieceVal(p.type) * 0.65);
             }
             score += val;
           } else {
             if (p.type !== 'k' && isSquareAttackedBy(b, r, c, 'b')) {
-              val -= Math.floor(getPieceVal(p.type) * 0.68);
+              val -= Math.floor(getPieceVal(p.type) * 0.65);
             }
             score -= val;
           }
         }
       }
 
-      score += evaluateCounterToOpponentMove(b);
+      score += evaluateAggressiveCounter(b);
 
       if (chess.in_check()) {
-        score += chess.turn() === 'w' ? 130 : -130;
+        score += chess.turn() === 'w' ? 160 : -160;
       }
 
       return score;
@@ -841,13 +869,16 @@
         s += getPieceVal(m.promotion) * 14;
       }
       if (m.san && m.san.includes('+')) {
-        s += 240;
+        s += 280;
+      }
+      if (isOpeningMoveCount() && m.piece === 'r' && (!m.san || (m.san !== 'O-O' && m.san !== 'O-O-O'))) {
+        s -= 900;
       }
       if (lastMoveInfo && m.to === lastMoveInfo.to) {
-        s += 110;
+        s += 120;
       }
       if (lastAIMoveInfo && m.from === lastAIMoveInfo.to && m.to === lastAIMoveInfo.from) {
-        s -= 260;
+        s -= 320;
       }
       return s;
     }
@@ -940,8 +971,9 @@
 
       let bestMove = rootMoves[0];
       const maxDepth = 4;
-      const timeBudgetMs = 1200;
+      const timeBudgetMs = 1250;
       const deadline = Date.now() + timeBudgetMs;
+      const opening = isOpeningMoveCount();
 
       for (let currentDepth = 3; currentDepth <= maxDepth; currentDepth++) {
         let currentBestMove = bestMove;
@@ -956,11 +988,15 @@
           chess.move(m);
           let score = alphaBeta(currentDepth - 1, -Infinity, Infinity, false, deadline);
 
+          if (opening && m.piece === 'r' && (!m.san || (m.san !== 'O-O' && m.san !== 'O-O-O'))) {
+            score -= 260;
+          }
+
           if (lastAIMoveInfo && m.from === lastAIMoveInfo.to && m.to === lastAIMoveInfo.from) {
-            score -= 70;
+            score -= 90;
           }
           if (chess.in_threefold_repetition() && score > 0) {
-            score -= 420;
+            score -= 480;
           }
 
           chess.undo();
