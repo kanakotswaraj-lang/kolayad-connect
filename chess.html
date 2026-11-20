@@ -10,210 +10,304 @@
       --bg-body: #070b19;
       --bg-app: #0b1128;
       --bg-card: #131c3f;
-      --border-color: rgba(56, 189, 248, 0.35);
+      --border-color: rgba(59, 130, 246, 0.35);
       --accent-gold: #facc15;
     }
     * { box-sizing: border-box; }
     body {
-      background: radial-gradient(circle at top, #1e1b4b 0%, var(--bg-body) 100%);
-      color: #f8fafc;
-      font-family: 'Noto Sans Malayalam', sans-serif;
       margin: 0;
       padding: 0;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
+      background: radial-gradient(circle at top, #172554 0%, #070b19 100%);
+      color: #f8fafc;
+      font-family: 'Noto Sans Malayalam', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
+
+    /* ഹെഡർ */
     .header {
-      background: var(--bg-app);
-      padding: 12px 15px;
+      background: rgba(11, 17, 40, 0.96);
+      padding: 11px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
       border-bottom: 2px solid var(--border-color);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
     }
     .back-btn {
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #38bdf8;
       border: 1.5px solid #38bdf8;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 10px;
-      cursor: pointer;
-      font-size: 13.5px;
-      font-weight: 800;
       text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
     }
-    .main-wrap {
-      width: 100%;
-      max-width: 460px;
-      margin: 0 auto;
-      padding: 14px;
+    .header-title {
+      margin: 0;
+      font-size: 15.5px;
+      font-weight: 900;
+      color: var(--accent-gold);
+      text-align: center;
       flex: 1;
+    }
+
+    /* പ്രധാന കണ്ടെയ്നർ */
+    .chess-page-wrap {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 10px 10px 28px 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 8px;
     }
+
+    /* മോഡ് സ്വിച്ചർ & സ്റ്റാറ്റസ് */
     .mode-bar {
       display: flex;
       gap: 8px;
       width: 100%;
-      margin-bottom: 10px;
+      justify-content: center;
     }
     .mode-btn {
       flex: 1;
-      padding: 9px 10px;
+      padding: 8px 10px;
       border-radius: 10px;
-      border: 1.5px solid var(--border-color);
-      background: var(--bg-card);
-      color: #e2e8f0;
+      border: 1.5px solid rgba(148, 163, 184, 0.35);
+      background: #131c3f;
+      color: #cbd5e1;
+      font-family: inherit;
+      font-size: 13px;
       font-weight: 800;
-      font-size: 12.5px;
       cursor: pointer;
     }
     .mode-btn.active {
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       border-color: #38bdf8;
       color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
     }
-    .level-bar {
-      display: none;
-      gap: 6px;
+
+    .status-banner {
       width: 100%;
-      margin-bottom: 10px;
-    }
-    .level-bar.show {
-      display: flex;
-    }
-    .level-btn {
-      flex: 1;
-      padding: 7px 6px;
-      border-radius: 9px;
-      border: 1px solid rgba(248, 113, 113, 0.4);
-      background: #1e1b4b;
-      color: #cbd5e1;
-      font-weight: 800;
-      font-size: 11.5px;
-      cursor: pointer;
-    }
-    .level-btn.active {
-      background: linear-gradient(135deg, #dc2626, #991b1b);
-      border-color: #fca5a5;
-      color: #ffffff;
-    }
-    .status-box {
-      width: 100%;
-      background: rgba(19, 28, 63, 0.9);
-      border: 1.5px solid rgba(250, 204, 21, 0.45);
+      background: rgba(15, 23, 42, 0.94);
+      border: 1.5px solid rgba(250, 204, 21, 0.5);
       border-radius: 12px;
-      padding: 9px 12px;
+      padding: 8px 12px;
       text-align: center;
       font-size: 14.5px;
       font-weight: 900;
       color: var(--accent-gold);
-      margin-bottom: 10px;
-      min-height: 42px;
+    }
+
+    /* ബോർഡിന്റെ മുകളിലും താഴെയുമുള്ള വലിയ കരുക്കളുടെ ട്രേ */
+    .captured-tray {
+      width: 100%;
+      min-height: 52px;
+      background: linear-gradient(145deg, rgba(19, 28, 63, 0.95), rgba(15, 23, 42, 0.95));
+      border: 2px solid rgba(250, 204, 21, 0.45);
+      border-radius: 14px;
+      padding: 6px 10px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      gap: 8px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
     }
-    .board-frame {
+    .tray-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #93c5fd;
+      white-space: nowrap;
+    }
+    .captured-pieces-list {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-height: 36px;
+    }
+
+    /* 3D രൂപത്തിലുള്ള വലിയ കരുക്കൾ (പുറത്തും ബോർഡിലും) */
+    .piece-3d-outer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.25);
+    }
+    .piece-3d-white {
+      color: #ffffff;
+      text-shadow:
+        0 2px 0 #94a3b8,
+        0 5px 8px rgba(0, 0, 0, 0.85);
+      filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.65));
+    }
+    .piece-3d-black {
+      color: #0f172a;
+      text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.55),
+        0 4px 7px rgba(0, 0, 0, 0.8);
+      filter: drop-shadow(0 2px 3px rgba(255, 255, 255, 0.22));
+    }
+
+    /* 3D സ്റ്റേജ് & വലിയ ബോർഡ് */
+    .board-3d-perspective {
+      perspective: 950px;
       width: 100%;
-      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      padding: 2px 0;
+    }
+    .chess-board-3d {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
-      gap: 2px;
-      background: #0f172a;
-      padding: 8px;
+      width: 100%;
+      max-width: 416px;
+      aspect-ratio: 1 / 1;
+      background: #1e293b;
+      padding: 6px;
       border-radius: 16px;
-      border: 2.5px solid #38bdf8;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
-      margin-bottom: 12px;
+      border: 3px solid #facc15;
+      transform: rotateX(8deg);
+      transform-style: preserve-3d;
+      box-shadow:
+        0 10px 0 #78350f,
+        0 20px 35px rgba(0, 0, 0, 0.8);
+      user-select: none;
     }
-    .board-frame.ai-border {
-      border-color: #ef4444;
-    }
-    .chess-sq {
+    .sq {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: clamp(24px, 7vw, 36px);
+      justify-content: center;
+      position: relative;
       cursor: pointer;
       border-radius: 5px;
-      user-select: none;
-      transition: transform 0.12s ease, background-color 0.12s ease;
-      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.65);
-      position: relative;
+      transition: transform 0.12s ease, background-color 0.15s ease;
     }
-    .chess-sq:active { transform: scale(0.92); }
-    .chess-sq.selected {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
-      outline: 2px solid #facc15;
+    .sq.light {
+      background: linear-gradient(145deg, #64748b, #475569);
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.22), inset 0 -2px 3px rgba(0, 0, 0, 0.35);
     }
-    .chess-sq.last-move {
-      box-shadow: inset 0 0 0 2px rgba(250, 204, 21, 0.65);
+    .sq.dark {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.1), inset 0 -2px 3px rgba(0, 0, 0, 0.55);
     }
-    .chess-sq.legal-target::after {
-      content: "•";
+    .sq.selected {
+      background: linear-gradient(145deg, #f59e0b, #d97706) !important;
+      box-shadow: inset 0 0 0 2.5px #ffffff, 0 0 12px rgba(250, 204, 21, 0.75);
+    }
+    .sq.last-move {
+      box-shadow: inset 0 0 0 2px rgba(56, 189, 248, 0.7);
+    }
+    .sq.move-dot::after {
+      content: "";
       position: absolute;
-      color: rgba(250, 204, 21, 0.75);
-      font-size: 18px;
+      width: 30%;
+      height: 30%;
+      border-radius: 50%;
+      background: rgba(250, 204, 21, 0.88);
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+    }
+    .sq.move-capture {
+      box-shadow: inset 0 0 0 3px #ef4444;
+      background: rgba(239, 68, 68, 0.25) !important;
+    }
+    .board-piece {
+      font-size: clamp(29px, 8vw, 42px);
+      line-height: 1;
+      transform: translateZ(10px) translateY(-1px);
       pointer-events: none;
     }
+
+    /* താഴത്തെ കൺട്രോൾ ബട്ടണുകൾ */
     .controls-row {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       width: 100%;
+      justify-content: center;
+      margin-top: 4px;
     }
-    .action-btn {
+    .ctrl-btn {
       flex: 1;
-      background: var(--bg-card);
-      color: #f8fafc;
-      border: 1.5px solid var(--border-color);
       padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 13px;
+      border-radius: 11px;
+      border: none;
+      font-family: inherit;
+      font-size: 13.5px;
       font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-undo {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+    }
+    .btn-reset {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0f172a;
     }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <a href="games.html" class="back-btn">← ഗെയിംസ് ലിസ്റ്റ്</a>
-    <h2 style="margin: 0; font-size: 16.5px; color: #facc15; font-weight: 900;">♟️ ചെസ്സ് അരീന</h2>
+    <a href="games.html" class="back-btn">← ഗെയിംസ്</a>
+    <h1 class="header-title" id="pageTitle">♟️ 3D ചെസ്സ് അരീന</h1>
+    <a href="chess-guide.html" class="back-btn" style="color:#facc15;border-color:#facc15;">പഠിക്കാം</a>
   </div>
 
-  <div class="main-wrap">
+  <div class="chess-page-wrap">
     <div class="mode-bar">
-      <button id="modeAIBtn" class="mode-btn active" onclick="switchMode('ai')">🔥 Vs കമ്പ്യൂട്ടർ (AI)</button>
-      <button id="mode2PBtn" class="mode-btn" onclick="switchMode('2p')">👥 2-Player Local</button>
+      <button type="button" class="mode-btn" id="mode2pBtn" onclick="switchMode('2p')">👥 2 പ്ലെയർ</button>
+      <button type="button" class="mode-btn active" id="modeAiBtn" onclick="switchMode('ai')">🤖 കമ്പ്യൂട്ടർ (AI)</button>
     </div>
 
-    <div id="aiLevelBar" class="level-bar show">
-      <button class="level-btn" onclick="setAILevel('easy', this)">തുടക്കക്കാർക്ക്</button>
-      <button class="level-btn" onclick="setAILevel('medium', this)">മീഡിയം</button>
-      <button class="level-btn active" onclick="setAILevel('hard', this)">🔥 ഹാർഡ് (Pro)</button>
+    <div class="status-banner" id="statusText">നിങ്ങളുടെ ടേൺ (White)</div>
+
+    <!-- മുകൾ ഭാഗത്ത്: വെട്ടിയെടുത്ത കരുക്കൾ (Black Captured) -->
+    <div class="captured-tray" id="topTray">
+      <span class="tray-label" id="topTrayLabel">🤖 എതിരാളി വെട്ടിയവ:</span>
+      <div class="captured-pieces-list" id="topCaptured"></div>
     </div>
 
-    <div id="chessStatus" class="status-box">നിങ്ങളുടെ ടേൺ (White)</div>
+    <!-- വലിയ 3D ചെസ്സ് ബോർഡ് -->
+    <div class="board-3d-perspective">
+      <div class="chess-board-3d" id="board"></div>
+    </div>
 
-    <div id="chessBoard" class="board-frame ai-border"></div>
+    <!-- താഴെ ഭാഗത്ത്: വെട്ടിയെടുത്ത കരുക്കൾ (White Captured) -->
+    <div class="captured-tray" id="bottomTray">
+      <span class="tray-label" id="bottomTrayLabel" style="color:#38bdf8;">♔ നിങ്ങൾ വെട്ടിയവ:</span>
+      <div class="captured-pieces-list" id="bottomCaptured"></div>
+    </div>
 
     <div class="controls-row">
-      <button class="action-btn" onclick="undoMove()">↩️ നീക്കം മാറ്റുക</button>
-      <button class="action-btn" onclick="resetChess()">🔄 പുതിയ കളി</button>
+      <button type="button" class="ctrl-btn btn-undo" onclick="undoMove()">↩ നീക്കം മാറ്റുക</button>
+      <button type="button" class="ctrl-btn btn-reset" onclick="resetGame()">🔄 പുതിയ കളി</button>
     </div>
   </div>
 
   <script>
-    const pieceSymbols = {
-      'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
-      'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
+    const pieceGlyphs = {
+      p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
+      P: '♙', R: '♖', N: '♘', B: '♗', Q: '♕', K: '♔'
     };
+
     const squareNames = [
       'a8','b8','c8','d8','e8','f8','g8','h8',
       'a7','b7','c7','d7','e7','f7','g7','h7',
@@ -225,435 +319,133 @@
       'a1','b1','c1','d1','e1','f1','g1','h1'
     ];
 
-    const pawnPST = [
-      [0,  0,  0,  0,  0,  0,  0,  0],
-      [5,  5,  5,  5,  5,  5,  5,  5],
-      [1.5,1.5,2.5,4.2,4.2,2.5,1.5,1.5],
-      [0.8,0.8,1.5,3.6,3.6,1.5,0.8,0.8],
-      [0.2,0.2,0.8,2.8,2.8,0.8,0.2,0.2],
-      [0.5,-0.5,-1,0,  0,  -1,-0.5,0.5],
-      [0.5,1,  1,  -2, -2, 1,  1,  0.5],
-      [0,  0,  0,  0,  0,  0,  0,  0]
-    ];
-
-    const knightPST = [
-      [-5,-4,-3,-3,-3,-3,-4,-5],
-      [-4,-2, 0.2,0.4,0.4,0.2,-2,-4],
-      [-3, 0.4,1.5,2.2,2.2,1.5,0.4,-3],
-      [-3, 0.8,2.2,3.0,3.0,2.2,0.8,-3],
-      [-3, 0.5,2.2,3.0,3.0,2.2,0.5,-3],
-      [-3, 0.8,1.5,2.2,2.2,1.5,0.8,-3],
-      [-4,-2, 0.2,0.8,0.8,0.2,-2,-4],
-      [-5,-4,-3,-3,-3,-3,-4,-5]
-    ];
-
-    const bishopPST = [
-      [-2,-1,-1,-1,-1,-1,-1,-2],
-      [-1, 0.2,0, 0, 0, 0, 0.2,-1],
-      [-1, 0.4,1.0,1.5,1.5,1.0,0.4,-1],
-      [-1, 0.8,1.0,1.8,1.8,1.0,0.8,-1],
-      [-1, 0.2,1.5,1.8,1.8,1.5,0.2,-1],
-      [-1, 1.2,1.5,1.5,1.5,1.5,1.2,-1],
-      [-1, 0.8,0.2,0, 0, 0.2,0.8,-1],
-      [-2,-1,-1,-1,-1,-1,-1,-2]
-    ];
-
-    const rookPST = [
-      [0.2,0.4,0.6,0.8,0.8,0.6,0.4,0.2],
-      [1.0,1.8,1.8,1.8,1.8,1.8,1.8,1.0],
-      [-0.5,0, 0.2,0.4,0.4,0.2,0, -0.5],
-      [-0.5,0, 0.2,0.4,0.4,0.2,0, -0.5],
-      [-0.5,0, 0.2,0.4,0.4,0.2,0, -0.5],
-      [-0.5,0, 0.2,0.4,0.4,0.2,0, -0.5],
-      [-0.5,0, 0,  0,  0,  0,  0, -0.5],
-      [0,  0,  0.4,1.0,1.0,0.4,0,  0]
-    ];
-
-    const queenPST = [
-      [-2,-1,-1,-0.5,-0.5,-1,-1,-2],
-      [-1, 0, 0.2,0.2,0.2,0.2,0,-1],
-      [-1, 0.2,0.8,1.0,1.0,0.8,0.2,-1],
-      [-0.5,0,1.0,1.2,1.2,1.0,0,-0.5],
-      [0,  0, 1.0,1.2,1.2,1.0,0,-0.5],
-      [-1, 0.8,1.0,1.0,1.0,1.0,0.2,-1],
-      [-1, 0, 0.8,0.2,0.2,0, 0,-1],
-      [-2,-1,-1,-0.5,-0.5,-1,-1,-2]
-    ];
-
-    const kingMidPST = [
-      [-4,-4,-4,-5,-5,-4,-4,-4],
-      [-4,-4,-4,-5,-5,-4,-4,-4],
-      [-4,-4,-4,-5,-5,-4,-4,-4],
-      [-4,-4,-4,-5,-5,-4,-4,-4],
-      [-3,-3,-3,-4,-4,-3,-3,-3],
-      [-2,-2,-2,-2,-2,-2,-2,-2],
-      [2,  2,  0,  0,  0,  0,  2,  2],
-      [2.5,3.5,1.5,0,  0,  1.5,3.5,2.5]
-    ];
-
-    const kingEndPST = [
-      [-5,-3,-3,-3,-3,-3,-3,-5],
-      [-3,-1, 0, 0, 0, 0,-1,-3],
-      [-3, 0, 2.5,3.2,3.2,2.5,0,-3],
-      [-3, 0, 3.2,4.2,4.2,3.2,0,-3],
-      [-3, 0, 3.2,4.2,4.2,3.2,0,-3],
-      [-3, 0, 2.5,3.2,3.2,2.5,0,-3],
-      [-3,-1, 0, 0, 0, 0,-1,-3],
-      [-5,-3,-3,-3,-3,-3,-3,-5]
-    ];
-
-    const pieceBaseValues = {
-      'p': 10,
-      'n': 32,
-      'b': 34,
-      'r': 52,
-      'q': 95,
-      'k': 900
-    };
-
-    let chessGame = null;
-    let gameMode = 'ai';
-    let aiLevel = 'hard';
+    let chess = new Chess();
+    let mode = 'ai';
     let selectedSq = null;
-    let legalTargets = [];
-    let lastMove = null;
+    let lastMoveInfo = null;
+    let whiteCaptured = []; // White വെട്ടിയെടുത്ത കറുത്ത കരുക്കൾ
+    let blackCaptured = []; // Black വെട്ടിയെടുത്ത വെളുത്ത കരുക്കൾ
     let aiThinking = false;
-    let searchDeadline = 0;
-    let nodeCounter = 0;
 
-    const urlMode = new URLSearchParams(window.location.search).get('mode');
-    if (urlMode === '2p' || urlMode === 'ai') {
-      gameMode = urlMode;
+    function detectInitialMode() {
+      const params = new URLSearchParams(window.location.search);
+      const m = params.get('mode');
+      mode = (m === '2p') ? '2p' : 'ai';
+      syncModeButtons();
     }
 
-    function isTimeUp() {
-      nodeCounter++;
-      if ((nodeCounter & 255) === 0) {
-        return performance.now() > searchDeadline;
-      }
-      return false;
+    function syncModeButtons() {
+      document.getElementById('mode2pBtn').classList.toggle('active', mode === '2p');
+      document.getElementById('modeAiBtn').classList.toggle('active', mode === 'ai');
+      document.getElementById('pageTitle').innerText = mode === 'ai' ? '🔥 3D ചെസ്സ് Vs AI' : '♟️ 3D ചെസ്സ് (2P)';
+      document.getElementById('topTrayLabel').innerText = mode === 'ai' ? '🤖 ബോട്ട് വെട്ടിയവ:' : '♚ കറുപ്പ് വെട്ടിയവ:';
+      document.getElementById('bottomTrayLabel').innerText = mode === 'ai' ? '♔ നിങ്ങൾ വെട്ടിയവ:' : '♔ വെളുപ്പ് വെട്ടിയവ:';
     }
 
-    function isEndgame(board) {
-      let nonPawnMaterial = 0;
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = board[r][c];
-          if (!p || p.type === 'p' || p.type === 'k') continue;
-          nonPawnMaterial += pieceBaseValues[p.type] || 0;
-        }
-      }
-      return nonPawnMaterial <= 130;
+    function switchMode(newMode) {
+      mode = newMode;
+      syncModeButtons();
+      resetGame();
     }
 
-    function getPSTValue(piece, r, c, endgame) {
-      const row = piece.color === 'w' ? r : 7 - r;
-      switch (piece.type) {
-        case 'p': return pawnPST[row][c];
-        case 'n': return knightPST[row][c];
-        case 'b': return bishopPST[row][c];
-        case 'r': return rookPST[row][c];
-        case 'q': return queenPST[row][c];
-        case 'k': return endgame ? kingEndPST[row][c] : kingMidPST[row][c];
-        default: return 0;
-      }
+    function resetGame() {
+      chess = new Chess();
+      selectedSq = null;
+      lastMoveInfo = null;
+      whiteCaptured = [];
+      blackCaptured = [];
+      aiThinking = false;
+      renderAll();
     }
 
-    // Score from White's perspective
-    function evaluatePosition(instance) {
-      if (instance.in_checkmate()) {
-        return instance.turn() === 'w' ? -99999 : 99999;
-      }
-      if (instance.in_draw() || instance.in_stalemate() || instance.in_threefold_repetition()) {
-        return 0;
-      }
+    function renderCapturedTrays() {
+      const topEl = document.getElementById('topCaptured');
+      const bottomEl = document.getElementById('bottomCaptured');
 
-      const board = instance.board();
-      const endgame = isEndgame(board);
-      let score = 0;
-      let whiteKingPos = null;
-      let blackKingPos = null;
+      topEl.innerHTML = blackCaptured.length
+        ? blackCaptured.map(t => `<span class="piece-3d-outer piece-3d-white">${pieceGlyphs[t.toUpperCase()]}</span>`).join('')
+        : `<span style="font-size:12px;color:#64748b;">—</span>`;
 
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const piece = board[r][c];
-          if (!piece) continue;
-
-          if (piece.type === 'k') {
-            if (piece.color === 'w') whiteKingPos = { r, c };
-            else blackKingPos = { r, c };
-          }
-
-          const base = pieceBaseValues[piece.type] || 0;
-          const posBonus = getPSTValue(piece, r, c, endgame);
-          const total = base + posBonus;
-          score += piece.color === 'w' ? total : -total;
-        }
-      }
-
-      if (endgame && whiteKingPos && blackKingPos) {
-        const wEdgeDist = Math.min(whiteKingPos.r, 7 - whiteKingPos.r) + Math.min(whiteKingPos.c, 7 - whiteKingPos.c);
-        const bEdgeDist = Math.min(blackKingPos.r, 7 - blackKingPos.r) + Math.min(blackKingPos.c, 7 - blackKingPos.c);
-        const kingDist = Math.abs(whiteKingPos.r - blackKingPos.r) + Math.abs(whiteKingPos.c - blackKingPos.c);
-
-        score += (4 - bEdgeDist) * 2.2;
-        score -= (4 - wEdgeDist) * 2.2;
-        score += (14 - kingDist) * 0.8;
-      }
-
-      if (instance.in_check()) {
-        score += instance.turn() === 'w' ? -6.5 : 6.5;
-      }
-
-      return score;
-    }
-
-    function orderMoves(moves) {
-      return moves.sort((a, b) => {
-        const scoreA =
-          (a.captured ? (pieceBaseValues[a.captured] || 1) * 18 : 0) +
-          (a.san.includes('#') ? 250 : a.san.includes('+') ? 38 : 0) +
-          (a.promotion ? 65 : 0);
-        const scoreB =
-          (b.captured ? (pieceBaseValues[b.captured] || 1) * 18 : 0) +
-          (b.san.includes('#') ? 250 : b.san.includes('+') ? 38 : 0) +
-          (b.promotion ? 65 : 0);
-        return scoreB - scoreA;
-      });
-    }
-
-    function quiescenceAI(instance, alpha, beta, isBlackTurn, qDepth) {
-      const standPat = -evaluatePosition(instance);
-      if (qDepth <= 0 || instance.game_over() || isTimeUp()) {
-        return standPat;
-      }
-
-      if (isBlackTurn) {
-        if (standPat >= beta) return beta;
-        if (standPat > alpha) alpha = standPat;
-
-        const captures = orderMoves(
-          instance.moves({ verbose: true }).filter(m => m.captured || m.promotion)
-        ).slice(0, 7);
-
-        for (let i = 0; i < captures.length; i++) {
-          if (isTimeUp()) break;
-          instance.move(captures[i]);
-          const score = quiescenceAI(instance, alpha, beta, false, qDepth - 1);
-          instance.undo();
-          if (score >= beta) return beta;
-          if (score > alpha) alpha = score;
-        }
-        return alpha;
-      } else {
-        const whiteStandPat = evaluatePosition(instance);
-        if (whiteStandPat <= alpha) return alpha;
-        if (whiteStandPat < beta) beta = whiteStandPat;
-
-        const captures = orderMoves(
-          instance.moves({ verbose: true }).filter(m => m.captured || m.promotion)
-        ).slice(0, 7);
-
-        for (let i = 0; i < captures.length; i++) {
-          if (isTimeUp()) break;
-          instance.move(captures[i]);
-          const score = -quiescenceAI(instance, -beta, -alpha, true, qDepth - 1);
-          instance.undo();
-          if (score <= alpha) return alpha;
-          if (score < beta) beta = score;
-        }
-        return beta;
-      }
-    }
-
-    function minimaxAI(depth, instance, alpha, beta, isBlackTurn) {
-      if (instance.game_over()) {
-        return -evaluatePosition(instance);
-      }
-      if (depth <= 0 || isTimeUp()) {
-        return quiescenceAI(instance, alpha, beta, isBlackTurn, 3);
-      }
-
-      const moves = orderMoves(instance.moves({ verbose: true }));
-
-      if (isBlackTurn) {
-        let maxEval = -Infinity;
-        for (let i = 0; i < moves.length; i++) {
-          if (isTimeUp()) break;
-          instance.move(moves[i]);
-          const ev = minimaxAI(depth - 1, instance, alpha, beta, false);
-          instance.undo();
-          if (ev > maxEval) maxEval = ev;
-          if (ev > alpha) alpha = ev;
-          if (beta <= alpha) break;
-        }
-        return maxEval;
-      } else {
-        let minEval = Infinity;
-        for (let i = 0; i < moves.length; i++) {
-          if (isTimeUp()) break;
-          instance.move(moves[i]);
-          const ev = minimaxAI(depth - 1, instance, alpha, beta, true);
-          instance.undo();
-          if (ev < minEval) minEval = ev;
-          if (ev < beta) beta = ev;
-          if (beta <= alpha) break;
-        }
-        return minEval;
-      }
-    }
-
-    // Allows up to ~75s in hard mode while staying deep and responsive
-    function getLevelSettings() {
-      if (aiLevel === 'easy') return { maxDepth: 2, budgetMs: 1500 };
-      if (aiLevel === 'medium') return { maxDepth: 4, budgetMs: 8000 };
-      const endgame = isEndgame(chessGame.board());
-      const moveCount = chessGame.moves().length;
-      if (endgame && moveCount <= 16) {
-        return { maxDepth: 6, budgetMs: 75000 };
-      }
-      return { maxDepth: 5, budgetMs: 75000 };
-    }
-
-    function getShufflingPenalty(move, recentBlackMoves) {
-      let penalty = 0;
-      if (recentBlackMoves.includes(move.from + move.to)) {
-        penalty += 6.5;
-      }
-      if (lastMove && move.from === lastMove.to && move.to === lastMove.from && !move.captured) {
-        penalty += 5.0;
-      }
-      if (move.captured) penalty -= 3.0;
-      if (move.san.includes('#')) penalty -= 60;
-      else if (move.san.includes('+')) penalty -= 4.0;
-      return penalty;
-    }
-
-    function searchAtDepth(depth, moves, recentBlackMoves) {
-      let bestMove = moves[0];
-      let bestScore = -Infinity;
-
-      for (let i = 0; i < moves.length; i++) {
-        if (i > 0 && performance.now() > searchDeadline) {
-          break;
-        }
-        chessGame.move(moves[i]);
-        const rawVal = minimaxAI(depth - 1, chessGame, -Infinity, Infinity, false);
-        chessGame.undo();
-
-        const adjustedVal = rawVal - getShufflingPenalty(moves[i], recentBlackMoves);
-        if (adjustedVal > bestScore) {
-          bestScore = adjustedVal;
-          bestMove = moves[i];
-        }
-      }
-
-      return { move: bestMove, score: bestScore };
-    }
-
-    function computeBestAIMove() {
-      const moves = orderMoves(chessGame.moves({ verbose: true }));
-      if (!moves.length) return null;
-
-      const history = chessGame.history({ verbose: true });
-      const recentBlackMoves = history
-        .filter(m => m.color === 'b')
-        .slice(-4)
-        .map(m => m.from + m.to);
-
-      const { maxDepth, budgetMs } = getLevelSettings();
-      searchDeadline = performance.now() + budgetMs;
-      nodeCounter = 0;
-
-      let chosenMove = moves[0];
-      for (let d = 2; d <= maxDepth; d++) {
-        if (d > 2 && performance.now() > searchDeadline) break;
-        document.getElementById('chessStatus').innerText = `കമ്പ്യൂട്ടർ ആഴത്തിൽ ചിന്തിക്കുന്നു (Depth ${d})... 🔥`;
-        const result = searchAtDepth(d, moves, recentBlackMoves);
-        if (result && result.move) {
-          chosenMove = result.move;
-        }
-      }
-
-      return chosenMove;
+      bottomEl.innerHTML = whiteCaptured.length
+        ? whiteCaptured.map(t => `<span class="piece-3d-outer piece-3d-black">${pieceGlyphs[t]}</span>`).join('')
+        : `<span style="font-size:12px;color:#64748b;">—</span>`;
     }
 
     function renderBoard() {
-      const boardEl = document.getElementById('chessBoard');
-      const board = chessGame.board();
-      let html = '';
+      const boardEl = document.getElementById('board');
+      const grid = chess.board();
+      const legalTargets = selectedSq
+        ? chess.moves({ square: selectedSq, verbose: true }).map(m => m.to)
+        : [];
 
+      let html = '';
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           const sqName = squareNames[r * 8 + c];
           const isDark = (r + c) % 2 === 1;
-          let bg = isDark
-            ? 'linear-gradient(135deg, #1e293b, #0f172a)'
-            : 'linear-gradient(135deg, #475569, #334155)';
+          const piece = grid[r][c];
+          const isSelected = selectedSq === sqName;
+          const isLegal = legalTargets.includes(sqName);
+          const isLast = lastMoveInfo && (lastMoveInfo.from === sqName || lastMoveInfo.to === sqName);
 
-          let classes = 'chess-sq';
-          if (selectedSq === sqName) classes += ' selected';
-          if (legalTargets.includes(sqName)) classes += ' legal-target';
-          if (lastMove && (lastMove.from === sqName || lastMove.to === sqName)) classes += ' last-move';
+          let cls = `sq ${isDark ? 'dark' : 'light'}`;
+          if (isSelected) cls += ' selected';
+          if (isLast) cls += ' last-move';
+          if (isLegal) cls += piece ? ' move-capture' : ' move-dot';
 
-          const piece = board[r][c];
-          let pieceChar = '';
-          let pieceColor = '';
+          let pieceHtml = '';
           if (piece) {
-            const key = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
-            pieceChar = pieceSymbols[key] || '';
-            pieceColor = piece.color === 'w' ? '#ffffff' : '#cbd5e1';
+            const sym = piece.color === 'w' ? pieceGlyphs[piece.type.toUpperCase()] : pieceGlyphs[piece.type];
+            const styleCls = piece.color === 'w' ? 'piece-3d-white' : 'piece-3d-black';
+            pieceHtml = `<span class="board-piece ${styleCls}">${sym}</span>`;
           }
 
-          html += `<div class="${classes}" style="background:${bg};" onclick="onSquareClick('${sqName}')"><span style="color:${pieceColor};">${pieceChar}</span></div>`;
+          html += `<div class="${cls}" onclick="onSquareClick('${sqName}')">${pieceHtml}</div>`;
         }
       }
-
       boardEl.innerHTML = html;
     }
 
     function updateStatus() {
-      const statusEl = document.getElementById('chessStatus');
-      if (chessGame.in_checkmate()) {
-        if (gameMode === 'ai') {
-          statusEl.innerText = chessGame.turn() === 'w'
-            ? '🏁 ചെക്ക്മേറ്റ്! കമ്പ്യൂട്ടർ വിജയിച്ചു!'
-            : '🎉 അതിഗംഭീരം! നിങ്ങൾ വിജയിച്ചു!';
-        } else {
-          statusEl.innerText = `🏁 ചെക്ക്മേറ്റ്! ${chessGame.turn() === 'w' ? 'കറുപ്പ് (Black)' : 'വെളുപ്പ് (White)'} വിജയിച്ചു!`;
-        }
+      const statusEl = document.getElementById('statusText');
+      if (aiThinking) {
+        statusEl.innerText = '🤖 കമ്പ്യൂട്ടർ നീക്കം ആലോചിക്കുന്നു...';
         return;
       }
-
-      if (chessGame.in_draw() || chessGame.in_stalemate() || chessGame.in_threefold_repetition()) {
+      if (chess.in_checkmate()) {
+        const winner = chess.turn() === 'w'
+          ? (mode === 'ai' ? 'കമ്പ്യൂട്ടർ (Black)' : 'കറുപ്പ് (Black)')
+          : (mode === 'ai' ? 'നിങ്ങൾ (White)' : 'വെളുപ്പ് (White)');
+        statusEl.innerText = `🏆 ചെക്ക്മേറ്റ്! ${winner} വിജയിച്ചു!`;
+        return;
+      }
+      if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
         statusEl.innerText = '🤝 കളി സമനിലയിൽ (Draw)!';
         return;
       }
 
-      if (gameMode === 'ai') {
-        if (aiThinking) {
-          statusEl.innerText = 'കമ്പ്യൂട്ടർ നീക്കം ആലോചിക്കുന്നു... 🔥';
-        } else {
-          let txt = chessGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു...';
-          if (chessGame.in_check()) txt += ' ⚠️ ചെക്ക്!';
-          statusEl.innerText = txt;
-        }
-      } else {
-        let txt = chessGame.turn() === 'w' ? 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ' : 'കറുപ്പ് (Black) കളിക്കാരുടെ ടേൺ';
-        if (chessGame.in_check()) txt += ' ⚠️ ചെക്ക്!';
-        statusEl.innerText = txt;
-      }
+      let turnMsg = chess.turn() === 'w'
+        ? (mode === 'ai' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ')
+        : 'കറുപ്പ് (Black) കളിക്കാരുടെ ടേൺ';
+
+      if (chess.in_check()) turnMsg += ' — ⚠️ ചെക്ക്!';
+      statusEl.innerText = turnMsg;
+    }
+
+    function renderAll() {
+      renderBoard();
+      renderCapturedTrays();
+      updateStatus();
     }
 
     function onSquareClick(sq) {
-      if (aiThinking || chessGame.game_over()) return;
-      if (gameMode === 'ai' && chessGame.turn() !== 'w') return;
+      if (aiThinking || chess.game_over()) return;
+      if (mode === 'ai' && chess.turn() !== 'w') return;
 
       if (!selectedSq) {
-        const piece = chessGame.get(sq);
-        if (piece && piece.color === chessGame.turn()) {
+        const piece = chess.get(sq);
+        if (piece && piece.color === chess.turn()) {
           selectedSq = sq;
-          legalTargets = chessGame.moves({ square: sq, verbose: true }).map(m => m.to);
           renderBoard();
         }
         return;
@@ -661,96 +453,126 @@
 
       if (selectedSq === sq) {
         selectedSq = null;
-        legalTargets = [];
         renderBoard();
         return;
       }
 
-      const move = chessGame.move({ from: selectedSq, to: sq, promotion: 'q' });
+      const move = chess.move({ from: selectedSq, to: sq, promotion: 'q' });
       selectedSq = null;
-      legalTargets = [];
 
       if (!move) {
-        const piece = chessGame.get(sq);
-        if (piece && piece.color === chessGame.turn()) {
-          selectedSq = sq;
-          legalTargets = chessGame.moves({ square: sq, verbose: true }).map(m => m.to);
-        }
+        const piece = chess.get(sq);
+        if (piece && piece.color === chess.turn()) selectedSq = sq;
         renderBoard();
-        updateStatus();
         return;
       }
 
-      lastMove = { from: move.from, to: move.to };
-      renderBoard();
-      updateStatus();
+      lastMoveInfo = { from: move.from, to: move.to };
+      if (move.captured) {
+        if (move.color === 'w') whiteCaptured.push(move.captured);
+        else blackCaptured.push(move.captured);
+      }
 
-      if (gameMode === 'ai' && !chessGame.game_over() && chessGame.turn() === 'b') {
+      renderAll();
+
+      if (!chess.game_over() && mode === 'ai' && chess.turn() === 'b') {
         aiThinking = true;
         updateStatus();
         setTimeout(() => {
-          const best = computeBestAIMove();
-          if (best) {
-            const aiMove = chessGame.move(best);
-            if (aiMove) lastMove = { from: aiMove.from, to: aiMove.to };
+          const aiMove = pickBestAIMove();
+          if (aiMove) {
+            const exec = chess.move(aiMove);
+            if (exec) {
+              lastMoveInfo = { from: exec.from, to: exec.to };
+              if (exec.captured) blackCaptured.push(exec.captured);
+            }
           }
           aiThinking = false;
-          renderBoard();
-          updateStatus();
-        }, 40);
+          renderAll();
+        }, 260);
       }
     }
 
-    function switchMode(mode) {
-      gameMode = mode;
-      document.getElementById('modeAIBtn').classList.toggle('active', mode === 'ai');
-      document.getElementById('mode2PBtn').classList.toggle('active', mode === '2p');
-      document.getElementById('aiLevelBar').classList.toggle('show', mode === 'ai');
-      document.getElementById('chessBoard').classList.toggle('ai-border', mode === 'ai');
-      resetChess();
+    function getPieceVal(type) {
+      return type === 'p' ? 10 : type === 'n' ? 30 : type === 'b' ? 30 : type === 'r' ? 50 : type === 'q' ? 90 : 900;
     }
 
-    function setAILevel(level, btnEl) {
-      aiLevel = level;
-      document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      resetChess();
+    function evaluateBoard() {
+      const b = chess.board();
+      let score = 0;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = b[r][c];
+          if (p) {
+            const center = (r >= 2 && r <= 5 && c >= 2 && c <= 5) ? 2 : 0;
+            score += p.color === 'b' ? (getPieceVal(p.type) + center) : -(getPieceVal(p.type) + center);
+          }
+        }
+      }
+      return score;
+    }
+
+    function minimax(depth, alpha, beta, isMax) {
+      if (depth === 0 || chess.game_over()) return evaluateBoard();
+      const moves = chess.moves({ verbose: true });
+      if (isMax) {
+        let best = -999999;
+        for (const m of moves) {
+          chess.move(m);
+          best = Math.max(best, minimax(depth - 1, alpha, beta, false));
+          chess.undo();
+          alpha = Math.max(alpha, best);
+          if (beta <= alpha) break;
+        }
+        return best;
+      } else {
+        let best = 999999;
+        for (const m of moves) {
+          chess.move(m);
+          best = Math.min(best, minimax(depth - 1, alpha, beta, true));
+          chess.undo();
+          beta = Math.min(beta, best);
+          if (beta <= alpha) break;
+        }
+        return best;
+      }
+    }
+
+    function pickBestAIMove() {
+      const moves = chess.moves({ verbose: true });
+      if (!moves.length) return null;
+      let bestMove = moves[0];
+      let bestVal = -999999;
+      for (const m of moves) {
+        chess.move(m);
+        const val = minimax(2, -1000000, 1000000, false) + (Math.random() * 2);
+        chess.undo();
+        if (val > bestVal) {
+          bestVal = val;
+          bestMove = m;
+        }
+      }
+      return bestMove;
     }
 
     function undoMove() {
       if (aiThinking) return;
-      if (gameMode === 'ai') {
-        if (chessGame.turn() === 'w' && chessGame.history().length >= 2) {
-          chessGame.undo();
-          chessGame.undo();
-        } else if (chessGame.history().length >= 1) {
-          chessGame.undo();
+      const steps = (mode === 'ai' && chess.turn() === 'w') ? 2 : 1;
+      for (let i = 0; i < steps; i++) {
+        const undone = chess.undo();
+        if (!undone) break;
+        if (undone.captured) {
+          if (undone.color === 'w') whiteCaptured.pop();
+          else blackCaptured.pop();
         }
-      } else {
-        chessGame.undo();
       }
       selectedSq = null;
-      legalTargets = [];
-      lastMove = null;
-      renderBoard();
-      updateStatus();
+      lastMoveInfo = null;
+      renderAll();
     }
 
-    function resetChess() {
-      chessGame = new Chess();
-      selectedSq = null;
-      legalTargets = [];
-      lastMove = null;
-      aiThinking = false;
-      document.getElementById('modeAIBtn').classList.toggle('active', gameMode === 'ai');
-      document.getElementById('mode2PBtn').classList.toggle('active', gameMode === '2p');
-      document.getElementById('aiLevelBar').classList.toggle('show', gameMode === 'ai');
-      document.getElementById('chessBoard').classList.toggle('ai-border', gameMode === 'ai');
-      renderBoard();
-      updateStatus();
-    }
-
-    resetChess();
+    detectInitialMode();
+    resetGame();
   </script>
 </body>
 </html>
