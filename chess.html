@@ -265,6 +265,54 @@
       background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #0f172a;
     }
+
+    /* വിജയ / കളി അവസാനിക്കുന്ന മോഡൽ */
+    .result-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.82);
+      backdrop-filter: blur(4px);
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .result-modal-backdrop.show {
+      display: flex;
+    }
+    .result-modal-card {
+      width: 100%;
+      max-width: 350px;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 2.5px solid #facc15;
+      border-radius: 20px;
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
+    }
+    .result-trophy {
+      font-size: 46px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .result-title {
+      margin: 0 0 6px 0;
+      font-size: 21px;
+      font-weight: 900;
+      color: #facc15;
+    }
+    .result-sub {
+      margin: 0 0 18px 0;
+      font-size: 14px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+    .result-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -306,6 +354,19 @@
     </div>
   </div>
 
+  <!-- വിജയ / കളി അവസാനിക്കുന്ന മോഡൽ -->
+  <div class="result-modal-backdrop" id="resultModal">
+    <div class="result-modal-card">
+      <div class="result-trophy" id="resultIcon">🏆</div>
+      <h2 class="result-title" id="resultTitle">വിജയം!</h2>
+      <p class="result-sub" id="resultSub">കളി പൂർത്തിയായിരിക്കുന്നു.</p>
+      <div class="result-actions">
+        <button type="button" class="ctrl-btn btn-reset" onclick="resetGame()">🔄 വീണ്ടും കളിക്കാം</button>
+        <button type="button" class="ctrl-btn btn-undo" onclick="closeResultModal()">ബോർഡ് കാണാം</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const pieceGlyphs = {
       p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
@@ -330,6 +391,7 @@
     let whiteCaptured = [];
     let blackCaptured = [];
     let aiThinking = false;
+    let gameOverShown = false;
 
     function detectInitialMode() {
       const params = new URLSearchParams(window.location.search);
@@ -352,6 +414,17 @@
       resetGame();
     }
 
+    function closeResultModal() {
+      document.getElementById('resultModal').classList.remove('show');
+    }
+
+    function showResultModal(icon, title, sub) {
+      document.getElementById('resultIcon').innerText = icon;
+      document.getElementById('resultTitle').innerText = title;
+      document.getElementById('resultSub').innerText = sub;
+      document.getElementById('resultModal').classList.add('show');
+    }
+
     function resetGame() {
       chess = new Chess();
       selectedSq = null;
@@ -359,6 +432,8 @@
       whiteCaptured = [];
       blackCaptured = [];
       aiThinking = false;
+      gameOverShown = false;
+      closeResultModal();
       renderAll();
     }
 
@@ -421,10 +496,23 @@
           ? (mode === 'ai' ? 'കമ്പ്യൂട്ടർ (Black)' : 'കറുപ്പ് (Black)')
           : (mode === 'ai' ? 'നിങ്ങൾ (White)' : 'വെളുപ്പ് (White)');
         statusEl.innerText = `🏆 ചെക്ക്മേറ്റ്! ${winner} വിജയിച്ചു!`;
+        if (!gameOverShown) {
+          gameOverShown = true;
+          const isHumanWin = (chess.turn() !== 'w');
+          showResultModal(
+            isHumanWin ? '🏆' : '🤖',
+            `${winner} വിജയിച്ചു!`,
+            'ചെക്ക്മേറ്റ് വഴി കളി അവസാനിച്ചിരിക്കുന്നു. പുതിയ കളി തുടങ്ങാം.'
+          );
+        }
         return;
       }
       if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
         statusEl.innerText = '🤝 കളി സമനിലയിൽ (Draw)!';
+        if (!gameOverShown) {
+          gameOverShown = true;
+          showResultModal('🤝', 'കളി സമനിലയിൽ!', 'നിയമപരമായ നീക്കങ്ങൾ ഇല്ലാത്തതിനാൽ കളി സമനിലയായി.');
+        }
         return;
       }
 
@@ -497,70 +585,258 @@
       }
     }
 
+    // Ultra Hard Chess AI Engine
     function getPieceVal(type) {
-      return type === 'p' ? 10 : type === 'n' ? 30 : type === 'b' ? 30 : type === 'r' ? 50 : type === 'q' ? 90 : 900;
+      if (type === 'p') return 100;
+      if (type === 'n') return 320;
+      if (type === 'b') return 330;
+      if (type === 'r') return 500;
+      if (type === 'q') return 900;
+      if (type === 'k') return 20000;
+      return 0;
+    }
+
+    const pawnPST = [
+      [0,  0,  0,  0,  0,  0,  0,  0],
+      [50, 50, 50, 50, 50, 50, 50, 50],
+      [10, 10, 20, 30, 30, 20, 10, 10],
+      [5,  5, 10, 25, 25, 10,  5,  5],
+      [0,  0,  0, 20, 20,  0,  0,  0],
+      [5, -5,-10,  0,  0,-10, -5,  5],
+      [5, 10, 10,-20,-20, 10, 10,  5],
+      [0,  0,  0,  0,  0,  0,  0,  0]
+    ];
+
+    const knightPST = [
+      [-50,-40,-30,-30,-30,-30,-40,-50],
+      [-40,-20,  0,  0,  0,  0,-20,-40],
+      [-30,  0, 10, 15, 15, 10,  0,-30],
+      [-30,  5, 15, 20, 20, 15,  5,-30],
+      [-30,  0, 15, 20, 20, 15,  0,-30],
+      [-30,  5, 10, 15, 15, 10,  5,-30],
+      [-40,-20,  0,  5,  5,  0,-20,-40],
+      [-50,-40,-30,-30,-30,-30,-40,-50]
+    ];
+
+    const bishopPST = [
+      [-20,-10,-10,-10,-10,-10,-10,-20],
+      [-10,  0,  0,  0,  0,  0,  0,-10],
+      [-10,  0,  5, 10, 10,  5,  0,-10],
+      [-10,  5,  5, 10, 10,  5,  5,-10],
+      [-10,  0, 10, 10, 10, 10,  0,-10],
+      [-10, 10, 10, 10, 10, 10, 10,-10],
+      [-10,  5,  0,  0,  0,  0,  5,-10],
+      [-20,-10,-10,-10,-10,-10,-10,-20]
+    ];
+
+    const rookPST = [
+      [0,  0,  0,  0,  0,  0,  0,  0],
+      [5, 10, 10, 10, 10, 10, 10,  5],
+      [-5,  0,  0,  0,  0,  0,  0, -5],
+      [-5,  0,  0,  0,  0,  0,  0, -5],
+      [-5,  0,  0,  0,  0,  0,  0, -5],
+      [-5,  0,  0,  0,  0,  0,  0, -5],
+      [-5,  0,  0,  0,  0,  0,  0, -5],
+      [0,  0,  0,  5,  5,  0,  0,  0]
+    ];
+
+    const queenPST = [
+      [-20,-10,-10, -5, -5,-10,-10,-20],
+      [-10,  0,  0,  0,  0,  0,  0,-10],
+      [-10,  0,  5,  5,  5,  5,  0,-10],
+      [ -5,  0,  5,  5,  5,  5,  0, -5],
+      [  0,  0,  5,  5,  5,  5,  0, -5],
+      [-10,  5,  5,  5,  5,  5,  0,-10],
+      [-10,  0,  5,  0,  0,  0,  0,-10],
+      [-20,-10,-10, -5, -5,-10,-10,-20]
+    ];
+
+    const kingMidPST = [
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-20,-30,-30,-40,-40,-30,-30,-20],
+      [-10,-20,-20,-20,-20,-20,-20,-10],
+      [ 20, 20,  0,  0,  0,  0, 20, 20],
+      [ 20, 30, 10,  0,  0, 10, 30, 20]
+    ];
+
+    function getPosBonus(piece, r, c) {
+      const row = piece.color === 'w' ? r : 7 - r;
+      if (piece.type === 'p') return pawnPST[row][c];
+      if (piece.type === 'n') return knightPST[row][c];
+      if (piece.type === 'b') return bishopPST[row][c];
+      if (piece.type === 'r') return rookPST[row][c];
+      if (piece.type === 'q') return queenPST[row][c];
+      if (piece.type === 'k') return kingMidPST[row][c];
+      return 0;
     }
 
     function evaluateBoard() {
+      if (chess.in_checkmate()) {
+        return chess.turn() === 'w' ? 1000000 : -1000000;
+      }
+      if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
+        return 0;
+      }
+
       const b = chess.board();
       let score = 0;
+
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           const p = b[r][c];
-          if (p) {
-            const center = (r >= 2 && r <= 5 && c >= 2 && c <= 5) ? 2 : 0;
-            score += p.color === 'b' ? (getPieceVal(p.type) + center) : -(getPieceVal(p.type) + center);
-          }
+          if (!p) continue;
+          const val = getPieceVal(p.type) + getPosBonus(p, r, c);
+          score += p.color === 'b' ? val : -val;
         }
+      }
+
+      if (chess.in_check()) {
+        score += chess.turn() === 'w' ? 45 : -45;
       }
       return score;
     }
 
-    function minimax(depth, alpha, beta, isMax) {
-      if (depth === 0 || chess.game_over()) return evaluateBoard();
-      const moves = chess.moves({ verbose: true });
+    function scoreMoveForOrdering(m) {
+      let s = 0;
+      if (m.captured) {
+        s += getPieceVal(m.captured) * 10 - getPieceVal(m.piece);
+      }
+      if (m.promotion) {
+        s += getPieceVal(m.promotion) * 8;
+      }
+      if (m.san && m.san.includes('+')) {
+        s += 120;
+      }
+      return s;
+    }
+
+    function orderMoves(moves) {
+      return moves.sort((a, b) => scoreMoveForOrdering(b) - scoreMoveForOrdering(a));
+    }
+
+    function quiescence(alpha, beta, isMax, deadline) {
+      if (Date.now() > deadline) return evaluateBoard();
+
+      const standPat = evaluateBoard();
       if (isMax) {
-        let best = -999999;
-        for (const m of moves) {
+        if (standPat >= beta) return beta;
+        if (alpha < standPat) alpha = standPat;
+
+        const captures = orderMoves(
+          chess.moves({ verbose: true }).filter(m => m.captured)
+        );
+        for (const m of captures) {
           chess.move(m);
-          best = Math.max(best, minimax(depth - 1, alpha, beta, false));
+          const score = quiescence(alpha, beta, false, deadline);
           chess.undo();
-          alpha = Math.max(alpha, best);
-          if (beta <= alpha) break;
+          if (score >= beta) return beta;
+          if (score > alpha) alpha = score;
         }
-        return best;
+        return alpha;
       } else {
-        let best = 999999;
+        if (standPat <= alpha) return alpha;
+        if (beta > standPat) beta = standPat;
+
+        const captures = orderMoves(
+          chess.moves({ verbose: true }).filter(m => m.captured)
+        );
+        for (const m of captures) {
+          chess.move(m);
+          const score = quiescence(alpha, beta, true, deadline);
+          chess.undo();
+          if (score <= alpha) return alpha;
+          if (score < beta) beta = score;
+        }
+        return beta;
+      }
+    }
+
+    function alphaBeta(depth, alpha, beta, isMax, deadline) {
+      if (Date.now() > deadline) return evaluateBoard();
+      if (depth === 0 || chess.game_over()) {
+        return quiescence(alpha, beta, isMax, deadline);
+      }
+
+      const moves = orderMoves(chess.moves({ verbose: true }));
+      if (!moves.length) return evaluateBoard();
+
+      if (isMax) {
+        let maxEval = -Infinity;
         for (const m of moves) {
           chess.move(m);
-          best = Math.min(best, minimax(depth - 1, alpha, beta, true));
+          const ev = alphaBeta(depth - 1, alpha, beta, false, deadline);
           chess.undo();
-          beta = Math.min(beta, best);
+          if (ev > maxEval) maxEval = ev;
+          if (ev > alpha) alpha = ev;
           if (beta <= alpha) break;
         }
-        return best;
+        return maxEval;
+      } else {
+        let minEval = Infinity;
+        for (const m of moves) {
+          chess.move(m);
+          const ev = alphaBeta(depth - 1, alpha, beta, true, deadline);
+          chess.undo();
+          if (ev < minEval) minEval = ev;
+          if (ev < beta) beta = ev;
+          if (beta <= alpha) break;
+        }
+        return minEval;
       }
     }
 
     function pickBestAIMove() {
-      const moves = chess.moves({ verbose: true });
-      if (!moves.length) return null;
-      let bestMove = moves[0];
-      let bestVal = -999999;
-      for (const m of moves) {
+      const rootMoves = orderMoves(chess.moves({ verbose: true }));
+      if (!rootMoves.length) return null;
+
+      for (const m of rootMoves) {
         chess.move(m);
-        const val = minimax(2, -1000000, 1000000, false) + (Math.random() * 2);
+        const mateNow = chess.in_checkmate();
         chess.undo();
-        if (val > bestVal) {
-          bestVal = val;
-          bestMove = m;
-        }
+        if (mateNow) return m;
       }
+
+      let bestMove = rootMoves[0];
+      const maxDepth = 4;
+      const timeBudgetMs = 850;
+      const deadline = Date.now() + timeBudgetMs;
+
+      for (let currentDepth = 2; currentDepth <= maxDepth; currentDepth++) {
+        let currentBestMove = bestMove;
+        let currentBestScore = -Infinity;
+        let completedFullDepth = true;
+
+        for (const m of rootMoves) {
+          if (Date.now() > deadline) {
+            completedFullDepth = false;
+            break;
+          }
+          chess.move(m);
+          const score = alphaBeta(currentDepth - 1, -Infinity, Infinity, false, deadline);
+          chess.undo();
+
+          if (score > currentBestScore) {
+            currentBestScore = score;
+            currentBestMove = m;
+          }
+        }
+
+        if (completedFullDepth || currentDepth === 2) {
+          bestMove = currentBestMove;
+        }
+        if (Date.now() > deadline) break;
+      }
+
       return bestMove;
     }
 
     function undoMove() {
       if (aiThinking) return;
+      gameOverShown = false;
+      closeResultModal();
       const steps = (mode === 'ai' && chess.turn() === 'w') ? 2 : 1;
       for (let i = 0; i < steps; i++) {
         const undone = chess.undo();
