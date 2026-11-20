@@ -359,7 +359,6 @@
       }
     }
 
-    // Score from White's perspective
     function evaluatePosition(instance) {
       if (instance.in_checkmate()) {
         return instance.turn() === 'w' ? -99999 : 99999;
@@ -514,7 +513,6 @@
       return { depth: 4, budgetMs: 550 };
     }
 
-    // Penalize shuffling back to recent AI squares so AI plays proactive moves
     function getShufflingPenalty(move, recentBlackMoves) {
       let penalty = 0;
       if (recentBlackMoves.includes(move.from + move.to)) {
@@ -523,7 +521,6 @@
       if (lastMove && move.from === lastMove.to && move.to === lastMove.from && !move.captured) {
         penalty += 5.0;
       }
-      // Slight bonus for proactive moves (captures, checks, attacking/advancing)
       if (move.captured) penalty -= 2.5;
       if (move.san.includes('+') || move.san.includes('#')) penalty -= 3.0;
       return penalty;
@@ -729,7 +726,7 @@
       lastMove = null;
       aiThinking = false;
       document.getElementById('modeAIBtn').classList.toggle('active', gameMode === 'ai');
-      document.getElementById('mode2PBtn').classList.toggle('active', mode === '2p');
+      document.getElementById('mode2PBtn').classList.toggle('active', gameMode === '2p');
       document.getElementById('aiLevelBar').classList.toggle('show', gameMode === 'ai');
       document.getElementById('chessBoard').classList.toggle('ai-border', gameMode === 'ai');
       renderBoard();
