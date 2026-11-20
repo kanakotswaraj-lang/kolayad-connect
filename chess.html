@@ -328,7 +328,7 @@
 
     function isTimeUp() {
       nodeCounter++;
-      if ((nodeCounter & 63) === 0) {
+      if ((nodeCounter & 255) === 0) {
         return performance.now() > searchDeadline;
       }
       return false;
@@ -359,6 +359,7 @@
       }
     }
 
+    // Score from White's perspective
     function evaluatePosition(instance) {
       if (instance.in_checkmate()) {
         return instance.turn() === 'w' ? -99999 : 99999;
@@ -395,13 +396,13 @@
         const bEdgeDist = Math.min(blackKingPos.r, 7 - blackKingPos.r) + Math.min(blackKingPos.c, 7 - blackKingPos.c);
         const kingDist = Math.abs(whiteKingPos.r - blackKingPos.r) + Math.abs(whiteKingPos.c - blackKingPos.c);
 
-        score += (4 - bEdgeDist) * 1.8;
-        score -= (4 - wEdgeDist) * 1.8;
-        score += (14 - kingDist) * 0.65;
+        score += (4 - bEdgeDist) * 2.2;
+        score -= (4 - wEdgeDist) * 2.2;
+        score += (14 - kingDist) * 0.8;
       }
 
       if (instance.in_check()) {
-        score += instance.turn() === 'w' ? -4.5 : 4.5;
+        score += instance.turn() === 'w' ? -6.5 : 6.5;
       }
 
       return score;
@@ -410,13 +411,13 @@
     function orderMoves(moves) {
       return moves.sort((a, b) => {
         const scoreA =
-          (a.captured ? (pieceBaseValues[a.captured] || 1) * 16 : 0) +
-          (a.san.includes('+') || a.san.includes('#') ? 32 : 0) +
-          (a.promotion ? 55 : 0);
+          (a.captured ? (pieceBaseValues[a.captured] || 1) * 18 : 0) +
+          (a.san.includes('#') ? 250 : a.san.includes('+') ? 38 : 0) +
+          (a.promotion ? 65 : 0);
         const scoreB =
-          (b.captured ? (pieceBaseValues[b.captured] || 1) * 16 : 0) +
-          (b.san.includes('+') || b.san.includes('#') ? 32 : 0) +
-          (b.promotion ? 55 : 0);
+          (b.captured ? (pieceBaseValues[b.captured] || 1) * 18 : 0) +
+          (b.san.includes('#') ? 250 : b.san.includes('+') ? 38 : 0) +
+          (b.promotion ? 65 : 0);
         return scoreB - scoreA;
       });
     }
@@ -433,7 +434,7 @@
 
         const captures = orderMoves(
           instance.moves({ verbose: true }).filter(m => m.captured || m.promotion)
-        ).slice(0, 5);
+        ).slice(0, 7);
 
         for (let i = 0; i < captures.length; i++) {
           if (isTimeUp()) break;
@@ -451,7 +452,7 @@
 
         const captures = orderMoves(
           instance.moves({ verbose: true }).filter(m => m.captured || m.promotion)
-        ).slice(0, 5);
+        ).slice(0, 7);
 
         for (let i = 0; i < captures.length; i++) {
           if (isTimeUp()) break;
@@ -470,7 +471,7 @@
         return -evaluatePosition(instance);
       }
       if (depth <= 0 || isTimeUp()) {
-        return quiescenceAI(instance, alpha, beta, isBlackTurn, 2);
+        return quiescenceAI(instance, alpha, beta, isBlackTurn, 3);
       }
 
       const moves = orderMoves(instance.moves({ verbose: true }));
@@ -502,15 +503,16 @@
       }
     }
 
-    function getDepthAndBudget() {
-      if (aiLevel === 'easy') return { depth: 2, budgetMs: 180 };
-      if (aiLevel === 'medium') return { depth: 3, budgetMs: 320 };
+    // Allows up to ~75s in hard mode while staying deep and responsive
+    function getLevelSettings() {
+      if (aiLevel === 'easy') return { maxDepth: 2, budgetMs: 1500 };
+      if (aiLevel === 'medium') return { maxDepth: 4, budgetMs: 8000 };
       const endgame = isEndgame(chessGame.board());
       const moveCount = chessGame.moves().length;
-      if (endgame && moveCount <= 14) {
-        return { depth: 5, budgetMs: 700 };
+      if (endgame && moveCount <= 16) {
+        return { maxDepth: 6, budgetMs: 75000 };
       }
-      return { depth: 4, budgetMs: 550 };
+      return { maxDepth: 5, budgetMs: 75000 };
     }
 
     function getShufflingPenalty(move, recentBlackMoves) {
@@ -521,25 +523,13 @@
       if (lastMove && move.from === lastMove.to && move.to === lastMove.from && !move.captured) {
         penalty += 5.0;
       }
-      if (move.captured) penalty -= 2.5;
-      if (move.san.includes('+') || move.san.includes('#')) penalty -= 3.0;
+      if (move.captured) penalty -= 3.0;
+      if (move.san.includes('#')) penalty -= 60;
+      else if (move.san.includes('+')) penalty -= 4.0;
       return penalty;
     }
 
-    function computeBestAIMove() {
-      const moves = orderMoves(chessGame.moves({ verbose: true }));
-      if (!moves.length) return null;
-
-      const history = chessGame.history({ verbose: true });
-      const recentBlackMoves = history
-        .filter(m => m.color === 'b')
-        .slice(-4)
-        .map(m => m.from + m.to);
-
-      const { depth, budgetMs } = getDepthAndBudget();
-      searchDeadline = performance.now() + budgetMs;
-      nodeCounter = 0;
-
+    function searchAtDepth(depth, moves, recentBlackMoves) {
       let bestMove = moves[0];
       let bestScore = -Infinity;
 
@@ -558,7 +548,34 @@
         }
       }
 
-      return bestMove;
+      return { move: bestMove, score: bestScore };
+    }
+
+    function computeBestAIMove() {
+      const moves = orderMoves(chessGame.moves({ verbose: true }));
+      if (!moves.length) return null;
+
+      const history = chessGame.history({ verbose: true });
+      const recentBlackMoves = history
+        .filter(m => m.color === 'b')
+        .slice(-4)
+        .map(m => m.from + m.to);
+
+      const { maxDepth, budgetMs } = getLevelSettings();
+      searchDeadline = performance.now() + budgetMs;
+      nodeCounter = 0;
+
+      let chosenMove = moves[0];
+      for (let d = 2; d <= maxDepth; d++) {
+        if (d > 2 && performance.now() > searchDeadline) break;
+        document.getElementById('chessStatus').innerText = `കമ്പ്യൂട്ടർ ആഴത്തിൽ ചിന്തിക്കുന്നു (Depth ${d})... 🔥`;
+        const result = searchAtDepth(d, moves, recentBlackMoves);
+        if (result && result.move) {
+          chosenMove = result.move;
+        }
+      }
+
+      return chosenMove;
     }
 
     function renderBoard() {
@@ -680,7 +697,7 @@
           aiThinking = false;
           renderBoard();
           updateStatus();
-        }, 30);
+        }, 40);
       }
     }
 
