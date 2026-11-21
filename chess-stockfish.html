@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ചെസ്സ് - കോളയാട് കണക്ട്</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800;900&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', sans-serif; }
     body {
-      background: #0b0f17;
-      color: #f1f5f9;
+      background: radial-gradient(circle at top, #172554 0%, #070b19 100%);
+      color: #f8fafc;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -19,10 +19,10 @@
       width: 100%;
       max-width: 520px;
       background: #0f172a;
-      border: 2px solid #eab308;
+      border: 2.5px solid #facc15;
       border-radius: 20px;
       padding: 16px;
-      box-shadow: 0 0 28px rgba(234, 179, 8, 0.2);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
       height: fit-content;
     }
     .top-bar {
@@ -35,8 +35,8 @@
     }
     .page-title {
       font-size: 18px;
-      font-weight: 800;
-      color: #fde047;
+      font-weight: 900;
+      color: #facc15;
     }
     .nav-actions {
       display: flex;
@@ -47,11 +47,11 @@
       text-decoration: none;
       background: #1e293b;
       color: #38bdf8;
-      border: 1px solid #38bdf8;
+      border: 1.5px solid #38bdf8;
       padding: 6px 12px;
       border-radius: 10px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 12.5px;
+      font-weight: 800;
     }
     .btn-wa-share {
       text-decoration: none;
@@ -59,38 +59,40 @@
       color: #ffffff;
       padding: 6px 12px;
       border-radius: 10px;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
     }
 
     /* ലെവൽ സെലക്ടർ (ഈസി / മീഡിയം / ഹാർഡ്) */
     .level-box {
-      background: #131c31;
-      border: 1px solid #334155;
+      background: #131c3f;
+      border: 1.5px solid rgba(59, 130, 246, 0.35);
       border-radius: 14px;
       padding: 12px;
       margin-bottom: 12px;
     }
     .level-label {
-      font-size: 12px;
-      color: #94a3b8;
-      font-weight: 700;
+      font-size: 12.5px;
+      color: #e2e8f0;
+      font-weight: 800;
       margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
     .engine-pill {
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.16);
       color: #38bdf8;
       border: 1px solid #38bdf8;
       padding: 2px 8px;
       border-radius: 999px;
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 800;
     }
     .level-buttons {
@@ -103,32 +105,32 @@
       border-radius: 10px;
       border: 1.5px solid #334155;
       background: #1e293b;
-      color: #e2e8f0;
-      font-size: 12.5px;
-      font-weight: 800;
+      color: #f1f5f9;
+      font-size: 13px;
+      font-weight: 900;
       cursor: pointer;
       transition: 0.2s;
     }
     .lvl-btn.active[data-level="easy"] {
-      background: #16a34a;
+      background: linear-gradient(135deg, #22c55e, #15803d);
       border-color: #86efac;
       color: #ffffff;
     }
     .lvl-btn.active[data-level="medium"] {
-      background: #eab308;
+      background: linear-gradient(135deg, #facc15, #ca8a04);
       border-color: #fef08a;
       color: #0f172a;
     }
     .lvl-btn.active[data-level="hard"] {
-      background: #dc2626;
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
       border-color: #fca5a5;
       color: #ffffff;
     }
 
-    /* സ്റ്റാറ്റസ് & കൺട്രോൾ ബട്ടണുകൾ */
+    /* സ്റ്റാറ്റസ് & ചെക്ക് അലർട്ട് */
     .status-bar {
       background: #1e293b;
-      border: 1px solid #334155;
+      border: 1.5px solid #475569;
       border-radius: 12px;
       padding: 10px 12px;
       margin-bottom: 12px;
@@ -136,10 +138,21 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      font-size: 12.5px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
+      transition: all 0.2s ease;
+    }
+    .status-bar.in-check {
+      background: rgba(220, 38, 38, 0.25);
+      border-color: #ef4444;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.45);
     }
     .turn-text { color: #fde047; }
+    .status-bar.in-check .turn-text {
+      color: #fca5a5;
+      font-weight: 900;
+    }
+
     .board-controls {
       display: flex;
       gap: 8px;
@@ -150,77 +163,104 @@
       padding: 9px;
       border-radius: 10px;
       border: none;
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 12.5px;
+      font-weight: 900;
       cursor: pointer;
     }
     .btn-undo { background: #334155; color: #f8fafc; }
-    .btn-restart { background: #eab308; color: #0f172a; }
+    .btn-restart { background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; }
 
-    /* ചെസ്സ് ബോർഡ് */
+    /* കളർഫുൾ ചെസ്സ് ബോർഡ് */
     .board-wrapper {
       width: 100%;
       aspect-ratio: 1 / 1;
-      border: 3px solid #eab308;
-      border-radius: 12px;
+      border: 4px solid #f59e0b;
+      border-radius: 14px;
       overflow: hidden;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
       margin-bottom: 14px;
       user-select: none;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.6);
     }
     .square {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(24px, 7vw, 40px);
+      font-size: clamp(28px, 8vw, 46px);
       cursor: pointer;
       position: relative;
+      font-weight: 900;
+      line-height: 1;
+      transition: transform 0.1s ease;
     }
-    .square.light { background: #f1f5f9; color: #0f172a; }
-    .square.dark { background: #334155; color: #0f172a; }
-    .square.selected { outline: 3px solid #2563eb; outline-offset: -3px; background: #93c5fd !important; }
+    .square:active { transform: scale(0.95); }
+    .square.light {
+      background: linear-gradient(145deg, #fef9c3, #fde047);
+    }
+    .square.dark {
+      background: linear-gradient(145deg, #16a34a, #15803d);
+    }
+    .square.selected {
+      outline: 3px solid #2563eb;
+      outline-offset: -3px;
+      background: #60a5fa !important;
+    }
     .square.valid-move::after {
       content: '';
-      width: 14px;
-      height: 14px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
-      background: rgba(22, 163, 74, 0.72);
+      background: rgba(37, 99, 235, 0.78);
+      border: 2px solid #ffffff;
     }
-    .square.last-move { background: rgba(250, 204, 21, 0.45) !important; }
+    .square.last-move {
+      background: rgba(249, 115, 22, 0.45) !important;
+    }
+    /* ചെക്ക് വന്ന രാജാവിന്റെ കള്ളിയിലെ വ്യക്തമായ അടയാളം */
+    .square.king-in-check {
+      background: radial-gradient(circle, #ef4444 35%, #991b1b 100%) !important;
+      outline: 3px solid #fef08a;
+      outline-offset: -3px;
+      animation: checkPulse 0.8s infinite alternate;
+    }
+    @keyframes checkPulse {
+      from { box-shadow: inset 0 0 8px #fef08a; }
+      to { box-shadow: inset 0 0 18px #ffffff; }
+    }
 
     /* പഠന ടിപ്പുകൾ സെക്ഷൻ */
     .tips-card {
-      background: #131c31;
-      border: 1px solid #334155;
+      background: #131c3f;
+      border: 1.5px solid rgba(59, 130, 246, 0.35);
       border-radius: 14px;
       padding: 14px;
     }
     .tips-title {
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 14.5px;
+      font-weight: 900;
       color: #38bdf8;
       margin-bottom: 8px;
     }
     .level-tip-highlight {
-      background: rgba(234, 179, 8, 0.14);
-      border-left: 4px solid #eab308;
+      background: rgba(250, 204, 21, 0.14);
+      border-left: 4px solid #facc15;
       padding: 9px 11px;
       border-radius: 8px;
       font-size: 12.5px;
       color: #fef9c3;
       margin-bottom: 10px;
-      line-height: 1.5;
+      line-height: 1.55;
     }
     .tips-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 7px;
-      font-size: 12px;
-      color: #cbd5e1;
-      line-height: 1.5;
+      font-size: 12.5px;
+      color: #e2e8f0;
+      line-height: 1.55;
     }
     .tips-list li::before {
       content: '♟️ ';
@@ -252,8 +292,8 @@
       </div>
     </div>
 
-    <!-- സ്റ്റാറ്റസ് -->
-    <div class="status-bar">
+    <!-- സ്റ്റാറ്റസ് & ചെക്ക് അടയാളം -->
+    <div class="status-bar" id="statusBar">
       <span class="turn-text" id="gameStatusText">നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)</span>
       <span id="currentLevelText" style="color: #4ade80;">ലെവൽ: ഈസി</span>
     </div>
@@ -274,27 +314,26 @@
         <strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം.
       </div>
       <ul class="tips-list">
+        <li><strong>ചെക്ക് (Check) ശ്രദ്ധിക്കുക:</strong> രാജാവിന് എതിരാളിയുടെ ആക്രമണം വരുമ്പോൾ രാജാവിന്റെ കള്ളി ചുവപ്പായി മാറുകയും മുന്നറിയിപ്പ് കാണിക്കുകയും ചെയ്യും. രാജാവിനെ ഉടൻ സുരക്ഷിതമാക്കുക.</li>
         <li><strong>ബോർഡിന്റെ മധ്യഭാഗം പിടിക്കുക:</strong> കളി തുടങ്ങുമ്പോൾ രാജാവിന്റെയോ രാജ്ഞിയുടെയോ മുന്നിലുള്ള കാലാൾ (Pawn) മുന്നോട്ട് നീക്കി മധ്യഭാഗം നിയന്ത്രിക്കാൻ ശ്രമിക്കുക.</li>
-        <li><strong>കരുക്കൾ പുറത്തിറക്കുക:</strong> കുതിര (Knight) ആന (Bishop) എന്നിവയെ വേഗത്തിൽ സജീവമാക്കുക; രാജ്ഞിയെ ആദ്യം തന്നെ ശത്രുനിരയിലേക്ക് ഒറ്റയ്ക്ക് ഇറക്കരുത്.</li>
-        <li><strong>രാജാവിന്റെ സുരക്ഷ (Castling):</strong> കളി തുടങ്ങി അധികം വൈകാതെ രാജാവിനെ സുരക്ഷിത സ്ഥാനത്തേക്ക് മാറ്റാൻ ശ്രദ്ധിക്കുക.</li>
-        <li><strong>ഓരോ നീക്കത്തിന് മുൻപും ശ്രദ്ധിക്കുക:</strong> എതിരാളിയുടെ അടുത്ത നീക്കം എങ്ങോട്ടായിരിക്കുമെന്ന് ചിന്തിച്ച ശേഷം മാത്രം കരു നീക്കുക.</li>
+        <li><strong>കരുക്കൾ പുറത്തിറക്കുക:</strong> കുതിര (Knight), ആന (Bishop) എന്നിവയെ വേഗത്തിൽ സജീവമാക്കുക; രാജ്ഞിയെ ആദ്യം തന്നെ ശത്രുനിരയിലേക്ക് ഒറ്റയ്ക്ക് ഇറക്കരുത്.</li>
+        <li><strong>രാജാവിന്റെ സുരക്ഷ:</strong> ഓരോ നീക്കത്തിന് മുൻപും എതിരാളിയുടെ അടുത്ത നീക്കം എങ്ങോട്ടായിരിക്കുമെന്ന് ചിന്തിച്ച ശേഷം മാത്രം കരു നീക്കുക.</li>
       </ul>
     </div>
   </div>
 
   <script>
-    // 1. വാട്‌സാപ്പ് ഷെയർ ലിങ്ക് സജ്ജീകരിക്കുന്നു
+    // വാട്‌സാപ്പ് ഷെയർ ലിങ്ക് ("ഈ കളി ഇഷ്ടപ്പെട്ടെങ്കിൽ കൂട്ടുകാർക്ക് പങ്കുവെക്കാം")
     (function setupWhatsAppShare() {
       const shareUrl = window.location.href;
       const text =
-        `♟️ കോളയാട് കണക്ട് (Kolayad Connect) ചെസ്സ് കളിച്ച് നോക്കൂ!\n` +
-        `ഈസി, മീഡിയം, ഹാർഡ് ലെവലുകളിൽ Stockfish എഞ്ചിനോടൊപ്പം കളിക്കാനും പഠിക്കാനും സാധിക്കും.\n\n` +
-        `ലിങ്ക്: ${shareUrl}`;
+        `♟️ ഈ ചെസ്സ് കളി നിങ്ങൾക്ക് ഇഷ്ടപ്പെട്ടെങ്കിൽ കൂട്ടുകാർക്കും പങ്കുവെക്കാം!\n\n` +
+        `കോളയാട് കണക്ട് (Kolayad Connect) ചെസ്സിൽ ഈസി, മീഡിയം, ഹാർഡ് ലെവലുകളിൽ കളിക്കാനും പഠിക്കാനും സാധിക്കും.\n\n` +
+        `🔗 കളിച്ച് നോക്കൂ: ${shareUrl}`;
       document.getElementById('waShareLink').href =
         `https://wa.me/?text=${encodeURIComponent(text)}`;
     })();
 
-    // കരുക്കളുടെ ചിഹ്നങ്ങൾ
     const PIECES = {
       wK: '♔', wQ: '♕', wR: '♖', wB: '♗', wN: '♘', wP: '♙',
       bK: '♚', bQ: '♛', bR: '♜', bB: '♝', bN: '♞', bP: '♟'
@@ -334,6 +373,7 @@
     let lastMove = null;
     let isPlayerTurn = true;
     let gameOver = false;
+    let checkedKingSquare = null;
 
     function createInitialBoard() {
       return [
@@ -360,7 +400,6 @@
       lvlTextEl.style.color = meta.color;
       document.getElementById('activeLevelGuide').innerHTML = meta.guide;
 
-      // ബാഹ്യ Stockfish Worker / Engine ഉണ്ടെങ്കിൽ ലെവൽ അപ്ഡേറ്റ് ചെയ്യാം
       if (window.stockfishEngine && typeof window.stockfishEngine.postMessage === 'function') {
         window.stockfishEngine.postMessage(`setoption name Skill Level value ${meta.skillLevel}`);
       }
@@ -374,12 +413,16 @@
       lastMove = null;
       isPlayerTurn = true;
       gameOver = false;
-      updateStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+      checkedKingSquare = null;
+      updateTurnStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
       renderBoard();
     }
 
-    function updateStatus(text) {
-      document.getElementById('gameStatusText').innerText = text;
+    function updateTurnStatus(text, isCheck = false) {
+      const statusBar = document.getElementById('statusBar');
+      const statusText = document.getElementById('gameStatusText');
+      statusText.innerText = text;
+      statusBar.classList.toggle('in-check', Boolean(isCheck));
     }
 
     function inBounds(r, c) {
@@ -466,6 +509,42 @@
       return all;
     }
 
+    // നൽകിയിരിക്കുന്ന നിറത്തിന്റെ രാജാവിന് എതിരാളിയുടെ നീക്കത്തിൽ നിന്ന് ചെക്ക് വരുന്നുണ്ടോ എന്ന് പരിശോധിക്കുന്നു
+    function findKingInCheck(board, kingColor) {
+      let kingPos = null;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (board[r][c] === `${kingColor}K`) {
+            kingPos = { r, c };
+            break;
+          }
+        }
+        if (kingPos) break;
+      }
+      if (!kingPos) return null;
+
+      const enemyColor = kingColor === 'w' ? 'b' : 'w';
+      const enemyMoves = getAllMovesForColor(board, enemyColor);
+      const attacked = enemyMoves.some(m => m.toR === kingPos.r && m.toC === kingPos.c);
+      return attacked ? kingPos : null;
+    }
+
+    function refreshCheckState(nextTurnColor) {
+      const whiteCheck = findKingInCheck(boardState, 'w');
+      const blackCheck = findKingInCheck(boardState, 'b');
+      checkedKingSquare = whiteCheck || blackCheck || null;
+
+      if (gameOver) return;
+
+      if (nextTurnColor === 'w' && whiteCheck) {
+        updateTurnStatus('⚠️ ചെക്ക്! നിങ്ങളുടെ രാജാവിനെ സംരക്ഷിക്കുക!', true);
+      } else if (nextTurnColor === 'b' && blackCheck) {
+        updateTurnStatus('⚠️ ചെക്ക്! എതിരാളിയുടെ രാജാവിന് ഭീഷണി!', true);
+      } else {
+        updateTurnStatus(nextTurnColor === 'w' ? 'നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)' : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`, false);
+      }
+    }
+
     function executeMove(fromR, fromC, toR, toC) {
       const piece = boardState[fromR][fromC];
       const captured = boardState[toR][toC];
@@ -479,7 +558,6 @@
       boardState[toR][toC] = piece;
       boardState[fromR][fromC] = null;
 
-      // കാലാൾ അവസാന നിരയിൽ എത്തിയാൽ രാജ്ഞിയായി പ്രൊമോട്ട് ചെയ്യുന്നു
       if (piece === 'wP' && toR === 0) boardState[toR][toC] = 'wQ';
       if (piece === 'bP' && toR === 7) boardState[toR][toC] = 'bQ';
 
@@ -487,16 +565,19 @@
 
       if (captured && captured[1] === 'K') {
         gameOver = true;
-        updateStatus(piece[0] === 'w' ? '🎉 നിങ്ങൾ വിജയിച്ചു!' : '🤖 Stockfish വിജയിച്ചു!');
+        checkedKingSquare = null;
+        updateTurnStatus(piece[0] === 'w' ? '🎉 നിങ്ങൾ വിജയിച്ചു!' : '🤖 Stockfish വിജയിച്ചു!', false);
         renderBoard();
         return;
       }
+
+      const nextColor = piece[0] === 'w' ? 'b' : 'w';
+      refreshCheckState(nextColor);
       renderBoard();
     }
 
     function undoLastMove() {
       if (moveHistory.length === 0 || !isPlayerTurn) return;
-      // കളിക്കാരന്റെയും എഞ്ചിന്റെയും അവസാന നീക്കങ്ങൾ തിരികെ എടുക്കുന്നു
       const steps = moveHistory.length >= 2 && moveHistory[moveHistory.length - 1].piece[0] === 'b' ? 2 : 1;
       for (let i = 0; i < steps; i++) {
         const prev = moveHistory.pop();
@@ -509,28 +590,15 @@
       selectedSquare = null;
       validMovesForSelected = [];
       isPlayerTurn = true;
-      updateStatus('നീക്കം മാറ്റി — നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+      refreshCheckState('w');
       renderBoard();
-    }
-
-    function evaluateBoard(board) {
-      let score = 0;
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = board[r][c];
-          if (!p) continue;
-          const val = PIECE_VALUES[p[1]] || 0;
-          score += p[0] === 'b' ? val : -val;
-        }
-      }
-      return score;
     }
 
     function pickEngineMove() {
       const moves = getAllMovesForColor(boardState, 'b');
       if (moves.length === 0) {
         gameOver = true;
-        updateStatus('🎉 നിങ്ങൾ വിജയിച്ചു!');
+        updateTurnStatus('🎉 നിങ്ങൾ വിജയിച്ചു!', false);
         return null;
       }
 
@@ -543,10 +611,10 @@
 
       moves.forEach(m => {
         const target = boardState[m.toR][m.toC];
-        const captureBonus = target ? (PIECE_VALUES[target[1]] || 0) * 2 : 0;
+        const captureBonus = target ? (PIECE_VALUES[target[1]] || 0) * 2.5 : 0;
         const centerBonus = (3.5 - Math.abs(3.5 - m.toR)) + (3.5 - Math.abs(3.5 - m.toC));
         const noise = currentLevel === 'medium' ? Math.random() * 2.5 : Math.random() * 0.4;
-        const score = captureBonus + centerBonus * 0.25 + noise;
+        const score = captureBonus + centerBonus * 0.3 + noise;
         if (score > bestScore) {
           bestScore = score;
           bestMove = m;
@@ -556,21 +624,26 @@
       return bestMove;
     }
 
-    // പുറത്തുനിന്നുള്ള Stockfish എഞ്ചിൻ UCI നീക്കം അയച്ചാൽ പ്രയോഗിക്കാൻ ഈ ഫംഗ്ഷൻ ഉപയോഗിക്കാം
     window.applyStockfishMove = function(fromR, fromC, toR, toC) {
       if (gameOver) return;
       executeMove(fromR, fromC, toR, toC);
       if (!gameOver) {
         isPlayerTurn = true;
-        updateStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+        refreshCheckState('w');
+        renderBoard();
       }
     };
 
     function triggerEngineTurn() {
       isPlayerTurn = false;
-      updateStatus(`🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`);
+      const blackInCheck = Boolean(findKingInCheck(boardState, 'b'));
+      updateTurnStatus(
+        blackInCheck
+          ? `⚠️ ചെക്ക്! Stockfish (${LEVEL_META[currentLevel].label}) നീക്കം ആലോചിക്കുന്നു...`
+          : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`,
+        blackInCheck
+      );
 
-      // കളിക്കാരൻ നീക്കം നടത്തിയ വിവരം പുറത്തുള്ള Stockfish സ്ക്രിപ്റ്റിലേക്ക് അറിയിക്കാനുള്ള ഹുക്ക്
       if (typeof window.onChessMoveMade === 'function') {
         window.onChessMoveMade({
           board: boardState,
@@ -587,10 +660,11 @@
           executeMove(move.fromR, move.fromC, move.toR, move.toC);
           if (!gameOver) {
             isPlayerTurn = true;
-            updateStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+            refreshCheckState('w');
+            renderBoard();
           }
         }
-      }, 350);
+      }, 380);
     }
 
     function handleSquareClick(r, c) {
@@ -629,19 +703,35 @@
           const isLight = (r + c) % 2 === 0;
           sq.className = `square ${isLight ? 'light' : 'dark'}`;
 
+          if (lastMove && ((lastMove.fromR === r && lastMove.fromC === c) || (lastMove.toR === r && lastMove.toC === c))) {
+            sq.classList.add('last-move');
+          }
+          if (checkedKingSquare && checkedKingSquare.r === r && checkedKingSquare.c === c) {
+            sq.classList.add('king-in-check');
+          }
           if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
             sq.classList.add('selected');
           }
           if (validMovesForSelected.some(m => m.r === r && m.c === c)) {
             sq.classList.add('valid-move');
           }
-          if (lastMove && ((lastMove.fromR === r && lastMove.fromC === c) || (lastMove.toR === r && lastMove.toC === c))) {
-            sq.classList.add('last-move');
-          }
 
           const pieceCode = boardState[r][c];
           if (pieceCode) {
             sq.textContent = PIECES[pieceCode] || '';
+            if (pieceCode[0] === 'w') {
+              sq.style.color = '#ffffff';
+              sq.style.webkitTextStroke = '1.2px #0f172a';
+              sq.style.textShadow = '0 2px 5px rgba(0, 0, 0, 0.85)';
+            } else {
+              sq.style.color = '#090d16';
+              sq.style.webkitTextStroke = '0.8px #f8fafc';
+              sq.style.textShadow = '0 2px 4px rgba(255, 255, 255, 0.65)';
+            }
+          } else {
+            sq.textContent = '';
+            sq.style.webkitTextStroke = '0';
+            sq.style.textShadow = 'none';
           }
 
           sq.onclick = () => handleSquareClick(r, c);
