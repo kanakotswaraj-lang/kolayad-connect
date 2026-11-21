@@ -83,6 +83,25 @@
         </div>
     </div>
 
+    <!-- കളർഫുൾ വെൽകം പോപ്പ്-അപ്പ് (പുതിയ കച്ചവടക്കാർ ജോയിൻ ചെയ്യുമ്പോൾ) -->
+    <div id="kolayadSuccessPopup" style="display:none; position:fixed; inset:0; background:rgba(2,6,23,0.85); backdrop-filter:blur(5px); z-index:99999; align-items:center; justify-content:center; padding:18px;">
+      <div id="kolayadPopupCard" style="width:100%; max-width:390px; background:linear-gradient(145deg, #1e1b4b 0%, #0f172a 55%, #064e3b 100%); border:3px solid #facc15; border-radius:24px; padding:26px 20px; text-align:center; color:#ffffff; box-shadow:0 0 35px rgba(250,204,21,0.45), 0 22px 45px rgba(0,0,0,0.85); transform:scale(0.85); opacity:0; transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position:relative; overflow:hidden;">
+        <div style="background:linear-gradient(90deg, #f59e0b, #10b981, #3b82f6); height:6px; position:absolute; top:0; left:0; right:0;"></div>
+        <div style="width:74px; height:74px; margin:0 auto 14px auto; border-radius:50%; background:linear-gradient(135deg, #22c55e, #15803d); border:3px solid #fde047; display:flex; align-items:center; justify-content:center; font-size:38px; box-shadow:0 0 22px rgba(34,197,94,0.75);">✅</div>
+        <div style="display:inline-block; background:rgba(250,204,21,0.18); border:1px solid #facc15; color:#fde047; font-size:12px; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:10px;">🎉 രജിസ്ട്രേഷൻ വിജയിച്ചു!</div>
+        <h2 id="popupGreetingHeading" style="margin:0 0 10px 0; font-size:21px; font-weight:900; color:#facc15; line-height:1.35;">സ്വാഗതം!</h2>
+        <p id="popupGreetingBody" style="margin:0 0 18px 0; font-size:14.5px; line-height:1.65; color:#e2e8f0;">
+          <strong>കോളയാട് കണക്ട് (Kolayad Connect)</strong> ആപ്പിൽ ജോയിൻ ചെയ്തതിന് ഒരുപാട് നന്ദി! നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു.
+        </p>
+        <div style="background:rgba(15,23,42,0.72); border:1px dashed rgba(56,189,248,0.55); border-radius:12px; padding:10px 12px; margin-bottom:18px; font-size:13px; color:#7dd3fc;">
+          ✨ ഇനി നമ്മുടെ നാട്ടുകാർക്ക് നിങ്ങളുടെ സ്ഥാപനത്തെ എളുപ്പത്തിൽ കണ്ടെത്താം!
+        </div>
+        <button type="button" onclick="closeKolayadPopup()" style="width:100%; padding:12px 16px; border:none; border-radius:14px; background:linear-gradient(135deg, #facc15, #f59e0b); color:#0f172a; font-family:inherit; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(245,158,11,0.45);">
+          നന്ദി, തുടരാം 👍
+        </button>
+      </div>
+    </div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -104,9 +123,47 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const shopId = urlParams.get('id');
+        const isWelcomeParam = urlParams.get('welcome') === '1';
         const shopDetailsDiv = document.getElementById('shop-details');
         let currentShopData = null;
         const isAdmin = localStorage.getItem('kolayad_admin') === 'true';
+
+        function showKolayadWelcomePopup(shopOrMerchantName) {
+            const name = (shopOrMerchantName && shopOrMerchantName.trim())
+                ? shopOrMerchantName.trim()
+                : 'പ്രിയ കച്ചവടക്കാരാ';
+            document.getElementById('popupGreetingHeading').innerText = `🙏 സ്വാഗതം, ${name}!`;
+            document.getElementById('popupGreetingBody').innerHTML =
+                `<strong>കോളയാട് കണക്ട്</strong> ആപ്പിൽ ജോയിൻ ചെയ്തതിന് ഒരുപാട് നന്ദി! നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തിരിക്കുന്നു.`;
+            const overlay = document.getElementById('kolayadSuccessPopup');
+            const card = document.getElementById('kolayadPopupCard');
+            overlay.style.display = 'flex';
+            requestAnimationFrame(() => {
+                card.style.transform = 'scale(1)';
+                card.style.opacity = '1';
+            });
+        }
+
+        function closeKolayadPopup() {
+            const overlay = document.getElementById('kolayadSuccessPopup');
+            const card = document.getElementById('kolayadPopupCard');
+            card.style.transform = 'scale(0.85)';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 220);
+        }
+
+        // രജിസ്ട്രേഷൻ ഫോമിൽ നിന്ന് പുതിയ കട ചേർക്കുമ്പോൾ ഉപയോഗിക്കാവുന്ന ഹെൽപ്പർ ഫംഗ്ഷൻ
+        async function registerNewMerchantShop(shopPayload) {
+            const docRef = await db.collection("shops").add({
+                ...shopPayload,
+                welcomeSent: false,
+                createdAt: new Date().toISOString()
+            });
+            showKolayadWelcomePopup(shopPayload.name);
+            return docRef.id;
+        }
 
         function openZoomModal(imgSrc) {
             document.getElementById('zoomedImage').src = imgSrc;
@@ -129,12 +186,16 @@
                     currentShopData = doc.data();
                     renderShopDetails(currentShopData);
 
+                    if (isWelcomeParam) {
+                        showKolayadWelcomePopup(currentShopData.name);
+                    }
+
                     if (isAdmin) {
                         document.getElementById('adminEditSection').style.display = 'block';
                         document.getElementById('editHours').value = currentShopData.businessHours || '';
                         document.getElementById('editCatalog').value = currentShopData.catalogLink || '';
                         document.getElementById('editSocial').value = currentShopData.socialLink || '';
-                        document.getElementById('editInstagram').value = currentShopData.instagramLink || ''; // ഇൻസ്റ്റാഗ്രാം ലോഡ് ചെയ്യാൻ
+                        document.getElementById('editInstagram').value = currentShopData.instagramLink || '';
                         document.getElementById('editOffer').value = currentShopData.specialOffer || '';
                     }
                 } else {
@@ -204,7 +265,6 @@
                 </a>
             ` : '';
 
-            // ഇൻസ്റ്റാഗ്രാം ബട്ടൺ
             let instagramHtml = shop.instagramLink ? `
                 <a href="${shop.instagramLink}" target="_blank" style="display: block; text-align: center; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);">
                     📸 ഇൻസ്റ്റാഗ്രാം പേജ് സന്ദർശിക്കുക
@@ -251,14 +311,14 @@
             const businessHours = document.getElementById('editHours').value;
             const catalogLink = document.getElementById('editCatalog').value;
             const socialLink = document.getElementById('editSocial').value;
-            const instagramLink = document.getElementById('editInstagram').value; // ഇൻസ്റ്റാഗ്രാം ലിങ്ക് എടുക്കാൻ
+            const instagramLink = document.getElementById('editInstagram').value;
             const specialOffer = document.getElementById('editOffer').value;
 
             db.collection("shops").doc(shopId).update({
                 businessHours: businessHours,
                 catalogLink: catalogLink,
                 socialLink: socialLink,
-                instagramLink: instagramLink, // ഫയർബേസിൽ സേവ് ചെയ്യാൻ
+                instagramLink: instagramLink,
                 specialOffer: specialOffer
             }).then(() => {
                 alert('വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!');
