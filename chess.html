@@ -94,7 +94,7 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
     }
 
-    /* ലെവൽ ബാർ (ഇതിന്റെ അകത്തുതന്നെ അടുത്ത ലെവൽ) */
+    /* ലെവൽ ബാർ */
     .level-bar {
       width: 100%;
       background: rgba(15, 23, 42, 0.92);
@@ -376,7 +376,6 @@
       <button type="button" class="mode-btn active" id="modeAiBtn" onclick="switchMode('ai')">🤖 കമ്പ്യൂട്ടർ (AI)</button>
     </div>
 
-    <!-- ഇതിന്റെ അകത്തുതന്നെ അടുത്ത ലെവൽ -->
     <div class="level-bar" id="levelBar">
       <div class="level-info">
         ലെവൽ: <span class="level-badge" id="levelLabel">ലെവൽ 1 (ചലഞ്ച്)</span>
@@ -384,20 +383,17 @@
       <button type="button" class="next-level-btn" id="nextLevelBtn" onclick="goNextLevel()">അടുത്ത ലെവൽ →</button>
     </div>
 
-    <div class="status-banner" id="statusText">നിങ്ങളുടെ ടേൺ (White)</div>
+    <div class="status-banner" id="statusText">⏳ AI എൻജിൻ തയ്യാറാകുന്നു...</div>
 
-    <!-- മുകൾ ഭാഗത്ത്: വെട്ടിയെടുത്ത കരുക്കൾ (Black Captured) -->
     <div class="captured-tray" id="topTray">
       <span class="tray-label" id="topTrayLabel">🤖 ബോട്ട് വെട്ടിയവ:</span>
       <div class="captured-pieces-list" id="topCaptured"></div>
     </div>
 
-    <!-- വലിയ 3D ചെസ്സ് ബോർഡ് -->
     <div class="board-3d-perspective">
       <div class="chess-board-3d" id="board"></div>
     </div>
 
-    <!-- താഴെ ഭാഗത്ത്: വെട്ടിയെടുത്ത കരുക്കൾ (White Captured) -->
     <div class="captured-tray" id="bottomTray">
       <span class="tray-label" id="bottomTrayLabel" style="color:#38bdf8;">♔ നിങ്ങൾ വെട്ടിയവ:</span>
       <div class="captured-pieces-list" id="bottomCaptured"></div>
@@ -409,7 +405,6 @@
     </div>
   </div>
 
-  <!-- വിജയ / കളി അവസാനിക്കുന്ന മോഡൽ -->
   <div class="result-modal-backdrop" id="resultModal">
     <div class="result-modal-card">
       <div class="result-trophy" id="resultIcon">🏆</div>
@@ -440,9 +435,9 @@
     ];
 
     const aiLevels = [
-      { level: 1, name: 'ലെവൽ 1 (ചലഞ്ച്)', skill: 14, movetime: 900 },
-      { level: 2, name: 'ലെവൽ 2 (അടുത്ത ലെവൽ)', skill: 17, movetime: 1200 },
-      { level: 3, name: 'ലെവൽ 3 (മാസ്റ്റർ)', skill: 20, movetime: 1500 }
+      { level: 1, name: 'ലെവൽ 1 (ചലഞ്ച്)', skill: 14, movetime: 900, depth: 3 },
+      { level: 2, name: 'ലെവൽ 2 (അടുത്ത ലെവൽ)', skill: 17, movetime: 1300, depth: 3 },
+      { level: 3, name: 'ലെവൽ 3 (മാസ്റ്റർ)', skill: 20, movetime: 1700, depth: 4 }
     ];
 
     let chess = new Chess();
@@ -455,54 +450,85 @@
     let aiThinking = false;
     let gameOverShown = false;
 
-    // Stockfish Web Worker
+    // Stockfish Web Worker (Multiple CDN fallbacks)
     let engine = null;
     let engineReady = false;
+    let engineLoading = true;
     let pendingMoveResolver = null;
 
+    const stockfishSources = [
+      'https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js',
+      'https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js',
+      'https://unpkg.com/stockfish.js@10.0.2/stockfish.js'
+    ];
+
     function applyStockfishSkill() {
-      if (engine && engineReady) {
+      if (engine) {
         const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
         engine.postMessage('setoption name Skill Level value ' + cfg.skill);
         engine.postMessage('isready');
       }
     }
 
-    function initStockfish() {
-      try {
-        const workerUrl = 'https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js';
-        fetch(workerUrl)
-          .then(res => {
-            if (!res.ok) throw new Error('Stockfish fetch failed');
-            return res.blob();
-          })
-          .then(blob => {
-            const blobUrl = URL.createObjectURL(blob);
-            engine = new Worker(blobUrl);
-            engine.onmessage = function (e) {
+    async function initStockfish() {
+      engineLoading = true;
+      updateStatus();
+
+      for (const url of stockfishSources) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const scriptText = await res.text();
+          if (!scriptText || scriptText.length < 1000) continue;
+
+          const blob = new Blob([scriptText], { type: 'application/javascript' });
+          const blobUrl = URL.createObjectURL(blob);
+          const worker = new Worker(blobUrl);
+
+          const ready = await new Promise((resolve) => {
+            const timeout = setTimeout(() => resolve(false), 6000);
+            worker.onmessage = function (e) {
               const line = typeof e.data === 'string' ? e.data : '';
               if (line === 'uciok') {
-                applyStockfishSkill();
+                const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
+                worker.postMessage('setoption name Skill Level value ' + cfg.skill);
+                worker.postMessage('isready');
               } else if (line === 'readyok') {
-                engineReady = true;
+                clearTimeout(timeout);
+                resolve(true);
               } else if (line.startsWith('bestmove ')) {
-                const parts = line.split(' ');
-                const uci = parts[1];
+                const uci = line.split(' ')[1];
                 if (pendingMoveResolver) {
-                  const resolve = pendingMoveResolver;
+                  const fn = pendingMoveResolver;
                   pendingMoveResolver = null;
-                  resolve(uci);
+                  fn(uci);
                 }
               }
             };
-            engine.postMessage('uci');
-          })
-          .catch(() => {
-            engineReady = false;
+            worker.onerror = () => {
+              clearTimeout(timeout);
+              resolve(false);
+            };
+            worker.postMessage('uci');
           });
-      } catch (err) {
-        engineReady = false;
+
+          if (ready) {
+            engine = worker;
+            engineReady = true;
+            engineLoading = false;
+            updateStatus();
+            return;
+          } else {
+            worker.terminate();
+          }
+        } catch (err) {
+          // Try next CDN
+        }
       }
+
+      engineReady = false;
+      engineLoading = false;
+      updateStatus();
     }
 
     function queryStockfishBestMove(fen, movetimeMs) {
@@ -511,7 +537,13 @@
           resolve(null);
           return;
         }
+        const safetyTimer = setTimeout(() => {
+          pendingMoveResolver = null;
+          resolve(null);
+        }, movetimeMs + 3500);
+
         pendingMoveResolver = (uci) => {
+          clearTimeout(safetyTimer);
           if (!uci || uci === '(none)') return resolve(null);
           const from = uci.slice(0, 2);
           const to = uci.slice(2, 4);
@@ -524,6 +556,148 @@
         engine.postMessage('position fen ' + fen);
         engine.postMessage('go movetime ' + movetimeMs);
       });
+    }
+
+    // ശക്തമായ Minimax + Alpha-Beta + Positional Tables (Stockfish ബ്ലോക്ക് ആയാൽ മാത്രം ഉപയോഗിക്കാൻ)
+    const pstPawn = [
+       0,  0,  0,  0,  0,  0,  0,  0,
+      50, 50, 50, 50, 50, 50, 50, 50,
+      10, 10, 20, 30, 30, 20, 10, 10,
+       5,  5, 10, 25, 25, 10,  5,  5,
+       0,  0,  0, 20, 20,  0,  0,  0,
+       5, -5,-10,  0,  0,-10, -5,  5,
+       5, 10, 10,-20,-20, 10, 10,  5,
+       0,  0,  0,  0,  0,  0,  0,  0
+    ];
+    const pstKnight = [
+      -50,-40,-30,-30,-30,-30,-40,-50,
+      -40,-20,  0,  0,  0,  0,-20,-40,
+      -30,  0, 10, 15, 15, 10,  0,-30,
+      -30,  5, 15, 20, 20, 15,  5,-30,
+      -30,  0, 15, 20, 20, 15,  0,-30,
+      -30,  5, 10, 15, 15, 10,  5,-30,
+      -40,-20,  0,  5,  5,  0,-20,-40,
+      -50,-40,-30,-30,-30,-30,-40,-50
+    ];
+    const pstBishop = [
+      -20,-10,-10,-10,-10,-10,-10,-20,
+      -10,  0,  0,  0,  0,  0,  0,-10,
+      -10,  0,  5, 10, 10,  5,  0,-10,
+      -10,  5,  5, 10, 10,  5,  5,-10,
+      -10,  0, 10, 10, 10, 10,  0,-10,
+      -10, 10, 10, 10, 10, 10, 10,-10,
+      -10,  5,  0,  0,  0,  0,  5,-10,
+      -20,-10,-10,-10,-10,-10,-10,-20
+    ];
+    const pstRook = [
+       0,  0,  0,  0,  0,  0,  0,  0,
+       5, 10, 10, 10, 10, 10, 10,  5,
+      -5,  0,  0,  0,  0,  0,  0, -5,
+      -5,  0,  0,  0,  0,  0,  0, -5,
+      -5,  0,  0,  0,  0,  0,  0, -5,
+      -5,  0,  0,  0,  0,  0,  0, -5,
+      -5,  0,  0,  0,  0,  0,  0, -5,
+       0,  0,  0,  5,  5,  0,  0,  0
+    ];
+    const pstQueen = [
+      -20,-10,-10, -5, -5,-10,-10,-20,
+      -10,  0,  0,  0,  0,  0,  0,-10,
+      -10,  0,  5,  5,  5,  5,  0,-10,
+       -5,  0,  5,  5,  5,  5,  0, -5,
+        0,  0,  5,  5,  5,  5,  0, -5,
+      -10,  5,  5,  5,  5,  5,  0,-10,
+      -10,  0,  5,  0,  0,  0,  0,-10,
+      -20,-10,-10, -5, -5,-10,-10,-20
+    ];
+    const pstKing = [
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -20,-30,-30,-40,-40,-30,-30,-20,
+      -10,-20,-20,-20,-20,-20,-20,-10,
+       20, 20,  0,  0,  0,  0, 20, 20,
+       20, 30, 10,  0,  0, 10, 30, 20
+    ];
+
+    function evaluatePosition() {
+      if (chess.in_checkmate()) {
+        return chess.turn() === 'b' ? -99999 : 99999;
+      }
+      if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
+        return 0;
+      }
+      const weights = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+      const tables = { p: pstPawn, n: pstKnight, b: pstBishop, r: pstRook, q: pstQueen, k: pstKing };
+      const b = chess.board();
+      let total = 0;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const piece = b[r][c];
+          if (!piece) continue;
+          const idx = piece.color === 'w' ? (r * 8 + c) : ((7 - r) * 8 + c);
+          const score = (weights[piece.type] || 0) + (tables[piece.type] ? tables[piece.type][idx] : 0);
+          total += piece.color === 'b' ? score : -score;
+        }
+      }
+      return total;
+    }
+
+    function alphaBeta(depth, alpha, beta, isMax) {
+      if (depth === 0 || chess.game_over()) {
+        return evaluatePosition();
+      }
+      const moves = chess.moves({ verbose: true });
+      moves.sort((a, b) => (b.captured ? 10 : 0) - (a.captured ? 10 : 0));
+
+      if (isMax) {
+        let best = -Infinity;
+        for (const m of moves) {
+          chess.move(m);
+          const val = alphaBeta(depth - 1, alpha, beta, false);
+          chess.undo();
+          if (val > best) best = val;
+          if (best > alpha) alpha = best;
+          if (beta <= alpha) break;
+        }
+        return best;
+      } else {
+        let best = Infinity;
+        for (const m of moves) {
+          chess.move(m);
+          const val = alphaBeta(depth - 1, alpha, beta, true);
+          chess.undo();
+          if (val < best) best = val;
+          if (best < beta) beta = best;
+          if (beta <= alpha) break;
+        }
+        return best;
+      }
+    }
+
+    function smartFallbackBestMove() {
+      const moves = chess.moves({ verbose: true });
+      if (!moves.length) return null;
+      moves.sort(() => Math.random() - 0.5);
+      moves.sort((a, b) => (b.captured ? 10 : 0) - (a.captured ? 10 : 0));
+
+      const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
+      const depth = cfg.depth || 3;
+      let bestMove = moves[0];
+      let bestVal = -Infinity;
+
+      for (const m of moves) {
+        chess.move(m);
+        // Repetition penalty so rook never shuffles back and forth
+        const repPenalty = chess.in_threefold_repetition() ? -500 : 0;
+        const val = alphaBeta(depth - 1, -Infinity, Infinity, false) + repPenalty;
+        chess.undo();
+        if (val > bestVal) {
+          bestVal = val;
+          bestMove = m;
+        }
+      }
+      return bestMove;
     }
 
     function syncLevelUI() {
@@ -664,6 +838,10 @@
       const isCheck = chess.in_check() && !chess.in_checkmate();
       statusEl.classList.toggle('in-check', isCheck);
 
+      if (mode === 'ai' && engineLoading) {
+        statusEl.innerText = '⏳ Stockfish AI എൻജിൻ തയ്യാറാകുന്നു...';
+        return;
+      }
       if (aiThinking) {
         const cfg = aiLevels[currentLevelIndex] || aiLevels[0];
         statusEl.innerText = `🤖 കമ്പ്യൂട്ടർ (${cfg.name}) ആലോചിക്കുന്നു...`;
@@ -711,35 +889,9 @@
       updateStatus();
     }
 
-    function fallbackBestMove() {
-      const moves = chess.moves({ verbose: true });
-      if (!moves.length) return null;
-      const val = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
-      let best = moves[0];
-      let bestScore = -Infinity;
-      for (const m of moves) {
-        chess.move(m);
-        let s = 0;
-        if (chess.in_checkmate()) s = 100000;
-        const b = chess.board();
-        for (let r = 0; r < 8; r++) {
-          for (let c = 0; c < 8; c++) {
-            const p = b[r][c];
-            if (p) s += p.color === 'b' ? (val[p.type] || 0) : -(val[p.type] || 0);
-          }
-        }
-        chess.undo();
-        if (s > bestScore) {
-          bestScore = s;
-          best = m;
-        }
-      }
-      return best;
-    }
-
     async function onSquareClick(sq) {
       if (aiThinking || chess.game_over()) return;
-      if (mode === 'ai' && chess.turn() !== 'w') return;
+      if (mode === 'ai' && (engineLoading || chess.turn() !== 'w')) return;
 
       if (!selectedSq) {
         const piece = chess.get(sq);
@@ -782,7 +934,8 @@
         const currentFen = chess.fen();
         let chosen = await queryStockfishBestMove(currentFen, cfg.movetime);
         if (!chosen) {
-          chosen = fallbackBestMove();
+          await new Promise(r => setTimeout(r, 150));
+          chosen = smartFallbackBestMove();
         }
 
         if (chosen && chess.turn() === 'b' && !chess.game_over()) {
@@ -819,8 +972,8 @@
     }
 
     detectInitialMode();
-    initStockfish();
     resetGame();
+    initStockfish();
   </script>
 </body>
 </html>
