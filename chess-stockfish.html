@@ -42,6 +42,17 @@
       display: flex;
       gap: 8px;
       align-items: center;
+      flex-wrap: wrap;
+    }
+    .sound-toggle-btn {
+      background: #1e293b;
+      color: #4ade80;
+      border: 1.5px solid #4ade80;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
     }
     .btn-home {
       text-decoration: none;
@@ -50,7 +61,7 @@
       border: 1.5px solid #38bdf8;
       padding: 6px 12px;
       border-radius: 10px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 800;
     }
     .btn-wa-share {
@@ -59,7 +70,7 @@
       color: #ffffff;
       padding: 6px 12px;
       border-radius: 10px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
@@ -186,13 +197,13 @@
     }
     .square {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: clamp(28px, 8vw, 46px);
       cursor: pointer;
       position: relative;
-      font-weight: 900;
       line-height: 1;
+      padding: 2px;
       transition: transform 0.1s ease;
     }
     .square:active { transform: scale(0.95); }
@@ -218,7 +229,6 @@
     .square.last-move {
       background: rgba(249, 115, 22, 0.45) !important;
     }
-    /* ചെക്ക് വന്ന രാജാവിന്റെ കള്ളിയിലെ വ്യക്തമായ അടയാളം */
     .square.king-in-check {
       background: radial-gradient(circle, #ef4444 35%, #991b1b 100%) !important;
       outline: 3px solid #fef08a;
@@ -228,6 +238,36 @@
     @keyframes checkPulse {
       from { box-shadow: inset 0 0 8px #fef08a; }
       to { box-shadow: inset 0 0 18px #ffffff; }
+    }
+
+    /* ഗ്രേഡിയന്റ് കരുക്കൾ & അടയാളം */
+    .piece-symbol {
+      font-size: clamp(28px, 7.6vw, 44px);
+      font-weight: 900;
+      line-height: 1.05;
+      background-clip: text;
+      -webkit-background-clip: text;
+      display: inline-block;
+    }
+    .piece-symbol.white-piece {
+      background-image: linear-gradient(145deg, #ffffff 0%, #fef08a 55%, #f59e0b 100%);
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1.3px #0f172a;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.75));
+    }
+    .piece-symbol.black-piece {
+      background-image: linear-gradient(145deg, #38bdf8 0%, #4f46e5 55%, #9333ea 100%);
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1.2px #f8fafc;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.85));
+    }
+    .piece-tag {
+      font-size: 9px;
+      font-weight: 900;
+      padding: 0 4px;
+      border-radius: 5px;
+      margin-top: 1px;
+      line-height: 1.25;
     }
 
     /* പഠന ടിപ്പുകൾ സെക്ഷൻ */
@@ -272,6 +312,7 @@
     <div class="top-bar">
       <div class="page-title">♟️ ചെസ്സ് - കോളയാട് കണക്ട്</div>
       <div class="nav-actions">
+        <button type="button" id="soundToggleBtn" class="sound-toggle-btn" onclick="toggleChessSound()">🔊 ശബ്ദം ഓൺ</button>
         <a id="waShareLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-wa-share">
           💬 കൂട്ടുകാർക്ക് അയക്കാം
         </a>
@@ -334,9 +375,84 @@
         `https://wa.me/?text=${encodeURIComponent(text)}`;
     })();
 
+    // ശബ്ദ സംവിധാനം (Web Audio API)
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function toggleChessSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      if (btn) {
+        btn.innerText = soundEnabled ? '🔊 ശബ്ദം ഓൺ' : '🔇 ശബ്ദം ഓഫ്';
+        btn.style.color = soundEnabled ? '#4ade80' : '#f87171';
+        btn.style.borderColor = soundEnabled ? '#4ade80' : '#f87171';
+      }
+      if (soundEnabled) playChessSound('move');
+    }
+
+    function playChessSound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        if (type === 'capture') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.16);
+          gain.gain.setValueAtTime(0.28, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.17);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } else if (type === 'check') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.setValueAtTime(680, now + 0.09);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.24);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.exponentialRampToValueAtTime(460, now + 0.09);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.11);
+        }
+      } catch (e) {
+        // ഓഡിയോ ബ്ലോക്ക് ചെയ്താൽ കളി തടസ്സപ്പെടില്ല
+      }
+    }
+
     const PIECES = {
       wK: '♔', wQ: '♕', wR: '♖', wB: '♗', wN: '♘', wP: '♙',
       bK: '♚', bQ: '♛', bR: '♜', bB: '♝', bN: '♞', bP: '♟'
+    };
+
+    const PIECE_LABELS_ML = {
+      P: 'ക',
+      R: 'ത',
+      N: 'കു',
+      B: 'ആ',
+      Q: 'റ',
+      K: 'രാ'
     };
 
     const PIECE_VALUES = { P: 1, N: 3, B: 3, R: 5, Q: 9, K: 100 };
@@ -509,7 +625,6 @@
       return all;
     }
 
-    // നൽകിയിരിക്കുന്ന നിറത്തിന്റെ രാജാവിന് എതിരാളിയുടെ നീക്കത്തിൽ നിന്ന് ചെക്ക് വരുന്നുണ്ടോ എന്ന് പരിശോധിക്കുന്നു
     function findKingInCheck(board, kingColor) {
       let kingPos = null;
       for (let r = 0; r < 8; r++) {
@@ -537,8 +652,10 @@
       if (gameOver) return;
 
       if (nextTurnColor === 'w' && whiteCheck) {
+        playChessSound('check');
         updateTurnStatus('⚠️ ചെക്ക്! നിങ്ങളുടെ രാജാവിനെ സംരക്ഷിക്കുക!', true);
       } else if (nextTurnColor === 'b' && blackCheck) {
+        playChessSound('check');
         updateTurnStatus('⚠️ ചെക്ക്! എതിരാളിയുടെ രാജാവിന് ഭീഷണി!', true);
       } else {
         updateTurnStatus(nextTurnColor === 'w' ? 'നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)' : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`, false);
@@ -564,11 +681,18 @@
       lastMove = { fromR, fromC, toR, toC };
 
       if (captured && captured[1] === 'K') {
+        playChessSound('capture');
         gameOver = true;
         checkedKingSquare = null;
         updateTurnStatus(piece[0] === 'w' ? '🎉 നിങ്ങൾ വിജയിച്ചു!' : '🤖 Stockfish വിജയിച്ചു!', false);
         renderBoard();
         return;
+      }
+
+      if (captured) {
+        playChessSound('capture');
+      } else {
+        playChessSound('move');
       }
 
       const nextColor = piece[0] === 'w' ? 'b' : 'w';
@@ -718,20 +842,29 @@
 
           const pieceCode = boardState[r][c];
           if (pieceCode) {
-            sq.textContent = PIECES[pieceCode] || '';
-            if (pieceCode[0] === 'w') {
-              sq.style.color = '#ffffff';
-              sq.style.webkitTextStroke = '1.2px #0f172a';
-              sq.style.textShadow = '0 2px 5px rgba(0, 0, 0, 0.85)';
+            const isWhite = pieceCode[0] === 'w';
+            const pType = pieceCode[1];
+
+            const symSpan = document.createElement('span');
+            symSpan.className = `piece-symbol ${isWhite ? 'white-piece' : 'black-piece'}`;
+            symSpan.textContent = PIECES[pieceCode] || '';
+
+            const tagSpan = document.createElement('span');
+            tagSpan.className = 'piece-tag';
+            tagSpan.textContent = PIECE_LABELS_ML[pType] || '';
+
+            if (isWhite) {
+              tagSpan.style.background = '#eff6ff';
+              tagSpan.style.color = '#0f172a';
+              tagSpan.style.border = '1px solid #1d4ed8';
             } else {
-              sq.style.color = '#090d16';
-              sq.style.webkitTextStroke = '0.8px #f8fafc';
-              sq.style.textShadow = '0 2px 4px rgba(255, 255, 255, 0.65)';
+              tagSpan.style.background = '#0f172a';
+              tagSpan.style.color = '#fde047';
+              tagSpan.style.border = '1px solid #facc15';
             }
-          } else {
-            sq.textContent = '';
-            sq.style.webkitTextStroke = '0';
-            sq.style.textShadow = 'none';
+
+            sq.appendChild(symSpan);
+            sq.appendChild(tagSpan);
           }
 
           sq.onclick = () => handleSquareClick(r, c);
