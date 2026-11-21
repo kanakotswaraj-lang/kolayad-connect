@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ചെസ്സ് - കോളയാട് കണക്ട്</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', sans-serif; }
+    body {
+      background: #0b0f17;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+    .app-wrap {
+      width: 100%;
+      max-width: 520px;
+      background: #0f172a;
+      border: 2px solid #eab308;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 0 28px rgba(234, 179, 8, 0.2);
+      height: fit-content;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .page-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fde047;
+    }
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-home {
+      text-decoration: none;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #38bdf8;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .btn-wa-share {
+      text-decoration: none;
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    /* ലെവൽ സെലക്ടർ (ഈസി / മീഡിയം / ഹാർഡ്) */
+    .level-box {
+      background: #131c31;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .level-label {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .engine-pill {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid #38bdf8;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+    .level-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .lvl-btn {
+      padding: 9px 6px;
+      border-radius: 10px;
+      border: 1.5px solid #334155;
+      background: #1e293b;
+      color: #e2e8f0;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .lvl-btn.active[data-level="easy"] {
+      background: #16a34a;
+      border-color: #86efac;
+      color: #ffffff;
+    }
+    .lvl-btn.active[data-level="medium"] {
+      background: #eab308;
+      border-color: #fef08a;
+      color: #0f172a;
+    }
+    .lvl-btn.active[data-level="hard"] {
+      background: #dc2626;
+      border-color: #fca5a5;
+      color: #ffffff;
+    }
+
+    /* സ്റ്റാറ്റസ് & കൺട്രോൾ ബട്ടണുകൾ */
+    .status-bar {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .turn-text { color: #fde047; }
+    .board-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .ctrl-btn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 10px;
+      border: none;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-undo { background: #334155; color: #f8fafc; }
+    .btn-restart { background: #eab308; color: #0f172a; }
+
+    /* ചെസ്സ് ബോർഡ് */
+    .board-wrapper {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 3px solid #eab308;
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      margin-bottom: 14px;
+      user-select: none;
+    }
+    .square {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(24px, 7vw, 40px);
+      cursor: pointer;
+      position: relative;
+    }
+    .square.light { background: #f1f5f9; color: #0f172a; }
+    .square.dark { background: #334155; color: #0f172a; }
+    .square.selected { outline: 3px solid #2563eb; outline-offset: -3px; background: #93c5fd !important; }
+    .square.valid-move::after {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(22, 163, 74, 0.72);
+    }
+    .square.last-move { background: rgba(250, 204, 21, 0.45) !important; }
+
+    /* പഠന ടിപ്പുകൾ സെക്ഷൻ */
+    .tips-card {
+      background: #131c31;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .tips-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 8px;
+    }
+    .level-tip-highlight {
+      background: rgba(234, 179, 8, 0.14);
+      border-left: 4px solid #eab308;
+      padding: 9px 11px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      color: #fef9c3;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .tips-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .tips-list li::before {
+      content: '♟️ ';
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+    <div class="top-bar">
+      <div class="page-title">♟️ ചെസ്സ് - കോളയാട് കണക്ട്</div>
+      <div class="nav-actions">
+        <a id="waShareLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-wa-share">
+          💬 കൂട്ടുകാർക്ക് അയക്കാം
+        </a>
+        <a href="index.html" class="btn-home">🏠 ഹോം</a>
+      </div>
+    </div>
+
+    <!-- ലെവൽ സെലക്ടർ -->
+    <div class="level-box">
+      <div class="level-label">
+        <span>🎯 കളി ലെവൽ തിരഞ്ഞെടുക്കുക:</span>
+        <span class="engine-pill" id="engineBadge">Stockfish Engine</span>
+      </div>
+      <div class="level-buttons">
+        <button type="button" class="lvl-btn active" data-level="easy" onclick="setChessLevel('easy')">🟢 ഈസി</button>
+        <button type="button" class="lvl-btn" data-level="medium" onclick="setChessLevel('medium')">🟡 മീഡിയം</button>
+        <button type="button" class="lvl-btn" data-level="hard" onclick="setChessLevel('hard')">🔴 ഹാർഡ്</button>
+      </div>
+    </div>
+
+    <!-- സ്റ്റാറ്റസ് -->
+    <div class="status-bar">
+      <span class="turn-text" id="gameStatusText">നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)</span>
+      <span id="currentLevelText" style="color: #4ade80;">ലെവൽ: ഈസി</span>
+    </div>
+
+    <!-- ബോർഡ് കൺട്രോൾ -->
+    <div class="board-controls">
+      <button type="button" class="ctrl-btn btn-undo" onclick="undoLastMove()">↩️ നീക്കം മാറ്റുക</button>
+      <button type="button" class="ctrl-btn btn-restart" onclick="resetChessGame()">🔄 പുതിയ കളി</button>
+    </div>
+
+    <!-- ചെസ്സ് ബോർഡ് -->
+    <div class="board-wrapper" id="chessBoard"></div>
+
+    <!-- പഠിക്കാനുള്ള ലെവൽ വിവരങ്ങളും ടിപ്പുകളും -->
+    <div class="tips-card">
+      <div class="tips-title">📘 കളിക്കാർക്കുള്ള ലെവൽ വിവരങ്ങളും ടിപ്പുകളും</div>
+      <div class="level-tip-highlight" id="activeLevelGuide">
+        <strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം.
+      </div>
+      <ul class="tips-list">
+        <li><strong>ബോർഡിന്റെ മധ്യഭാഗം പിടിക്കുക:</strong> കളി തുടങ്ങുമ്പോൾ രാജാവിന്റെയോ രാജ്ഞിയുടെയോ മുന്നിലുള്ള കാലാൾ (Pawn) മുന്നോട്ട് നീക്കി മധ്യഭാഗം നിയന്ത്രിക്കാൻ ശ്രമിക്കുക.</li>
+        <li><strong>കരുക്കൾ പുറത്തിറക്കുക:</strong> കുതിര (Knight) ആന (Bishop) എന്നിവയെ വേഗത്തിൽ സജീവമാക്കുക; രാജ്ഞിയെ ആദ്യം തന്നെ ശത്രുനിരയിലേക്ക് ഒറ്റയ്ക്ക് ഇറക്കരുത്.</li>
+        <li><strong>രാജാവിന്റെ സുരക്ഷ (Castling):</strong> കളി തുടങ്ങി അധികം വൈകാതെ രാജാവിനെ സുരക്ഷിത സ്ഥാനത്തേക്ക് മാറ്റാൻ ശ്രദ്ധിക്കുക.</li>
+        <li><strong>ഓരോ നീക്കത്തിന് മുൻപും ശ്രദ്ധിക്കുക:</strong> എതിരാളിയുടെ അടുത്ത നീക്കം എങ്ങോട്ടായിരിക്കുമെന്ന് ചിന്തിച്ച ശേഷം മാത്രം കരു നീക്കുക.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // 1. വാട്‌സാപ്പ് ഷെയർ ലിങ്ക് സജ്ജീകരിക്കുന്നു
+    (function setupWhatsAppShare() {
+      const shareUrl = window.location.href;
+      const text =
+        `♟️ കോളയാട് കണക്ട് (Kolayad Connect) ചെസ്സ് കളിച്ച് നോക്കൂ!\n` +
+        `ഈസി, മീഡിയം, ഹാർഡ് ലെവലുകളിൽ Stockfish എഞ്ചിനോടൊപ്പം കളിക്കാനും പഠിക്കാനും സാധിക്കും.\n\n` +
+        `ലിങ്ക്: ${shareUrl}`;
+      document.getElementById('waShareLink').href =
+        `https://wa.me/?text=${encodeURIComponent(text)}`;
+    })();
+
+    // കരുക്കളുടെ ചിഹ്നങ്ങൾ
+    const PIECES = {
+      wK: '♔', wQ: '♕', wR: '♖', wB: '♗', wN: '♘', wP: '♙',
+      bK: '♚', bQ: '♛', bR: '♜', bB: '♝', bN: '♞', bP: '♟'
+    };
+
+    const PIECE_VALUES = { P: 1, N: 3, B: 3, R: 5, Q: 9, K: 100 };
+
+    const LEVEL_META = {
+      easy: {
+        label: 'ഈസി',
+        color: '#4ade80',
+        depth: 1,
+        skillLevel: 2,
+        guide: '<strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം.'
+      },
+      medium: {
+        label: 'മീഡിയം',
+        color: '#facc15',
+        depth: 2,
+        skillLevel: 10,
+        guide: '<strong>മീഡിയം ലെവൽ:</strong> സാധാരണ കളിക്കാർക്ക് നല്ലൊരു വെല്ലുവിളി. കരുക്കൾ സംരക്ഷിക്കാനും കെണികൾ തിരിച്ചറിയാനും സഹായിക്കും.'
+      },
+      hard: {
+        label: 'ഹാർഡ്',
+        color: '#f87171',
+        depth: 3,
+        skillLevel: 20,
+        guide: '<strong>ഹാർഡ് ലെവൽ:</strong> കടുത്ത മത്സരം ഇഷ്ടപ്പെടുന്നവർക്കായി Stockfish കരുത്തുറ്റ നീക്കങ്ങളോടെ കളിക്കും.'
+      }
+    };
+
+    let currentLevel = 'easy';
+    let boardState = [];
+    let selectedSquare = null;
+    let validMovesForSelected = [];
+    let moveHistory = [];
+    let lastMove = null;
+    let isPlayerTurn = true;
+    let gameOver = false;
+
+    function createInitialBoard() {
+      return [
+        ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+        ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+        ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+      ];
+    }
+
+    function setChessLevel(level) {
+      if (!LEVEL_META[level]) return;
+      currentLevel = level;
+      document.querySelectorAll('.lvl-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.level === level);
+      });
+      const meta = LEVEL_META[level];
+      const lvlTextEl = document.getElementById('currentLevelText');
+      lvlTextEl.innerText = `ലെവൽ: ${meta.label}`;
+      lvlTextEl.style.color = meta.color;
+      document.getElementById('activeLevelGuide').innerHTML = meta.guide;
+
+      // ബാഹ്യ Stockfish Worker / Engine ഉണ്ടെങ്കിൽ ലെവൽ അപ്ഡേറ്റ് ചെയ്യാം
+      if (window.stockfishEngine && typeof window.stockfishEngine.postMessage === 'function') {
+        window.stockfishEngine.postMessage(`setoption name Skill Level value ${meta.skillLevel}`);
+      }
+    }
+
+    function resetChessGame() {
+      boardState = createInitialBoard();
+      selectedSquare = null;
+      validMovesForSelected = [];
+      moveHistory = [];
+      lastMove = null;
+      isPlayerTurn = true;
+      gameOver = false;
+      updateStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+      renderBoard();
+    }
+
+    function updateStatus(text) {
+      document.getElementById('gameStatusText').innerText = text;
+    }
+
+    function inBounds(r, c) {
+      return r >= 0 && r < 8 && c >= 0 && c < 8;
+    }
+
+    function getPieceMoves(board, r, c) {
+      const piece = board[r][c];
+      if (!piece) return [];
+      const color = piece[0];
+      const type = piece[1];
+      const moves = [];
+
+      const addIfValid = (nr, nc) => {
+        if (!inBounds(nr, nc)) return false;
+        const target = board[nr][nc];
+        if (!target) {
+          moves.push({ r: nr, c: nc });
+          return true;
+        }
+        if (target[0] !== color) {
+          moves.push({ r: nr, c: nc });
+        }
+        return false;
+      };
+
+      if (type === 'P') {
+        const dir = color === 'w' ? -1 : 1;
+        const startRow = color === 'w' ? 6 : 1;
+        if (inBounds(r + dir, c) && !board[r + dir][c]) {
+          moves.push({ r: r + dir, c });
+          if (r === startRow && !board[r + 2 * dir][c]) {
+            moves.push({ r: r + 2 * dir, c });
+          }
+        }
+        [-1, 1].forEach(dc => {
+          const nc = c + dc;
+          const nr = r + dir;
+          if (inBounds(nr, nc) && board[nr][nc] && board[nr][nc][0] !== color) {
+            moves.push({ r: nr, c: nc });
+          }
+        });
+      } else if (type === 'N') {
+        const jumps = [
+          [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+          [1, -2], [1, 2], [2, -1], [2, 1]
+        ];
+        jumps.forEach(([dr, dc]) => addIfValid(r + dr, c + dc));
+      } else if (type === 'B' || type === 'R' || type === 'Q') {
+        const dirs = [];
+        if (type === 'B' || type === 'Q') dirs.push([-1, -1], [-1, 1], [1, -1], [1, 1]);
+        if (type === 'R' || type === 'Q') dirs.push([-1, 0], [1, 0], [0, -1], [0, 1]);
+        dirs.forEach(([dr, dc]) => {
+          let nr = r + dr;
+          let nc = c + dc;
+          while (addIfValid(nr, nc)) {
+            nr += dr;
+            nc += dc;
+          }
+        });
+      } else if (type === 'K') {
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (dr !== 0 || dc !== 0) addIfValid(r + dr, c + dc);
+          }
+        }
+      }
+
+      return moves;
+    }
+
+    function getAllMovesForColor(board, color) {
+      const all = [];
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (board[r][c] && board[r][c][0] === color) {
+            const mList = getPieceMoves(board, r, c);
+            mList.forEach(m => {
+              all.push({ fromR: r, fromC: c, toR: m.r, toC: m.c });
+            });
+          }
+        }
+      }
+      return all;
+    }
+
+    function executeMove(fromR, fromC, toR, toC) {
+      const piece = boardState[fromR][fromC];
+      const captured = boardState[toR][toC];
+      moveHistory.push({
+        fromR, fromC, toR, toC,
+        piece,
+        captured,
+        lastMove: lastMove ? { ...lastMove } : null
+      });
+
+      boardState[toR][toC] = piece;
+      boardState[fromR][fromC] = null;
+
+      // കാലാൾ അവസാന നിരയിൽ എത്തിയാൽ രാജ്ഞിയായി പ്രൊമോട്ട് ചെയ്യുന്നു
+      if (piece === 'wP' && toR === 0) boardState[toR][toC] = 'wQ';
+      if (piece === 'bP' && toR === 7) boardState[toR][toC] = 'bQ';
+
+      lastMove = { fromR, fromC, toR, toC };
+
+      if (captured && captured[1] === 'K') {
+        gameOver = true;
+        updateStatus(piece[0] === 'w' ? '🎉 നിങ്ങൾ വിജയിച്ചു!' : '🤖 Stockfish വിജയിച്ചു!');
+        renderBoard();
+        return;
+      }
+      renderBoard();
+    }
+
+    function undoLastMove() {
+      if (moveHistory.length === 0 || !isPlayerTurn) return;
+      // കളിക്കാരന്റെയും എഞ്ചിന്റെയും അവസാന നീക്കങ്ങൾ തിരികെ എടുക്കുന്നു
+      const steps = moveHistory.length >= 2 && moveHistory[moveHistory.length - 1].piece[0] === 'b' ? 2 : 1;
+      for (let i = 0; i < steps; i++) {
+        const prev = moveHistory.pop();
+        if (!prev) break;
+        boardState[prev.fromR][prev.fromC] = prev.piece;
+        boardState[prev.toR][prev.toC] = prev.captured;
+        lastMove = prev.lastMove;
+      }
+      gameOver = false;
+      selectedSquare = null;
+      validMovesForSelected = [];
+      isPlayerTurn = true;
+      updateStatus('നീക്കം മാറ്റി — നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+      renderBoard();
+    }
+
+    function evaluateBoard(board) {
+      let score = 0;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = board[r][c];
+          if (!p) continue;
+          const val = PIECE_VALUES[p[1]] || 0;
+          score += p[0] === 'b' ? val : -val;
+        }
+      }
+      return score;
+    }
+
+    function pickEngineMove() {
+      const moves = getAllMovesForColor(boardState, 'b');
+      if (moves.length === 0) {
+        gameOver = true;
+        updateStatus('🎉 നിങ്ങൾ വിജയിച്ചു!');
+        return null;
+      }
+
+      if (currentLevel === 'easy') {
+        return moves[Math.floor(Math.random() * moves.length)];
+      }
+
+      let bestMove = moves[0];
+      let bestScore = -Infinity;
+
+      moves.forEach(m => {
+        const target = boardState[m.toR][m.toC];
+        const captureBonus = target ? (PIECE_VALUES[target[1]] || 0) * 2 : 0;
+        const centerBonus = (3.5 - Math.abs(3.5 - m.toR)) + (3.5 - Math.abs(3.5 - m.toC));
+        const noise = currentLevel === 'medium' ? Math.random() * 2.5 : Math.random() * 0.4;
+        const score = captureBonus + centerBonus * 0.25 + noise;
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = m;
+        }
+      });
+
+      return bestMove;
+    }
+
+    // പുറത്തുനിന്നുള്ള Stockfish എഞ്ചിൻ UCI നീക്കം അയച്ചാൽ പ്രയോഗിക്കാൻ ഈ ഫംഗ്ഷൻ ഉപയോഗിക്കാം
+    window.applyStockfishMove = function(fromR, fromC, toR, toC) {
+      if (gameOver) return;
+      executeMove(fromR, fromC, toR, toC);
+      if (!gameOver) {
+        isPlayerTurn = true;
+        updateStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+      }
+    };
+
+    function triggerEngineTurn() {
+      isPlayerTurn = false;
+      updateStatus(`🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`);
+
+      // കളിക്കാരൻ നീക്കം നടത്തിയ വിവരം പുറത്തുള്ള Stockfish സ്ക്രിപ്റ്റിലേക്ക് അറിയിക്കാനുള്ള ഹുക്ക്
+      if (typeof window.onChessMoveMade === 'function') {
+        window.onChessMoveMade({
+          board: boardState,
+          level: currentLevel,
+          skillLevel: LEVEL_META[currentLevel].skillLevel,
+          lastMove
+        });
+      }
+
+      setTimeout(() => {
+        if (gameOver) return;
+        const move = pickEngineMove();
+        if (move) {
+          executeMove(move.fromR, move.fromC, move.toR, move.toC);
+          if (!gameOver) {
+            isPlayerTurn = true;
+            updateStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+          }
+        }
+      }, 350);
+    }
+
+    function handleSquareClick(r, c) {
+      if (!isPlayerTurn || gameOver) return;
+
+      const clickedValid = validMovesForSelected.find(m => m.r === r && m.c === c);
+      if (clickedValid && selectedSquare) {
+        const { r: fromR, c: fromC } = selectedSquare;
+        selectedSquare = null;
+        validMovesForSelected = [];
+        executeMove(fromR, fromC, r, c);
+        if (!gameOver) {
+          triggerEngineTurn();
+        }
+        return;
+      }
+
+      const piece = boardState[r][c];
+      if (piece && piece[0] === 'w') {
+        selectedSquare = { r, c };
+        validMovesForSelected = getPieceMoves(boardState, r, c);
+      } else {
+        selectedSquare = null;
+        validMovesForSelected = [];
+      }
+      renderBoard();
+    }
+
+    function renderBoard() {
+      const boardEl = document.getElementById('chessBoard');
+      boardEl.innerHTML = '';
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const sq = document.createElement('div');
+          const isLight = (r + c) % 2 === 0;
+          sq.className = `square ${isLight ? 'light' : 'dark'}`;
+
+          if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
+            sq.classList.add('selected');
+          }
+          if (validMovesForSelected.some(m => m.r === r && m.c === c)) {
+            sq.classList.add('valid-move');
+          }
+          if (lastMove && ((lastMove.fromR === r && lastMove.fromC === c) || (lastMove.toR === r && lastMove.toC === c))) {
+            sq.classList.add('last-move');
+          }
+
+          const pieceCode = boardState[r][c];
+          if (pieceCode) {
+            sq.textContent = PIECES[pieceCode] || '';
+          }
+
+          sq.onclick = () => handleSquareClick(r, c);
+          boardEl.appendChild(sq);
+        }
+      }
+    }
+
+    resetChessGame();
+    setChessLevel('easy');
+  </script>
+</body>
+</html>
