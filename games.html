@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>നാട്ടുകൂട്ടം ഗെയിംസ് അരീന - കോളയാട് കണക്ട്</title>
-  <!-- Chess.js for Official Rules -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
   <style>
     :root {
       --bg-body: #070b19;
@@ -310,20 +308,6 @@
     .face-4 { transform: rotateY(-90deg) translateZ(25px); }
     .face-5 { transform: rotateX(90deg) translateZ(25px); }
     .face-6 { transform: rotateX(-90deg) translateZ(25px); }
-
-    /* 3D Chess Sleek Pieces Styling */
-    .chess-3d-square {
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 26px;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: transform 0.15s ease, background-color 0.15s ease;
-      text-shadow: 0 3px 6px rgba(0,0,0,0.6);
-    }
-    .chess-3d-square:active { transform: scale(0.92); }
   </style>
 </head>
 <body>
@@ -351,26 +335,26 @@
       <button class="play-btn" onclick="openSetup('ludo')">കളിക്കുക</button>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" style="border-color: rgba(250, 204, 21, 0.55);">
       <div class="game-card-left">
         <div class="game-icon-badge">♟️</div>
         <div class="game-card-info">
-          <h3 style="color: #38bdf8;">ചെസ്സ് (3D 2-Player Local)</h3>
-          <p>ഔദ്യോഗിക നിയമങ്ങളും 3D കരിക്കളും</p>
+          <h3 style="color: #fde047;">ചെസ്സ് (ഈസി / മീഡിയം / ഹാർഡ്)</h3>
+          <p>പഠന ടിപ്പുകളും കൂട്ടുകാർക്ക് അയക്കാം ലിങ്കും ചേർന്ന പുതിയ ചെസ്സ് പേജ്</p>
         </div>
       </div>
-      <button class="play-btn" onclick="openGame('chess')">കളിക്കുക</button>
+      <a href="chess-stockfish.html" class="play-btn" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a;">കളിക്കുക</a>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" style="border-color: rgba(56, 189, 248, 0.45);">
       <div class="game-card-left">
-        <div class="game-icon-badge">🔥</div>
+        <div class="game-icon-badge">🤖</div>
         <div class="game-card-info">
-          <h3 style="color: #f87171;">ചെസ്സ് Vs കമ്പ്യൂട്ടർ (3D AI)</h3>
-          <p>മുന്നിൽ കാണുന്ന തന്ത്രശാലിയായ ബോട്ട്</p>
+          <h3 style="color: #38bdf8;">സ്റ്റോക്ക് ഫിഷ് ചെസ്സ്</h3>
+          <p>നിലവിലുള്ള സ്റ്റോക്ക് ഫിഷ് ചെസ്സ് പേജ്</p>
         </div>
       </div>
-      <button class="play-btn" onclick="openGame('chessAI')" style="background: linear-gradient(135deg, #dc2626, #991b1b);">കളിക്കുക</button>
+      <a href="stockfish.html" class="play-btn">കളിക്കുക</a>
     </div>
 
     <div class="game-card" style="border-color: rgba(224, 138, 75, 0.55);">
@@ -393,28 +377,6 @@
         </div>
       </div>
       <button class="play-btn" onclick="openSetup('snakes')">കളിക്കുക</button>
-    </div>
-
-    <div class="game-card">
-      <div class="game-card-left">
-        <div class="game-icon-badge">♟️</div>
-        <div class="game-card-info">
-          <h3 style="color: #38bdf8;">ചെസ്സ് (2-Player Local)</h3>
-          <p>ഔദ്യോഗിക നിയമങ്ങളും പ്രത്യേക ചെസ്സ് പേജും</p>
-        </div>
-      </div>
-      <a href="chess.html?mode=2p" class="play-btn">കളിക്കുക</a>
-    </div>
-
-    <div class="game-card">
-      <div class="game-card-left">
-        <div class="game-icon-badge">🤖</div>
-        <div class="game-card-info">
-          <h3 style="color: #f87171;">ചെസ്സ് Vs കമ്പ്യൂട്ടർ (AI)</h3>
-          <p>കരുത്തുറ്റ AI ലെവലുകൾ (Easy / Medium / Risk Pro)</p>
-        </div>
-      </div>
-      <a href="chess.html?mode=ai" class="play-btn" style="background: linear-gradient(135deg, #dc2626, #991b1b);">കളിക്കുക</a>
     </div>
 
     <div class="game-card" style="border-color: rgba(250, 204, 21, 0.55);">
@@ -549,30 +511,6 @@
         `;
         initLudoGame();
       } 
-      else if(type === 'chess') {
-        titleEl.innerText = '♟️ 3D ക്ലാസിക് ചെസ്സ് (2-Player)';
-        container.innerHTML = `
-          <div style="text-align: center; width: 100%; max-width: 380px;">
-            <p id="chessStatus" style="font-size: 16px; color: #facc15; margin-bottom: 8px; font-weight: 900;">വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ</p>
-            <div id="chessBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #0f172a; padding: 8px; border-radius: 14px; border: 2.5px solid #38bdf8; margin-bottom: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-            </div>
-            <button onclick="initChessGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;">പുതിയ കളി (Reset)</button>
-          </div>
-        `;
-        initChessGame();
-      }
-      else if(type === 'chessAI') {
-        titleEl.innerText = '🔥 3D ചെസ്സ് Vs കമ്പ്യൂട്ടർ (AI)';
-        container.innerHTML = `
-          <div style="text-align: center; width: 100%; max-width: 380px;">
-            <p id="chessAIStatus" style="font-size: 16px; color: #facc15; margin-bottom: 8px; font-weight: 900;">നിങ്ങളുടെ ടേൺ (White)</p>
-            <div id="chessAIBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #0f172a; padding: 8px; border-radius: 14px; border: 2.5px solid #dc2626; margin-bottom: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-            </div>
-            <button onclick="initChessAIGame()" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;">പുതിയ കളി (Reset)</button>
-          </div>
-        `;
-        initChessAIGame();
-      }
       else if(type === 'snakes') {
         titleEl.innerText = `🐍 3D ഏണിയും പാമ്പും (${selectedPlayerCount}-Player)`;
         container.innerHTML = `
@@ -719,226 +657,6 @@
         updateLudoUI();
         isLudoRolling = false;
       }, 700);
-    }
-
-    // --- CHESS 2-PLAYER LOGIC ---
-    let game = null;
-    let chessSelectedSquare = null;
-    const pieceSymbols = {
-      'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
-      'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
-    };
-
-    function initChessGame() {
-      game = new Chess();
-      chessSelectedSquare = null;
-      updateChessStatus();
-      renderChessBoard();
-    }
-
-    function renderChessBoard() {
-      let boardEl = document.getElementById('chessBoard');
-      let boardHtml = '';
-      let board = game.board();
-      const squareNames = ['a8','b8','c8','d8','e8','f8','g8','h8',
-                           'a7','b7','c7','d7','e7','f7','g7','h7',
-                           'a6','b6','c6','d6','e6','f6','g6','h6',
-                           'a5','b5','c5','d5','e5','f5','g5','h5',
-                           'a4','b4','c4','d4','e4','f4','g4','h4',
-                           'a3','b3','c3','d3','e3','f3','g3','h3',
-                           'a2','b2','c2','d2','e2','f2','g2','h2',
-                           'a1','b1','c1','d1','e1','f1','g1','h1'];
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          let sqIndex = r * 8 + c;
-          let sqName = squareNames[sqIndex];
-          let isDark = (r + c) % 2 === 1;
-          let bg = isDark ? 'linear-gradient(135deg, #1e293b, #0f172a)' : 'linear-gradient(135deg, #475569, #334155)';
-
-          if (chessSelectedSquare === sqName) bg = 'linear-gradient(135deg, #2563eb, #1d4ed8)';
-
-          let piece = board[r][c];
-          let pieceChar = '';
-          let pieceStyle = '';
-          if (piece) {
-            let symbolKey = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
-            pieceChar = pieceSymbols[symbolKey] || '';
-            pieceStyle = piece.color === 'w' ? 'color: #f8fafc;' : 'color: #cbd5e1;';
-          }
-          boardHtml += `<div class="chess-3d-square" onclick="handleChessSquareClick('${sqName}')" style="background: ${bg};"><span style="${pieceStyle}">${pieceChar}</span></div>`;
-        }
-      }
-      boardEl.innerHTML = boardHtml;
-    }
-
-    function handleChessSquareClick(sq) {
-      if (!chessSelectedSquare) {
-        let piece = game.get(sq);
-        if (piece && piece.color === game.turn()) {
-          chessSelectedSquare = sq;
-          renderChessBoard();
-        }
-      } else {
-        if (chessSelectedSquare === sq) {
-          chessSelectedSquare = null;
-          renderChessBoard();
-        } else {
-          let move = game.move({ from: chessSelectedSquare, to: sq, promotion: 'q' });
-          chessSelectedSquare = null;
-          if (move === null) {
-            let piece = game.get(sq);
-            if (piece && piece.color === game.turn()) chessSelectedSquare = sq;
-          }
-          renderChessBoard();
-          updateChessStatus();
-        }
-      }
-    }
-
-    function updateChessStatus() {
-      let statusEl = document.getElementById('chessStatus');
-      let turnText = game.turn() === 'w' ? 'വെളുപ്പ് (White) കളിക്കാരുടെ ടേൺ' : 'കറുപ്പ് (Black) കളിക്കാരുടെ ടേൺ';
-      if (game.in_checkmate()) turnText = `🏁 ചെക്ക്മേറ്റ്! ${game.turn() === 'w' ? 'കറുപ്പ്' : 'വെളുപ്പ്'} വിജയിച്ചു!`;
-      else if (game.in_draw()) turnText = `🤝 കളി സമനിലയിൽ!`;
-      else if (game.in_check()) turnText += ' ⚠️ (ചെക്ക്!)';
-      statusEl.innerText = turnText;
-    }
-
-    // --- CHESS AI ENGINE ---
-    let aiGame = null;
-    let aiSelectedSquare = null;
-    let lastAIMoveSquares = [];
-
-    function getPieceValue(piece, x, y) {
-      if (!piece) return 0;
-      let val = piece.type === 'p' ? 10 : piece.type === 'r' ? 50 : piece.type === 'n' ? 30 : piece.type === 'b' ? 30 : piece.type === 'q' ? 90 : 900;
-      return piece.color === 'w' ? val : -val;
-    }
-
-    function evaluateBoard(board) {
-      let total = 0;
-      for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++) total += getPieceValue(board[i][j], j, i);
-      return total;
-    }
-
-    function minimax(depth, gameInstance, alpha, beta, isMax) {
-      if (depth === 0 || gameInstance.game_over()) return -evaluateBoard(gameInstance.board());
-      let moves = gameInstance.moves({ verbose: true });
-      if (isMax) {
-        let maxEval = -999999;
-        for (let m of moves) {
-          gameInstance.move(m);
-          let evaluation = minimax(depth - 1, gameInstance, alpha, beta, false);
-          gameInstance.undo();
-          maxEval = Math.max(maxEval, evaluation);
-          alpha = Math.max(alpha, evaluation);
-          if (beta <= alpha) break;
-        }
-        return maxEval;
-      } else {
-        let minEval = 999999;
-        for (let m of moves) {
-          gameInstance.move(m);
-          let evaluation = minimax(depth - 1, gameInstance, alpha, beta, true);
-          gameInstance.undo();
-          minEval = Math.min(minEval, evaluation);
-          beta = Math.min(beta, evaluation);
-          if (beta <= alpha) break;
-        }
-        return minEval;
-      }
-    }
-
-    function getBestAIMove() {
-      let moves = aiGame.moves({ verbose: true });
-      if (!moves.length) return null;
-      let bestMove = moves[0];
-      let bestVal = -999999;
-      for (let m of moves) {
-        aiGame.move(m);
-        let val = minimax(3, aiGame, -1000000, 1000000, false);
-        aiGame.undo();
-        if (val > bestVal) {
-          bestVal = val;
-          bestMove = m;
-        }
-      }
-      return bestMove;
-    }
-
-    function initChessAIGame() {
-      aiGame = new Chess();
-      aiSelectedSquare = null;
-      lastAIMoveSquares = [];
-      updateAIStatus();
-      renderAIBoard();
-    }
-
-    function renderAIBoard() {
-      let boardEl = document.getElementById('chessAIBoard');
-      let boardHtml = '';
-      let board = aiGame.board();
-      const squareNames = ['a8','b8','c8','d8','e8','f8','g8','h8','a7','b7','c7','d7','e7','f7','g7','h7','a6','b6','c6','d6','e6','f6','g6','h6','a5','b5','c5','d5','e5','f5','g5','h5','a4','b4','c4','d4','e4','f4','g4','h4','a3','b3','c3','d3','e3','f3','g3','h3','a2','b2','c2','d2','e2','f2','g2','h2','a1','b1','c1','d1','e1','f1','g1','h1'];
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          let sqIndex = r * 8 + c;
-          let sqName = squareNames[sqIndex];
-          let isDark = (r + c) % 2 === 1;
-          let bg = isDark ? 'linear-gradient(135deg, #1e293b, #0f172a)' : 'linear-gradient(135deg, #475569, #334155)';
-
-          if (aiSelectedSquare === sqName) bg = 'linear-gradient(135deg, #dc2626, #991b1b)';
-
-          let piece = board[r][c];
-          let pieceChar = '';
-          let pieceStyle = '';
-          if (piece) {
-            let symbolKey = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
-            pieceChar = pieceSymbols[symbolKey] || '';
-            pieceStyle = piece.color === 'w' ? 'color: #f8fafc;' : 'color: #cbd5e1;';
-          }
-          boardHtml += `<div class="chess-3d-square" onclick="handleAISquareClick('${sqName}')" style="background: ${bg};"><span style="${pieceStyle}">${pieceChar}</span></div>`;
-        }
-      }
-      boardEl.innerHTML = boardHtml;
-    }
-
-    function handleAISquareClick(sq) {
-      if (aiGame.turn() !== 'w') return;
-      if (!aiSelectedSquare) {
-        let piece = aiGame.get(sq);
-        if (piece && piece.color === 'w') { aiSelectedSquare = sq; renderAIBoard(); }
-      } else {
-        if (aiSelectedSquare === sq) { aiSelectedSquare = null; renderAIBoard(); }
-        else {
-          let move = aiGame.move({ from: aiSelectedSquare, to: sq, promotion: 'q' });
-          aiSelectedSquare = null;
-          if (!move) {
-            let piece = aiGame.get(sq);
-            if (piece && piece.color === 'w') aiSelectedSquare = sq;
-          }
-          renderAIBoard();
-          updateAIStatus();
-
-          if (!aiGame.game_over() && aiGame.turn() === 'b') {
-            document.getElementById('chessAIStatus').innerText = 'ബോട്ട് ചിന്തിക്കുന്നു... 🔥';
-            setTimeout(() => {
-              let bm = getBestAIMove();
-              if (bm) aiGame.move(bm);
-              renderAIBoard();
-              updateAIStatus();
-            }, 150);
-          }
-        }
-      }
-    }
-
-    function updateAIStatus() {
-      let statusEl = document.getElementById('chessAIStatus');
-      let turnText = aiGame.turn() === 'w' ? 'നിങ്ങളുടെ ടേൺ (White)' : 'കമ്പ്യൂട്ടർ കളിക്കുന്നു... 🔥';
-      if (aiGame.in_checkmate()) turnText = aiGame.turn() === 'w' ? '🏁 ബോട്ട് വിജയിച്ചു!' : '🎉 അതിഗംഭീരം! നിങ്ങൾ വിജയിച്ചു!';
-      statusEl.innerText = turnText;
     }
 
     // --- 3D SNAKES & LADDERS LOGIC ---
