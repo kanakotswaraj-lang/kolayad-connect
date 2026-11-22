@@ -31,7 +31,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       border-bottom: 2px solid var(--border-color);
       position: sticky;
       top: 0;
@@ -41,16 +41,28 @@
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #38bdf8;
       border: 1.5px solid #38bdf8;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 10px;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .sound-btn {
+      background: #1e293b;
+      color: #4ade80;
+      border: 1.5px solid #4ade80;
+      padding: 6px 9px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
       white-space: nowrap;
     }
     .header-title {
       margin: 0;
-      font-size: 15.5px;
+      font-size: 15px;
       font-weight: 900;
       color: var(--accent-gold);
       text-align: center;
@@ -409,9 +421,9 @@
 <body>
 
   <div class="header">
-    <a href="games.html" class="back-btn">← ഗെയിംസ്</a>
+    <a href="index.html" class="back-btn">← ഹോം</a>
     <h1 class="header-title" id="pageTitle">♟️ 3D ചെസ്സ് അരീന</h1>
-    <a href="chess-guide.html" class="back-btn" style="color:#facc15;border-color:#facc15;">പഠിക്കാം</a>
+    <button type="button" id="soundToggleBtn" class="sound-btn" onclick="toggleSound()">🔊 ഓൺ</button>
   </div>
 
   <div class="chess-page-wrap">
@@ -463,6 +475,19 @@
   </div>
 
   <script>
+    // ഫോണിന്റെ ബാക്ക് ബട്ടൺ അമർത്തുമ്പോൾ കോളയാട് കണക്ട് index.html-ലേക്ക് പോകാൻ
+    (function setupIndexBackNavigation() {
+      try {
+        if (window.history && window.history.pushState) {
+          window.history.pushState({ chessArena: true }, '', window.location.href);
+          window.addEventListener('popstate', function () {
+            window.location.replace('index.html');
+          });
+        }
+      } catch (e) {}
+    })();
+
+    // വാട്‌സാപ്പ് ക്ഷണ സന്ദേശം
     (function setupWhatsAppInvite() {
       const shareUrl = window.location.href;
       const msg =
@@ -478,6 +503,74 @@
         btn.href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
       }
     })();
+
+    // ശബ്ദ സംവിധാനം (Web Audio API)
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function unlockAudio() {
+      try {
+        if (!audioCtx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) audioCtx = new AudioCtx();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(() => {});
+        }
+      } catch (e) {}
+      return audioCtx;
+    }
+
+    function playTone(ctx, startOffset, duration, startFreq, endFreq, waveType, gainVal) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + startOffset;
+      osc.type = waveType;
+      osc.frequency.setValueAtTime(startFreq, t0);
+      if (endFreq && endFreq !== startFreq) {
+        osc.frequency.exponentialRampToValueAtTime(endFreq, t0 + duration);
+      }
+      gain.gain.setValueAtTime(gainVal, t0);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + duration + 0.01);
+    }
+
+    function playSound(kind) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = unlockAudio();
+        if (!ctx) return;
+        if (kind === 'capture') {
+          playTone(ctx, 0.01, 0.16, 390, 120, 'triangle', 0.35);
+        } else if (kind === 'check') {
+          playTone(ctx, 0.01, 0.11, 587.33, 587.33, 'triangle', 0.35);
+          playTone(ctx, 0.13, 0.16, 783.99, 783.99, 'triangle', 0.35);
+        } else if (kind === 'win') {
+          playTone(ctx, 0.01, 0.12, 523.25, 523.25, 'triangle', 0.35);
+          playTone(ctx, 0.14, 0.12, 659.25, 659.25, 'triangle', 0.35);
+          playTone(ctx, 0.27, 0.22, 783.99, 783.99, 'triangle', 0.38);
+        } else {
+          playTone(ctx, 0.01, 0.1, 320, 520, 'triangle', 0.32);
+        }
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      if (btn) {
+        btn.innerText = soundEnabled ? '🔊 ഓൺ' : '🔇 ഓഫ്';
+        btn.style.color = soundEnabled ? '#4ade80' : '#f87171';
+        btn.style.borderColor = soundEnabled ? '#4ade80' : '#f87171';
+      }
+      if (soundEnabled) {
+        unlockAudio();
+        playSound('move');
+      }
+    }
 
     const pieceGlyphs = {
       p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
@@ -768,6 +861,7 @@
 
     function goNextLevel() {
       if (aiThinking) return;
+      unlockAudio();
       currentLevelIndex = (currentLevelIndex + 1) % aiLevels.length;
       syncLevelUI();
       resetGame();
@@ -791,6 +885,7 @@
     }
 
     function switchMode(newMode) {
+      unlockAudio();
       mode = newMode;
       syncModeButtons();
       resetGame();
@@ -918,6 +1013,7 @@
         if (!gameOverShown) {
           gameOverShown = true;
           const isHumanWin = (chess.turn() !== 'w');
+          playSound(isHumanWin ? 'win' : 'check');
           showResultModal(
             isHumanWin ? '🏆' : '🤖',
             `${winner} വിജയിച്ചു!`,
@@ -953,6 +1049,7 @@
     }
 
     async function onSquareClick(sq) {
+      unlockAudio();
       if (aiThinking || chess.game_over()) return;
       if (mode === 'ai' && (engineLoading || chess.turn() !== 'w')) return;
 
@@ -987,6 +1084,12 @@
         else blackCaptured.push(move.captured);
       }
 
+      if (!chess.game_over()) {
+        if (chess.in_check()) playSound('check');
+        else if (move.captured) playSound('capture');
+        else playSound('move');
+      }
+
       renderAll();
 
       if (!chess.game_over() && mode === 'ai' && chess.turn() === 'b') {
@@ -1006,6 +1109,11 @@
           if (exec) {
             lastMoveInfo = { from: exec.from, to: exec.to };
             if (exec.captured) blackCaptured.push(exec.captured);
+            if (!chess.game_over()) {
+              if (chess.in_check()) playSound('check');
+              else if (exec.captured) playSound('capture');
+              else playSound('move');
+            }
           }
         }
 
@@ -1016,6 +1124,7 @@
 
     function undoMove() {
       if (aiThinking) return;
+      unlockAudio();
       if (engine && engineReady) engine.postMessage('stop');
       pendingMoveResolver = null;
       gameOverShown = false;
