@@ -164,6 +164,22 @@
       font-weight: 900;
     }
 
+        .status-bar.game-won {
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.28), rgba(34, 197, 94, 0.28));
+      border: 2px solid #facc15;
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.55);
+      animation: winGlow 0.75s infinite alternate;
+    }
+    .status-bar.game-won .turn-text {
+      color: #fde047;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    @keyframes winGlow {
+      from { transform: scale(0.99); box-shadow: 0 0 10px rgba(250, 204, 21, 0.4); }
+      to { transform: scale(1.01); box-shadow: 0 0 22px rgba(74, 222, 128, 0.75); }
+    }
+
     .board-controls {
       display: flex;
       gap: 8px;
@@ -524,12 +540,14 @@
       renderBoard();
     }
 
-    function updateTurnStatus(text, isCheck = false) {
+        function updateTurnStatus(text, isCheck = false, isWon = false) {
       const statusBar = document.getElementById('statusBar');
       const statusText = document.getElementById('gameStatusText');
       statusText.innerText = text;
       statusBar.classList.toggle('in-check', Boolean(isCheck));
+      statusBar.classList.toggle('game-won', Boolean(isWon));
     }
+
 
     function inBounds(r, c) {
       return r >= 0 && r < 8 && c >= 0 && c < 8;
@@ -674,13 +692,14 @@
       const nextLegalMoves = getAllLegalMovesForColor(boardState, nextTurnColor);
       if (nextLegalMoves.length === 0) {
         gameOver = true;
-        if (nextTurnColor === 'b' && blackCheck) {
+                if (nextTurnColor === 'b' && blackCheck) {
           playChessSound('capture');
-          updateTurnStatus('🎉 ചെക്ക്‌മേറ്റ്! നിങ്ങൾ വിജയിച്ചു!', false);
+          updateTurnStatus('🎉 ചെക്ക്‌മേറ്റ്! നിങ്ങൾ വിജയിച്ചു!', false, true);
         } else if (nextTurnColor === 'w' && whiteCheck) {
           playChessSound('check');
-          updateTurnStatus('🤖 ചെക്ക്‌മേറ്റ്! കളി അവസാനിച്ചു.', false);
-        } else {
+          updateTurnStatus('🤖 ചെക്ക്‌മേറ്റ്! കളി അവസാനിച്ചു.', false, false);
+        }
+
           updateTurnStatus('🤝 സമനില (Stalemate)!', false);
         }
         return;
@@ -754,14 +773,20 @@
       const legalMoves = getAllLegalMovesForColor(boardState, 'b');
       if (legalMoves.length === 0) return null;
 
-      if (currentLevel === 'easy') {
-        const nonKingMoves = legalMoves.filter(m => {
+            if (currentLevel === 'easy') {
+        const nonKingMoves = candidateMoves.filter(m => {
           const p = boardState[m.fromR][m.fromC];
           return p && p[1] !== 'K';
         });
-        const pool = nonKingMoves.length > 0 ? nonKingMoves : legalMoves;
+        const pool = currentlyInCheck ? candidateMoves : (nonKingMoves.length > 0 ? nonKingMoves : candidateMoves);
+
+        const captureMoves = pool.filter(m => boardState[m.toR][m.toC] !== null);
+        if (!currentlyInCheck && captureMoves.length > 0 && Math.random() < 0.38) {
+          return captureMoves[Math.floor(Math.random() * captureMoves.length)];
+        }
         return pool[Math.floor(Math.random() * pool.length)];
       }
+
 
       let bestMove = legalMoves[0];
       let bestScore = -Infinity;
