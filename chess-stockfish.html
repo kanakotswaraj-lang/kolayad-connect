@@ -78,7 +78,7 @@
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
     }
 
-    /* ലെവൽ സെലക്ടർ (ഈസി / മീഡിയം / ഹാർഡ്) */
+    /* ലെവൽ സെലക്ടർ */
     .level-box {
       background: rgba(30, 41, 59, 0.72);
       border: 1.5px solid rgba(45, 212, 191, 0.32);
@@ -181,7 +181,7 @@
     .btn-undo { background: #334155; color: #f8fafc; }
     .btn-restart { background: linear-gradient(135deg, #2dd4bf, #0d9488); color: #042f2e; }
 
-    /* പുതിയ ടീൽ & ക്രീം ചെസ്സ് ബോർഡ് */
+    /* ടീൽ & ക്രീം ചെസ്സ് ബോർഡ് */
     .board-wrapper {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -196,20 +196,17 @@
       box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
     }
     .square {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: 1fr auto;
       align-items: center;
-      justify-content: center;
+      justify-items: center;
       cursor: pointer;
       position: relative;
-      line-height: 1;
-      padding: 1px;
+      padding: 2px 1px 2px;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
-      transition: transform 0.1s ease;
     }
-    .square:active { transform: scale(0.96); }
     .square.light {
       background: linear-gradient(145deg, #fffbeb, #fde68a);
     }
@@ -226,10 +223,10 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: rgba(56, 189, 248, 0.9);
+      background: rgba(56, 189, 248, 0.92);
       border: 2px solid #ffffff;
       position: absolute;
-      bottom: 3px;
+      top: 3px;
       right: 3px;
     }
     .square.last-move {
@@ -246,18 +243,19 @@
       to { box-shadow: inset 0 0 18px #ffffff; }
     }
 
-    /* ഗ്രേഡിയന്റ് കരുക്കൾ & അടയാളം */
-        .piece-symbol {
-      font-size: clamp(25px, 7vw, 40px);
+    /* കരുക്കൾ & അടയാളം */
+    .piece-symbol {
+      font-size: clamp(24px, 6.8vw, 39px);
       font-weight: 900;
       line-height: 1;
       display: inline-block;
+      align-self: center;
     }
     .piece-symbol.white-piece {
       color: #ffffff;
       -webkit-text-fill-color: #ffffff;
-      -webkit-text-stroke: 1.6px #0f172a;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95);
+      -webkit-text-stroke: 1.7px #0f172a;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
     }
     .piece-symbol.black-piece {
       background-image: linear-gradient(135deg, #c084fc 0%, #7c3aed 55%, #312e81 100%);
@@ -265,16 +263,15 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       -webkit-text-stroke: 1.3px #ffffff;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.9));
     }
-
     .piece-tag {
       font-size: 8px;
       font-weight: 900;
       padding: 0 3px;
       border-radius: 4px;
-      margin-top: 1px;
       line-height: 1.15;
+      align-self: end;
     }
 
     /* പഠന ടിപ്പുകൾ സെക്ഷൻ */
@@ -327,7 +324,6 @@
       </div>
     </div>
 
-    <!-- ലെവൽ സെലക്ടർ -->
     <div class="level-box">
       <div class="level-label">
         <span>🎯 കളി ലെവൽ തിരഞ്ഞെടുക്കുക:</span>
@@ -340,22 +336,18 @@
       </div>
     </div>
 
-    <!-- സ്റ്റാറ്റസ് & ചെക്ക് അടയാളം -->
     <div class="status-bar" id="statusBar">
       <span class="turn-text" id="gameStatusText">നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)</span>
       <span id="currentLevelText" style="color: #4ade80;">ലെവൽ: ഈസി</span>
     </div>
 
-    <!-- ബോർഡ് കൺട്രോൾ -->
     <div class="board-controls">
       <button type="button" class="ctrl-btn btn-undo" onclick="undoLastMove()">↩️ നീക്കം മാറ്റുക</button>
       <button type="button" class="ctrl-btn btn-restart" onclick="resetChessGame()">🔄 പുതിയ കളി</button>
     </div>
 
-    <!-- ചെസ്സ് ബോർഡ് -->
     <div class="board-wrapper" id="chessBoard"></div>
 
-    <!-- പഠിക്കാനുള്ള ലെവൽ വിവരങ്ങളും ടിപ്പുകളും -->
     <div class="tips-card">
       <div class="tips-title">📘 കളിക്കാർക്കുള്ള ലെവൽ വിവരങ്ങളും ടിപ്പുകളും</div>
       <div class="level-tip-highlight" id="activeLevelGuide">
@@ -371,7 +363,6 @@
   </div>
 
   <script>
-    // വാട്‌സാപ്പ് ഷെയർ ലിങ്ക് ("ഈ കളി ഇഷ്ടപ്പെട്ടെങ്കിൽ കൂട്ടുകാർക്ക് പങ്കുവെക്കാം")
     (function setupWhatsAppShare() {
       const shareUrl = window.location.href;
       const text =
@@ -386,6 +377,55 @@
     let soundEnabled = true;
     let audioCtx = null;
 
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+
+    function playTone(ctx, startTime, duration, freqStart, freqEnd, type, volume) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freqStart, startTime);
+      if (freqEnd && freqEnd !== freqStart) {
+        osc.frequency.exponentialRampToValueAtTime(freqEnd, startTime + duration);
+      }
+      gain.gain.setValueAtTime(volume, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.01);
+    }
+
+    function playChessSound(type) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime + 0.01;
+
+        if (type === 'capture') {
+          playTone(ctx, now, 0.16, 380, 120, 'triangle', 0.36);
+        } else if (type === 'check') {
+          // ചെക്ക് വരുമ്പോൾ രണ്ട് വ്യക്തമായ സ്വരങ്ങൾ തുടർച്ചയായി
+          playTone(ctx, now, 0.11, 587.33, 587.33, 'triangle', 0.36);
+          playTone(ctx, now + 0.12, 0.15, 783.99, 783.99, 'triangle', 0.36);
+        } else {
+          // സാധാരണ കരു നീക്കുമ്പോൾ വ്യക്തമായ ശബ്ദം
+          playTone(ctx, now, 0.11, 320, 520, 'triangle', 0.34);
+        }
+      } catch (e) {}
+    }
+
     function toggleChessSound() {
       soundEnabled = !soundEnabled;
       const btn = document.getElementById('soundToggleBtn');
@@ -394,57 +434,9 @@
         btn.style.color = soundEnabled ? '#4ade80' : '#f87171';
         btn.style.borderColor = soundEnabled ? '#4ade80' : '#f87171';
       }
-      if (soundEnabled) playChessSound('move');
-    }
-
-    function playChessSound(type) {
-      if (!soundEnabled) return;
-      try {
-        if (!audioCtx) {
-          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-          audioCtx = new AudioContextClass();
-        }
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        if (type === 'capture') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(340, now);
-          osc.frequency.exponentialRampToValueAtTime(110, now + 0.16);
-          gain.gain.setValueAtTime(0.28, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.17);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.18);
-        } else if (type === 'check') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(520, now);
-          osc.frequency.setValueAtTime(680, now + 0.09);
-          gain.gain.setValueAtTime(0.22, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.24);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.25);
-        } else {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(280, now);
-          osc.frequency.exponentialRampToValueAtTime(460, now + 0.09);
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.11);
-        }
-      } catch (e) {
-        // ഓഡിയോ ബ്ലോക്ക് ചെയ്താൽ കളി തടസ്സപ്പെടില്ല
+      if (soundEnabled) {
+        ensureAudioContext();
+        playChessSound('move');
       }
     }
 
@@ -454,12 +446,7 @@
     };
 
     const PIECE_LABELS_ML = {
-      P: 'ക',
-      R: 'ത',
-      N: 'കു',
-      B: 'ആ',
-      Q: 'റ',
-      K: 'രാ'
+      P: 'ക', R: 'ത', N: 'കു', B: 'ആ', Q: 'റ', K: 'രാ'
     };
 
     const PIECE_VALUES = { P: 1, N: 3, B: 3, R: 5, Q: 9, K: 100 };
@@ -470,7 +457,7 @@
         color: '#4ade80',
         depth: 1,
         skillLevel: 2,
-        guide: '<strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം (രാജാവിനെ അപകടത്തിൽപ്പെടുത്താതെ കളിക്കും).'
+        guide: '<strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം.'
       },
       medium: {
         label: 'മീഡിയം',
@@ -522,10 +509,6 @@
       lvlTextEl.innerText = `ലെവൽ: ${meta.label}`;
       lvlTextEl.style.color = meta.color;
       document.getElementById('activeLevelGuide').innerHTML = meta.guide;
-
-      if (window.stockfishEngine && typeof window.stockfishEngine.postMessage === 'function') {
-        window.stockfishEngine.postMessage(`setoption name Skill Level value ${meta.skillLevel}`);
-      }
     }
 
     function resetChessGame() {
@@ -552,7 +535,7 @@
       return r >= 0 && r < 8 && c >= 0 && c < 8;
     }
 
-    function getPieceMoves(board, r, c) {
+    function getPseudoMoves(board, r, c) {
       const piece = board[r][c];
       if (!piece) return [];
       const color = piece[0];
@@ -617,13 +600,12 @@
       return moves;
     }
 
-    function getAllMovesForColor(board, color) {
+    function getAllPseudoMovesForColor(board, color) {
       const all = [];
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           if (board[r][c] && board[r][c][0] === color) {
-            const mList = getPieceMoves(board, r, c);
-            mList.forEach(m => {
+            getPseudoMoves(board, r, c).forEach(m => {
               all.push({ fromR: r, fromC: c, toR: m.r, toC: m.c });
             });
           }
@@ -633,26 +615,53 @@
     }
 
     function isSquareAttackedBy(board, targetR, targetC, attackerColor) {
-      const attackerMoves = getAllMovesForColor(board, attackerColor);
-      return attackerMoves.some(m => m.toR === targetR && m.toC === targetC);
+      return getAllPseudoMovesForColor(board, attackerColor).some(m => m.toR === targetR && m.toC === targetC);
+    }
+
+    function findKingPos(board, kingColor) {
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (board[r][c] === `${kingColor}K`) return { r, c };
+        }
+      }
+      return null;
     }
 
     function findKingInCheck(board, kingColor) {
-      let kingPos = null;
+      const kingPos = findKingPos(board, kingColor);
+      if (!kingPos) return null;
+      const enemyColor = kingColor === 'w' ? 'b' : 'w';
+      return isSquareAttackedBy(board, kingPos.r, kingPos.c, enemyColor) ? kingPos : null;
+    }
+
+    function isMoveLegal(board, fromR, fromC, toR, toC) {
+      const piece = board[fromR][fromC];
+      if (!piece) return false;
+      const color = piece[0];
+      const sim = board.map(row => [...row]);
+      sim[toR][toC] = piece;
+      sim[fromR][fromC] = null;
+      if (piece === 'wP' && toR === 0) sim[toR][toC] = 'wQ';
+      if (piece === 'bP' && toR === 7) sim[toR][toC] = 'bQ';
+      return !findKingInCheck(sim, color);
+    }
+
+    function getLegalPieceMoves(board, r, c) {
+      return getPseudoMoves(board, r, c).filter(m => isMoveLegal(board, r, c, m.r, m.c));
+    }
+
+    function getAllLegalMovesForColor(board, color) {
+      const legal = [];
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
-          if (board[r][c] === `${kingColor}K`) {
-            kingPos = { r, c };
-            break;
+          if (board[r][c] && board[r][c][0] === color) {
+            getLegalPieceMoves(board, r, c).forEach(m => {
+              legal.push({ fromR: r, fromC: c, toR: m.r, toC: m.c });
+            });
           }
         }
-        if (kingPos) break;
       }
-      if (!kingPos) return null;
-
-      const enemyColor = kingColor === 'w' ? 'b' : 'w';
-      const attacked = isSquareAttackedBy(board, kingPos.r, kingPos.c, enemyColor);
-      return attacked ? kingPos : null;
+      return legal;
     }
 
     function refreshCheckState(nextTurnColor) {
@@ -662,6 +671,21 @@
 
       if (gameOver) return;
 
+      const nextLegalMoves = getAllLegalMovesForColor(boardState, nextTurnColor);
+      if (nextLegalMoves.length === 0) {
+        gameOver = true;
+        if (nextTurnColor === 'b' && blackCheck) {
+          playChessSound('capture');
+          updateTurnStatus('🎉 ചെക്ക്‌മേറ്റ്! നിങ്ങൾ വിജയിച്ചു!', false);
+        } else if (nextTurnColor === 'w' && whiteCheck) {
+          playChessSound('check');
+          updateTurnStatus('🤖 ചെക്ക്‌മേറ്റ്! കളി അവസാനിച്ചു.', false);
+        } else {
+          updateTurnStatus('🤝 സമനില (Stalemate)!', false);
+        }
+        return;
+      }
+
       if (nextTurnColor === 'w' && whiteCheck) {
         playChessSound('check');
         updateTurnStatus('⚠️ ചെക്ക്! നിങ്ങളുടെ രാജാവിനെ സംരക്ഷിക്കുക!', true);
@@ -669,7 +693,12 @@
         playChessSound('check');
         updateTurnStatus('⚠️ ചെക്ക്! എതിരാളിയുടെ രാജാവിന് ഭീഷണി!', true);
       } else {
-        updateTurnStatus(nextTurnColor === 'w' ? 'നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)' : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`, false);
+        updateTurnStatus(
+          nextTurnColor === 'w'
+            ? 'നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)'
+            : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`,
+          false
+        );
       }
     }
 
@@ -691,15 +720,6 @@
 
       lastMove = { fromR, fromC, toR, toC };
 
-      if (captured && captured[1] === 'K') {
-        playChessSound('capture');
-        gameOver = true;
-        checkedKingSquare = null;
-        updateTurnStatus(piece[0] === 'w' ? '🎉 നിങ്ങൾ വിജയിച്ചു!' : '🤖 Stockfish വിജയിച്ചു!', false);
-        renderBoard();
-        return;
-      }
-
       if (captured) {
         playChessSound('capture');
       } else {
@@ -713,6 +733,7 @@
 
     function undoLastMove() {
       if (moveHistory.length === 0 || !isPlayerTurn) return;
+      ensureAudioContext();
       const steps = moveHistory.length >= 2 && moveHistory[moveHistory.length - 1].piece[0] === 'b' ? 2 : 1;
       for (let i = 0; i < steps; i++) {
         const prev = moveHistory.pop();
@@ -730,38 +751,22 @@
     }
 
     function pickEngineMove() {
-      const moves = getAllMovesForColor(boardState, 'b');
-      if (moves.length === 0) {
-        gameOver = true;
-        updateTurnStatus('🎉 നിങ്ങൾ വിജയിച്ചു!', false);
-        return null;
-      }
-
-      // രാജാവിനെ ആക്രമിക്കപ്പെടുന്ന കള്ളിയിലേക്ക് ഇറക്കുന്നത് ഒഴിവാക്കുന്നു
-      const safeMoves = moves.filter(m => {
-        const piece = boardState[m.fromR][m.fromC];
-        if (!piece || piece[1] !== 'K') return true;
-        const simBoard = boardState.map(row => [...row]);
-        simBoard[m.toR][m.toC] = piece;
-        simBoard[m.fromR][m.fromC] = null;
-        return !isSquareAttackedBy(simBoard, m.toR, m.toC, 'w');
-      });
-
-      const candidateMoves = safeMoves.length > 0 ? safeMoves : moves;
+      const legalMoves = getAllLegalMovesForColor(boardState, 'b');
+      if (legalMoves.length === 0) return null;
 
       if (currentLevel === 'easy') {
-        const nonKingMoves = candidateMoves.filter(m => {
+        const nonKingMoves = legalMoves.filter(m => {
           const p = boardState[m.fromR][m.fromC];
           return p && p[1] !== 'K';
         });
-        const pool = nonKingMoves.length > 0 ? nonKingMoves : candidateMoves;
+        const pool = nonKingMoves.length > 0 ? nonKingMoves : legalMoves;
         return pool[Math.floor(Math.random() * pool.length)];
       }
 
-      let bestMove = candidateMoves[0];
+      let bestMove = legalMoves[0];
       let bestScore = -Infinity;
 
-      candidateMoves.forEach(m => {
+      legalMoves.forEach(m => {
         const movingPiece = boardState[m.fromR][m.fromC];
         const target = boardState[m.toR][m.toC];
         const captureBonus = target ? (PIECE_VALUES[target[1]] || 0) * (currentLevel === 'hard' ? 4 : 2.5) : 0;
@@ -787,34 +792,15 @@
       return bestMove;
     }
 
-    window.applyStockfishMove = function(fromR, fromC, toR, toC) {
-      if (gameOver) return;
-      executeMove(fromR, fromC, toR, toC);
-      if (!gameOver) {
-        isPlayerTurn = true;
-        refreshCheckState('w');
-        renderBoard();
-      }
-    };
-
     function triggerEngineTurn() {
       isPlayerTurn = false;
       const blackInCheck = Boolean(findKingInCheck(boardState, 'b'));
       updateTurnStatus(
         blackInCheck
-          ? `⚠️ ചെക്ക്! Stockfish (${LEVEL_META[currentLevel].label}) നീക്കം ആലോചിക്കുന്നു...`
+          ? `⚠️ ചെക്ക്! Stockfish (${LEVEL_META[currentLevel].label}) ചെക്ക് മാറ്റുന്നു...`
           : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`,
         blackInCheck
       );
-
-      if (typeof window.onChessMoveMade === 'function') {
-        window.onChessMoveMade({
-          board: boardState,
-          level: currentLevel,
-          skillLevel: LEVEL_META[currentLevel].skillLevel,
-          lastMove
-        });
-      }
 
       setTimeout(() => {
         if (gameOver) return;
@@ -831,6 +817,7 @@
     }
 
     function handleSquareClick(r, c) {
+      ensureAudioContext();
       if (!isPlayerTurn || gameOver) return;
 
       const clickedValid = validMovesForSelected.find(m => m.r === r && m.c === c);
@@ -848,7 +835,7 @@
       const piece = boardState[r][c];
       if (piece && piece[0] === 'w') {
         selectedSquare = { r, c };
-        validMovesForSelected = getPieceMoves(boardState, r, c);
+        validMovesForSelected = getLegalPieceMoves(boardState, r, c);
       } else {
         selectedSquare = null;
         validMovesForSelected = [];
