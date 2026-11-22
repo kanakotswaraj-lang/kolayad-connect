@@ -503,6 +503,27 @@
         btn.href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
       }
     })();
+    // പ്രധാന പേജ് (index.html)-ലേക്ക് ബാക്ക് ബട്ടൺ വഴി പോകാൻ
+    (function setupIndexBackNavigation() {
+      const homeUrl = new URL('index.html', window.location.href).href;
+
+      function armBackTrap() {
+        try {
+          if (window.history && window.history.pushState) {
+            window.history.pushState({ kolayaadChessHomeTrap: true }, '', window.location.href);
+          }
+        } catch (e) {}
+      }
+
+      armBackTrap();
+
+      document.addEventListener('pointerdown', armBackTrap, { once: true, passive: true });
+      document.addEventListener('click', armBackTrap, { once: true, passive: true });
+
+      window.addEventListener('popstate', function () {
+        window.location.replace(homeUrl);
+      });
+    })();
 
     // ശബ്ദ സംവിധാനം (Web Audio API)
     let soundEnabled = true;
