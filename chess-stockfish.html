@@ -164,7 +164,7 @@
       font-weight: 900;
     }
 
-        .status-bar.game-won {
+    .status-bar.game-won {
       background: linear-gradient(135deg, rgba(250, 204, 21, 0.28), rgba(34, 197, 94, 0.28));
       border: 2px solid #facc15;
       box-shadow: 0 0 20px rgba(250, 204, 21, 0.55);
@@ -432,11 +432,9 @@
         if (type === 'capture') {
           playTone(ctx, now, 0.16, 380, 120, 'triangle', 0.36);
         } else if (type === 'check') {
-          // ചെക്ക് വരുമ്പോൾ രണ്ട് വ്യക്തമായ സ്വരങ്ങൾ തുടർച്ചയായി
           playTone(ctx, now, 0.11, 587.33, 587.33, 'triangle', 0.36);
           playTone(ctx, now + 0.12, 0.15, 783.99, 783.99, 'triangle', 0.36);
         } else {
-          // സാധാരണ കരു നീക്കുമ്പോൾ വ്യക്തമായ ശബ്ദം
           playTone(ctx, now, 0.11, 320, 520, 'triangle', 0.34);
         }
       } catch (e) {}
@@ -536,18 +534,17 @@
       isPlayerTurn = true;
       gameOver = false;
       checkedKingSquare = null;
-      updateTurnStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)');
+      updateTurnStatus('നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)', false, false);
       renderBoard();
     }
 
-        function updateTurnStatus(text, isCheck = false, isWon = false) {
+    function updateTurnStatus(text, isCheck = false, isWon = false) {
       const statusBar = document.getElementById('statusBar');
       const statusText = document.getElementById('gameStatusText');
       statusText.innerText = text;
       statusBar.classList.toggle('in-check', Boolean(isCheck));
       statusBar.classList.toggle('game-won', Boolean(isWon));
     }
-
 
     function inBounds(r, c) {
       return r >= 0 && r < 8 && c >= 0 && c < 8;
@@ -692,30 +689,30 @@
       const nextLegalMoves = getAllLegalMovesForColor(boardState, nextTurnColor);
       if (nextLegalMoves.length === 0) {
         gameOver = true;
-                if (nextTurnColor === 'b' && blackCheck) {
+        if (nextTurnColor === 'b' && blackCheck) {
           playChessSound('capture');
           updateTurnStatus('🎉 ചെക്ക്‌മേറ്റ്! നിങ്ങൾ വിജയിച്ചു!', false, true);
         } else if (nextTurnColor === 'w' && whiteCheck) {
           playChessSound('check');
           updateTurnStatus('🤖 ചെക്ക്‌മേറ്റ്! കളി അവസാനിച്ചു.', false, false);
-        }
-
-          updateTurnStatus('🤝 സമനില (Stalemate)!', false);
+        } else {
+          updateTurnStatus('🤝 സമനില (Stalemate)!', false, false);
         }
         return;
       }
 
       if (nextTurnColor === 'w' && whiteCheck) {
         playChessSound('check');
-        updateTurnStatus('⚠️ ചെക്ക്! നിങ്ങളുടെ രാജാവിനെ സംരക്ഷിക്കുക!', true);
+        updateTurnStatus('⚠️ ചെക്ക്! നിങ്ങളുടെ രാജാവിനെ സംരക്ഷിക്കുക!', true, false);
       } else if (nextTurnColor === 'b' && blackCheck) {
         playChessSound('check');
-        updateTurnStatus('⚠️ ചെക്ക്! എതിരാളിയുടെ രാജാവിന് ഭീഷണി!', true);
+        updateTurnStatus('⚠️ ചെക്ക്! എതിരാളിയുടെ രാജാവിന് ഭീഷണി!', true, false);
       } else {
         updateTurnStatus(
           nextTurnColor === 'w'
             ? 'നിങ്ങളുടെ നീക്കം (വെളുപ്പ്)'
             : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`,
+          false,
           false
         );
       }
@@ -773,12 +770,14 @@
       const legalMoves = getAllLegalMovesForColor(boardState, 'b');
       if (legalMoves.length === 0) return null;
 
-            if (currentLevel === 'easy') {
-        const nonKingMoves = candidateMoves.filter(m => {
+      const currentlyInCheck = Boolean(findKingInCheck(boardState, 'b'));
+
+      if (currentLevel === 'easy') {
+        const nonKingMoves = legalMoves.filter(m => {
           const p = boardState[m.fromR][m.fromC];
           return p && p[1] !== 'K';
         });
-        const pool = currentlyInCheck ? candidateMoves : (nonKingMoves.length > 0 ? nonKingMoves : candidateMoves);
+        const pool = currentlyInCheck ? legalMoves : (nonKingMoves.length > 0 ? nonKingMoves : legalMoves);
 
         const captureMoves = pool.filter(m => boardState[m.toR][m.toC] !== null);
         if (!currentlyInCheck && captureMoves.length > 0 && Math.random() < 0.38) {
@@ -786,7 +785,6 @@
         }
         return pool[Math.floor(Math.random() * pool.length)];
       }
-
 
       let bestMove = legalMoves[0];
       let bestScore = -Infinity;
@@ -824,7 +822,8 @@
         blackInCheck
           ? `⚠️ ചെക്ക്! Stockfish (${LEVEL_META[currentLevel].label}) ചെക്ക് മാറ്റുന്നു...`
           : `🤖 Stockfish (${LEVEL_META[currentLevel].label}) ചിന്തിക്കുന്നു...`,
-        blackInCheck
+        blackInCheck,
+        false
       );
 
       setTimeout(() => {
