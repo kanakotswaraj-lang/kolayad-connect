@@ -8,7 +8,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700;800;900&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Malayalam', sans-serif; }
     body {
-      background: radial-gradient(circle at top, #172554 0%, #070b19 100%);
+      background: radial-gradient(circle at top, #0f172a 0%, #050814 100%);
       color: #f8fafc;
       min-height: 100vh;
       display: flex;
@@ -18,11 +18,11 @@
     .app-wrap {
       width: 100%;
       max-width: 520px;
-      background: #0f172a;
-      border: 2.5px solid #facc15;
-      border-radius: 20px;
+      background: linear-gradient(180deg, #111827 0%, #0b1120 100%);
+      border: 2px solid #2dd4bf;
+      border-radius: 22px;
       padding: 16px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
       height: fit-content;
     }
     .top-bar {
@@ -36,7 +36,7 @@
     .page-title {
       font-size: 18px;
       font-weight: 900;
-      color: #facc15;
+      color: #5eead4;
     }
     .nav-actions {
       display: flex;
@@ -80,9 +80,9 @@
 
     /* ലെവൽ സെലക്ടർ (ഈസി / മീഡിയം / ഹാർഡ്) */
     .level-box {
-      background: #131c3f;
-      border: 1.5px solid rgba(59, 130, 246, 0.35);
-      border-radius: 14px;
+      background: rgba(30, 41, 59, 0.72);
+      border: 1.5px solid rgba(45, 212, 191, 0.32);
+      border-radius: 16px;
       padding: 12px;
       margin-bottom: 12px;
     }
@@ -98,10 +98,10 @@
       flex-wrap: wrap;
     }
     .engine-pill {
-      background: rgba(56, 189, 248, 0.16);
-      color: #38bdf8;
-      border: 1px solid #38bdf8;
-      padding: 2px 8px;
+      background: rgba(45, 212, 191, 0.15);
+      color: #5eead4;
+      border: 1px solid #2dd4bf;
+      padding: 2px 9px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 800;
@@ -113,9 +113,9 @@
     }
     .lvl-btn {
       padding: 9px 6px;
-      border-radius: 10px;
+      border-radius: 11px;
       border: 1.5px solid #334155;
-      background: #1e293b;
+      background: #0f172a;
       color: #f1f5f9;
       font-size: 13px;
       font-weight: 900;
@@ -141,8 +141,8 @@
     /* സ്റ്റാറ്റസ് & ചെക്ക് അലർട്ട് */
     .status-bar {
       background: #1e293b;
-      border: 1.5px solid #475569;
-      border-radius: 12px;
+      border: 1.5px solid #334155;
+      border-radius: 14px;
       padding: 10px 12px;
       margin-bottom: 12px;
       display: flex;
@@ -158,7 +158,7 @@
       border-color: #ef4444;
       box-shadow: 0 0 16px rgba(239, 68, 68, 0.45);
     }
-    .turn-text { color: #fde047; }
+    .turn-text { color: #5eead4; }
     .status-bar.in-check .turn-text {
       color: #fca5a5;
       font-weight: 900;
@@ -172,76 +172,81 @@
     .ctrl-btn {
       flex: 1;
       padding: 9px;
-      border-radius: 10px;
+      border-radius: 11px;
       border: none;
       font-size: 12.5px;
       font-weight: 900;
       cursor: pointer;
     }
     .btn-undo { background: #334155; color: #f8fafc; }
-    .btn-restart { background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; }
+    .btn-restart { background: linear-gradient(135deg, #2dd4bf, #0d9488); color: #042f2e; }
 
-    /* കളർഫുൾ ചെസ്സ് ബോർഡ് */
+    /* പുതിയ ടീൽ & ക്രീം ചെസ്സ് ബോർഡ് */
     .board-wrapper {
       width: 100%;
       aspect-ratio: 1 / 1;
-      border: 4px solid #f59e0b;
-      border-radius: 14px;
+      border: 4px solid #2dd4bf;
+      border-radius: 16px;
       overflow: hidden;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
       margin-bottom: 14px;
       user-select: none;
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
     }
     .square {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  line-height: 1;
-  padding: 1px;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  transition: transform 0.1s ease;
-}
-.square:active { transform: scale(0.96); }
-.square.light {
-  background: linear-gradient(145deg, #fef9c3, #fde047);
-}
-.square.dark {
-  background: linear-gradient(145deg, #16a34a, #15803d);
-}
-.square.selected {
-  outline: 3px solid #2563eb;
-  outline-offset: -3px;
-  background: #60a5fa !important;
-}
-.square.valid-move::after {
-  content: '';
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(37, 99, 235, 0.85);
-  border: 2px solid #ffffff;
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
-}
-.square.last-move {
-  box-shadow: inset 0 0 0 3px #f97316;
-}
-.square.king-in-check {
-  background: radial-gradient(circle, #ef4444 35%, #991b1b 100%) !important;
-  outline: 3px solid #fef08a;
-  outline-offset: -3px;
-  animation: checkPulse 0.8s infinite alternate;
-}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      line-height: 1;
+      padding: 1px;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      transition: transform 0.1s ease;
+    }
+    .square:active { transform: scale(0.96); }
+    .square.light {
+      background: linear-gradient(145deg, #fffbeb, #fde68a);
+    }
+    .square.dark {
+      background: linear-gradient(145deg, #0d9488, #115e59);
+    }
+    .square.selected {
+      outline: 3px solid #38bdf8;
+      outline-offset: -3px;
+      background: #0284c7 !important;
+    }
+    .square.valid-move::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.9);
+      border: 2px solid #ffffff;
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+    }
+    .square.last-move {
+      box-shadow: inset 0 0 0 3px #fbbf24;
+    }
+    .square.king-in-check {
+      background: radial-gradient(circle, #ef4444 35%, #991b1b 100%) !important;
+      outline: 3px solid #fef08a;
+      outline-offset: -3px;
+      animation: checkPulse 0.8s infinite alternate;
+    }
+    @keyframes checkPulse {
+      from { box-shadow: inset 0 0 8px #fef08a; }
+      to { box-shadow: inset 0 0 18px #ffffff; }
+    }
 
+    /* ഗ്രേഡിയന്റ് കരുക്കൾ & അടയാളം */
     .piece-symbol {
       font-size: clamp(22px, 6.2vw, 36px);
       font-weight: 900;
@@ -251,16 +256,16 @@
       display: inline-block;
     }
     .piece-symbol.white-piece {
-      background-image: linear-gradient(145deg, #ffffff 0%, #e0f2fe 50%, #fde047 100%);
+      background-image: linear-gradient(135deg, #ffffff 0%, #fef08a 55%, #f59e0b 100%);
       -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 2px #090d16;
-      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.95));
+      -webkit-text-stroke: 1.7px #0f172a;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85));
     }
     .piece-symbol.black-piece {
-      background-image: linear-gradient(145deg, #1e1b4b 0%, #312e81 50%, #7e22ce 100%);
+      background-image: linear-gradient(135deg, #c084fc 0%, #7c3aed 55%, #312e81 100%);
       -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 1.5px #ffffff;
-      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.9));
+      -webkit-text-stroke: 1.4px #ffffff;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
     }
     .piece-tag {
       font-size: 8px;
@@ -273,24 +278,24 @@
 
     /* പഠന ടിപ്പുകൾ സെക്ഷൻ */
     .tips-card {
-      background: #131c3f;
-      border: 1.5px solid rgba(59, 130, 246, 0.35);
-      border-radius: 14px;
+      background: rgba(30, 41, 59, 0.72);
+      border: 1.5px solid rgba(45, 212, 191, 0.32);
+      border-radius: 16px;
       padding: 14px;
     }
     .tips-title {
       font-size: 14.5px;
       font-weight: 900;
-      color: #38bdf8;
+      color: #5eead4;
       margin-bottom: 8px;
     }
     .level-tip-highlight {
-      background: rgba(250, 204, 21, 0.14);
-      border-left: 4px solid #facc15;
+      background: rgba(45, 212, 191, 0.12);
+      border-left: 4px solid #2dd4bf;
       padding: 9px 11px;
       border-radius: 8px;
       font-size: 12.5px;
-      color: #fef9c3;
+      color: #f1f5f9;
       margin-bottom: 10px;
       line-height: 1.55;
     }
@@ -464,21 +469,21 @@
         color: '#4ade80',
         depth: 1,
         skillLevel: 2,
-        guide: '<strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം.'
+        guide: '<strong>ഈസി ലെവൽ:</strong> തുടക്കക്കാർക്കും കുട്ടികൾക്കും കരുക്കളുടെ നീക്കങ്ങൾ മനസ്സിലാക്കി ശാന്തമായി കളിച്ച് പഠിക്കാൻ അനുയോജ്യം (രാജാവിനെ അപകടത്തിൽപ്പെടുത്താതെ കളിക്കും).'
       },
       medium: {
         label: 'മീഡിയം',
         color: '#facc15',
         depth: 2,
         skillLevel: 10,
-        guide: '<strong>മീഡിയം ലെവൽ:</strong> സാധാരണ കളിക്കാർക്ക് നല്ലൊരു വെല്ലുവിളി. കരുക്കൾ സംരക്ഷിക്കാനും കെണികൾ തിരിച്ചറിയാനും സഹായിക്കും.'
+        guide: '<strong>മീഡിയം ലെവൽ:</strong> സാധാരണ കളിക്കാർക്ക് നല്ലൊരു വെല്ലുവിളി. കരുക്കൾ വെട്ടാനും മധ്യഭാഗം പിടിക്കാനും ശ്രമിക്കും.'
       },
       hard: {
         label: 'ഹാർഡ്',
         color: '#f87171',
         depth: 3,
         skillLevel: 20,
-        guide: '<strong>ഹാർഡ് ലെവൽ:</strong> കടുത്ത മത്സരം ഇഷ്ടപ്പെടുന്നവർക്കായി Stockfish കരുത്തുറ്റ നീക്കങ്ങളോടെ കളിക്കും.'
+        guide: '<strong>ഹാർഡ് ലെവൽ:</strong> കടുത്ത മത്സരം ഇഷ്ടപ്പെടുന്നവർക്കായി കരുക്കളുടെ മൂല്യവും സുരക്ഷയും ചെക്കുകളും കണക്കിലെടുത്ത് കരുത്തുറ്റ നീക്കങ്ങൾ എടുക്കും.'
       }
     };
 
@@ -626,6 +631,11 @@
       return all;
     }
 
+    function isSquareAttackedBy(board, targetR, targetC, attackerColor) {
+      const attackerMoves = getAllMovesForColor(board, attackerColor);
+      return attackerMoves.some(m => m.toR === targetR && m.toC === targetC);
+    }
+
     function findKingInCheck(board, kingColor) {
       let kingPos = null;
       for (let r = 0; r < 8; r++) {
@@ -640,8 +650,7 @@
       if (!kingPos) return null;
 
       const enemyColor = kingColor === 'w' ? 'b' : 'w';
-      const enemyMoves = getAllMovesForColor(board, enemyColor);
-      const attacked = enemyMoves.some(m => m.toR === kingPos.r && m.toC === kingPos.c);
+      const attacked = isSquareAttackedBy(board, kingPos.r, kingPos.c, enemyColor);
       return attacked ? kingPos : null;
     }
 
@@ -727,19 +736,47 @@
         return null;
       }
 
+      // രാജാവിനെ ആക്രമിക്കപ്പെടുന്ന കള്ളിയിലേക്ക് ഇറക്കുന്നത് ഒഴിവാക്കുന്നു
+      const safeMoves = moves.filter(m => {
+        const piece = boardState[m.fromR][m.fromC];
+        if (!piece || piece[1] !== 'K') return true;
+        const simBoard = boardState.map(row => [...row]);
+        simBoard[m.toR][m.toC] = piece;
+        simBoard[m.fromR][m.fromC] = null;
+        return !isSquareAttackedBy(simBoard, m.toR, m.toC, 'w');
+      });
+
+      const candidateMoves = safeMoves.length > 0 ? safeMoves : moves;
+
       if (currentLevel === 'easy') {
-        return moves[Math.floor(Math.random() * moves.length)];
+        const nonKingMoves = candidateMoves.filter(m => {
+          const p = boardState[m.fromR][m.fromC];
+          return p && p[1] !== 'K';
+        });
+        const pool = nonKingMoves.length > 0 ? nonKingMoves : candidateMoves;
+        return pool[Math.floor(Math.random() * pool.length)];
       }
 
-      let bestMove = moves[0];
+      let bestMove = candidateMoves[0];
       let bestScore = -Infinity;
 
-      moves.forEach(m => {
+      candidateMoves.forEach(m => {
+        const movingPiece = boardState[m.fromR][m.fromC];
         const target = boardState[m.toR][m.toC];
-        const captureBonus = target ? (PIECE_VALUES[target[1]] || 0) * 2.5 : 0;
-        const centerBonus = (3.5 - Math.abs(3.5 - m.toR)) + (3.5 - Math.abs(3.5 - m.toC));
-        const noise = currentLevel === 'medium' ? Math.random() * 2.5 : Math.random() * 0.4;
-        const score = captureBonus + centerBonus * 0.3 + noise;
+        const captureBonus = target ? (PIECE_VALUES[target[1]] || 0) * (currentLevel === 'hard' ? 4 : 2.5) : 0;
+        const centerBonus = ((3.5 - Math.abs(3.5 - m.toR)) + (3.5 - Math.abs(3.5 - m.toC))) * 0.35;
+
+        const simBoard = boardState.map(row => [...row]);
+        simBoard[m.toR][m.toC] = movingPiece;
+        simBoard[m.fromR][m.fromC] = null;
+
+        const hangingPenalty = isSquareAttackedBy(simBoard, m.toR, m.toC, 'w')
+          ? (PIECE_VALUES[movingPiece[1]] || 1) * (currentLevel === 'hard' ? 2.2 : 1.0)
+          : 0;
+
+        const noise = currentLevel === 'medium' ? Math.random() * 2.2 : Math.random() * 0.25;
+        const score = captureBonus + centerBonus - hangingPenalty + noise;
+
         if (score > bestScore) {
           bestScore = score;
           bestMove = m;
@@ -857,11 +894,11 @@
             if (isWhite) {
               tagSpan.style.background = '#eff6ff';
               tagSpan.style.color = '#0f172a';
-              tagSpan.style.border = '1px solid #1d4ed8';
+              tagSpan.style.border = '1px solid #0284c7';
             } else {
               tagSpan.style.background = '#0f172a';
-              tagSpan.style.color = '#fde047';
-              tagSpan.style.border = '1px solid #facc15';
+              tagSpan.style.color = '#5eead4';
+              tagSpan.style.border = '1px solid #2dd4bf';
             }
 
             sq.appendChild(symSpan);
