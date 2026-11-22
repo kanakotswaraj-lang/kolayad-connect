@@ -208,7 +208,6 @@
         drop-shadow(0 3px 4px rgba(0, 0, 0, 0.85));
     }
 
-    /* കാലാൾ (Pawn) & ആന (Bishop) വ്യക്തമായി വേർതിരിച്ചറിയാനുള്ള ഹൈലൈറ്റ് */
     .piece-type-p.piece-3d-white {
       color: #e0f2fe;
       filter: drop-shadow(0 0 2px rgba(56, 189, 248, 0.85)) drop-shadow(0 3px 3px rgba(0, 0, 0, 0.8));
@@ -264,7 +263,6 @@
       border-radius: 5px;
       transition: transform 0.12s ease, background-color 0.15s ease;
     }
-    /* കളർഫുൾ 3D കള്ളികൾ */
     .sq.light {
       background: linear-gradient(145deg, #fef9c3, #fde047);
       color: #0f172a;
@@ -281,7 +279,6 @@
     .sq.last-move {
       box-shadow: inset 0 0 0 2.5px rgba(249, 115, 22, 0.95);
     }
-    /* ചെക്ക് കിട്ടുന്ന രാജാവിന്റെ കള്ളിയിൽ ചുവപ്പ് കളർ */
     .sq.king-in-check {
       background: radial-gradient(circle, #ef4444 0%, #991b1b 100%) !important;
       box-shadow: inset 0 0 0 3px #fecaca, 0 0 16px rgba(239, 68, 68, 0.95) !important;
@@ -306,7 +303,6 @@
       pointer-events: none;
     }
 
-    /* കൺഫ്യൂഷൻ ഒഴിവാക്കാൻ ചെറിയ സൂചന ബാഡ്ജ് (കാലാളിന് 'ക' / ആനയ്ക്ക് 'ആ') */
     .piece-tag {
       position: absolute;
       bottom: 2px;
@@ -328,20 +324,25 @@
     /* താഴത്തെ കൺട്രോൾ ബട്ടണുകൾ */
     .controls-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
       justify-content: center;
       margin-top: 4px;
     }
     .ctrl-btn {
       flex: 1;
-      padding: 10px 14px;
+      padding: 10px 10px;
       border-radius: 11px;
       border: none;
       font-family: inherit;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
     .btn-undo {
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
@@ -350,6 +351,10 @@
     .btn-reset {
       background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #0f172a;
+    }
+    .btn-wa {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #ffffff;
     }
 
     /* വിജയ / കളി അവസാനിക്കുന്ന മോഡൽ */
@@ -439,8 +444,9 @@
     </div>
 
     <div class="controls-row">
-      <button type="button" class="ctrl-btn btn-undo" onclick="undoMove()">↩ നീക്കം മാറ്റുക</button>
-      <button type="button" class="ctrl-btn btn-reset" onclick="resetGame()">🔄 പുതിയ കളി</button>
+      <button type="button" class="ctrl-btn btn-undo" onclick="undoMove()">↩ മാറ്റുക</button>
+      <button type="button" class="ctrl-btn btn-reset" onclick="resetGame()">🔄 പുതിയത്</button>
+      <a id="waInviteBtn" href="#" target="_blank" rel="noopener noreferrer" class="ctrl-btn btn-wa">💬 വാട്‌സാപ്പ്</a>
     </div>
   </div>
 
@@ -457,6 +463,22 @@
   </div>
 
   <script>
+    (function setupWhatsAppInvite() {
+      const shareUrl = window.location.href;
+      const msg =
+        `♟️ കോളയാട് കണക്ട് ചെസ്സ് ടീമിലേക്ക് സ്വാഗതം! ♟️\n\n` +
+        `നമ്മുടെ നാട്ടിലെ ചെസ്സ് പ്രേമികൾക്കും തുടക്കക്കാർക്കും കുട്ടികൾക്കും ഒരുമിച്ച് കളിക്കാനും പഠിക്കാനും ഇതാ ഒരു കിടിലൻ ചെസ്സ് പേജ്!\n\n` +
+        `✅ ഈസി, മീഡിയം, ഹാർഡ് എന്നിങ്ങനെ 3 ലെവലുകൾ\n` +
+        `✅ മലയാളം കരുക്കളുടെ അടയാളങ്ങളും ലളിതമായ ടിപ്പുകളും\n` +
+        `✅ ചെക്ക് മുന്നറിയിപ്പുകൾ, ശബ്ദങ്ങൾ, വ്യക്തമായ ബോർഡ്\n\n` +
+        `ഇപ്പോൾ തന്നെ കളിച്ച് നോക്കൂ, നിങ്ങളുടെ സ്കോറും അനുഭവങ്ങളും നമ്മുടെ ടീമിൽ പങ്കുവെക്കൂ! 🏆\n\n` +
+        `🔗 ഇവിടെ കളിക്കാം: ${shareUrl}`;
+      const btn = document.getElementById('waInviteBtn');
+      if (btn) {
+        btn.href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+      }
+    })();
+
     const pieceGlyphs = {
       p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
       P: '♙', R: '♖', N: '♘', B: '♗', Q: '♕', K: '♔'
@@ -489,7 +511,6 @@
     let aiThinking = false;
     let gameOverShown = false;
 
-    // Stockfish Web Worker (Multiple CDN fallbacks)
     let engine = null;
     let engineReady = false;
     let engineLoading = true;
@@ -560,9 +581,7 @@
           } else {
             worker.terminate();
           }
-        } catch (err) {
-          // Try next CDN
-        }
+        } catch (err) {}
       }
 
       engineReady = false;
