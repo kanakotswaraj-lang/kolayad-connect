@@ -1334,7 +1334,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 700;
+            const MAX_WIDTH = 500;
             const scaleSize = MAX_WIDTH / img.width;
             
             if (scaleSize < 1) {
@@ -1347,7 +1347,7 @@
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.45);
             resolve(compressedDataUrl);
           };
         };
